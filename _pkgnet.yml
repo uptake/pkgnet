@@ -1,0 +1,29 @@
+template:
+  params:
+    bootswatch: cosmo
+
+navbar:
+  title: "pkgnet"
+  type: inverse
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Reference"
+      href: reference/index.html
+
+  right:
+   - icon: fa-github
+     href: https://github.com/uptakeopensource/pkgnet
+
+reference:
+  - title: "Network Extraction"
+    contents:
+      - ExtractDependencyNetwork
+      - ExtractNetwork
+  - title: "Coverage Calculation"
+    contents:
+      - GetCoverageByFunction
+      - CalcNetworkFeatures
+  - title: "Visualization"
+    contents:
+      - PlotNetwork
