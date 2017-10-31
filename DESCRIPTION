@@ -1,0 +1,27 @@
+Package: pkgnet
+Type: Package
+Title: Get Network Representation of an R package
+Version: 0.1.0
+Author: Uptake Data Science
+Authors@R: c(
+    person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
+    person("James", "Lamb", email = "james.lamb@uptake.com", role = c("aut")),
+    person("Patrick", "Boueri", email = "patrick.boueri@uptake.com", role = c("ctb")))
+Maintainer: Brian Burns <brian.burns@uptake.com>
+Description: This package provides utilities for building a network representation of
+             an R package.
+Imports:
+    covr,
+    data.table,
+    futile.logger,
+    igraph,
+    magrittr,
+    mvbutils,
+    R6,
+    visNetwork
+Suggests:
+    devtools,
+    testthat
+License: BSD_3_clause + file LICENSE
+LazyData: TRUE
+RoxygenNote: 6.0.1
