@@ -1,15 +1,16 @@
 Package: pkgnet
 Type: Package
-Title: Get Network Representation of an R package
+Title: Get Network Representation of an R Package
 Version: 0.1.0
-Author: Uptake Data Science
 Authors@R: c(
     person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "james.lamb@uptake.com", role = c("aut")),
     person("Patrick", "Boueri", email = "patrick.boueri@uptake.com", role = c("ctb")))
 Maintainer: Brian Burns <brian.burns@uptake.com>
-Description: This package provides utilities for building a network representation of
-             an R package.
+Description: Tools from the  domain of graph theory can be used to quantify the complexity
+             and vulnerability to failure of a software package. That is the guiding philosophy
+             of this package. "pkgnet" provides tools to analyze the dependencies between functions
+             in an R package and between its imported packages.
 Imports:
     covr,
     data.table,

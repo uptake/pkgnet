@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,7 +39,7 @@
   <body>
     <div class="container template-reference-topic">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -52,10 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -63,7 +60,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/uptakeopensource/pkgnet">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -90,13 +92,13 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="graph-methods"><a class="anchor" href="#graph-methods"></a>Graph Methods</h2>
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
     <dl class='dl-horizontal'>
    <dt><code>calculateNetworkMetrics</code>Uses <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a> to calculate nodes and edges to create summary metrics of the overall graph structure, including centrality measures etc.</dt><dd><p></p></dd>   <dt><code>getSummaryView</code>Returns the output of calculateNetworkMetrics</dt><dd><p></p></dd>   <dt><code>setGraphLayout</code>Accepts a layoutType from either "tree" or "circle" and augments the nodes private field with level/horizontal co-ordinates for a prettified layout</dt><dd><p></p></dd>   <dt><code>plotNetwork</code>Calls <code>PlotNetwork</code> and returns a plotly object </dt><dd><p></p></dd></dl>
     
-    <h2 class="hasAnchor" id="graph-fields"><a class="anchor" href="#graph-fields"></a>Graph Fields</h2>
+    <h2 class="hasAnchor" id="public-members"><a class="anchor" href="#public-members"></a>Public Members</h2>
 
     
     <dl class='dl-horizontal'>
@@ -114,9 +116,9 @@
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#graph-methods">Graph Methods</a></li>
+      <li><a href="#public-methods">Public Methods</a></li>
 
-      <li><a href="#graph-fields">Graph Fields</a></li>
+      <li><a href="#public-members">Public Members</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>

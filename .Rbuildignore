@@ -1,0 +1,8 @@
+
+^.*\.DS_Store$
+^docs$
+_pkgdown.yml
+cran-comments.md
+CONDUCT.md
+.travis.yml
+^_pkgdown\.yml$
