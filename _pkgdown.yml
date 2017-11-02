@@ -19,7 +19,7 @@ reference:
   - title: "Network Extraction"
     contents:
       - ExtractDependencyNetwork
-      - ExtractNetwork
+      - ExtractFunctionNetwork
   - title: "Coverage Calculation"
     contents:
       - GetCoverageByFunction

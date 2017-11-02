@@ -11,8 +11,8 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -39,7 +39,7 @@
   <body>
     <div class="container template-reference-topic">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -52,10 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -63,7 +60,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/uptakeopensource/pkgnet">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -79,7 +81,7 @@
     </div>
 
     
-    <p>This Reporter takes a package and uncovers then  structure from
+    <p>This Reporter takes a package and uncovers the structure from
              its other package dependencies, determining which package it relies on is most central,
              allowing for a developer to determine how to vett its dependency tree</p>
     
@@ -90,10 +92,20 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="dependency-methods"><a class="anchor" href="#dependency-methods"></a>Dependency Methods</h2>
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
-    <p><code>setPackage</code>Uses <a href='ExtractDependencyNetwork.html'>ExtractDependencyNetwork</a> to create edges, and then recovers nodes, passed ... to it</p>
+    <dl class='dl-horizontal'>
+    <dt><code>set_package(packageName, ...)</code></dt><dd><p><ul>
+<li><p>Set the package that all operations in the object are done for.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>packageName</code></b>: a string with the name of the package you are
+                  analyzing.</p></li>
+<li><p><b><code>...</code></b>: other arguments passed through to <code>ExtractDependencyNetwork</code></p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -107,7 +119,7 @@
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#dependency-methods">Dependency Methods</a></li>
+      <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
