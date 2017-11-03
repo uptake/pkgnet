@@ -1,6 +1,6 @@
 #' @title Calculate Network and Node Level Statistics
 #' @name CalcNetworkFeatures
-#' @description Given an ExtractNetwork object, extract network features on a node and network level
+#' @description Given an ExtractFunctionNetwork object, extract network features on a node and network level
 #' @param edges a data.table of edges with two columns, SOURCE, and TARGET
 #' @param nodes a data.table of nodes with column node
 #' @importFrom igraph graph.edgelist centralization.betweenness centralization.closeness centralization.degree 
@@ -98,7 +98,7 @@ CalcNetworkFeatures <- function(edges,nodes) {
 
 #' @title Make Graph Object Including Isolated Nodes
 #' @name MakeGraphObject
-#' @description Given a pkgGraphect created by \code{\link{ExtractNetwork}},
+#' @description Given a pkgGraphect created by \code{\link{ExtractFunctionNetwork}},
 #'              use \code{igraph} to create a formal graph object
 #' @param edges a data.table of edges with two columns, SOURCE, and TARGET
 #' @param nodes a data.table of nodes with column node

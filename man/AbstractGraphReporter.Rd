@@ -16,20 +16,24 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 \section{Public Methods}{
 
 \describe{
-   \item{\code{calculateNetworkMetrics}{Uses \link{CalcNetworkFeatures} to calculate nodes and edges to create summary metrics of the overall graph structure, including centrality measures etc.}}
-   \item{\code{getSummaryView}{Returns the output of calculateNetworkMetrics}}
-   \item{\code{setGraphLayout}{Accepts a layoutType from either "tree" or "circle" and augments the nodes private field with level/horizontal co-ordinates for a prettified layout}}
-   \item{\code{plotNetwork}{Calls \code{PlotNetwork} and returns a plotly object }}
+   \itemize{
+       \item{\code{calculateNetworkMetrics}{Uses \link{CalcNetworkFeatures} to calculate nodes and edges to create summary metrics of the overall graph structure, including centrality measures etc.}}
+       \item{\code{getSummaryView}{Returns the output of calculateNetworkMetrics}}
+       \item{\code{setGraphLayout}{Accepts a layoutType from either "tree" or "circle" and augments the nodes private field with level/horizontal co-ordinates for a prettified layout}}
+       \item{\code{plotNetwork}{Calls \code{PlotNetwork} and returns a plotly object }}
+   }
 }
 }
 
 \section{Public Members}{
 
 \describe{
+ \itemize{
    \item{\code{edges}{A data.table from SOURCE to TARGET nodes describing the connections}}
    \item{\code{nodes}{A data.table with node as an identifier, and augementing information about each node}}
    \item{\code{pkgGraph}{An igraph object describing the package graph}}
    \item{\code{networkMeasures}{A list of network measures calculated by \link{CalcNetworkFeatures}}}
+  }
 }
 }
 

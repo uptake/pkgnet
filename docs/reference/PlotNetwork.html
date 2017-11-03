@@ -101,7 +101,7 @@
       <th>colorFieldName</th>
       <td><p>(character) The name of column to use to color the nodes. This can
 be any column in the "nodes" table inside the object produced by
-<code>ExtractNetwork</code>. Default is outDegree. If you estimated
+<code>ExtractFunctionNetwork</code>. Default is outDegree. If you estimated
 test coverage when creating the network representation,
 try setting this field to "test_coverage"!</p></td>
     </tr>
@@ -114,7 +114,7 @@ try setting this field to "test_coverage"!</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>nw</span> <span class='kw'>&lt;-</span> <span class='fu'>ExtractNetwork</span>(<span class='st'>"lubridate"</span>)
+<span class='no'>nw</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ExtractFunctionNetwork.html'>ExtractFunctionNetwork</a></span>(<span class='st'>"lubridate"</span>)
 <span class='no'>nw</span>$<span class='no'>nodes</span>[,<span class='no'>test</span> <span class='kw'>:=</span> <span class='fu'>runif</span>(<span class='no'>.N</span>)]
 <span class='fu'>PlotNetwork</span>(<span class='no'>nw</span>, <span class='kw'>colorFieldName</span> <span class='kw'>=</span> <span class='st'>"test"</span>)
 <span class='co'># }</span></pre>

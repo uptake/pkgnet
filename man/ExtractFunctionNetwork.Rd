@@ -25,7 +25,7 @@ This function maps the relationships between
 }
 \examples{
 \dontrun{
-nw <- ExtractNetwork("data.table")
+nw <- ExtractFunctionNetwork("data.table")
 }
 }
 \seealso{

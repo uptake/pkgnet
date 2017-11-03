@@ -21,7 +21,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' nw <- ExtractNetwork("data.table")
+#' nw <- ExtractFunctionNetwork("data.table")
 #' }
 ExtractFunctionNetwork <- function(pkgName
                            , pkgPath = NULL
@@ -61,7 +61,7 @@ ExtractFunctionNetwork <- function(pkgName
 #' @param nodes a data.table with node and augmenting metadata
 #' @param colorFieldName (character) The name of column to use to color the nodes. This can
 #'                       be any column in the "nodes" table inside the object produced by
-#'                       \code{ExtractNetwork}. Default is outDegree. If you estimated
+#'                       \code{ExtractFunctionNetwork}. Default is outDegree. If you estimated
 #'                       test coverage when creating the network representation,
 #'                       try setting this field to "test_coverage"!
 #' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
@@ -70,7 +70,7 @@ ExtractFunctionNetwork <- function(pkgName
 #' @export 
 #' @examples
 #' \dontrun{
-#' nw <- ExtractNetwork("lubridate")
+#' nw <- ExtractFunctionNetwork("lubridate")
 #' nw$nodes[,test := runif(.N)]
 #' PlotNetwork(nw, colorFieldName = "test")
 #' }

@@ -33,7 +33,7 @@
 # 
 #     # Should run end-to-end for working inputs
 #     test_that(".UpdateNodes should run end-to-end without error", {expect_true({
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         pkgnet:::.UpdateNodes(baseballGraph, data.table::data.table(node = c('batting_avg', 'slugging_avg')
 #                                                                     , some_stat = rnorm(2)))
 #         TRUE
@@ -42,7 +42,7 @@
 # 
 #     # Should do what we expect
 #     test_that(".UpdateNodes should run work as expected", {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph <- pkgnet:::.UpdateNodes(baseballGraph
 #                                                , data.table::data.table(node = c('batting_avg', 'slugging_avg')
 #                                                                         , some_stat = rnorm(2)))
@@ -55,19 +55,19 @@
 # 
 #     # Should break with an informative error if the thing has no "nodes"
 #     test_that('.UpdateNodes should break with an informative error for a pkgGraph missing nodes', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph[["nodes"]] <- NULL
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNodes(baseballGraph
 #                                                    , data.table::data.table(node = c('batting_avg', 'slugging_avg')
 #                                                                             , some_stat = rnorm(2)))
 #             }
-#             , regexp = "Did you generate pkgGraph with ExtractNetwork")
+#             , regexp = "Did you generate pkgGraph with ExtractFunctionNetwork")
 #     })
 #     
 #     # Should break with an informative error if "nodes" isn't a data.table
 #     test_that('.UpdateNodes should break with an informative error for a pkgGraph missing nodes', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph[["nodes"]] <- list(thing1 = 5, thing2 = 7.0)
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNodes(baseballGraph
@@ -79,7 +79,7 @@
 #     
 #     # Should break with an informative error if "nodes" isn't a data.table
 #     test_that('.UpdateNodes should break with an informative error if metadataDT is not a data.table', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNodes(baseballGraph
 #                                                    , list(node = c('batting_avg', 'slugging_avg')
@@ -90,7 +90,7 @@
 #     
 #     # Should break with an informative error if metadataDT has no "node" columns
 #     test_that('.UpdateNodes should break with an informative error if metadataDT is not a data.table', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNodes(baseballGraph
 #                                                    , data.table::data.table(item = c('batting_avg', 'slugging_avg')
@@ -103,7 +103,7 @@
 # 
 #     # Should run end-to-end for working inputs
 #     test_that(".UpdateNetworkMeasures should run end-to-end without error", {expect_true({
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         result <- pkgnet:::.UpdateNetworkMeasures(baseballGraph, list(awesomeness = 11))
 #         TRUE
 #         })
@@ -111,7 +111,7 @@
 #     
 #     # Should do what we expect
 #     test_that(".UpdateNetworkMeasures should work as expected", {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph <- pkgnet:::.UpdateNetworkMeasures(baseballGraph
 #                                                         , list(thing = 21, stuff = 11.9))
 #         
@@ -124,7 +124,7 @@
 #     
 #     # Should replace a value if we update a thing
 #     test_that(".UpdateNetworkMeasures should update a metric if it exists already", {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph <- pkgnet:::.UpdateNetworkMeasures(baseballGraph
 #                                                          , list(thing = 21, stuff = 11.9))
 #         baseballGraph <- pkgnet:::.UpdateNetworkMeasures(baseballGraph
@@ -139,18 +139,18 @@
 #     
 #     # Should break with an informative error if the thing has no "nodes"
 #     test_that('.UpdateNetworkMeasures should break with an informative error for a pkgGraph missing nodes', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph[["nodes"]] <- NULL
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNetworkMeasures(baseballGraph
 #                                                             , list(thing = 21, stuff = 11.9))
 #         }
-#         , regexp = "Did you generate pkgGraph with ExtractNetwork")
+#         , regexp = "Did you generate pkgGraph with ExtractFunctionNetwork")
 #     })
 #     
 #     # Should break with an informative error if "nodes" isn't a data.table
 #     test_that('.UpdateNetworkMeasures should break with an informative error for a pkgGraph that is not a data.table', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         baseballGraph[["nodes"]] <- list(thing1 = 5, thing2 = 7.0)
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNetworkMeasures(baseballGraph
@@ -162,7 +162,7 @@
 #     
 #     # Should break with an informative error if "nodes" isn't a data.table
 #     test_that('.UpdateNetworkMeasures should break with an informative error if networkMeasureList is not a list', {
-#         baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+#         baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 #         expect_error({
 #             baseballGraph <- pkgnet:::.UpdateNetworkMeasures(baseballGraph, c(awesomeness = 10))
 #         }
