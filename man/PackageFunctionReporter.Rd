@@ -16,8 +16,12 @@ This Reporter takes a package and uncovers the structure from
 }
 \section{Dependency Methods}{
 
+\describe{
+ \itemize{
    \item{\code{setPackage}{Uses \link{ExtractFunctionNetwork} to create edges}}
    \item{\code{packageTestCoverage}{Uses \link{GetCoverageByFunction} to calculate node test coverage}}
+ }
+}
 }
 
 \seealso{

@@ -96,13 +96,21 @@
 
     
     <dl class='dl-horizontal'>
-   <dt><code>calculateNetworkMetrics</code>Uses <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a> to calculate nodes and edges to create summary metrics of the overall graph structure, including centrality measures etc.</dt><dd><p></p></dd>   <dt><code>getSummaryView</code>Returns the output of calculateNetworkMetrics</dt><dd><p></p></dd>   <dt><code>setGraphLayout</code>Accepts a layoutType from either "tree" or "circle" and augments the nodes private field with level/horizontal co-ordinates for a prettified layout</dt><dd><p></p></dd>   <dt><code>plotNetwork</code>Calls <code>PlotNetwork</code> and returns a plotly object </dt><dd><p></p></dd></dl>
+    <code>calculateNetworkMetrics</code>Uses <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a> to calculate nodes and edges to create summary metrics of the overall graph structure, including centrality measures etc.
+       <code>getSummaryView</code>Returns the output of calculateNetworkMetrics
+       <code>setGraphLayout</code>Accepts a layoutType from either "tree" or "circle" and augments the nodes private field with level/horizontal co-ordinates for a prettified layout
+       <code>plotNetwork</code>Calls <code>PlotNetwork</code> and returns a plotly object
+    </dl>
     
     <h2 class="hasAnchor" id="public-members"><a class="anchor" href="#public-members"></a>Public Members</h2>
 
     
     <dl class='dl-horizontal'>
-   <dt><code>edges</code>A data.table from SOURCE to TARGET nodes describing the connections</dt><dd><p></p></dd>   <dt><code>nodes</code>A data.table with node as an identifier, and augementing information about each node</dt><dd><p></p></dd>   <dt><code>pkgGraph</code>An igraph object describing the package graph</dt><dd><p></p></dd>   <dt><code>networkMeasures</code>A list of network measures calculated by <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a></dt><dd><p></p></dd></dl>
+    <code>edges</code>A data.table from SOURCE to TARGET nodes describing the connections
+   <code>nodes</code>A data.table with node as an identifier, and augementing information about each node
+   <code>pkgGraph</code>An igraph object describing the package graph
+   <code>networkMeasures</code>A list of network measures calculated by <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a>
+    </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

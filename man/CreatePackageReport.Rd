@@ -7,7 +7,9 @@
 CreatePackageReport(packageName, packageReporters = DefaultReporters())
 }
 \arguments{
-\item{pkgPath}{path to the package you want to examine}
+\item{packageName}{name of a package}
+
+\item{packageReporters}{a list of package reporters}
 }
 \description{
 Obtain Ratio of Coverage For Each Function Within A Package

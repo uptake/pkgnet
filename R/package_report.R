@@ -2,11 +2,12 @@
 #' @name CreatePackageReport
 #' @description Obtain Ratio of Coverage For Each Function Within A Package
 #' @author B. Burns
-#' @param pkgPath path to the package you want to examine
+#' @param packageName name of a package
+#' @param packageReporters a list of package reporters
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
 #' @export
-CreatePackageReport <- function(packageName,packageReporters = DefaultReporters()) {
+CreatePackageReport <- function(packageName, packageReporters = DefaultReporters()) {
     futile.logger::flog.info(paste("Creating package report for package",packageName
                                    ,"with reporters"
                                    ,paste(unlist(lapply(packageReporters,function(x) class(x)[1])),collapse = ",")))

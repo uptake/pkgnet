@@ -15,6 +15,6 @@ MakeGraphObject(edges, nodes)
 an igraph object
 }
 \description{
-Given a pkgGraphect created by \code{\link{ExtractNetwork}},
+Given a pkgGraphect created by \code{\link{ExtractFunctionNetwork}},
              use \code{igraph} to create a formal graph object
 }

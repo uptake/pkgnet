@@ -24,7 +24,7 @@
 # TEST_PKG_PATH <- file.path(.libPaths()[1], 'pkgnet', 'baseballstats')
 # 
 # # Create a network out of the baseball stats package
-# baseballGraph <- ExtractNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
+# baseballGraph <- ExtractFunctionNetwork(pkgName = 'baseballstats', pkgPath = TEST_PKG_PATH)
 # 
 # ##### RUN TESTS #####
 # 
@@ -63,10 +63,10 @@
 # # TESTS
 # 
 # test_that('Extract Network Handles No Network Edge Case', {
-#   expect_warning(ExtractNetwork("sartre")
+#   expect_warning(ExtractFunctionNetwork("sartre")
 #                , regexp = "No Network Available\\.  Only one function in"
 #                )
-#   testNW <- suppressWarnings(ExtractNetwork("sartre"))
+#   testNW <- suppressWarnings(ExtractFunctionNetwork("sartre"))
 #   expect_named(testNW
 #                , expected = c('nodes', 'edges', 'networkMeasures')
 #                , ignore.order = TRUE

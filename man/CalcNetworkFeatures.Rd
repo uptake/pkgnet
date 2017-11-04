@@ -18,5 +18,5 @@ A two element list: \describe{
 }
 }
 \description{
-Given an ExtractNetwork object, extract network features on a node and network level
+Given an ExtractFunctionNetwork object, extract network features on a node and network level
 }

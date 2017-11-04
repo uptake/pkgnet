@@ -8,8 +8,12 @@
 #' @importFrom data.table data.table
 #' @importFrom R6 R6Class
 #' @section Dependency Methods:
+#' \describe{
+#'  \itemize{
 #'    \item{\code{setPackage}{Uses \link{ExtractFunctionNetwork} to create edges}}
 #'    \item{\code{packageTestCoverage}{Uses \link{GetCoverageByFunction} to calculate node test coverage}}
+#'  }
+#' }
 #' @export
 PackageFunctionReporter <- R6::R6Class(
     "PackageFunctionReporter",
