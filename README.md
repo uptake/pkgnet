@@ -1,5 +1,7 @@
 # pkgnet
 
+[![Build Status](https://travis-ci.org/UptakeOpenSource/travis.svg?branch=master)](https://travis-ci.org/UptakeOpenSource/travis)
+
 **WARNING: This package is still under construction. It's API can and will change. Please contribute to the conversation about its future by submitting issues and pull requests, or by contacting the package maintainer (see the DESCRIPTION file) directly.**
 
 ## Introduction
