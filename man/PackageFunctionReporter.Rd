@@ -18,8 +18,8 @@ This Reporter takes a package and uncovers the structure from
 
 \describe{
  \itemize{
-   \item{\code{setPackage}{Uses \link{ExtractFunctionNetwork} to create edges}}
-   \item{\code{packageTestCoverage}{Uses \link{GetCoverageByFunction} to calculate node test coverage}}
+   \item{\code{set_package}{Uses \code{ExtractFunctionNetwork} to create edges}}
+   \item{\code{package_test_coverage}{Uses \code{GetCoverageByFunction} to calculate node test coverage}}
  }
 }
 }

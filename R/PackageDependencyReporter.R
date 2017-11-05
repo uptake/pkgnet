@@ -31,8 +31,8 @@ PackageDependencyReporter <- R6::R6Class(
 
     public = list(
         set_package = function(packageName, ...) {
-            private$edges <- ExtractDependencyNetwork(packageName,...)
-            private$nodes <- data.table::data.table(node = unique(c(private$edges[,SOURCE],private$edges[,TARGET])))
+            private$edges <- ExtractDependencyNetwork(packageName, ...)
+            private$nodes <- data.table::data.table(node = unique(c(private$edges[, SOURCE], private$edges[,TARGET])))
             private$packageName <- packageName
             private$pkgGraph <- MakeGraphObject(private$edges,private$nodes)
         }

@@ -10,8 +10,8 @@
 #' @section Dependency Methods:
 #' \describe{
 #'  \itemize{
-#'    \item{\code{setPackage}{Uses \link{ExtractFunctionNetwork} to create edges}}
-#'    \item{\code{packageTestCoverage}{Uses \link{GetCoverageByFunction} to calculate node test coverage}}
+#'    \item{\code{set_package}{Uses \code{ExtractFunctionNetwork} to create edges}}
+#'    \item{\code{package_test_coverage}{Uses \code{GetCoverageByFunction} to calculate node test coverage}}
 #'  }
 #' }
 #' @export
@@ -21,18 +21,18 @@ PackageFunctionReporter <- R6::R6Class(
     
     public = list(
         
-        setPackage = function(packageName, packagePath = NULL) {
+        set_package = function(packageName, packagePath = NULL) {
             private$edges <- ExtractFunctionNetwork(packageName)
             private$nodes <- data.table::data.table(node = unique(c(private$edges[,SOURCE],private$edges[,TARGET])))
             private$packageName <- packageName
-            if(is.null(packagePath)){
-                self$packageTestCoverage(packagePath)
+            if (is.null(packagePath)){
+                self$package_test_coverage(packagePath)
             }
             private$pkgGraph <- MakeGraphObject(private$edges,private$nodes)
-            self$calculateNetworkMetrics()
+            self$calculate_network_metrics()
         },
         
-        packageTestCoverage = function(packagePath){
+        package_test_coverage = function(packagePath){
             return(invisible(NULL))
             # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
             # futile.logger::flog.info('Checking package coverage...')
