@@ -27,25 +27,24 @@ ExtractFunctionNetwork <- function(pkgName
                                    , pkgPath = NULL
 ){
     
-  futile.logger::flog.info(sprintf('Loading %s...', pkgName))
+  log_info(sprintf('Loading %s...', pkgName))
   suppressPackageStartupMessages({
     require(pkgName, character.only = TRUE)
   })
-  futile.logger::flog.info('DONE.\n')
+  log_info('DONE.\n')
   
   # Avoid mvbutils::foodweb bug on one function packages
   numFuncs <- as.character(unlist(utils::lsf.str(asNamespace(pkgName)))) # list of functions within Package
   if (length(numFuncs) == 1) {
-    msg <- sprintf('No Network Available.  Only one function in %s.', pkgName)
-    futile.logger::flog.warn(msg)
-    warning(msg)
+    log_warn(sprintf('No Network Available.  Only one function in %s.', pkgName))
+
     nodeDT <- data.table::data.table(nodes = numFuncs, level = 1,  horizontal = 0.5)
     return(packageObj <- list(nodes = nodeDT, edges = list(), networkMeasures = list()))
   }
   
-  futile.logger::flog.info(sprintf('Constructing network representation...'))
+  log_info(sprintf('Constructing network representation...'))
   funcMap <- mvbutils::foodweb(where = paste("package", pkgName, sep = ":"), plotting = FALSE)
-  futile.logger::flog.info("Done constructing network representation")
+  log_info("Done constructing network representation")
   
   # Function Connections: Arcs
   edges <- data.table::melt(data.table::as.data.table(funcMap$funmat, keep.rownames = TRUE)

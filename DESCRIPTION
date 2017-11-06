@@ -12,11 +12,13 @@ Description: Tools from the  domain of graph theory can be used to quantify the 
              of this package. "pkgnet" provides tools to analyze the dependencies between functions
              in an R package and between its imported packages.
 Imports:
+    assertthat,
     covr,
     data.table,
     futile.logger,
     igraph,
     magrittr,
+    methods,
     mvbutils,
     R6,
     visNetwork

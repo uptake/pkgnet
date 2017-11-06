@@ -97,7 +97,7 @@ CalcNetworkFeatures <- function(edges, nodes) {
 
 #' @title Make Graph Object Including Isolated Nodes
 #' @name MakeGraphObject
-#' @description Given a pkgGraphect created by \code{\link{ExtractFunctionNetwork}},
+#' @description Given a pkgGraph object created by \code{\link{ExtractFunctionNetwork}},
 #'              use \code{igraph} to create a formal graph object
 #' @param edges a data.table of edges with two columns, SOURCE, and TARGET
 #' @param nodes a data.table of nodes with column node
