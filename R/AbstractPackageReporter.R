@@ -52,13 +52,17 @@ AbstractPackageReporter <- R6::R6Class(
     "AbstractPackageReporter",
     
     public = list(
-
-        get_package = function(){
-            return(private$packageName)
+        
+        set_package = function(packageName, packagePath = NULL) {
+            
+            private$packageName <- packageName
+            private$packagePath <- packagePath
+            
+            return(invisible(NULL))
         },
         
-        set_package = function(packageName) {
-            stop("set_package has not been implemented.")
+        get_package = function(){
+            return(private$packageName)
         },
         
         get_report =  function() {
@@ -75,6 +79,7 @@ AbstractPackageReporter <- R6::R6Class(
     ),
     
     private = list(
-        packageName = NULL
+        packageName = NULL,
+        packagePath = NULL
     )
 )

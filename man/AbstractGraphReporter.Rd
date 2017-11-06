@@ -17,9 +17,18 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 
 \describe{
    \itemize{
-       \item{\code{calculate_network_metrics}{Uses \code{CalcNetworkFeatures} to 
-         calculate nodes and edges to create summary metrics of the overall 
-         graph structure, including centrality measures etc.}}
+        \item{\code{calculate_network_measures()}}{
+            \itemize{
+                \item{extract network features on a node and network level}
+                \item{\bold{Returns:}}{
+                    \itemize{
+                    \item{\bold{\code{packageName}}: String with the name of the package}
+                    \item{\bold{\code{packagePath}}: Optional path to the source code. 
+                        To be used for test coverage, if provided.}
+                   }
+                }
+            }
+       }
        \item{\code{get_summary_view}{Returns the output of calculateNetworkMetrics}}
        \item{\code{set_graph_layout}{Accepts a layoutType from either "tree" or "circle"
          and augments the nodes private field with level/horizontal coordinates 
