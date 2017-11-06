@@ -21,7 +21,7 @@
 #' \describe{
 #'  \itemize{
 #'    \item{\code{edges}{A data.table from SOURCE to TARGET nodes describing the connections}}
-#'    \item{\code{nodes}{A data.table with node as an identifier, and augementing information about each node}}
+#'    \item{\code{nodes}{A data.table with node as an identifier, and augmenting information about each node}}
 #'    \item{\code{pkgGraph}{An igraph object describing the package graph}}
 #'    \item{\code{networkMeasures}{A list of network measures calculated by \code{CalcNetworkFeatures}}}
 #'   }

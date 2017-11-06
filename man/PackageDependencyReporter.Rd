@@ -3,7 +3,7 @@
 \docType{data}
 \name{PackageDependencyReporter}
 \alias{PackageDependencyReporter}
-\title{Package Dependecy Reporter Class}
+\title{Package Dependency Reporter Class}
 \format{An object of class \code{R6ClassGenerator} of length 24.}
 \usage{
 PackageDependencyReporter

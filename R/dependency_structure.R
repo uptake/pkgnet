@@ -1,4 +1,4 @@
-#' @title Extract the Depndency Network from a Package
+#' @title Extract the Dependency Network from a Package
 #' @name ExtractDependencyNetwork
 #' @author P. Boueri
 #' @description This function maps a package's reverse dependency

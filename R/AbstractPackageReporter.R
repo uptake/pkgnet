@@ -31,7 +31,7 @@
 #'     }
 #'     \item{\code{get_summary_view()}}{
 #'         \itemize{
-#'             \item{Returns a particular reporters summmary report on the package}
+#'             \item{Returns a particular reporters summary report on the package}
 #'       }
 #'     }
 #'     \item{\code{get_raw_data()}}{
