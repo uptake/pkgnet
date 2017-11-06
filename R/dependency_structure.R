@@ -20,11 +20,15 @@
 #' \dontrun{
 #' nw <- ExtractDependencyNetwork("dplyr")
 #' }
-ExtractDependencyNetwork <- function(pkgName, which = "Imports", installed = TRUE,ignorePackages = NULL){
+ExtractDependencyNetwork <- function(pkgName
+                                     , which = "Imports"
+                                     , installed = TRUE
+                                     , ignorePackages = NULL
+                                     ){
     
     futile.logger::flog.info(sprintf('Constructing reverse dependency graph for %s',pkgName))
   
-    if(installed){
+    if (installed){
         db <- utils::installed.packages()
         if (!is.element(pkgName, db[,1])) {
           msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.',pkgName)

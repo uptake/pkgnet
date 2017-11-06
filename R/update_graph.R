@@ -71,40 +71,40 @@
 #' @importFrom futile.logger flog.fatal
 .UpdateNetworkMeasures <- function(pkgGraph, networkMeasureList){
   
-  # Input checks
-  if (!'nodes' %in% names(pkgGraph)){
-    msg <- paste0("Did you generate pkgGraph with ExtractFunctionNetwork? ",
-                  "It should be a list with a 'nodes' element.")
-    futile.logger::flog.fatal(msg)
-    stop(msg)    
-  }
-  if (!'data.table' %in% class(pkgGraph[['nodes']])){
-    msg <- "the object in the 'nodes' element of pkgGraph should be a data.table!"
-    futile.logger::flog.fatal(msg)
-    stop(msg)
-  }
-  if (!'list' %in% class(networkMeasureList)){
-    msg <- "the object passed to networkMeasureList should be a list!"
-    futile.logger::flog.fatal(msg)
-    stop(msg)
-  }
-
-  # replace Value is exists already. otherwise append
-  currentNames <- names(pkgGraph[['networkMeasures']])
-  newNames <- names(networkMeasureList)
-  existingIX <- match(x = newNames, table = currentNames)
-  r <- 0
-  for(i in existingIX){
-    r <- r + 1
-    if(is.na(i)) {
-      #append
-      pkgGraph[['networkMeasures']] <- c(pkgGraph[['networkMeasures']], networkMeasureList[r])
-    } else {
-      #replace
-      pkgGraph[['networkMeasures']][i] <- networkMeasureList[r]
-    }
-  }
-  
-  return(pkgGraph)
+      # Input checks
+      if (!'nodes' %in% names(pkgGraph)){
+        msg <- paste0("Did you generate pkgGraph with ExtractFunctionNetwork? ",
+                      "It should be a list with a 'nodes' element.")
+        futile.logger::flog.fatal(msg)
+        stop(msg)    
+      }
+      if (!'data.table' %in% class(pkgGraph[['nodes']])){
+        msg <- "the object in the 'nodes' element of pkgGraph should be a data.table!"
+        futile.logger::flog.fatal(msg)
+        stop(msg)
+      }
+      if (!'list' %in% class(networkMeasureList)){
+        msg <- "the object passed to networkMeasureList should be a list!"
+        futile.logger::flog.fatal(msg)
+        stop(msg)
+      }
+    
+      # replace Value is exists already. otherwise append
+      currentNames <- names(pkgGraph[['networkMeasures']])
+      newNames <- names(networkMeasureList)
+      existingIX <- match(x = newNames, table = currentNames)
+      r <- 0
+      for(i in existingIX){
+        r <- r + 1
+        if(is.na(i)) {
+          #append
+          pkgGraph[['networkMeasures']] <- c(pkgGraph[['networkMeasures']], networkMeasureList[r])
+        } else {
+          #replace
+          pkgGraph[['networkMeasures']][i] <- networkMeasureList[r]
+        }
+      }
+      
+      return(pkgGraph)
   
 }

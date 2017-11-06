@@ -7,10 +7,14 @@
 #' @section Public Methods:
 #' \describe{
 #'    \itemize{
-#'        \item{\code{calculateNetworkMetrics}{Uses \link{CalcNetworkFeatures} to calculate nodes and edges to create summary metrics of the overall graph structure, including centrality measures etc.}}
-#'        \item{\code{getSummaryView}{Returns the output of calculateNetworkMetrics}}
-#'        \item{\code{setGraphLayout}{Accepts a layoutType from either "tree" or "circle" and augments the nodes private field with level/horizontal co-ordinates for a prettified layout}}
-#'        \item{\code{plotNetwork}{Calls \code{PlotNetwork} and returns a plotly object }}
+#'        \item{\code{calculate_network_metrics}{Uses \code{CalcNetworkFeatures} to 
+#'          calculate nodes and edges to create summary metrics of the overall 
+#'          graph structure, including centrality measures etc.}}
+#'        \item{\code{get_summary_view}{Returns the output of calculateNetworkMetrics}}
+#'        \item{\code{set_graph_layout}{Accepts a layoutType from either "tree" or "circle"
+#'          and augments the nodes private field with level/horizontal coordinates 
+#'          for a prettified layout}}
+#'        \item{\code{plot_network}{Calls \code{PlotNetwork} and returns a plotly object }}
 #'    }
 #' }
 #' @section Public Members:
@@ -19,7 +23,7 @@
 #'    \item{\code{edges}{A data.table from SOURCE to TARGET nodes describing the connections}}
 #'    \item{\code{nodes}{A data.table with node as an identifier, and augementing information about each node}}
 #'    \item{\code{pkgGraph}{An igraph object describing the package graph}}
-#'    \item{\code{networkMeasures}{A list of network measures calculated by \link{CalcNetworkFeatures}}}
+#'    \item{\code{networkMeasures}{A list of network measures calculated by \code{CalcNetworkFeatures}}}
 #'   }
 #' }
 #' @importFrom data.table data.table
@@ -31,15 +35,16 @@ AbstractGraphReporter <- R6::R6Class(
     inherit = AbstractPackageReporter,
     
     public = list(
-        calculateNetworkMetrics = function(){
+        
+        calculate_network_metrics = function(){
             private$networkMeasures <- CalcNetworkFeatures(private$edges,private$nodes)
         },
         
-        getSummaryView = function(){
+        get_summary_view = function(){
             return(private$networkMeasures)
         },
         
-        setGraphLayout = function(layoutType = "tree"){
+        set_graph_layout = function(layoutType = "tree"){
 
             if (layoutType == "tree"){
                 plotMat <- suppressWarnings(igraph::layout_as_tree(private$pkgGraph)) 
@@ -54,11 +59,11 @@ AbstractGraphReporter <- R6::R6Class(
             private$nodes <- merge(x = private$nodes, y = plotDT, all.x = TRUE, by="node")
         },
         
-        plotNetwork = function(colorFieldName = NULL){
-            self$setGraphLayout()
+        plot_network = function(colorFieldName = NULL){
+            self$set_graph_layout()
             PlotNetwork(edges = private$edges
-                        ,nodes = private$nodes
-                        ,colorFieldName)
+                        , nodes = private$nodes
+                        , colorFieldName)
         }
     ),
     

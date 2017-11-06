@@ -34,7 +34,12 @@ devtools::install_github("UptakeOpenSource/pkgnet")
 
 ## Usage Examples <a name="examples"></a>
 
-TODO: Add examples
+Try it out!
+
+```
+library(pkgnet)
+result <- CreatePackageReport('ggplot2')
+```
 
 ## Next Steps <a name="nextsteps"></a>
 

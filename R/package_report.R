@@ -8,14 +8,17 @@
 #' @importFrom data.table as.data.table setnames
 #' @export
 CreatePackageReport <- function(packageName, packageReporters = DefaultReporters()) {
-    futile.logger::flog.info(paste("Creating package report for package",packageName
-                                   ,"with reporters"
-                                   ,paste(unlist(lapply(packageReporters,function(x) class(x)[1])),collapse = ",")))
+    
+    futile.logger::flog.info(paste("Creating package report for package"
+                                   , packageName
+                                   , "with reporters"
+                                   , paste(unlist(lapply(packageReporters,function(x) class(x)[1])),collapse = ",")))
+
     # TODO [patrick.bouer@uptake.com]: Type checks
     plots <- list()
     for(reporter in packageReporters){
-        reporter$setPackage(packageName)
-        plots <- c(plots,reporter$plotNetwork()) # TODO [patrick.bouer@uptake.com]: Figure out how to pass configuration params by class. Probably gonna be constructor fields
+        reporter$set_package(packageName)
+        plots <- c(plots, reporter$plot_network()) # TODO [patrick.bouer@uptake.com]: Figure out how to pass configuration params by class. Probably gonna be constructor fields
     }
     
     return(plots)
