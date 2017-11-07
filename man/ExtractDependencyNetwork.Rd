@@ -2,7 +2,7 @@
 % Please edit documentation in R/dependency_structure.R
 \name{ExtractDependencyNetwork}
 \alias{ExtractDependencyNetwork}
-\title{Extract the Depndency Network from a Package}
+\title{Extract the Dependency Network from a Package}
 \usage{
 ExtractDependencyNetwork(pkgName, which = "Imports", installed = TRUE,
   ignorePackages = NULL)

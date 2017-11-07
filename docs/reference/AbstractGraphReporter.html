@@ -96,14 +96,14 @@
 
     
     <dl class='dl-horizontal'>
-    <code>calculateNetworkMetrics</code>Uses <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a> to 
+    <code>calculate_network_metrics</code>Uses <code>CalcNetworkFeatures</code> to 
          calculate nodes and edges to create summary metrics of the overall 
          graph structure, including centrality measures etc.
-       <code>getSummaryView</code>Returns the output of calculateNetworkMetrics
-       <code>setGraphLayout</code>Accepts a layoutType from either "tree" or "circle"
+       <code>get_summary_view</code>Returns the output of calculateNetworkMetrics
+       <code>set_graph_layout</code>Accepts a layoutType from either "tree" or "circle"
          and augments the nodes private field with level/horizontal coordinates 
          for a prettified layout
-       <code>plotNetwork</code>Calls <code>PlotNetwork</code> and returns a plotly object
+       <code>plot_network</code>Calls <code>PlotNetwork</code> and returns a plotly object
     </dl>
     
     <h2 class="hasAnchor" id="public-members"><a class="anchor" href="#public-members"></a>Public Members</h2>
@@ -111,9 +111,9 @@
     
     <dl class='dl-horizontal'>
     <code>edges</code>A data.table from SOURCE to TARGET nodes describing the connections
-   <code>nodes</code>A data.table with node as an identifier, and augementing information about each node
+   <code>nodes</code>A data.table with node as an identifier, and augmenting information about each node
    <code>pkgGraph</code>An igraph object describing the package graph
-   <code>networkMeasures</code>A list of network measures calculated by <a href='CalcNetworkFeatures.html'>CalcNetworkFeatures</a>
+   <code>networkMeasures</code>A list of network measures calculated by <code>CalcNetworkFeatures</code>
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

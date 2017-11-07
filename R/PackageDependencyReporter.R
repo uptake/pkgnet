@@ -1,4 +1,4 @@
-#' @title Package Dependecy Reporter Class
+#' @title Package Dependency Reporter Class
 #' @name PackageDependencyReporter
 #' @family PackageReporters
 #' @description This Reporter takes a package and uncovers the structure from

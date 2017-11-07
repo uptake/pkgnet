@@ -20,10 +20,3 @@ reference:
     contents:
       - ExtractDependencyNetwork
       - ExtractFunctionNetwork
-  - title: "Coverage Calculation"
-    contents:
-      - GetCoverageByFunction
-      - CalcNetworkFeatures
-  - title: "Visualization"
-    contents:
-      - PlotNetwork
