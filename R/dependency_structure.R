@@ -26,27 +26,26 @@ ExtractDependencyNetwork <- function(pkgName
                                      , ignorePackages = NULL
                                      ){
     
-    futile.logger::flog.info(sprintf('Constructing reverse dependency graph for %s',pkgName))
+    log_info(sprintf('Constructing reverse dependency graph for %s',pkgName))
   
     if (installed){
         db <- utils::installed.packages()
         if (!is.element(pkgName, db[,1])) {
           msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.',pkgName)
-          futile.logger::flog.fatal(msg)
-          stop(msg)
+          log_fatal(msg)
         }
     }else{
         db <- NULL
     }
     allDependencies <- unlist(tools::package_dependencies(pkgName
-                                                          ,reverse = FALSE
-                                                          ,recursive = TRUE
-                                                          ,db = db
-                                                          ,which = which))
-    if(is.null(allDependencies) | identical(allDependencies, character(0))){
+                                                          , reverse = FALSE
+                                                          , recursive = TRUE
+                                                          , db = db
+                                                          , which = which))
+    
+    if (is.null(allDependencies) | identical(allDependencies, character(0))){
         msg <- sprintf('Could not resolve dependencies for package %s',pkgName)
-        futile.logger::flog.warn(msg)
-        warning(msg)
+        log_warn(msg)
         nodeDT <- data.table::data.table(nodes = pkgName, level = 1,  horizontal = 0.5)
         return(packageObj <- list(nodes = nodeDT, edges = list(), networkMeasures = list()))
     }
@@ -60,12 +59,13 @@ ExtractDependencyNetwork <- function(pkgName
                                                   , which = which)
     
     nullList <-Filter(function(x){is.null(x)},dependencyList)
-    if(length(nullList) > 0){
-        futile.logger::flog.info(paste( "For package:", pkgName
-                                        ,"with dependency types:"
-                                        , paste(which,collapse = ",")
-                                        ,"could not find dependencies:"
-                                        , paste(names(nullList),collapse = ",")))
+    if (length(nullList) > 0){
+        log_info(paste("For package:"
+                       , pkgName
+                       , "with dependency types:"
+                       , paste(which,collapse = ",")    
+                       , "could not find dependencies:"
+                       , paste(names(nullList),collapse = ",")))
     }
     
     dependencyList <- Filter(function(x){!is.null(x)},dependencyList)

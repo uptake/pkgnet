@@ -4,23 +4,36 @@
 #' @author B. Burns
 #' @param packageName name of a package
 #' @param packageReporters a list of package reporters
+#' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
+#' @importFrom methods is
 #' @export
 CreatePackageReport <- function(packageName, packageReporters = DefaultReporters()) {
     
-    futile.logger::flog.info(paste("Creating package report for package"
-                                   , packageName
-                                   , "with reporters"
-                                   , paste(unlist(lapply(packageReporters,function(x) class(x)[1])),collapse = ",")))
+    # Input checks
+    assertthat::assert_that(assertthat::is.string(packageName)
+                            , is.list(packageReporters))
+    
+    # Confirm that all reporters are actually reporters
+    checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})
+    if (!all(checks)){
+        msg <- paste0("At least one of the reporters passed to CreatePackageReport ",
+                      "is not a PackageReporter. See ?AbstractPackageReporter for details.")
+        log_fatal(msg)
+    }
+    
+    log_info(paste("Creating package report for package"
+                   , packageName
+                   , "with reporters"
+                   , paste(unlist(lapply(packageReporters,function(x) class(x)[1])),collapse = ",")))
 
-    # TODO [patrick.bouer@uptake.com]: Type checks
+    # Make them plots
     plots <- list()
-    for(reporter in packageReporters){
+    for (reporter in packageReporters){
         reporter$set_package(packageName)
-        plots <- c(plots, reporter$plot_network()) # TODO [patrick.bouer@uptake.com]: Figure out how to pass configuration params by class. Probably gonna be constructor fields
+        plots <- c(plots, reporter$plot_network())
     }
     
     return(plots)
-        
 }

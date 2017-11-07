@@ -15,30 +15,25 @@
 # # Add random stuff
 # coverageDT <- data.table(node = c('log.warn', 'GetAPIInfo'), coverage = c(95, 100))
 # newNW <- pkgnet:::.UpdateNodes(nw, coverageDT)
-#' @importFrom futile.logger flog.fatal
 .UpdateNodes <- function(pkgGraph, metadataDT){
    
     # Input checks
     if (!'nodes' %in% names(pkgGraph)){
         msg <- paste0("Did you generate pkgGraph with ExtractFunctionNetwork? ",
                       "It should be a list with a 'nodes' element.")
-        futile.logger::flog.fatal(msg)
-        stop(msg)    
+        log_fatal(msg)
     }
     if (!'data.table' %in% class(pkgGraph[['nodes']])){
         msg <- "the object in the 'nodes' element of pkgGraph should be a data.table!"
-        futile.logger::flog.fatal(msg)
-        stop(msg)
+        log_fatal(msg)
     }
     if (!'data.table' %in% class(metadataDT)){
         msg <- "the object passed to metadataDT should be a data.table!"
-        futile.logger::flog.fatal()
-        stop(msg)
+        log_fatal(msg)
     }
     if (!'node' %in% names(metadataDT)){
         msg <- "metadataDT should have a column called 'node'"
-        futile.logger::flog.fatal(msg)
-        stop(msg)
+        log_fatal(msg)
     }
     
     # Append metadata
@@ -68,25 +63,23 @@
 # # Add random stuff
 # newNetworkMeasure <- list(awesomness = 11)
 # newNW <- pkgnet:::.UpdateNetworkMeasures(nw, newNetworkMeasure)
-#' @importFrom futile.logger flog.fatal
+#' @importFrom data.table is.data.table
+#' @importFrom methods is
 .UpdateNetworkMeasures <- function(pkgGraph, networkMeasureList){
   
       # Input checks
       if (!'nodes' %in% names(pkgGraph)){
         msg <- paste0("Did you generate pkgGraph with ExtractFunctionNetwork? ",
                       "It should be a list with a 'nodes' element.")
-        futile.logger::flog.fatal(msg)
-        stop(msg)    
+        log_fatal(msg)
       }
-      if (!'data.table' %in% class(pkgGraph[['nodes']])){
+      if (!data.table::is.data.table(pkgGraph[['nodes']])){
         msg <- "the object in the 'nodes' element of pkgGraph should be a data.table!"
-        futile.logger::flog.fatal(msg)
-        stop(msg)
+        log_fatal(msg)
       }
-      if (!'list' %in% class(networkMeasureList)){
+      if (!methods::is(networkMeasureList, "list")){
         msg <- "the object passed to networkMeasureList should be a list!"
-        futile.logger::flog.fatal(msg)
-        stop(msg)
+        log_fatal(msg)
       }
     
       # replace Value is exists already. otherwise append
@@ -106,5 +99,5 @@
       }
       
       return(pkgGraph)
-  
+
 }

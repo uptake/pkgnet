@@ -37,7 +37,7 @@ AbstractGraphReporter <- R6::R6Class(
     public = list(
         
         calculate_network_metrics = function(){
-            private$networkMeasures <- CalcNetworkFeatures(private$edges,private$nodes)
+            private$networkMeasures <- CalcNetworkFeatures(private$edges, private$nodes)
         },
         
         get_summary_view = function(){

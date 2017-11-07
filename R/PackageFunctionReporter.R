@@ -35,7 +35,7 @@ PackageFunctionReporter <- R6::R6Class(
         package_test_coverage = function(packagePath){
             return(invisible(NULL))
             # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
-            # futile.logger::flog.info('Checking package coverage...')
+            # log_info('Checking package coverage...')
             # packageObj <- .UpdateNodes(nodes
             #                            , metadataDT = GetCoverageByFunction(pkgPath)) 
             # 
@@ -44,7 +44,7 @@ PackageFunctionReporter <- R6::R6Class(
             # packageObj <- .UpdateNetworkMeasures(pkgGraph = packageObj
             #                             , networkMeasureList = list(dependencyWeightedTestCoverage = dependencyWeightedTestCoverage)
             # )
-            # futile.logger::flog.info('DONE.\n')
+            # log_info'DONE.\n')
         }
     )
 )
