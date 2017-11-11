@@ -23,7 +23,27 @@
 #'        \item{\code{set_graph_layout}{Accepts a layoutType from either "tree" or "circle"
 #'          and augments the nodes private field with level/horizontal coordinates 
 #'          for a prettified layout}}
-#'        \item{\code{plot_network}{Calls \code{PlotNetwork} and returns a plotly object }}
+#'
+#'         \item{\code{plot_network(colorFieldName=NULL)}}{
+#'             \itemize{
+#'                 \item{Creates a network visualization from tables of edges and nodes}
+#'                 \item{\bold{Args:}}{
+#'                     \itemize{
+#'                         \item{\bold{\code{packageName}}: The name of column to use to 
+#'                             color the nodes. This can be any column in the "nodes" table
+#'                             inside the object produced by \code{extract_network}.
+#'                             Default is outDegree. If you estimated test coverage 
+#'                             when creating the network representation, try setting 
+#'                             this field to "test_coverage"}
+#'                     }
+#'                 }
+#'                 \item{\bold{Returns:}}{
+#'                     \itemize{
+#'                         \item{A plotly object (local, not on plot.ly)}
+#'                    }
+#'                 }
+#'             }
+#'        }
 #'    }
 #' }
 #' @section Public Members:
@@ -40,6 +60,8 @@
 #' @importFrom igraph degree graph_from_edgelist graph.edgelist centralization.betweenness 
 #' @importFrom igraph centralization.closeness centralization.degree hub_score
 #' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex
+#' @importFrom magrittr %>%
+#' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
 #' @export
 AbstractGraphReporter <- R6::R6Class(
     "AbstractGraphReporter",
@@ -152,9 +174,32 @@ AbstractGraphReporter <- R6::R6Class(
         
         plot_network = function(colorFieldName = NULL){
             self$set_graph_layout()
-            PlotNetwork(edges = private$edges
-                        , nodes = private$nodes
-                        , colorFieldName)
+            
+            # format for plot
+            private$nodes[, id := node]
+            private$nodes[, label := id]
+            
+            private$edges[, from := SOURCE]
+            private$edges[, to := TARGET]
+            
+            defaultNodeColor <- "blue" 
+            if (is.null(colorFieldName)) {
+                
+                # Same Color for all nodes
+                g <- visNetwork::visNetwork(nodes = private$nodes, edges = private$edges) %>%
+                     visNetwork::visHierarchicalLayout(sortMethod = "directed", direction = "DU") %>%
+                     visNetwork::visEdges(arrows = 'to') %>%
+                     visNetwork::visOptions(highlightNearest = list(enabled = TRUE, degree = 2000, algorithm = "hierarchical"))
+                
+            } else if (is.factor(private$nodes[, colorFieldName, with = FALSE]) | is.character(private$nodes[, colorFieldName, with = FALSE])) {
+                # Color By Discrete Factor
+            } else {
+                # Assume continuous number scale
+            }
+            
+            print(g) # to be removed once we have an HTML report function
+            return(g)
+            
         }
     ),
     

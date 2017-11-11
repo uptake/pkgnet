@@ -63,10 +63,9 @@ PackageDependencyReporter <- R6::R6Class(
 
         calculate_metrics = function(...){
             private$edges <- self$extract_network(...)
-            print("here")
-            private$nodes <- data.table::data.table(node = unique(c(private$edges[, SOURCE], private$edges[,TARGET])))
-            print("there")
+            private$nodes <- data.table::data.table(node = unique(c(private$edges[, SOURCE], private$edges[, TARGET])))
             private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
+            return(invisible(NULL))
         },
         
         extract_network = function(depTypes = "Imports", installed = TRUE, ignorePackages = NULL){
@@ -75,7 +74,7 @@ PackageDependencyReporter <- R6::R6Class(
             
             if (installed){
                 db <- utils::installed.packages()
-                if (!is.element(pkgName, db[,1])) {
+                if (!is.element(private$packageName, db[,1])) {
                     msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', private$packageName)
                     log_fatal(msg)
                 }
@@ -89,15 +88,15 @@ PackageDependencyReporter <- R6::R6Class(
                                                                   , which = depTypes))
             
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
-                msg <- sprintf('Could not resolve dependencies for package %s',pkgName)
+                msg <- sprintf('Could not resolve dependencies for package %s',private$packageName)
                 log_warn(msg)
-                nodeDT <- data.table::data.table(nodes = pkgName, level = 1,  horizontal = 0.5)
+                nodeDT <- data.table::data.table(nodes = private$packageName, level = 1,  horizontal = 0.5)
                 return(list(nodes = nodeDT, edges = list(), networkMeasures = list()))
             }
             
             allDependencies <- setdiff(allDependencies, ignorePackages)
             
-            dependencyList <- tools::package_dependencies(c(pkgName, allDependencies)
+            dependencyList <- tools::package_dependencies(c(private$packageName, allDependencies)
                                                           , reverse = FALSE
                                                           , recursive = FALSE
                                                           , db = db
@@ -106,7 +105,7 @@ PackageDependencyReporter <- R6::R6Class(
             nullList <- Filter(function(x){is.null(x)},dependencyList)
             if (length(nullList) > 0){
                 log_info(paste("For package:"
-                               , pkgName
+                               , private$packageName
                                , "with dependency types:"
                                , paste(which,collapse = ",")    
                                , "could not find dependencies:"

@@ -33,7 +33,27 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
        \item{\code{set_graph_layout}{Accepts a layoutType from either "tree" or "circle"
          and augments the nodes private field with level/horizontal coordinates 
          for a prettified layout}}
-       \item{\code{plot_network}{Calls \code{PlotNetwork} and returns a plotly object }}
+
+        \item{\code{plot_network(colorFieldName=NULL)}}{
+            \itemize{
+                \item{Creates a network visualization from tables of edges and nodes}
+                \item{\bold{Args:}}{
+                    \itemize{
+                        \item{\bold{\code{packageName}}: The name of column to use to 
+                            color the nodes. This can be any column in the "nodes" table
+                            inside the object produced by \code{extract_network}.
+                            Default is outDegree. If you estimated test coverage 
+                            when creating the network representation, try setting 
+                            this field to "test_coverage"}
+                    }
+                }
+                \item{\bold{Returns:}}{
+                    \itemize{
+                        \item{A plotly object (local, not on plot.ly)}
+                   }
+                }
+            }
+       }
    }
 }
 }

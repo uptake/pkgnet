@@ -53,7 +53,9 @@ PackageFunctionReporter <- R6::R6Class(
                 private$package_test_coverage()
             }
             private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
-            self$calculate_network_metrics()
+            self$calculate_network_measures()
+            
+            return(invisible(NULL))
         },
         
         extract_network = function(){
@@ -145,7 +147,7 @@ PackageFunctionReporter <- R6::R6Class(
     }
     if (!'node' %in% names(metadataDT)){
         msg <- "metadataDT should have a column called 'node'"
-        logal_fatal(msg)
+        log_fatal(msg)
     }
     
     # Append metadata
@@ -212,4 +214,27 @@ PackageFunctionReporter <- R6::R6Class(
     
     return(pkgGraph)
     
+}
+
+
+# [title] Obtain Ratio of Coverage For Each Function Within A Package
+# [name] GetCoverageByFunction
+# [description] Obtain Ratio of Coverage For Each Function Within A Package
+# [param] pkgPath path to the package you want to examine
+#' @importFrom covr package_coverage tally_coverage
+#' @importFrom data.table as.data.table setnames
+GetCoverageByFunction <- function(pkgPath) {
+    
+    # Grab Test Coverage
+    coverage <- covr::package_coverage(pkgPath)
+    
+    # Aggregation on coverage by function
+    res <- data.table::as.data.table(covr::tally_coverage(coverage))
+    outDT <- res[, list(test_coverage = 100*sum(value > 0) / length(value))
+                 , by = list(filename, functions)]
+    
+    # Rename for compatibility
+    data.table::setnames(outDT, old = 'functions', new = 'node')
+    
+    return(outDT)
 }
