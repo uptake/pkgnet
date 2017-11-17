@@ -23,11 +23,38 @@ This Reporter takes a package and uncovers the structure from
                 \itemize{
                 \item{\bold{\code{packageName}}: a string with the name of the package you are
                   analyzing.}
-                \item{\bold{\code{...}}: other arguments passed through to \code{ExtractDependencyNetwork}}
+                \item{\bold{\code{...}}: other arguments passed through to \code{extract_network}}
                  }
              }
          }
     }
+    \item{\code{extract_network(which = "Imports", installed = TRUE, ignorePackages = NULL)}}{
+        \itemize{
+            \item{This function maps a package's reverse dependency
+                  network, allowing for analysis of a package's imports}
+            \item{\bold{Args:}}{
+                \itemize{
+                \item{\bold{\code{depTypes}}: a character vector passed on to \code{which} argument of
+                    \link[tools]{package_dependencies} indicating what to count
+                    as a package dependency. Default is "Imports".}
+                \item{\bold{\code{installed}}: a boolean whether to consider installed
+                    packages or CRAN packages. default is TRUE. FALSE is useful if you 
+                    would like to vett a package before adding it as a dependency}
+                \item{\bold{\code{ignorePackages}}: a vector of package names to ignore 
+                    in dependency analysis. They will show up if a package depends on them
+                    but their dependencies will be ignored. Useful if you know certain packages
+                    are required and have and have a large number of dependencies that clutter
+                    the analysis.
+               }
+            }
+        }
+        \item{\bold{Returns:}}{
+            \itemize{
+                \item{A data.table of directed edges from SOURCE package to TARGET package}
+            }
+        }
+    }
+  }
 }
 }
 

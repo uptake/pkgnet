@@ -23,15 +23,20 @@ CreatePackageReport <- function(packageName, packageReporters = DefaultReporters
         log_fatal(msg)
     }
     
-    log_info(paste("Creating package report for package"
+    log_info(paste0("Creating package report for package "
                    , packageName
-                   , "with reporters"
-                   , paste(unlist(lapply(packageReporters,function(x) class(x)[1])),collapse = ",")))
+                   , " with reporters:\n\n"
+                   , paste(unlist(lapply(packageReporters, function(x) class(x)[1]))
+                           , collapse = "\n")))
 
     # Make them plots
     plots <- list()
     for (reporter in packageReporters){
         reporter$set_package(packageName)
+        
+        # TODO: make plotting act on active bindings so you can just call plot()
+        # directly without other method calls
+        reporter$calculate_metrics()
         plots <- c(plots, reporter$plot_network())
     }
     

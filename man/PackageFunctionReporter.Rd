@@ -14,13 +14,34 @@ This Reporter takes a package and uncovers the structure from
              central to the package. Combined with testing information it can be used as a powerful tool
              to plan testing efforts.
 }
-\section{Dependency Methods}{
+\section{Public Methods}{
 
 \describe{
- \itemize{
-   \item{\code{set_package}{Uses \code{ExtractFunctionNetwork} to create edges}}
-   \item{\code{package_test_coverage}{Uses \code{GetCoverageByFunction} to calculate node test coverage}}
- }
+    \item{\code{set_package(packageName, packagePath)}}{
+        \itemize{
+            \item{Set properties of this reporter. If packageName overrides a 
+                previously-set package name, any cached data will be removed.}
+            \item{\bold{Args:}}{
+                \itemize{
+                \item{\bold{\code{packageName}}: String with the name of the package}
+                \item{\bold{\code{packagePath}}: Optional path to the source code. 
+                    To be used for test coverage, if provided.}
+               }
+            }
+        }
+    }
+    \item{\code{calculate_metrics()}}{
+        \itemize{
+            \item{Create an edgelist with relationships between functions in a package}
+        }
+    }
+    \item{\code{extract_network()}}{
+        \itemize{
+            \item{This function maps the relationships between
+                  functions in a package. Optionally, a subset of functions
+                  can be mapped}
+        }
+    }
 }
 }
 

@@ -17,14 +17,43 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 
 \describe{
    \itemize{
-       \item{\code{calculate_network_metrics}{Uses \code{CalcNetworkFeatures} to 
-         calculate nodes and edges to create summary metrics of the overall 
-         graph structure, including centrality measures etc.}}
+        \item{\code{calculate_network_measures()}}{
+            \itemize{
+                \item{extract network features on a node and network level}
+                \item{\bold{Returns:}}{
+                    \itemize{
+                    \item{\bold{\code{packageName}}: String with the name of the package}
+                    \item{\bold{\code{packagePath}}: Optional path to the source code. 
+                        To be used for test coverage, if provided.}
+                   }
+                }
+            }
+       }
        \item{\code{get_summary_view}{Returns the output of calculateNetworkMetrics}}
        \item{\code{set_graph_layout}{Accepts a layoutType from either "tree" or "circle"
          and augments the nodes private field with level/horizontal coordinates 
          for a prettified layout}}
-       \item{\code{plot_network}{Calls \code{PlotNetwork} and returns a plotly object }}
+
+        \item{\code{plot_network(colorFieldName=NULL)}}{
+            \itemize{
+                \item{Creates a network visualization from tables of edges and nodes}
+                \item{\bold{Args:}}{
+                    \itemize{
+                        \item{\bold{\code{packageName}}: The name of column to use to 
+                            color the nodes. This can be any column in the "nodes" table
+                            inside the object produced by \code{extract_network}.
+                            Default is outDegree. If you estimated test coverage 
+                            when creating the network representation, try setting 
+                            this field to "test_coverage"}
+                    }
+                }
+                \item{\bold{Returns:}}{
+                    \itemize{
+                        \item{A plotly object (local, not on plot.ly)}
+                   }
+                }
+            }
+       }
    }
 }
 }
