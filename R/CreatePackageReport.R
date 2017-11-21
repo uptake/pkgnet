@@ -8,8 +8,10 @@
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
 #' @importFrom methods is
+#' @return A list of instantiated packageReporters the user can then interact with
 #' @export
-CreatePackageReport <- function(packageName, packageReporters = DefaultReporters()) {
+CreatePackageReport <- function(packageName
+                                , packageReporters = DefaultReporters()) {
     
     # Input checks
     assertthat::assert_that(assertthat::is.string(packageName)
@@ -30,15 +32,16 @@ CreatePackageReport <- function(packageName, packageReporters = DefaultReporters
                            , collapse = "\n")))
 
     # Make them plots
-    plots <- list()
     for (reporter in packageReporters){
+        log_info("Running Package Reporter",class(reporter)[1])
         reporter$set_package(packageName)
         
-        # TODO: make plotting act on active bindings so you can just call plot()
-        # directly without other method calls
         reporter$calculate_metrics()
-        plots <- c(plots, reporter$plot_network())
+        # TODO: replace plot_network() with render_report() which is then rendered into a parent report.
+        reporter$plot_network()
+        log_info("Done Package Reporter",class(reporter)[1])
     }
     
-    return(plots)
+    
+    return(packageReporters)
 }
