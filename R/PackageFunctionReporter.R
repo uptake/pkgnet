@@ -97,6 +97,20 @@ PackageFunctionReporter <- R6::R6Class(
         # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
         package_test_coverage = function(){
             return(invisible(NULL))
+          # Given private$nodes & package path
+          # result: update nodes table OR self$network measures?
+          
+          repoPath <- file.path(self$get_package_path())
+          
+          futile.logger::flog.info(msg = "Calculating package coverage...")
+          pkgCov <- covr::package_coverage(path = repoPath)
+          pkgCov <- data.table::as.data.table(pkgCov)
+          pkgCov <- pkgCov[, list(coverage = sum(value > 0)/.N)
+                           , by = list(node = functions)]
+          
+          # Update Network Measures active binding in parent
+          
+          
             
             # log_info('Checking package coverage...')
             # packageObj <- .UpdateNodes(nodes
