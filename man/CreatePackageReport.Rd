@@ -11,6 +11,9 @@ CreatePackageReport(packageName, packageReporters = DefaultReporters())
 
 \item{packageReporters}{a list of package reporters}
 }
+\value{
+A list of instantiated packageReporters the user can then interact with
+}
 \description{
 Obtain Ratio of Coverage For Each Function Within A Package
 }
