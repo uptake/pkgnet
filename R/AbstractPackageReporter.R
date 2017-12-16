@@ -57,10 +57,12 @@ AbstractPackageReporter <- R6::R6Class(
             
             private$packageName <- packageName
             
-            if (dir.exists(packagePath)) {
-              private$packagePath <- packagePath
-            } else {
-              stop(paste0("Package directory does not exist: ", packagePath))
+            if (exists("packagePath") && !is.null(packagePath)) {
+              if (dir.exists(packagePath)) {
+                private$packagePath <- packagePath
+              } else {
+                log_fatal(paste0("Package directory does not exist: ", packagePath))
+              }
             }
             
             
