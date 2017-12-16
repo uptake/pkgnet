@@ -172,7 +172,7 @@ AbstractGraphReporter <- R6::R6Class(
             private$nodes <- merge(x = private$nodes, y = plotDT, all.x = TRUE, by="node")
         },
         
-        plot_network = function(colorFieldName = NULL){
+        plot_network = function(){
             self$set_graph_layout()
             
             # format for plot
@@ -182,24 +182,73 @@ AbstractGraphReporter <- R6::R6Class(
             private$edges[, from := SOURCE]
             private$edges[, to := TARGET]
             
-            defaultNodeColor <- "blue" 
-            if (is.null(colorFieldName)) {
-                
-                # Same Color for all nodes
-                g <- visNetwork::visNetwork(nodes = private$nodes, edges = private$edges) %>%
-                     visNetwork::visHierarchicalLayout(sortMethod = "directed", direction = "DU") %>%
-                     visNetwork::visEdges(arrows = 'to') %>%
-                     visNetwork::visOptions(highlightNearest = list(enabled = TRUE, degree = 2000, algorithm = "hierarchical"))
-                
-            } else if (is.factor(private$nodes[, colorFieldName, with = FALSE]) | is.character(private$nodes[, colorFieldName, with = FALSE])) {
-                # Color By Discrete Factor
+            # Base Graph
+            g <- visNetwork::visNetwork(nodes = private$nodes
+                                        , edges = private$edges) %>%
+              visNetwork::visHierarchicalLayout(sortMethod = "directed"
+                                                , direction = "DU") %>%
+              visNetwork::visEdges(arrows = 'to') %>%
+              visNetwork::visOptions(highlightNearest = list(enabled = TRUE
+                                                             , degree = nrow(private$nodes) #guarantee full path
+                                                             , algorithm = "hierarchical")) 
+            
+            # None
+            if(is.null(private$plotNodeColorScheme[['field']])) {
+              g <- g %>% visNetwork::visNodes(color = private$plotNodeColorScheme[['pallete']])
             } else {
-                # Assume continuous number scale
+              
             }
+            
+            # Discrete Factor
+            
+            # Continuous Factor
             
             print(g) # to be removed once we have an HTML report function
             return(g)
             
+        }, 
+        
+        # Variables for the plot 
+        
+        set_plot_node_color_scheme = function(field
+                                              , pallete){
+          # Check field is length 1 string vector
+          if (typeof(field) != "character" || length(field) != 1) {
+            log_fatal(paste0("'field' in set_plot_node_color_scheme must be a string vector of length one. "
+                             , "Coloring by multiple fields not supported."))
+          }
+          
+          # Check field is in nodes table 
+          if (!is.element(field, names(private$nodes))) {
+            log_fatal(sprintf(paste0("'%s' is not a field in the nodes table",
+                                     " and as such cannot be used in plot color scheme.")
+                              , field)
+            )
+          }
+          
+          # Confirm All Colors in pallete are Colors
+          areColors <- function(x) {
+            sapply(x, function(X) {
+              tryCatch(is.matrix(col2rgb(X)), 
+                       error = function(e) FALSE)
+            })
+          }
+          
+          if (!all(areColors(pallete))) {
+            notColors <- names(areColors)[areColors == FALSE]
+            notColorsTXT <- paste(notColors, collapse = ", ")
+            log_fatal(sprintf("The following are invalid colors: %s"
+                              , notColorsTXT))
+          }
+          
+          
+          private$plotNodeColorScheme <- list(field = field
+                                              , pallete = pallete)
+          
+        },
+        
+        get_plot_node_color_scheme = function(){
+          return(private$plotNodeColorScheme)
         }
     ),
     
@@ -220,6 +269,9 @@ AbstractGraphReporter <- R6::R6Class(
         edges = NULL,
         nodes = NULL,
         pkgGraph = NULL,
+        plotNodeColorScheme = list(field = NULL
+                                 , pallete = '#97C2FC'
+                                 ),
         
         # Create a "cache" to be used when evaluating active bindings
         cache = list(
