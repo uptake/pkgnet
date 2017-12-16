@@ -309,7 +309,7 @@ AbstractGraphReporter <- R6::R6Class(
         nodes = NULL,
         pkgGraph = NULL,
         plotNodeColorScheme = list(field = NULL
-                                 , pallete = 'green' #'#97C2FC'
+                                 , pallete = '#97C2FC'
                                  ),
         
         # Create a "cache" to be used when evaluating active bindings
