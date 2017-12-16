@@ -173,35 +173,69 @@ AbstractGraphReporter <- R6::R6Class(
         },
         
         plot_network = function(){
+          
+            log_info("Creating plot...")
+          
             self$set_graph_layout()
             
             # format for plot
-            private$nodes[, id := node]
-            private$nodes[, label := id]
+            plotDTnodes <- copy(private$nodes) # Don't modify original
+            plotDTnodes[, id := node]
+            plotDTnodes[, label := id]
             
-            private$edges[, from := SOURCE]
-            private$edges[, to := TARGET]
+            plotDTedges <- copy(private$edges) # Don't modify original
+            plotDTedges[, from := SOURCE]
+            plotDTedges[, to := TARGET]
+            plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
             
-            # Base Graph
-            g <- visNetwork::visNetwork(nodes = private$nodes
-                                        , edges = private$edges) %>%
+            
+            # Color By Field
+            if(is.null(private$plotNodeColorScheme[['field']])) {
+              
+              # Default Color for all Nodes
+              plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
+              
+            } else {
+              colorFieldName <- private$plotNodeColorScheme[['field']]
+              colorFieldPallete <- private$plotNodeColorScheme[['pallete']]
+              colorFieldValues <- plotDTnodes[[colorFieldName]]
+              
+              log_info(sprintf("Coloring plot nodes by %s..."
+                               , colorFieldName))
+              
+              # If character field
+              if(is.character(colorFieldValues) | is.factor(colorFieldValues)) {
+                # Create pallete by unique values
+                valCount <- data.table::uniqueN(colorFieldValues)
+                newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
+                
+                
+                # For each character value, update all nodes with that value
+                plotDTnodes[, color := newPallete[.GRP]
+                              , by = list(get(colorFieldName))]
+                
+              } else if (is.numeric(colorFieldValues)) {
+                # If numeric field, assume continuous
+                newPallete <- grDevices::colorRamp(colors = colorFieldPallete)
+                plotDTnodes[, color := newPallete(get(colorFieldName))]
+                
+              } else {
+                log_fatal("A character, factor, or numeric field can be used to color nodes.")
+                
+              } # end non-default color field
+              
+            } # end color field creation
+            
+            # Create Plot
+            g <- visNetwork::visNetwork(nodes = plotDTnodes
+                                        , edges = plotDTedges) %>%
               visNetwork::visHierarchicalLayout(sortMethod = "directed"
                                                 , direction = "DU") %>%
               visNetwork::visEdges(arrows = 'to') %>%
               visNetwork::visOptions(highlightNearest = list(enabled = TRUE
-                                                             , degree = nrow(private$nodes) #guarantee full path
+                                                             , degree = nrow(plotDTnodes) #guarantee full path
                                                              , algorithm = "hierarchical")) 
-            
-            # None
-            if(is.null(private$plotNodeColorScheme[['field']])) {
-              g <- g %>% visNetwork::visNodes(color = private$plotNodeColorScheme[['pallete']])
-            } else {
-              
-            }
-            
-            # Discrete Factor
-            
-            # Continuous Factor
+            log_info("Done creating plot...")
             
             print(g) # to be removed once we have an HTML report function
             return(g)
@@ -245,6 +279,11 @@ AbstractGraphReporter <- R6::R6Class(
           private$plotNodeColorScheme <- list(field = field
                                               , pallete = pallete)
           
+          log_info(sprintf("Node color scheme updated: field [%s], pallete [%s]."
+                           , private$plotNodeColorScheme[['field']]
+                           , paste(private$plotNodeColorScheme[['pallete']], collapse = ",")
+                           ))
+          
         },
         
         get_plot_node_color_scheme = function(){
@@ -270,7 +309,7 @@ AbstractGraphReporter <- R6::R6Class(
         nodes = NULL,
         pkgGraph = NULL,
         plotNodeColorScheme = list(field = NULL
-                                 , pallete = '#97C2FC'
+                                 , pallete = 'green' #'#97C2FC'
                                  ),
         
         # Create a "cache" to be used when evaluating active bindings
