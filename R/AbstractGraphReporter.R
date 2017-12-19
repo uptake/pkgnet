@@ -75,7 +75,7 @@ AbstractGraphReporter <- R6::R6Class(
             pkgGraph <- private$make_graph_object(private$edges, private$nodes)
             
             # inital Data.tables
-            outNodeDT <- data.table::data.table(node = names(igraph::V(pkgGraph)))
+            outNodeDT <- private$nodes
             outNetworkList <- list()
             
             #--------------#
@@ -183,10 +183,13 @@ AbstractGraphReporter <- R6::R6Class(
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
             
-            plotDTedges <- data.table::copy(private$edges) # Don't modify original
-            plotDTedges[, from := SOURCE]
-            plotDTedges[, to := TARGET]
-            plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+            if(!is.null(private$edges)) {
+              plotDTedges <- data.table::copy(private$edges) # Don't modify original
+              plotDTedges[, from := SOURCE]
+              plotDTedges[, to := TARGET]
+              plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+            }
+
             
             
             # Color By Field
@@ -329,17 +332,28 @@ AbstractGraphReporter <- R6::R6Class(
         # [param] nodes a data.table of nodes with column node
         # [return] an igraph object
         make_graph_object = function(edges, nodes){
-            
+          
             log_info("Creating graph object...")
             
-            inGraph <- igraph::graph.edgelist(as.matrix(edges[,list(SOURCE,TARGET)])
-                                              , directed = TRUE)
-            #add isolated nodes
-            allNodes <- nodes$node
-            nonConnectedNodes <- base::setdiff(allNodes, names(igraph::V(inGraph)))
+            if (!is.null(edges) && length(edges) != 0) {
+              # A graph with edges
+              inGraph <- igraph::graph.edgelist(as.matrix(edges[,list(SOURCE,TARGET)])
+                                                , directed = TRUE)
+              
+              # add isolated nodes
+              allNodes <- nodes$node
+              nonConnectedNodes <- base::setdiff(allNodes, names(igraph::V(inGraph)))
+              
+              outGraph <- inGraph + igraph::vertex(nonConnectedNodes)
+            } else {
+              # An unconnected graph
+              allNodes <- nodes$node
+              outGraph <- igraph::make_empty_graph() + igraph::vertex(allNodes)
+                
+            }
             
             log_info("Done creating graph object")
-            return(inGraph + igraph::vertex(nonConnectedNodes))
+            return(outGraph)
         }
     )
 )
