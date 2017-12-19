@@ -26,7 +26,7 @@ if (dir.exists('../../inst/sartre')){
 # Find the path to the "baseballstats" package we use to test pkgnet
 # (can get a weird path if you're in development mode)
 TEST_PKG_PATH_BBALL <- file.path(.libPaths()[1], 'pkgnet', 'baseballstats')
-TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'baseballstats')
+TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
 
 ##### RUN TESTS #####
 
