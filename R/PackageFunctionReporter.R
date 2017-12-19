@@ -82,7 +82,7 @@ PackageFunctionReporter <- R6::R6Class(
             numFuncs <- as.character(unlist(utils::lsf.str(asNamespace(private$packageName)))) # list of functions within Package
             if (length(numFuncs) == 1) {
                 log_info("Only one function. Edge list is null.")
-                return(NULL)
+              return(invisible(NULL))
             }
             
             log_info(sprintf('Constructing network representation...'))
@@ -96,7 +96,7 @@ PackageFunctionReporter <- R6::R6Class(
             
             # If no edges, return NULL
             if (nrow(edges) == 0) {
-              return(NULL)
+              return(invisible(NULL))
             }
             
             return(edges)
