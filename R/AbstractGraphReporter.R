@@ -188,6 +188,8 @@ AbstractGraphReporter <- R6::R6Class(
               plotDTedges[, from := SOURCE]
               plotDTedges[, to := TARGET]
               plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+            } else {
+              plotDTedges <- NULL
             }
 
             
