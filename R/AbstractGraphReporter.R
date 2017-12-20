@@ -179,11 +179,11 @@ AbstractGraphReporter <- R6::R6Class(
             self$set_graph_layout()
             
             # format for plot
-            plotDTnodes <- copy(private$nodes) # Don't modify original
+            plotDTnodes <- data.table::copy(private$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
             
-            plotDTedges <- copy(private$edges) # Don't modify original
+            plotDTedges <- data.table::copy(private$edges) # Don't modify original
             plotDTedges[, from := SOURCE]
             plotDTedges[, to := TARGET]
             plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
@@ -220,7 +220,12 @@ AbstractGraphReporter <- R6::R6Class(
                 plotDTnodes[, color := newPallete(get(colorFieldName))]
                 
               } else {
-                log_fatal("A character, factor, or numeric field can be used to color nodes.")
+                log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
+                                         , "Field %s is of type %s.")
+                                  , colorFieldName
+                                  , typeof(colorFieldValues)
+                                  )
+                          )
                 
               } # end non-default color field
               
@@ -235,7 +240,7 @@ AbstractGraphReporter <- R6::R6Class(
               visNetwork::visOptions(highlightNearest = list(enabled = TRUE
                                                              , degree = nrow(plotDTnodes) #guarantee full path
                                                              , algorithm = "hierarchical")) 
-            log_info("Done creating plot...")
+            log_info("Done creating plot.")
             
             print(g) # to be removed once we have an HTML report function
             return(g)
