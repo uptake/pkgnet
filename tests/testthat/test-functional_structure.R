@@ -15,8 +15,13 @@ futile.logger::flog.threshold(0)
 # This if block is to protect against some craziness that happens when
 # covr runs tests. TL;DR covr runs your tests in a temp file so the package
 # source isn't available to you.
-devtools::install('../../inst/baseballstats', force = FALSE)
-devtools::install('../../inst/sartre', force = FALSE)
+if (dir.exists('../../inst/baseballstats')){
+  devtools::install('../../inst/baseballstats', force = FALSE)
+}
+
+if (dir.exists('../../inst/baseballstats')){
+  devtools::install('../../inst/sartre', force = FALSE)
+}
 
 # Find the path to the "baseballstats" package we use to test pkgnet
 # (can get a weird path if you're in development mode)
