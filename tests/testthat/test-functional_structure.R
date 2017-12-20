@@ -15,13 +15,8 @@ futile.logger::flog.threshold(0)
 # This if block is to protect against some craziness that happens when
 # covr runs tests. TL;DR covr runs your tests in a temp file so the package
 # source isn't available to you.
-if (dir.exists('../../inst/baseballstats')){
-    devtools::install('../../inst/baseballstats', force = FALSE)
-}
-
-if (dir.exists('../../inst/sartre')){
-  devtools::install('../../inst/sartre', force = FALSE)
-}
+devtools::install('../../inst/baseballstats', force = FALSE)
+devtools::install('../../inst/sartre', force = FALSE)
 
 # Find the path to the "baseballstats" package we use to test pkgnet
 # (can get a weird path if you're in development mode)
@@ -30,6 +25,13 @@ TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
 
 ##### RUN TESTS #####
 
+  test_that('test packages loaded alright',{
+    expect_true(object = is.element('baseballstats', loadedNamespaces())
+                , info = "Fake test package baseballstats is loaded.")
+    
+    expect_true(object = is.element('sartre', loadedNamespaces())
+                , info = "Fake test package sartre is loaded.")
+  })
 
   test_that('PackageFunctionReporter returns graph of functions', {
         t <- PackageFunctionReporter$new()
@@ -55,7 +57,7 @@ TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
                     , info = "TARGET and SCORE fields in edge table at minimum")
 
         # Plots
-        expect_silent(object = t$plot_network())
+        expect_true(object = is.element("visNetwork", attributes(t$plot_network())))
         
   })
 
@@ -72,7 +74,7 @@ TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
                 , info = "Edges table is null since there are no edges."
                 )
     
-    expect_silent(object = t2$plot_network())
+    expect_true(object = is.element("visNetwork", attributes(t2$plot_network())))
     
   })
 
