@@ -46,6 +46,7 @@ This Reporter takes a package and uncovers the structure from
 }
 
 \seealso{
-Other PackageReporters: \code{\link{PackageDependencyReporter}}
+Other PackageReporters: \code{\link{PackageDependencyReporter}},
+  \code{\link{PackageSummaryReporter}}
 }
 \keyword{datasets}

@@ -13,7 +13,7 @@ Defines the Abstract Class for all PackageReporters defined in pkgnet.
              The class is not meant to be instantiated, but inherited from and its methods
              overloaded such that each Metric implements certain functionality.
 }
-\section{Public Methods}{
+\section{Public}{
 
 \describe{
     \item{\code{get_package()}}{
@@ -38,9 +38,19 @@ Defines the Abstract Class for all PackageReporters defined in pkgnet.
             \item{Returns a particular reporter's report on the package}
       }
     }
+    \item{\code{get_report_markdown_path()}}{
+        \itemize{
+            \item{Returns the path to the markdown report associated with this reporter}
+      }
+    }
     \item{\code{get_summary_view()}}{
         \itemize{
-            \item{Returns a particular reporters summary report on the package}
+            \item{Returns a particular reporters summary report on the package for use in a high level view}
+      }
+    }
+    \item{\code{calculate_package_metrics()}}{
+        \itemize{
+            \item{Calculates all the relevant metrics for a set package and updates the reporter}
       }
     }
     \item{\code{get_raw_data()}}{

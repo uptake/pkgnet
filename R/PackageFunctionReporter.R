@@ -89,6 +89,9 @@ PackageFunctionReporter <- R6::R6Class(
             data.table::setnames(edges,c('rn','variable'), c('TARGET','SOURCE'))
             
             return(edges)
+        },
+        get_report_markdown_path = function(){
+            system.file(file.path("package_report","package_function_reporter.Rmd"),package = "pkgnet")
         }
     ),
     

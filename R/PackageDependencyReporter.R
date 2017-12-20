@@ -67,7 +67,9 @@ PackageDependencyReporter <- R6::R6Class(
             private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
             return(invisible(NULL))
         },
-        
+        get_report_markdown_path = function(){
+            system.file(file.path("package_report","package_dependency_reporter.Rmd"),package = "pkgnet")
+        },
         extract_network = function(depTypes = "Imports", installed = TRUE, ignorePackages = NULL){
             
             log_info(sprintf('Constructing reverse dependency graph for %s', private$packageName))
