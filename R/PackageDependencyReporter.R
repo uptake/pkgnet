@@ -48,7 +48,11 @@ PackageDependencyReporter <- R6::R6Class(
     #TODO [patrick.boueri@uptake.com]: Add version information to dependency structure
 
     public = list(
-        
+
+        get_report_markdown_path = function(){
+            system.file(file.path("package_report","package_dependency_reporter.Rmd"),package = "pkgnet")
+        },
+
         extract_network = function(depTypes = "Imports", installed = TRUE, ignorePackages = NULL){
             
             # Check that package has been set
