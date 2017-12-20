@@ -5,7 +5,7 @@
 #'              The class is not meant to be instantiated, but inherited from and its methods
 #'              overloaded such that each Metric implements certain functionality.
 #' @importFrom R6 R6Class
-#' @section Public Methods:
+#' @section Public:
 #' \describe{
 #'     \item{\code{get_package()}}{
 #'         \itemize{
@@ -29,9 +29,19 @@
 #'             \item{Returns a particular reporter's report on the package}
 #'       }
 #'     }
+#'     \item{\code{get_report_markdown_path()}}{
+#'         \itemize{
+#'             \item{Returns the path to the markdown report associated with this reporter}
+#'       }
+#'     }
 #'     \item{\code{get_summary_view()}}{
 #'         \itemize{
-#'             \item{Returns a particular reporters summary report on the package}
+#'             \item{Returns a particular reporters summary report on the package for use in a high level view}
+#'       }
+#'     }
+#'     \item{\code{calculate_package_metrics()}}{
+#'         \itemize{
+#'             \item{Calculates all the relevant metrics for a set package and updates the reporter}
 #'       }
 #'     }
 #'     \item{\code{get_raw_data()}}{
@@ -49,7 +59,7 @@
 #' }
 #' @export
 AbstractPackageReporter <- R6::R6Class(
-    "AbstractPackageReporter",
+    classname = "AbstractPackageReporter",
     
     public = list(
         
@@ -64,13 +74,25 @@ AbstractPackageReporter <- R6::R6Class(
         get_package = function(){
             return(private$packageName)
         },
+   
+        get_report =  function(output_file = NULL) {
+            rmarkdown::render(self$get_report_markdown_path()
+                              , output_format = "html_document"
+                              , output_file = output_file
+                              , quiet = TRUE
+                              , envir = new.env()
+                              , params = list(reporter = self))
+        },
         
-        get_report =  function() {
-            stop("get_report has not been implemented.")
+        get_report_markdown_path =  function() {
+            stop("get_report_markdown_path has not been implemented.")
         },
         
         get_summary_view  = function(){
             stop("get_summary_view has not been implemented.")
+        },
+        calculate_metrics = function(){
+            stop("calculate_metrics is not implemented")  
         },
         
         get_raw_data = function(){
