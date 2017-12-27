@@ -10,16 +10,16 @@ test_that('node coloring by discrete and continuous', {
                                , pallete = c("red", "green")
   )
   
-  expect_output(object = plotObj <- b$plot_network()
-                , regexp = "Done creating plot"
-                , info = "Plot with continuous coloring has issues")
+  expect_silent(object = b$plot_network())
+                #, regexp = "Done creating plot"
+               #, info = "Plot with continuous coloring has issues")
   
   b$set_plot_node_color_scheme(field = "filename"
                                , pallete = RColorBrewer::brewer.pal(9,"Set1")
   )
   
-  expect_output(object = plotObj <- b$plot_network()
-                , regexp = "Done creating plot"
-                , info = "Plot with continuous coloring has issues")
+  expect_silent(object = b$plot_network())
+                # , regexp = "Done creating plot"
+                # , info = "Plot with continuous coloring has issues")
   
 })
