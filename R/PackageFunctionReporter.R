@@ -86,13 +86,25 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             log_info(sprintf('Constructing network representation...'))
-            funcMap <- mvbutils::foodweb(where = paste("package", private$packageName, sep = ":"), plotting = FALSE)
+            # foodweb will output a warning for "In par(oldpar) : calling par(new=TRUE) with no plot" all the time. 
+            # does not seem to be an issue
+            funcMap <- suppressWarnings(mvbutils::foodweb(where = paste("package"
+                                                                        , private$packageName
+                                                                        , sep = ":")
+                                                          , plotting = FALSE))
+            
             log_info("Done constructing network representation")
             
             # Function Connections: Edges
             edges <- data.table::melt(data.table::as.data.table(funcMap$funmat, keep.rownames = TRUE)
                                       , id.vars = "rn")[value != 0]
+            
+            # Formattign
+            edges[, value := NULL]
             data.table::setnames(edges,c('rn','variable'), c('TARGET','SOURCE'))
+            edges[, c('TARGET','SOURCE') := lapply(.SD, as.character)
+                  , .SDcols = c('TARGET','SOURCE')]
+            data.table::setcolorder(edges, c('SOURCE', 'TARGET'))
             
             # If no edges, return NULL
             if (nrow(edges) == 0) {
