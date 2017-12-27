@@ -75,7 +75,7 @@ AbstractGraphReporter <- R6::R6Class(
             pkgGraph <- private$make_graph_object(private$edges, private$nodes)
             
             # inital Data.tables
-            outNodeDT <- data.table::data.table(node = names(igraph::V(pkgGraph)))
+            outNodeDT <- private$nodes
             outNetworkList <- list()
             
             #--------------#
@@ -172,34 +172,132 @@ AbstractGraphReporter <- R6::R6Class(
             private$nodes <- merge(x = private$nodes, y = plotDT, all.x = TRUE, by="node")
         },
         
-        plot_network = function(colorFieldName = NULL){
+        plot_network = function(){
+          
+            log_info("Creating plot...")
+          
             self$set_graph_layout()
             
             # format for plot
-            private$nodes[, id := node]
-            private$nodes[, label := id]
+            plotDTnodes <- data.table::copy(private$nodes) # Don't modify original
+            plotDTnodes[, id := node]
+            plotDTnodes[, label := id]
             
-            private$edges[, from := SOURCE]
-            private$edges[, to := TARGET]
-            
-            defaultNodeColor <- "blue" 
-            if (is.null(colorFieldName)) {
-                
-                # Same Color for all nodes
-                g <- visNetwork::visNetwork(nodes = private$nodes, edges = private$edges) %>%
-                     visNetwork::visHierarchicalLayout(sortMethod = "directed", direction = "DU") %>%
-                     visNetwork::visEdges(arrows = 'to') %>%
-                     visNetwork::visOptions(highlightNearest = list(enabled = TRUE, degree = 2000, algorithm = "hierarchical"))
-                
-            } else if (is.factor(private$nodes[, colorFieldName, with = FALSE]) | is.character(private$nodes[, colorFieldName, with = FALSE])) {
-                # Color By Discrete Factor
+            if(!is.null(private$edges)) {
+              plotDTedges <- data.table::copy(private$edges) # Don't modify original
+              plotDTedges[, from := SOURCE]
+              plotDTedges[, to := TARGET]
+              plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
             } else {
-                # Assume continuous number scale
+              plotDTedges <- NULL
             }
+
+            
+            
+            # Color By Field
+            if(is.null(private$plotNodeColorScheme[['field']])) {
+              
+              # Default Color for all Nodes
+              plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
+              
+            } else {
+              colorFieldName <- private$plotNodeColorScheme[['field']]
+              colorFieldPallete <- private$plotNodeColorScheme[['pallete']]
+              colorFieldValues <- plotDTnodes[[colorFieldName]]
+              
+              log_info(sprintf("Coloring plot nodes by %s..."
+                               , colorFieldName))
+              
+              # If character field
+              if(is.character(colorFieldValues) | is.factor(colorFieldValues)) {
+                # Create pallete by unique values
+                valCount <- data.table::uniqueN(colorFieldValues)
+                newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
+                
+                
+                # For each character value, update all nodes with that value
+                plotDTnodes[, color := newPallete[.GRP]
+                              , by = list(get(colorFieldName))]
+                
+              } else if (is.numeric(colorFieldValues)) {
+                # If numeric field, assume continuous
+                newPallete <- grDevices::colorRamp(colors = colorFieldPallete)
+                plotDTnodes[, color := newPallete(get(colorFieldName))]
+                
+              } else {
+                log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
+                                         , "Field %s is of type %s.")
+                                  , colorFieldName
+                                  , typeof(colorFieldValues)
+                                  )
+                          )
+                
+              } # end non-default color field
+              
+            } # end color field creation
+            
+            # Create Plot
+            g <- visNetwork::visNetwork(nodes = plotDTnodes
+                                        , edges = plotDTedges) %>%
+              visNetwork::visHierarchicalLayout(sortMethod = "directed"
+                                                , direction = "DU") %>%
+              visNetwork::visEdges(arrows = 'to') %>%
+              visNetwork::visOptions(highlightNearest = list(enabled = TRUE
+                                                             , degree = nrow(plotDTnodes) #guarantee full path
+                                                             , algorithm = "hierarchical")) 
+            log_info("Done creating plot.")
             
             print(g) # to be removed once we have an HTML report function
             return(g)
             
+        }, 
+        
+        # Variables for the plot 
+        
+        set_plot_node_color_scheme = function(field
+                                              , pallete){
+          # Check field is length 1 string vector
+          if (typeof(field) != "character" || length(field) != 1) {
+            log_fatal(paste0("'field' in set_plot_node_color_scheme must be a string vector of length one. "
+                             , "Coloring by multiple fields not supported."))
+          }
+          
+          # Check field is in nodes table 
+          if (!is.element(field, names(private$nodes))) {
+            log_fatal(sprintf(paste0("'%s' is not a field in the nodes table",
+                                     " and as such cannot be used in plot color scheme.")
+                              , field)
+            )
+          }
+          
+          # Confirm All Colors in pallete are Colors
+          areColors <- function(x) {
+            sapply(x, function(X) {
+              tryCatch(is.matrix(col2rgb(X)), 
+                       error = function(e) FALSE)
+            })
+          }
+          
+          if (!all(areColors(pallete))) {
+            notColors <- names(areColors)[areColors == FALSE]
+            notColorsTXT <- paste(notColors, collapse = ", ")
+            log_fatal(sprintf("The following are invalid colors: %s"
+                              , notColorsTXT))
+          }
+          
+          
+          private$plotNodeColorScheme <- list(field = field
+                                              , pallete = pallete)
+          
+          log_info(sprintf("Node color scheme updated: field [%s], pallete [%s]."
+                           , private$plotNodeColorScheme[['field']]
+                           , paste(private$plotNodeColorScheme[['pallete']], collapse = ",")
+                           ))
+          
+        },
+        
+        get_plot_node_color_scheme = function(){
+          return(private$plotNodeColorScheme)
         }
     ),
     
@@ -220,6 +318,9 @@ AbstractGraphReporter <- R6::R6Class(
         edges = NULL,
         nodes = NULL,
         pkgGraph = NULL,
+        plotNodeColorScheme = list(field = NULL
+                                 , pallete = '#97C2FC'
+                                 ),
         
         # Create a "cache" to be used when evaluating active bindings
         cache = list(
@@ -233,17 +334,28 @@ AbstractGraphReporter <- R6::R6Class(
         # [param] nodes a data.table of nodes with column node
         # [return] an igraph object
         make_graph_object = function(edges, nodes){
-            
+          
             log_info("Creating graph object...")
             
-            inGraph <- igraph::graph.edgelist(as.matrix(edges[,list(SOURCE,TARGET)])
-                                              , directed = TRUE)
-            #add isolated nodes
-            allNodes <- nodes$node
-            nonConnectedNodes <- base::setdiff(allNodes, names(igraph::V(inGraph)))
+            if (!is.null(edges) && length(edges) != 0) {
+              # A graph with edges
+              inGraph <- igraph::graph.edgelist(as.matrix(edges[,list(SOURCE,TARGET)])
+                                                , directed = TRUE)
+              
+              # add isolated nodes
+              allNodes <- nodes$node
+              nonConnectedNodes <- base::setdiff(allNodes, names(igraph::V(inGraph)))
+              
+              outGraph <- inGraph + igraph::vertex(nonConnectedNodes)
+            } else {
+              # An unconnected graph
+              allNodes <- nodes$node
+              outGraph <- igraph::make_empty_graph() + igraph::vertex(allNodes)
+                
+            }
             
             log_info("Done creating graph object")
-            return(inGraph + igraph::vertex(nonConnectedNodes))
+            return(outGraph)
         }
     )
 )

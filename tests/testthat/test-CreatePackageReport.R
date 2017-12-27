@@ -4,7 +4,6 @@ context("CreatePackageReport")
 futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
 
 test_that("Test that CreatingPackageReport Runs", {
-    devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
     #TODO: Change when generating reports
     pdf("test_plots.pdf") #PDF doesn't actually work
     reporters <- CreatePackageReport(packageName = "baseballstats")

@@ -45,14 +45,22 @@ PackageFunctionReporter <- R6::R6Class(
     public = list(
         
         calculate_metrics = function(...){
-            
-            private$edges <- self$extract_network(...)
-            private$nodes <- data.table::data.table(node = unique(c(private$edges[,SOURCE],private$edges[,TARGET])))
+
+            # Nodes
+            # Function networks may have orphan nodes
+            private$nodes <- data.table::data.table(node = as.character(unlist(utils::lsf.str(asNamespace(private$packageName)))))
             
             if (!is.null(private$packagePath)){
-                private$package_test_coverage()
+              private$package_test_coverage()
             }
+            
+
+            # Edges
+            private$edges <- self$extract_network(...)
+            
+            # Graph
             private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
+
             self$calculate_network_measures()
             
             return(invisible(NULL))
@@ -73,20 +81,23 @@ PackageFunctionReporter <- R6::R6Class(
             # Avoid mvbutils::foodweb bug on one function packages
             numFuncs <- as.character(unlist(utils::lsf.str(asNamespace(private$packageName)))) # list of functions within Package
             if (length(numFuncs) == 1) {
-                log_warn(sprintf('No Network Available.  Only one function in %s.', private$packageName))
-                
-                nodeDT <- data.table::data.table(nodes = numFuncs, level = 1,  horizontal = 0.5)
-                return(packageObj <- list(nodes = nodeDT, edges = list(), networkMeasures = list()))
+                log_info("Only one function. Edge list is null.")
+              return(invisible(NULL))
             }
             
             log_info(sprintf('Constructing network representation...'))
             funcMap <- mvbutils::foodweb(where = paste("package", private$packageName, sep = ":"), plotting = FALSE)
             log_info("Done constructing network representation")
             
-            # Function Connections: Arcs
+            # Function Connections: Edges
             edges <- data.table::melt(data.table::as.data.table(funcMap$funmat, keep.rownames = TRUE)
                                       , id.vars = "rn")[value != 0]
             data.table::setnames(edges,c('rn','variable'), c('TARGET','SOURCE'))
+            
+            # If no edges, return NULL
+            if (nrow(edges) == 0) {
+              return(invisible(NULL))
+            }
             
             return(edges)
         },
@@ -99,7 +110,25 @@ PackageFunctionReporter <- R6::R6Class(
         
         # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
         package_test_coverage = function(){
-            return(invisible(NULL))
+          # Given private$nodes & package path
+          # result: update nodes table 
+          
+          repoPath <- file.path(self$get_package_path())
+          
+          log_info(msg = "Calculating package coverage...")
+          pkgCov <- covr::package_coverage(path = repoPath)
+          pkgCov <- data.table::as.data.table(pkgCov)
+          pkgCov <- pkgCov[, list(coverage = sum(value > 0)/.N)
+                           , by = list(node = functions)]
+          
+          # Update Node with Coverage Info
+          private$nodes <- merge(x = private$nodes
+                                 , y = pkgCov
+                                 , by = "node"
+                                 , all.x = TRUE)
+          
+          log_info(msg = "Done calculating package coverage...")
+          return(invisible(NULL))
             
             # log_info('Checking package coverage...')
             # packageObj <- .UpdateNodes(nodes

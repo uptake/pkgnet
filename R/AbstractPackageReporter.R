@@ -66,13 +66,25 @@ AbstractPackageReporter <- R6::R6Class(
         set_package = function(packageName, packagePath = NULL) {
             
             private$packageName <- packageName
-            private$packagePath <- packagePath
+            
+            if (exists("packagePath") && !is.null(packagePath)) {
+              if (dir.exists(packagePath)) {
+                private$packagePath <- packagePath
+              } else {
+                log_fatal(paste0("Package directory does not exist: ", packagePath))
+              }
+            }
+            
             
             return(invisible(NULL))
         },
         
         get_package = function(){
             return(private$packageName)
+        },
+      
+        get_package_path = function(){
+          return(private$packagePath)
         },
    
         get_report =  function(output_file = NULL) {
@@ -86,8 +98,9 @@ AbstractPackageReporter <- R6::R6Class(
         
         get_report_markdown_path =  function() {
             stop("get_report_markdown_path has not been implemented.")
-        },
         
+        },
+      
         get_summary_view  = function(){
             stop("get_summary_view has not been implemented.")
         },

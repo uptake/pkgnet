@@ -2,21 +2,26 @@
 % Please edit documentation in R/CreatePackageReport.R
 \name{CreatePackageReport}
 \alias{CreatePackageReport}
-\title{Creates a}
+\title{Surface the internal and external dependecies of an R package.}
 \usage{
-CreatePackageReport(packageName, packageReporters = DefaultReporters())
+CreatePackageReport(packageName, packageReporters = DefaultReporters(),
+  packagePath = NULL)
 }
 \arguments{
 \item{packageName}{name of a package}
 
 \item{packageReporters}{a list of package reporters}
+
+\item{packagePath}{(optional) the path to the package repository.
+If given, coverage will be calculated for each function.}
 }
 \value{
 A list of instantiated packageReporters the user can then interact with
 }
 \description{
-Obtain Ratio of Coverage For Each Function Within A Package
+Surface the internal and external dependecies of an R package.
 }
 \author{
 B. Burns
 }
+
