@@ -5,3 +5,8 @@ before_install:
 - Rscript -e "install.packages('roxygen2', repos = 'http://cran.rstudio.org')"
 - Rscript -e "devtools::install('inst/baseballstats')"
 - Rscript -e "devtools::install('inst/sartre')"
+
+
+before_deploy:
+- Rscript -e "devtools::uninstall('inst/baseballstats')"
+- Rscript -e "devtools::uninstall('inst/sartre')"

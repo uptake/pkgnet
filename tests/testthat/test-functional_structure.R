@@ -13,22 +13,22 @@ futile.logger::flog.threshold(0)
 
 # During Travis CI Setup, packages will be installed. 
 # This is to install locally if they have not been installed already. 
-if (require("baseballstats") == FALSE){
-  devtools::install(file.path('../../inst/baseballstats')
-                    , force = FALSE)
-}
-
-if (require("sartre") == FALSE){
-  devtools::install(file.path('../../inst/sartre')
-                    , force = FALSE)
-}
-
-# Find the path to the "baseballstats" package we use to test pkgnet
-# (can get a weird path if you're in development mode)
-library(baseballstats)
-TEST_PKG_PATH_BBALL <- find.package("baseballstats")
-library(sartre)
-TEST_PKG_PATH_SARTRE <- find.package("sartre")
+# if (require("baseballstats") == FALSE){
+#   devtools::install(file.path('../../inst/baseballstats')
+#                     , force = FALSE)
+# }
+# 
+# if (require("sartre") == FALSE){
+#   devtools::install(file.path('../../inst/sartre')
+#                     , force = FALSE)
+# }
+# 
+# # Find the path to the "baseballstats" package we use to test pkgnet
+# # (can get a weird path if you're in development mode)
+# library(baseballstats)
+# TEST_PKG_PATH_BBALL <- find.package("baseballstats")
+# library(sartre)
+# TEST_PKG_PATH_SARTRE <- find.package("sartre")
 
 ##### RUN TESTS #####
 
