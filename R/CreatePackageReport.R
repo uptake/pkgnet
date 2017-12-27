@@ -1,9 +1,11 @@
-#' @title Creates a 
+#' @title Surface the internal and external dependecies of an R package.
 #' @name CreatePackageReport
-#' @description Obtain Ratio of Coverage For Each Function Within A Package
+#' @description Surface the internal and external dependecies of an R package. 
 #' @author B. Burns
 #' @param packageName name of a package
 #' @param packageReporters a list of package reporters
+#' @param packagePath (optional) the path to the package repository.  
+#' If given, coverage will be calculated for each function.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
@@ -11,7 +13,8 @@
 #' @return A list of instantiated packageReporters the user can then interact with
 #' @export
 CreatePackageReport <- function(packageName
-                                , packageReporters = DefaultReporters()) {
+                                , packageReporters = DefaultReporters()
+                                , packagePath = NULL) {
     
     # Input checks
     assertthat::assert_that(assertthat::is.string(packageName)
@@ -34,7 +37,7 @@ CreatePackageReport <- function(packageName
     # Make them plots
     for (reporter in packageReporters){
         log_info("Running Package Reporter",class(reporter)[1])
-        reporter$set_package(packageName)
+        reporter$set_package(packageName, packagePath)
         
         reporter$calculate_metrics()
         # TODO: replace plot_network() with render_report() which is then rendered into a parent report.

@@ -48,11 +48,12 @@ PackageFunctionReporter <- R6::R6Class(
             
             private$edges <- self$extract_network(...)
             private$nodes <- data.table::data.table(node = unique(c(private$edges[,SOURCE],private$edges[,TARGET])))
+            private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
             
             if (!is.null(private$packagePath)){
-                private$package_test_coverage()
+              private$package_test_coverage()
             }
-            private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
+            
             self$calculate_network_measures()
             
             return(invisible(NULL))
@@ -96,7 +97,25 @@ PackageFunctionReporter <- R6::R6Class(
         
         # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
         package_test_coverage = function(){
-            return(invisible(NULL))
+          # Given private$nodes & package path
+          # result: update nodes table 
+          
+          repoPath <- file.path(self$get_package_path())
+          
+          log_info(msg = "Calculating package coverage...")
+          pkgCov <- covr::package_coverage(path = repoPath)
+          pkgCov <- data.table::as.data.table(pkgCov)
+          pkgCov <- pkgCov[, list(coverage = sum(value > 0)/.N)
+                           , by = list(node = functions)]
+          
+          # Update Node with Coverage Info
+          private$nodes <- merge(x = private$nodes
+                                 , y = pkgCov
+                                 , by = "node"
+                                 , all.x = TRUE)
+          
+          log_info(msg = "Done calculating package coverage...")
+          return(invisible(NULL))
             
             # log_info('Checking package coverage...')
             # packageObj <- .UpdateNodes(nodes

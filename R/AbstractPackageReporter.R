@@ -56,13 +56,25 @@ AbstractPackageReporter <- R6::R6Class(
         set_package = function(packageName, packagePath = NULL) {
             
             private$packageName <- packageName
-            private$packagePath <- packagePath
+            
+            if (exists("packagePath") && !is.null(packagePath)) {
+              if (dir.exists(packagePath)) {
+                private$packagePath <- packagePath
+              } else {
+                log_fatal(paste0("Package directory does not exist: ", packagePath))
+              }
+            }
+            
             
             return(invisible(NULL))
         },
         
         get_package = function(){
             return(private$packageName)
+        },
+        
+        get_package_path = function(){
+          return(private$packagePath)
         },
         
         get_report =  function() {
