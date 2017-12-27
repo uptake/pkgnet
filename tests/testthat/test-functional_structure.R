@@ -11,22 +11,24 @@ futile.logger::flog.threshold(0)
 
 ##### TEST SETUP #####
 
-# Need to manually install the dummy package we use for testing `pkgnet`.
-# This if block is to protect against some craziness that happens when
-# covr runs tests. TL;DR covr runs your tests in a temp file so the package
-# source isn't available to you.
-if (dir.exists('../../inst/baseballstats')){
-  devtools::install('../../inst/baseballstats', force = FALSE)
+# During Travis CI Setup, packages will be installed. 
+# This is to install locally if they have not been installed already. 
+if (require("baseballstats") == FALSE){
+  devtools::install(file.path('../../inst/baseballstats')
+                    , force = FALSE)
 }
 
-if (dir.exists('../../inst/baseballstats')){
-  devtools::install('../../inst/sartre', force = FALSE)
+if (require("sartre") == FALSE){
+  devtools::install(file.path('../../inst/sartre')
+                    , force = FALSE)
 }
 
 # Find the path to the "baseballstats" package we use to test pkgnet
 # (can get a weird path if you're in development mode)
-TEST_PKG_PATH_BBALL <- file.path(.libPaths()[1], 'pkgnet', 'baseballstats')
-TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
+library(baseballstats)
+TEST_PKG_PATH_BBALL <- find.package("baseballstats")
+library(sartre)
+TEST_PKG_PATH_SARTRE <- find.package("sartre")
 
 ##### RUN TESTS #####
 
@@ -44,8 +46,8 @@ TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
         t$calculate_metrics()
         
         # Nodes
-        expect_equivalent(object = t$get_raw_data()$nodes$node
-                          , expected = as.character(unlist(utils::lsf.str(asNamespace(t$get_package()))))
+        expect_equivalent(object = sort(t$get_raw_data()$nodes$node)
+                          , expected = sort(as.character(unlist(utils::lsf.str(asNamespace(t$get_package())))))
                           , info = "All functions are nodes, even ones without connections.")
         
         expect_true(object = is.element("node", names(t$get_raw_data()$nodes))
@@ -85,6 +87,11 @@ TEST_PKG_PATH_SARTRE <- file.path(.libPaths()[1], 'pkgnet', 'sartre')
 
 
 ##### TEST TEAR DOWN #####
+
+# uninstall fake test packages
+devtools::uninstall(file.path('../../inst/baseballstats'))
+devtools::uninstall(file.path('../../inst/sartre'))
+
 futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())
 closeAllConnections()
