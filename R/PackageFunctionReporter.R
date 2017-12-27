@@ -171,6 +171,39 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             return(edges)
+        }, 
+        
+        # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
+        package_test_coverage = function(){
+          # Given private$nodes & package path
+          # result: update nodes table 
+          
+          repoPath <- file.path(self$get_package_path())
+          
+          log_info(msg = "Calculating package coverage...")
+          pkgCov <- covr::package_coverage(path = repoPath)
+          pkgCov <- data.table::as.data.table(pkgCov)
+          pkgCov <- pkgCov[, list(totalLines = .N
+                                  , coveredLines = sum(value > 0)
+                                  , coverageRatio = sum(value > 0) / .N
+                                  , filename = filename[1]
+                                  , firstLineInFile = first_line[1]
+                                  , lastLineInFile = last_line[.N]
+          )
+          , by = list(node = functions)]
+          
+          # Update Node with Coverage Info
+          private$nodes <- merge(x = private$nodes
+                                 , y = pkgCov
+                                 , by = "node"
+                                 , all.x = TRUE)
+          
+          self$set_plot_node_color_scheme(field = "coverageRatio"
+                                          , pallete = c("red", "green")
+          )
+          
+          log_info(msg = "Done calculating package coverage.")
+          return(invisible(NULL))
         }
         
     ),
