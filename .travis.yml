@@ -3,10 +3,4 @@ cache: packages
 warnings_are_errors: true
 before_install:
 - Rscript -e "install.packages('roxygen2', repos = 'http://cran.rstudio.org')"
-- Rscript -e "devtools::install('inst/baseballstats')"
-- Rscript -e "devtools::install('inst/sartre')"
-
-
-before_deploy:
-- Rscript -e "devtools::uninstall('inst/baseballstats')"
-- Rscript -e "devtools::uninstall('inst/sartre')"
+- Rscript -e "install.packages('devtools', repos = 'http://cran.rstudio.org')"

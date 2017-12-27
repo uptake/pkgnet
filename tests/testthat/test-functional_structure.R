@@ -11,33 +11,19 @@ futile.logger::flog.threshold(0)
 
 ##### TEST SETUP #####
 
-# During Travis CI Setup, packages will be installed. 
-# This is to install locally if they have not been installed already. 
-# if (require("baseballstats") == FALSE){
-#   devtools::install(file.path('../../inst/baseballstats')
-#                     , force = FALSE)
-# }
-# 
-# if (require("sartre") == FALSE){
-#   devtools::install(file.path('../../inst/sartre')
-#                     , force = FALSE)
-# }
-# 
-# # Find the path to the "baseballstats" package we use to test pkgnet
-# # (can get a weird path if you're in development mode)
-# library(baseballstats)
-# TEST_PKG_PATH_BBALL <- find.package("baseballstats")
-# library(sartre)
-# TEST_PKG_PATH_SARTRE <- find.package("sartre")
+
 
 ##### RUN TESTS #####
 
-  test_that('test packages loaded alright',{
-    expect_true(object = is.element('baseballstats', loadedNamespaces())
-                , info = "Fake test package baseballstats is loaded.")
+# Note: Packages 'baseballstats' and 'sartre' are installed by Travis CI before testing
+#       and uninstalled after testing.  If running these tests locallaly. 
+
+  test_that('test packages installed alright',{
+    expect_true(object = require("baseballstats")
+                , info = "Fake test package baseballstats is not installed.")
     
-    expect_true(object = is.element('sartre', loadedNamespaces())
-                , info = "Fake test package sartre is loaded.")
+    expect_true(object =  require("sartre")
+                , info = "Fake test package sartre is not installed")
   })
 
   test_that('PackageFunctionReporter returns graph of functions', {
@@ -87,10 +73,6 @@ futile.logger::flog.threshold(0)
 
 
 ##### TEST TEAR DOWN #####
-
-# uninstall fake test packages
-devtools::uninstall(file.path('../../inst/baseballstats'))
-devtools::uninstall(file.path('../../inst/sartre'))
 
 futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())
