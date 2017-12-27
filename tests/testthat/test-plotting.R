@@ -15,7 +15,15 @@ test_that('node coloring by discrete and continuous', {
                #, info = "Plot with continuous coloring has issues")
   
   b$set_plot_node_color_scheme(field = "filename"
-                               , pallete = RColorBrewer::brewer.pal(9,"Set1")
+                               , pallete = c("#E41A1C"
+                                             , "#377EB8"
+                                             , "#4DAF4A"
+                                             , "#984EA3"
+                                             , "#FF7F00"
+                                             , "#FFFF33"
+                                             , "#A65628"
+                                             , "#F781BF"
+                                             , "#999999")
   )
   
   expect_silent(object = b$plot_network())
