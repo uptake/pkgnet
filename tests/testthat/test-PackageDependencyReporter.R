@@ -51,7 +51,7 @@ test_that('PackageDependencyReporter Methods Work', {
   
   # inherited set_package
   expect_silent(object = testObj$set_package(packageName = "baseballstats"
-                                             , packagePath = find.package("baseballstats")) 
+                                             , packagePath = system.file('baseballstats',package="pkgnet")) 
   )
   
   expect_equal(object = testObj$get_raw_data()$packageName
@@ -59,7 +59,7 @@ test_that('PackageDependencyReporter Methods Work', {
                , info = "set_package did not set expected package name")
   
   expect_equal(object = testObj$get_raw_data()$packagePath
-               , expected = find.package("baseballstats")
+               , expected = system.file('baseballstats',package="pkgnet")
                , info = "set_package did not set expected package path")
   
   
@@ -70,7 +70,7 @@ test_that('PackageDependencyReporter Methods Work', {
                , info = "get_package did not return expected package name")
   
   expect_equal(object = testObj$get_package_path()
-               , expected = find.package("baseballstats")
+               , expected = system.file('baseballstats',package="pkgnet")
                , info = "get_package did not return expected package path")
   
   # "extract_network"

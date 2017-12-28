@@ -4,6 +4,7 @@ context("Package Function Reporter Tests")
 
 rm(list = ls())
 # Configure logger (suppress all logs in testing)
+# expect_silents only work with this logger turned off; only alerts with warnings
 loggerOptions <- futile.logger::logger.options()
 if (!identical(loggerOptions, list())){
   origLogThreshold <- loggerOptions[[1]][['threshold']]
@@ -51,7 +52,9 @@ test_that('PackageFunctionReporter Methods Work', {
   
   # inherited set_package
   expect_silent(object = testObj$set_package(packageName = "baseballstats"
-                                             , packagePath = find.package("baseballstats")) 
+                                             # Covr only works on source code. find.package path will not work
+                                             , packagePath = system.file("baseballstats",package="pkgnet")
+                                             ) 
   )
   
   expect_equal(object = testObj$get_raw_data()$packageName
@@ -59,7 +62,7 @@ test_that('PackageFunctionReporter Methods Work', {
                , info = "set_package did not set expected package name")
   
   expect_equal(object = testObj$get_raw_data()$packagePath
-               , expected = find.package("baseballstats")
+               , expected = system.file('baseballstats',package="pkgnet")
                , info = "set_package did not set expected package path")
   
   
@@ -70,7 +73,7 @@ test_that('PackageFunctionReporter Methods Work', {
                , info = "get_package did not return expected package name")
   
   expect_equal(object = testObj$get_package_path()
-               , expected = find.package("baseballstats")
+               , expected = system.file('baseballstats',package="pkgnet")
                , info = "get_package did not return expected package path")
   
   # "extract_network"
@@ -119,15 +122,34 @@ test_that('PackageFunctionReporter Methods Work', {
   expect_null(object = testObj$get_raw_data()$pkgGraph
               , info = "pkgGraph created before calculate_metrics")
   
-  expect_silent(object = testObj$calculate_metrics())  # Fails Here
+  expect_silent(object = testObj$calculate_metrics()) 
   
   expect_identical(object = testObj$get_raw_data()$edges
                    , expected = edgeNetwork
                    , info = "Edge data.table not created as expected")
   
-  expect_identical(object = testObj$get_raw_data()$nodes
-                   , expected = testNodeDT
-                   , info = "Nodes data.table not created as expected")
+  # Nodes table with coverage and metrics too
+
+  expect_identical(object = sort(testObj$get_raw_data()$nodes$node)
+                   , expected = sort(testNodeDT$node)
+                   , info = "Different nodes than expected")
+  
+  # network measures
+  expect_true(object = all( c("outDegree",
+                            "outBetweeness",
+                            "outCloseness",
+                            "numDescendants",
+                            "hubScore",
+                            "pageRank",
+                            "inDegree") %in% names(testObj$get_raw_data()$nodes))
+              , info = "Not all expected network measures are in nodes table"
+  )
+  
+  # coverage
+  #TODO this will need to be updated after PR #40
+  expect_true(object = all( c("coverage") %in% names(testObj$get_raw_data()$nodes))
+              , info = "Not all expected function coverages measures are in nodes table"
+  )
   
   expect_true(object = all(igraph::get.vertex.attribute(testObj$get_raw_data()$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
               , info = "pkgGraph field nodes not as expected")

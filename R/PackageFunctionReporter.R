@@ -125,7 +125,9 @@ PackageFunctionReporter <- R6::R6Class(
           repoPath <- file.path(self$get_package_path())
           
           log_info(msg = "Calculating package coverage...")
-          pkgCov <- covr::package_coverage(path = repoPath)
+          pkgCov <- covr::package_coverage(path = repoPath
+                                           , type = "tests"
+                                           , combine_types = FALSE)
           pkgCov <- data.table::as.data.table(pkgCov)
           pkgCov <- pkgCov[, list(coverage = sum(value > 0)/.N)
                            , by = list(node = functions)]
