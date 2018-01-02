@@ -5,7 +5,7 @@
 #'              its other functions, determining useful information such as which function is most 
 #'              central to the package. Combined with testing information it can be used as a powerful tool
 #'              to plan testing efforts.
-#' @importFrom data.table data.table melt as.data.table data.table setnames
+#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder
 #' @importFrom mvbutils foodweb
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
@@ -88,10 +88,14 @@ PackageFunctionReporter <- R6::R6Class(
             log_info(sprintf('Constructing network representation...'))
             # foodweb will output a warning for "In par(oldpar) : calling par(new=TRUE) with no plot" all the time. 
             # does not seem to be an issue
-            funcMap <- suppressWarnings(mvbutils::foodweb(where = paste("package"
-                                                                        , private$packageName
-                                                                        , sep = ":")
-                                                          , plotting = FALSE))
+            funcMap <-
+              suppressWarnings(mvbutils::foodweb(
+                where = paste("package"
+                              , private$packageName
+                              , sep = ":")
+                ,
+                plotting = FALSE
+              ))
             
             log_info("Done constructing network representation")
             
@@ -101,9 +105,10 @@ PackageFunctionReporter <- R6::R6Class(
             
             # Formattign
             edges[, value := NULL]
-            data.table::setnames(edges,c('rn','variable'), c('TARGET','SOURCE'))
-            edges[, c('TARGET','SOURCE') := lapply(.SD, as.character)
-                  , .SDcols = c('TARGET','SOURCE')]
+            edges[, SOURCE := as.character(variable)]
+            edges[, TARGET := as.character(rn)]
+            edges[, variable := NULL]
+            edges[, rn := NULL]
             data.table::setcolorder(edges, c('SOURCE', 'TARGET'))
             
             # If no edges, return NULL
