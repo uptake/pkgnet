@@ -29,11 +29,15 @@ test_that('AbstractGraphReporter structure is as expected', {
                  "clone"
                )
                , info = "Available public methods for AbstractGraphReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = AbstractGraphReporter$public_fields
                , expected = NULL
                , info = "Available public fields for AbstractGraphReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = AbstractGraphReporter$private_methods
@@ -41,6 +45,8 @@ test_that('AbstractGraphReporter structure is as expected', {
                  "make_graph_object"
                )
                , info = "Available private methods for AbstractGraphReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = AbstractGraphReporter$private_fields
@@ -52,6 +58,8 @@ test_that('AbstractGraphReporter structure is as expected', {
                  "cache"
                  )
                , info = "Available private fields for AbstractGraphReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
 })

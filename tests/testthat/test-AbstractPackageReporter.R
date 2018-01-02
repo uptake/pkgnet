@@ -29,16 +29,22 @@ test_that('AbstractPackageReporter structure is as expected', {
                  "clone"
                )
                , info = "Available public methods for AbstractPackageReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = AbstractPackageReporter$public_fields
                , expected = NULL
                , info = "Available public fields for AbstractPackageReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = AbstractPackageReporter$private_methods
                , expected = NULL
                , info = "Available private methods for AbstractPackageReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = AbstractPackageReporter$private_fields
@@ -47,6 +53,8 @@ test_that('AbstractPackageReporter structure is as expected', {
                  "packagePath"
                  )
                , info = "Available private fields for AbstractPackageReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
 })

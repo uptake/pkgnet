@@ -26,21 +26,29 @@ test_that('PackageFunctionReporter structure is as expected', {
                  "clone"
                )
                , info = "Available public methods for PackageFunctionReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = PackageFunctionReporter$public_fields
                , expected = NULL
                , info = "Available public fields for PackageFunctionReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = PackageFunctionReporter$private_methods
                , expected = c("package_test_coverage")
                , info = "Available private methods for PackageFunctionReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = PackageFunctionReporter$private_fields
                , expected = NULL
                , info = "Available private fields for PackageFunctionReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
 })

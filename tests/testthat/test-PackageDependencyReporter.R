@@ -25,21 +25,29 @@ test_that('PackageDependencyReporter structure is as expected', {
                  "clone"
                )
                , info = "Available public methods for PackageDependencyReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = PackageDependencyReporter$public_fields
                , expected = NULL
                , info = "Available public fields for PackageDependencyReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = PackageDependencyReporter$private_methods
                , expected = NULL
                , info = "Available private methods for PackageDependencyReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
   expect_named(object = PackageDependencyReporter$private_fields
                , expected = NULL
                , info = "Available private fields for PackageDependencyReporter not as expected."
+               , ignore.order = TRUE
+               , ignore.case = FALSE
   )
   
 })
@@ -80,6 +88,8 @@ test_that('PackageDependencyReporter Methods Work', {
   expect_named(object = edgeNetwork
                , expected = c("SOURCE", "TARGET")
                , info = "more than edges created by extract_network"
+               , ignore.order = FALSE # enforcing this convention
+               , ignore.case = FALSE
   )
   
   expect_true(object = all(edgeNetwork[,unique(SOURCE, TARGET)] %in% c("baseballstats",
@@ -103,7 +113,7 @@ test_that('PackageDependencyReporter Methods Work', {
   )
   
   expect_true(object = igraph::is_igraph(testPkgGraph)
-              , info = "Graph object not and igraph formatted object")
+              , info = "Graph object not an igraph formatted object")
   
   expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
               , info = "Graph nodes not as expected")
