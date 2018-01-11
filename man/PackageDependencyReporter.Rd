@@ -11,7 +11,7 @@ PackageDependencyReporter
 \description{
 This Reporter takes a package and uncovers the structure from
              its other package dependencies, determining which package it relies on is most central,
-             allowing for a developer to determine how to vett its dependency tree
+             allowing for a developer to determine how to vet its dependency tree
 }
 \section{Public Methods}{
 
