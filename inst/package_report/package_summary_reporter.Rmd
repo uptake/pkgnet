@@ -5,10 +5,6 @@ params:
    reporter: params$reporter
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Description
 This report will give you a high level description of a package
 
@@ -21,8 +17,6 @@ reporter$get_description()
 
 Number of objects
 
-```{r pressure, echo=FALSE}
+```{r echo=FALSE}
 reporter$get_objects()
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
