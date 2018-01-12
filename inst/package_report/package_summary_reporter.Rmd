@@ -1,0 +1,22 @@
+---
+title: "Package Summary Report"
+output: html_document
+params: 
+   reporter: params$reporter
+---
+
+## Description
+This report will give you a high level description of a package
+
+
+```{r}
+reporter$get_description()
+```
+
+## Num Objects
+
+Number of objects
+
+```{r echo=FALSE}
+reporter$get_objects()
+```

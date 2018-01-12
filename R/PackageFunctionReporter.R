@@ -117,6 +117,9 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             return(edges)
+        },
+        get_report_markdown_path = function(){
+            system.file(file.path("package_report","package_function_reporter.Rmd"),package = "pkgnet")
         }
     ),
     

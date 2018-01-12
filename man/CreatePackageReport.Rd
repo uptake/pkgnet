@@ -5,7 +5,8 @@
 \title{Surface the internal and external dependencies of an R package.}
 \usage{
 CreatePackageReport(packageName, packageReporters = DefaultReporters(),
-  packagePath = NULL)
+  packagePath = NULL, reportPath = file.path(getwd(), paste0(packageName,
+  "_report.html")))
 }
 \arguments{
 \item{packageName}{name of a package}
@@ -24,4 +25,3 @@ Surface the internal and external dependencies of an R package.
 \author{
 B. Burns
 }
-
