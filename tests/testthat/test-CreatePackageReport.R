@@ -4,11 +4,8 @@ context("CreatePackageReport")
 futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
 
 test_that("Test that CreatingPackageReport Runs", {
-    #TODO: Change when generating reports
-    pdf("test_plots.pdf") #PDF doesn't actually work
-    reporters <- CreatePackageReport(packageName = "baseballstats")
-    dev.off()
+    reporters <- CreatePackageReport(packageName = "baseballstats",reportPath = 'baseballstats.html')
     testthat::expect_true(all(unlist(lapply(reporters,function(x) "AbstractPackageReporter" %in% class(x)))))
-    testthat::expect_true(file.exists("test_plots.pdf") && file.size("test_plots.pdf") > 0)
-    file.remove("test_plots.pdf")
+    testthat::expect_true(file.exists("baseballstats.html") && file.size("baseballstats.html") > 0)
+    file.remove('baseballstats.html')
 })

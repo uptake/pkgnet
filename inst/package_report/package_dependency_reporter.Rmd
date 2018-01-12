@@ -5,10 +5,6 @@ params:
    reporter: params$reporter
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ## Description
 This report will give you a view of what packages you rely on
 

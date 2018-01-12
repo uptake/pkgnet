@@ -1,0 +1,21 @@
+---
+title: "Package Report"
+output: html_document
+params: 
+   reporters: params$reporters
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+reportTabs <- lapply(params$reporters,function(reporter) {
+  knitr::knit_child(reporter$get_report_markdown_path()
+                    , envir = list(reporter = reporter))})
+
+```
+
+```{r results="asis"}
+cat(paste(paste0("### \n",reportTabs), collapse = '\n'))
+```
