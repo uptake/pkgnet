@@ -3,7 +3,7 @@
 #' @family PackageReporters
 #' @description This Reporter takes a package and uncovers the structure from
 #'              its other package dependencies, determining which package it relies on is most central,
-#'              allowing for a developer to determine how to vett its dependency tree
+#'              allowing for a developer to determine how to vet its dependency tree
 #' @section Public Methods:
 #' \describe{
 #'     \item{\code{set_package(packageName, ...)}}{
@@ -29,7 +29,7 @@
 #'                     as a package dependency. Default is "Imports".}
 #'                 \item{\bold{\code{installed}}: a boolean whether to consider installed
 #'                     packages or CRAN packages. default is TRUE. FALSE is useful if you 
-#'                     would like to vett a package before adding it as a dependency}
+#'                     would like to vet a package before adding it as a dependency}
 #'                 \item{\bold{\code{ignorePackages}}: a vector of package names to ignore 
 #'                     in dependency analysis. They will show up if a package depends on them
 #'                     but their dependencies will be ignored. Useful if you know certain packages
