@@ -1,6 +1,6 @@
-#' @title Surface the internal and external dependecies of an R package.
+#' @title Surface the internal and external dependencies of an R package.
 #' @name CreatePackageReport
-#' @description Surface the internal and external dependecies of an R package. 
+#' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
 #' @param packageName name of a package
 #' @param packageReporters a list of package reporters
