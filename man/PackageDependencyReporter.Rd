@@ -16,18 +16,6 @@ This Reporter takes a package and uncovers the structure from
 \section{Public Methods}{
 
 \describe{
-    \item{\code{set_package(packageName, ...)}}{
-        \itemize{
-            \item{Set the package that all operations in the object are done for.}
-            \item{\bold{Args:}}{
-                \itemize{
-                \item{\bold{\code{packageName}}: a string with the name of the package you are
-                  analyzing.}
-                \item{\bold{\code{...}}: other arguments passed through to \code{extract_network}}
-                 }
-             }
-         }
-    }
     \item{\code{extract_network(which = "Imports", installed = TRUE, ignorePackages = NULL)}}{
         \itemize{
             \item{This function maps a package's reverse dependency
@@ -39,18 +27,18 @@ This Reporter takes a package and uncovers the structure from
                     as a package dependency. Default is "Imports".}
                 \item{\bold{\code{installed}}: a boolean whether to consider installed
                     packages or CRAN packages. default is TRUE. FALSE is useful if you 
-                    would like to vett a package before adding it as a dependency}
+                    would like to vet a package before adding it as a dependency}
                 \item{\bold{\code{ignorePackages}}: a vector of package names to ignore 
                     in dependency analysis. They will show up if a package depends on them
                     but their dependencies will be ignored. Useful if you know certain packages
                     are required and have and have a large number of dependencies that clutter
-                    the analysis.
-               }
+                    the analysis.}
             }
         }
-        \item{\bold{Returns:}}{
+        \item{\bold{Returns: a list with}}{
             \itemize{
-                \item{A data.table of directed edges from SOURCE package to TARGET package}
+                \item{\bold{\code{edges}}: A data.table of directed edges from SOURCE package to TARGET package}
+                \item{\bold{\code{nodes}}: A data.table of nodes, where each node is a package}
             }
         }
     }

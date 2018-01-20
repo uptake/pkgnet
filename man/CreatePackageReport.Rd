@@ -24,4 +24,3 @@ Surface the internal and external dependencies of an R package.
 \author{
 B. Burns
 }
-

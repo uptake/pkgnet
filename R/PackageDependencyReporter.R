@@ -6,18 +6,6 @@
 #'              allowing for a developer to determine how to vet its dependency tree
 #' @section Public Methods:
 #' \describe{
-#'     \item{\code{set_package(packageName, ...)}}{
-#'         \itemize{
-#'             \item{Set the package that all operations in the object are done for.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                 \item{\bold{\code{packageName}}: a string with the name of the package you are
-#'                   analyzing.}
-#'                 \item{\bold{\code{...}}: other arguments passed through to \code{extract_network}}
-#'                  }
-#'              }
-#'          }
-#'     }
 #'     \item{\code{extract_network(which = "Imports", installed = TRUE, ignorePackages = NULL)}}{
 #'         \itemize{
 #'             \item{This function maps a package's reverse dependency
@@ -34,13 +22,13 @@
 #'                     in dependency analysis. They will show up if a package depends on them
 #'                     but their dependencies will be ignored. Useful if you know certain packages
 #'                     are required and have and have a large number of dependencies that clutter
-#'                     the analysis.
-#'                }
+#'                     the analysis.}
 #'             }
 #'         }
-#'         \item{\bold{Returns:}}{
+#'         \item{\bold{Returns: a list with}}{
 #'             \itemize{
-#'                 \item{A data.table of directed edges from SOURCE package to TARGET package}
+#'                 \item{\bold{\code{edges}}: A data.table of directed edges from SOURCE package to TARGET package}
+#'                 \item{\bold{\code{nodes}}: A data.table of nodes, where each node is a package}
 #'             }
 #'         }
 #'     }
@@ -60,32 +48,38 @@ PackageDependencyReporter <- R6::R6Class(
     #TODO [patrick.boueri@uptake.com]: Add version information to dependency structure
 
     public = list(
-
-        calculate_metrics = function(...){
-            private$edges <- self$extract_network(...)
-            private$nodes <- data.table::data.table(node = unique(c(private$edges[, SOURCE], private$edges[, TARGET])))
-            private$pkgGraph <- private$make_graph_object(private$edges, private$nodes)
-            return(invisible(NULL))
-        },
         
         extract_network = function(depTypes = "Imports", installed = TRUE, ignorePackages = NULL){
             
+            # Check that package has been set
+            if (is.null(private$packageName)){
+                log_fatal('Must set_package() before extracting dependency network.')
+            }
+            
+            # Reset cache, because any cached stuff will be outdated with a new package
+            private$reset_cache()
+            
             log_info(sprintf('Constructing reverse dependency graph for %s', private$packageName))
             
+            # Consider only installed packages when building dependency network
             if (installed){
                 db <- utils::installed.packages()
                 if (!is.element(private$packageName, db[,1])) {
                     msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', private$packageName)
                     log_fatal(msg)
                 }
+                
+            # Otherwise consider all CRAN packages
             }else{
                 db <- NULL
             }
-            allDependencies <- unlist(tools::package_dependencies(private$packageName
-                                                                  , reverse = FALSE
-                                                                  , recursive = TRUE
-                                                                  , db = db
-                                                                  , which = depTypes))
+            
+            # Recursively search dependencies, terminating search at ignorePackage nodes
+            allDependencies <- private$recursive_dependencies(package = private$packageName
+                                                              , db = db
+                                                              , depTypes = depTypes
+                                                              , ignorePackages = ignorePackages
+                                                              )
             
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
                 msg <- sprintf('Could not resolve dependencies for package %s',private$packageName)
@@ -94,13 +88,16 @@ PackageDependencyReporter <- R6::R6Class(
                 return(list(nodes = nodeDT, edges = list(), networkMeasures = list()))
             }
             
+            # Remove ignorePackages from getting constructed again
             allDependencies <- setdiff(allDependencies, ignorePackages)
             
-            dependencyList <- tools::package_dependencies(c(private$packageName, allDependencies)
+            # Get dependency relationships for all packages
+            dependencyList <- tools::package_dependencies(allDependencies
                                                           , reverse = FALSE
                                                           , recursive = FALSE
                                                           , db = db
                                                           , which = depTypes)
+            
             
             nullList <- Filter(function(x){is.null(x)},dependencyList)
             if (length(nullList) > 0){
@@ -114,11 +111,88 @@ PackageDependencyReporter <- R6::R6Class(
             
             dependencyList <- Filter(function(x){!is.null(x)}, dependencyList)
             
-            edges <- data.table::rbindlist(lapply(names(dependencyList), function(pkgN){data.table::data.table(SOURCE = rep(pkgN,length(dependencyList[[pkgN]]))
-                                                                                                               ,TARGET = dependencyList[[pkgN]])
-            }))
+            edges <- data.table::rbindlist(lapply(
+                names(dependencyList), 
+                function(pkgN){
+                    data.table::data.table(SOURCE = rep(pkgN,length(dependencyList[[pkgN]])), 
+                                           TARGET = dependencyList[[pkgN]])
+                    }
+                ))
             
-            return(edges)
+            private$cache$edges <- edges
+            
+            # Get and save nodes
+            nodes = data.table::data.table(node = unique(c(self$edges[, SOURCE], self$edges[, TARGET])))
+            private$cache$nodes <- nodes
+            
+            return(list(edges = edges, nodes = nodes))
+        },
+        
+        calculate_all_metrics = function(...) {
+            # Check if we need to re-extract network
+            private$parse_extract_args(list(...))
+            
+            metricsList <- list()
+            
+            # Calculate network measures
+            metricsList <- c(metricsList, self$calculate_network_measures())
+            
+            return(metricsList)
+        }
+        
+        
+    ),
+    
+    active = list(
+        nodes = function(){
+            if (is.null(private$cache$nodes)){
+                log_info("Calling extract_network() with default arguments...")
+                invisible(self$extract_network())
+            }
+            return(private$cache$nodes)
+        },
+        edges = function(){
+            if (is.null(private$cache$edges)){
+                log_info("Calling extract_network() with default arguments...")
+                invisible(self$extract_network())
+            }
+            return(private$cache$edges)
+        }
+    ),
+    
+    private = list(
+        recursive_dependencies = function(package, db, depTypes, ignorePackages, seenPackages = NULL) {
+            
+            # Case 1: Package is blacklisted by ignorePackages, stop searching
+            if (package %in% ignorePackages){
+                return(c(seenPackages, package))
+            }
+
+            # Case 2: If package is already seen (memoization)
+            if (package %in% seenPackages){
+                return(seenPackages)
+            }
+            
+            # Case 3: Otherwise, get all of packages dependencies, and call this function recursively
+            deps <- unlist(tools::package_dependencies(package
+                                                       , reverse = FALSE
+                                                       , recursive = FALSE
+                                                       , db = db
+                                                       , which = depTypes))
+            outPackages <- c(seenPackages, package)
+            
+            # Identify new packages to search dependencies for
+            newDeps <- setdiff(deps, outPackages)
+            for (dep in newDeps) {
+                outPackages <- unique(c(outPackages
+                                        , private$recursive_dependencies(package = dep, db = db
+                                                                         , depTypes = depTypes
+                                                                         , ignorePackages = ignorePackages
+                                                                         , seenPackages = outPackages)
+                ))
+            }
+            return(outPackages)
+            
         }
     )
 )

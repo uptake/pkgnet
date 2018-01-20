@@ -20,7 +20,7 @@ test_that('PackageDependencyReporter structure is as expected', {
   
   expect_named(object = PackageDependencyReporter$public_methods
                , expected = c(
-                 "calculate_metrics", 
+                 "calculate_all_metrics", 
                  "extract_network", 
                  "clone"
                )
@@ -37,7 +37,9 @@ test_that('PackageDependencyReporter structure is as expected', {
   )
   
   expect_named(object = PackageDependencyReporter$private_methods
-               , expected = NULL
+               , expected = c(
+                   "recursive_dependencies"
+               )
                , info = "Available private methods for PackageDependencyReporter not as expected."
                , ignore.order = TRUE
                , ignore.case = FALSE
@@ -83,16 +85,23 @@ test_that('PackageDependencyReporter Methods Work', {
   
   # "extract_network"
   
-  expect_silent(object = edgeNetwork <- testObj$extract_network())
+  expect_silent(object = networkDTList <- testObj$extract_network())
   
-  expect_named(object = edgeNetwork
+  expect_named(object = networkDTList
+               , expected = c("edges", "nodes")
+               , info = "extract_network did not return edges and nodes as expected"
+               , ignore.order = TRUE
+               , ignore.case = FALSE
+               )
+  
+  expect_named(object = networkDTList$edges
                , expected = c("SOURCE", "TARGET")
                , info = "more than edges created by extract_network"
                , ignore.order = FALSE # enforcing this convention
                , ignore.case = FALSE
   )
   
-  expect_true(object = all(edgeNetwork[,unique(SOURCE, TARGET)] %in% c("baseballstats",
+  expect_true(object = all(networkDTList$edges[,unique(SOURCE, TARGET)] %in% c("baseballstats",
                                                                        "methods",
                                                                        "methods",
                                                                        "stats",
@@ -102,14 +111,12 @@ test_that('PackageDependencyReporter Methods Work', {
               , info = "unexpected package dependencies derived for baseballstats"
   )
   
-  # nodes
-  testNodeDT <- data.table::data.table(node = unique(c(edgeNetwork[, SOURCE], edgeNetwork[, TARGET])))
-  
+  # TODO: Need to test that nodes were properly extracted
+  testNodeDT <- testObj$nodes
   
   # inherited make_graph_object
   
-  expect_silent(object = testPkgGraph <- AbstractGraphReporter$private_methods$make_graph_object(edges = edgeNetwork
-                                                                                                 , nodes = testNodeDT)
+  expect_silent(object = testPkgGraph <- testObj$make_graph_object()
   )
   
   expect_true(object = igraph::is_igraph(testPkgGraph)
@@ -119,34 +126,21 @@ test_that('PackageDependencyReporter Methods Work', {
               , info = "Graph nodes not as expected")
   
   expect_identical(object = igraph::get.edgelist(testPkgGraph)
-                   , expected = matrix(unlist(edgeNetwork), ncol = 2, dimnames = NULL)
+                   , expected = matrix(unlist(networkDTList$edges), ncol = 2, dimnames = NULL)
                    , info = "Graph edges not as expected")
   
-  
-  # "calculate_metrics"
-  expect_null(object = testObj$get_raw_data()$nodes
-              , info = "Nodes table created before calculate_metrics")
-  expect_null(object = testObj$get_raw_data()$edges
-              , info = "Edges table created before calculate_metrics")
-  expect_null(object = testObj$get_raw_data()$pkgGraph
-              , info = "pkgGraph created before calculate_metrics")
-  
-  expect_silent(object = testObj$calculate_metrics())
-  
-  expect_identical(object = testObj$get_raw_data()$edges
-                   , expected = edgeNetwork
-                   , info = "Edge data.table not created as expected")
-  
-  expect_identical(object = testObj$get_raw_data()$nodes
-                   , expected = testNodeDT
-                   , info = "Nodes data.table not created as expected")
-  
-  expect_true(object = all(igraph::get.vertex.attribute(testObj$get_raw_data()$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
+  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
               , info = "pkgGraph field nodes not as expected")
   
-  expect_identical(object = igraph::get.edgelist(testObj$get_raw_data()$pkgGraph)
+  expect_identical(object = igraph::get.edgelist(testObj$pkgGraph)
                    , expected = igraph::get.edgelist(testPkgGraph)
                    , info = "pkgGraph field edges not as expected")
+  
+  # "calculate_all_metrics"
+  # TODO: Need test for this
+
+  expect_silent(object = testObj$calculate_all_metrics())
+
 })
 
 
