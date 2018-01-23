@@ -36,15 +36,14 @@ CreatePackageReport <- function(packageName
 
     # Make them plots
     for (reporter in packageReporters){
-        log_info("Running Package Reporter",class(reporter)[1])
+        log_info(paste("Running Package Reporter", class(reporter)[1]))
         reporter$set_package(packageName, packagePath)
         
-        reporter$calculate_metrics()
+        reporter$calculate_all_metrics()
         # TODO: replace plot_network() with render_report() which is then rendered into a parent report.
         reporter$plot_network()
-        log_info("Done Package Reporter",class(reporter)[1])
+        log_info(paste("Done Package Reporter",class(reporter)[1]))
     }
     
-    
-    return(packageReporters)
+    return(invisible(packageReporters))
 }

@@ -20,36 +20,32 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
         \item{\code{calculate_network_measures()}}{
             \itemize{
                 \item{extract network features on a node and network level}
-                \item{\bold{Returns:}}{
+                \item{\bold{Returns:} A list containing:}{
                     \itemize{
-                    \item{\bold{\code{packageName}}: String with the name of the package}
-                    \item{\bold{\code{packagePath}}: Optional path to the source code. 
-                        To be used for test coverage, if provided.}
+                    \item{\bold{\code{networkMeasures}}: a list of network measures.}
+                    \item{\bold{\code{nodeMeasures}}: the nodes data.table with additional columns of node measures.}
                    }
                 }
             }
        }
-       \item{\code{get_summary_view}{Returns the output of calculateNetworkMetrics}}
-       \item{\code{set_graph_layout}{Accepts a layoutType from either "tree" or "circle"
-         and augments the nodes private field with level/horizontal coordinates 
-         for a prettified layout}}
-
-        \item{\code{plot_network(colorFieldName=NULL)}}{
+       \item{\code{set_graph_layout}{Sets the layout of the graph plotted by
+           \code{plot_network}. This method augments the nodes data.table
+           with level/horizontal coordinates. The following layout types are
+           supported:}}{\itemize{
+               \item{`tree` (default)}
+               \item{`circle`}
+           }}
+        \item{\code{plot_network}}{
             \itemize{
-                \item{Creates a network visualization from tables of edges and nodes}
+                \item{Creates a network visualization of extracted package graph.}
                 \item{\bold{Args:}}{
                     \itemize{
-                        \item{\bold{\code{packageName}}: The name of column to use to 
-                            color the nodes. This can be any column in the "nodes" table
-                            inside the object produced by \code{extract_network}.
-                            Default is outDegree. If you estimated test coverage 
-                            when creating the network representation, try setting 
-                            this field to "test_coverage"}
+                        \item{\bold{\code{...}}: ...}
                     }
                 }
                 \item{\bold{Returns:}}{
                     \itemize{
-                        \item{A plotly object (local, not on plot.ly)}
+                        \item{A `visNetwork` object}
                    }
                 }
             }
@@ -65,7 +61,9 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
    \item{\code{edges}{A data.table from SOURCE to TARGET nodes describing the connections}}
    \item{\code{nodes}{A data.table with node as an identifier, and augmenting information about each node}}
    \item{\code{pkgGraph}{An igraph object describing the package graph}}
-   \item{\code{networkMeasures}{A list of network measures calculated by \code{CalcNetworkFeatures}}}
+   \item{\code{networkMeasures}{A list of network measures calculated by \code{calculate_network_features}}}
+   \item{\code{graphLayoutType}{Character string indicating currently active graph layout}}
+   \item{\code{graphViz}{\code{visNetwork} object of package graph}}
   }
 }
 }

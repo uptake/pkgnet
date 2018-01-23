@@ -20,6 +20,7 @@
 #'                 \itemize{
 #'                 \item{\bold{\code{packageName}}: a string with the name of the package you are
 #'                   analyzing.}
+#'                   \item{\bold{\code{packagePath}}: directory path to source code of package}
 #'                  }
 #'              }
 #'          }
@@ -58,13 +59,15 @@ AbstractPackageReporter <- R6::R6Class(
             private$packageName <- packageName
             
             if (exists("packagePath") && !is.null(packagePath)) {
-              if (dir.exists(packagePath)) {
-                private$packagePath <- packagePath
-              } else {
-                log_fatal(paste0("Package directory does not exist: ", packagePath))
-              }
+                if (dir.exists(packagePath)) {
+                    private$packagePath <- packagePath
+                } else {
+                    log_fatal(paste0("Package directory does not exist: ", packagePath))
+                }
             }
             
+            # Reset cached variables to NULL
+            private$reset_cache()
             
             return(invisible(NULL))
         },
@@ -74,7 +77,7 @@ AbstractPackageReporter <- R6::R6Class(
         },
         
         get_package_path = function(){
-          return(private$packagePath)
+            return(private$packagePath)
         },
         
         get_report =  function() {
@@ -92,6 +95,17 @@ AbstractPackageReporter <- R6::R6Class(
     
     private = list(
         packageName = NULL,
-        packagePath = NULL
+        packagePath = NULL,
+        
+        # Reset cached variables
+        reset_cache = function() {
+            if (!all(unlist(lapply(private$cache, is.null)))) {
+                log_info("Resetting cached network information...")
+                for (cacheVar in names(private$cache)){
+                    private$cache[[cacheVar]] <- NULL
+                }
+            }
+            return(invisible(NULL))
+        }
     )
 )

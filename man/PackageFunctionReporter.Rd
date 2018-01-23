@@ -38,8 +38,7 @@ This Reporter takes a package and uncovers the structure from
     \item{\code{extract_network()}}{
         \itemize{
             \item{This function maps the relationships between
-                  functions in a package. Optionally, a subset of functions
-                  can be mapped}
+                  functions in a package.}
         }
     }
 }

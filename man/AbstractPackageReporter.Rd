@@ -29,6 +29,7 @@ Defines the Abstract Class for all PackageReporters defined in pkgnet.
                 \itemize{
                 \item{\bold{\code{packageName}}: a string with the name of the package you are
                   analyzing.}
+                  \item{\bold{\code{packagePath}}: directory path to source code of package}
                  }
              }
          }

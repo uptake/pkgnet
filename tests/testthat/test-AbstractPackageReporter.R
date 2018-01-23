@@ -41,7 +41,7 @@ test_that('AbstractPackageReporter structure is as expected', {
   )
   
   expect_named(object = AbstractPackageReporter$private_methods
-               , expected = NULL
+               , expected = c("reset_cache")
                , info = "Available private methods for AbstractPackageReporter not as expected."
                , ignore.order = TRUE
                , ignore.case = FALSE
