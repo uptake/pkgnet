@@ -14,11 +14,14 @@
 #' @export
 CreatePackageReport <- function(packageName
                                 , packageReporters = DefaultReporters()
-                                , packagePath = NULL) {
+                                , packagePath = NULL
+                                ){
     
     # Input checks
-    assertthat::assert_that(assertthat::is.string(packageName)
-                            , is.list(packageReporters))
+    assertthat::assert_that(
+        assertthat::is.string(packageName)
+        , is.list(packageReporters)
+    )
     
     # Confirm that all reporters are actually reporters
     checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})

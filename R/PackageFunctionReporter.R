@@ -70,9 +70,13 @@ PackageFunctionReporter <- R6::R6Class(
             repoPath <- file.path(private$packagePath)
             
             log_info(msg = "Calculating package coverage...")
-            pkgCov <- covr::package_coverage(path = repoPath
-                                             , type = "tests"
-                                             , combine_types = FALSE)
+            
+            pkgCov <- covr::package_coverage(
+                path = repoPath
+                , type = "tests"
+                , combine_types = FALSE
+            )
+            
             pkgCov <- data.table::as.data.table(pkgCov)
             pkgCov <- pkgCov[, list(coveredLines = sum(value > 0)
                                     , totalLines = .N
@@ -159,8 +163,10 @@ PackageFunctionReporter <- R6::R6Class(
             log_info("Done constructing network representation")
             
             # Function Connections: Edges
-            edges <- data.table::melt(data.table::as.data.table(funcMap$funmat, keep.rownames = TRUE)
-                                      , id.vars = "rn")[value != 0]
+            edges <- data.table::melt(
+                data.table::as.data.table(funcMap$funmat, keep.rownames = TRUE)
+                , id.vars = "rn"
+            )[value != 0]
             
             # Formatting
             edges[, value := NULL]

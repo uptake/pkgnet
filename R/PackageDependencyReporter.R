@@ -70,21 +70,28 @@ PackageDependencyReporter <- R6::R6Class(
                 }
                 
             # Otherwise consider all CRAN packages
-            }else{
+            } else {
                 db <- NULL
             }
             
             # Recursively search dependencies, terminating search at ignorePackage nodes
-            allDependencies <- private$recursive_dependencies(package = private$packageName
-                                                              , db = db
-                                                              , depTypes = depTypes
-                                                              , ignorePackages = ignorePackages
-                                                              )
+            allDependencies <- private$recursive_dependencies(
+                package = private$packageName
+                , db = db
+                , depTypes = depTypes
+                , ignorePackages = ignorePackages
+            )
             
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
                 msg <- sprintf('Could not resolve dependencies for package %s',private$packageName)
                 log_warn(msg)
-                nodeDT <- data.table::data.table(nodes = private$packageName, level = 1,  horizontal = 0.5)
+                
+                nodeDT <- data.table::data.table(
+                    nodes = private$packageName
+                    , level = 1
+                    ,  horizontal = 0.5
+                )
+                
                 return(list(nodes = nodeDT, edges = list(), networkMeasures = list()))
             }
             
@@ -92,12 +99,13 @@ PackageDependencyReporter <- R6::R6Class(
             allDependencies <- setdiff(allDependencies, ignorePackages)
             
             # Get dependency relationships for all packages
-            dependencyList <- tools::package_dependencies(allDependencies
-                                                          , reverse = FALSE
-                                                          , recursive = FALSE
-                                                          , db = db
-                                                          , which = depTypes)
-            
+            dependencyList <- tools::package_dependencies(
+                allDependencies
+                , reverse = FALSE
+                , recursive = FALSE
+                , db = db
+                , which = depTypes
+            )
             
             nullList <- Filter(function(x){is.null(x)},dependencyList)
             if (length(nullList) > 0){
@@ -114,15 +122,18 @@ PackageDependencyReporter <- R6::R6Class(
             edges <- data.table::rbindlist(lapply(
                 names(dependencyList), 
                 function(pkgN){
-                    data.table::data.table(SOURCE = dependencyList[[pkgN]], 
-                                           TARGET = rep(pkgN,length(dependencyList[[pkgN]])))
-                    }
-                ))
+                    data.table::data.table(
+                        SOURCE = dependencyList[[pkgN]]
+                        , TARGET = rep(pkgN,length(dependencyList[[pkgN]]))
+                    )
+                }
+            ))
             
             private$cache$edges <- edges
             
             # Get and save nodes
-            nodes = data.table::data.table(node = unique(c(self$edges[, SOURCE], self$edges[, TARGET])))
+            nodes <- data.table::data.table(node = unique(c(self$edges[, SOURCE]
+                                                            , self$edges[, TARGET])))
             private$cache$nodes <- nodes
             
             return(list(edges = edges, nodes = nodes))
@@ -139,7 +150,6 @@ PackageDependencyReporter <- R6::R6Class(
             
             return(metricsList)
         }
-        
         
     ),
     
@@ -174,21 +184,27 @@ PackageDependencyReporter <- R6::R6Class(
             }
             
             # Case 3: Otherwise, get all of packages dependencies, and call this function recursively
-            deps <- unlist(tools::package_dependencies(package
-                                                       , reverse = FALSE
-                                                       , recursive = FALSE
-                                                       , db = db
-                                                       , which = depTypes))
+            deps <- unlist(tools::package_dependencies(
+                package
+                , reverse = FALSE
+                , recursive = FALSE
+                , db = db
+                , which = depTypes
+            ))
+            
             outPackages <- c(seenPackages, package)
             
             # Identify new packages to search dependencies for
             newDeps <- setdiff(deps, outPackages)
             for (dep in newDeps) {
                 outPackages <- unique(c(outPackages
-                                        , private$recursive_dependencies(package = dep, db = db
-                                                                         , depTypes = depTypes
-                                                                         , ignorePackages = ignorePackages
-                                                                         , seenPackages = outPackages)
+                                        , private$recursive_dependencies(
+                                            package = dep
+                                            , db = db
+                                            , depTypes = depTypes
+                                            , ignorePackages = ignorePackages
+                                            , seenPackages = outPackages
+                                        )
                 ))
             }
             return(outPackages)
