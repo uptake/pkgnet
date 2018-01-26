@@ -114,8 +114,8 @@ PackageDependencyReporter <- R6::R6Class(
             edges <- data.table::rbindlist(lapply(
                 names(dependencyList), 
                 function(pkgN){
-                    data.table::data.table(SOURCE = rep(pkgN,length(dependencyList[[pkgN]])), 
-                                           TARGET = dependencyList[[pkgN]])
+                    data.table::data.table(SOURCE = dependencyList[[pkgN]], 
+                                           TARGET = rep(pkgN,length(dependencyList[[pkgN]])))
                     }
                 ))
             

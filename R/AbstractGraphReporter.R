@@ -297,7 +297,7 @@ AbstractGraphReporter <- R6::R6Class(
             g <- visNetwork::visNetwork(nodes = plotDTnodes
                                         , edges = plotDTedges) %>%
                 visNetwork::visHierarchicalLayout(sortMethod = "directed"
-                                                  , direction = "DU") %>%
+                                                  , direction = "UD") %>%
                 visNetwork::visEdges(arrows = 'to') %>%
                 visNetwork::visOptions(highlightNearest = list(enabled = TRUE
                                                                , degree = nrow(plotDTnodes) #guarantee full path

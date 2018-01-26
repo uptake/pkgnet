@@ -101,13 +101,13 @@ test_that('PackageDependencyReporter Methods Work', {
                , ignore.case = FALSE
   )
   
-  expect_true(object = all(networkDTList$edges[,unique(SOURCE, TARGET)] %in% c("baseballstats",
-                                                                       "methods",
-                                                                       "methods",
-                                                                       "stats",
-                                                                       "stats",
-                                                                       "stats",
-                                                                       "graphics"))
+  expect_true(object = all(networkDTList$edges[,unique(c(SOURCE, TARGET))] %in% c("base",
+                                                                               "methods",
+                                                                               "utils",
+                                                                               "stats",
+                                                                               "grDevices",
+                                                                               "graphics", 
+                                                                               "baseballstats"))
               , info = "unexpected package dependencies derived for baseballstats"
   )
   
