@@ -74,7 +74,12 @@ PackageFunctionReporter <- R6::R6Class(
                                              , type = "tests"
                                              , combine_types = FALSE)
             pkgCov <- data.table::as.data.table(pkgCov)
-            pkgCov <- pkgCov[, list(coverage = sum(value > 0)/.N)
+            pkgCov <- pkgCov[, list(coveredLines = sum(value > 0)
+                                    , totalLines = .N
+                                    , coverageRatio = sum(value > 0)/.N
+                                    , meanCoveragePerLine = sum(value)/.N
+                                    , filename = filename[1]
+                                    )
                              , by = list(node = functions)]
             
             # Update Node with Coverage Info
