@@ -245,14 +245,16 @@ AbstractGraphReporter <- R6::R6Class(
                 plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
                 
             } else {
+              
+               # Fetch Color Scheme Values
                 colorFieldName <- private$plotNodeColorScheme[['field']]
                 colorFieldPallete <- private$plotNodeColorScheme[['pallete']]
                 colorFieldValues <- plotDTnodes[[colorFieldName]]
-                
                 log_info(sprintf("Coloring plot nodes by %s..."
                                  , colorFieldName))
+              
                 
-                # If character field
+                # If colorFieldValues are character 
                 if(is.character(colorFieldValues) | is.factor(colorFieldValues)) {
                     # Create pallete by unique values
                     valCount <- data.table::uniqueN(colorFieldValues)
@@ -264,17 +266,28 @@ AbstractGraphReporter <- R6::R6Class(
                                 , by = list(get(colorFieldName))]
                     
                 } else if (is.numeric(colorFieldValues)) {
-                    # If numeric field, assume continuous
+                    # If colorFieldValues are numeric, assume continuous
+                  
+                    # Create Continuous Color Pallete
                     newPallete <- grDevices::colorRamp(colors = colorFieldPallete)
-                    plotDTnodes[, color := newPallete(get(colorFieldName))]
+                    
+                    # Scale Values to be with range 0 - 1
+                    plotDTnodes[!is.na(get(colorFieldName)), scaledColorValues := get(colorFieldName) / max(get(colorFieldName))]
+                    
+                    # Assign Color Values From Pallete
+                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPallete(scaledColorValues), maxColorValue = 255)]
+                    
+                    # NA Values get gray color
+                    plotDTnodes[is.na(scaledColorValues), color := "gray"]
                     
                 } else {
+                    # Error Out
                     log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
                                              , "Field %s is of type %s.")
                                       , colorFieldName
                                       , typeof(colorFieldValues)
-                    )
-                    )
+                                      )
+                              )
                     
                 } # end non-default color field
                 

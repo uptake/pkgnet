@@ -41,6 +41,7 @@ test_that('PackageFunctionReporter structure is as expected', {
   expect_named(object = PackageFunctionReporter$private_methods
                , expected = c("extract_nodes"
                               , "extract_edges"
+                              , "package_test_coverage"
                               )
                , info = "Available private methods for PackageFunctionReporter not as expected."
                , ignore.order = TRUE
@@ -163,8 +164,12 @@ test_that('PackageFunctionReporter Methods Work', {
   )
   
   # coverage
-  #TODO this will need to be updated after PR #40
-  expect_true(object = all( c("coverage") %in% names(testObj$nodes))
+  expect_true(object = all( c("coverageRatio"
+                              , "meanCoveragePerLine"
+                              , "totalLines"
+                              , "coveredLines"
+                              , "filename") %in% names(testObj$nodes)
+                            )
               , info = "Not all expected function coverages measures are in nodes table"
   )
   
