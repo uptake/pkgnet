@@ -28,6 +28,7 @@ Defines a concrete implementation of \link{AbstractPackageReporter} for a high l
                 \itemize{
                 \item{\bold{\code{packageName}}: a string with the name of the package you are
                   analyzing.}
+                  \item{\bold{\code{packagePath}}: directory path to source code of package}
                  }
              }
          }

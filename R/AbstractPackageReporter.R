@@ -100,10 +100,6 @@ AbstractPackageReporter <- R6::R6Class(
             return(private$packagePath)
         },
         
-        get_report =  function() {
-            stop("get_report has not been implemented.")
-        }, 
-        
         get_report_markdown_path =  function() {
             stop("get_report_markdown_path has not been implemented.")
         },
@@ -111,10 +107,7 @@ AbstractPackageReporter <- R6::R6Class(
         get_summary_view  = function(){
             stop("get_summary_view has not been implemented.")
         },
-        calculate_metrics = function(){
-            stop("calculate_metrics is not implemented")  
-        },
-        
+
         get_raw_data = function(){
             return(as.list(private))
         }

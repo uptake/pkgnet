@@ -3,8 +3,8 @@
 #' @family PackageReporters
 #' @description Defines a concrete implementation of \link{AbstractPackageReporter} for a high level overview
 #'              of a particular package. It will summarize things like Lines of code, whether it's on CRAN, etc.
-#' @importFrom R6 R6Class
 #' @inheritSection AbstractPackageReporter Public
+#' @importFrom R6 R6Class
 #' @export
 PackageSummaryReporter <- R6::R6Class(
     classname = "PackageSummaryReporter",

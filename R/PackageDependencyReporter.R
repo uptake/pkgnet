@@ -49,10 +49,6 @@ PackageDependencyReporter <- R6::R6Class(
 
     public = list(
 
-        get_report_markdown_path = function(){
-            system.file(file.path("package_report","package_dependency_reporter.Rmd"),package = "pkgnet")
-        },
-
         extract_network = function(depTypes = "Imports", installed = TRUE, ignorePackages = NULL){
             
             # Check that package has been set
@@ -142,6 +138,17 @@ PackageDependencyReporter <- R6::R6Class(
             metricsList <- c(metricsList, self$calculate_network_measures())
             
             return(metricsList)
+        }, 
+        
+        
+        # For report generation
+        get_report_markdown_path = function(){
+          system.file(file.path("package_report","package_dependency_reporter.Rmd"),package = "pkgnet")
+        },
+        
+        get_summary_view = function(){
+          #TODO: DO something with this
+          return(NULL)
         }
         
         

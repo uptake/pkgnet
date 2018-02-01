@@ -21,6 +21,7 @@ test_that('PackageDependencyReporter structure is as expected', {
   expect_named(object = PackageDependencyReporter$public_methods
                , expected = c(
                  "calculate_all_metrics", 
+                 "get_report_markdown_path",
                  "extract_network", 
                  "clone"
                )
