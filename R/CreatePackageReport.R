@@ -15,7 +15,7 @@
 CreatePackageReport <- function(packageName
                                 , packageReporters = DefaultReporters()
                                 , packagePath = NULL
-                                ){
+                                , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))) {
     
     # Input checks
     assertthat::assert_that(
@@ -48,5 +48,39 @@ CreatePackageReport <- function(packageName
         log_info(paste("Done Package Reporter",class(reporter)[1]))
     }
     
+    RenderPackageReport(reportPath = reportPath,
+                        packageReporters = packageReporters,
+                        packageName = packageName)
+    
     return(invisible(packageReporters))
+}
+
+
+
+#' @title Package Report Renderer
+#' @name RenderPackageReport
+#' @description Renders an html report based on the initialized reporters provided
+#' @author P. Boueri
+#' @param reportPath a file.path to where the report should be rendered
+#' @param packageReporters a list of package reporters that have already been initialized and have calculated 
+#' @return Nothing
+RenderPackageReport <- function(reportPath 
+                                , packageReporters
+                                , packageName) {
+    log_info(paste("Outputting Package Report to ",reportPath))
+    loggerOptions <- futile.logger::logger.options()
+    if (!identical(loggerOptions, list())){
+        origLogThreshold <- loggerOptions[[1]][['threshold']]
+    }
+    futile.logger::flog.threshold(0)
+    rmarkdown::render(system.file(file.path("package_report","package_report.Rmd"), package = "pkgnet")
+                      , output_format = "html_document"
+                      , output_file = reportPath
+                      , quiet = TRUE
+                      , envir = new.env()
+                      , params = list(reporters = packageReporters
+                                      , packageName = packageName)
+                      )
+    futile.logger::flog.threshold(origLogThreshold)
+    return(invisible(NULL))                   
 }

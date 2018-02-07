@@ -1,0 +1,29 @@
+---
+output: 
+  html_document:
+    theme: flatly
+params: 
+   reporters: params$reporters
+   packageName: params$packageName
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r title, results="asis"}
+cat(sprintf("# pkgnet: %s", packageName))
+```
+
+```{r}
+reportTabs <- lapply(params$reporters,function(reporter) {
+  knitr::knit_child(reporter$get_report_markdown_path()
+                    , envir = list(reporter = reporter))})
+
+```
+
+
+```{r results="asis"}
+cat(paste0("# {.tabset} \n",paste(reportTabs, collapse = '\n')))
+```
+

@@ -5,7 +5,8 @@
 \title{Surface the internal and external dependencies of an R package.}
 \usage{
 CreatePackageReport(packageName, packageReporters = DefaultReporters(),
-  packagePath = NULL)
+  packagePath = NULL, reportPath = file.path(getwd(), paste0(packageName,
+  "_report.html")))
 }
 \arguments{
 \item{packageName}{name of a package}
@@ -14,6 +15,9 @@ CreatePackageReport(packageName, packageReporters = DefaultReporters(),
 
 \item{packagePath}{(optional) the path to the package repository.
 If given, coverage will be calculated for each function.}
+
+\item{reportPath}{The path and filename of the output report.  Default
+report will be produced in working directory.}
 }
 \value{
 A list of instantiated packageReporters the user can then interact with

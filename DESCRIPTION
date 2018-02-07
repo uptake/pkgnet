@@ -23,7 +23,9 @@ Imports:
     methods,
     mvbutils,
     R6,
-    visNetwork
+    visNetwork, 
+    rmarkdown, 
+    knitr
 Suggests:
     devtools,
     testthat

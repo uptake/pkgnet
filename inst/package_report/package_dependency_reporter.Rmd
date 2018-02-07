@@ -1,0 +1,23 @@
+---
+title: "Package Dependency Report"
+output: html_document
+params: 
+   reporter: params$reporter
+---
+
+## Dependency Network
+
+
+### Description
+This report will give you a view of what packages you rely on
+
+
+```{r}
+#reporter$get_summary_view()
+```
+
+### Visualization
+
+```{r pressure, echo=FALSE}
+reporter$plot_network()
+```

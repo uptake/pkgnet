@@ -24,6 +24,7 @@ test_that('AbstractPackageReporter structure is as expected', {
                  "get_package",
                  "get_package_path",
                  "get_report",
+                 "get_report_markdown_path",
                  "get_summary_view",
                  "get_raw_data",
                  "clone"
