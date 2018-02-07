@@ -23,6 +23,7 @@ test_that('PackageDependencyReporter structure is as expected', {
                  "calculate_all_metrics", 
                  "get_report_markdown_path",
                  "extract_network", 
+                 "get_summary_view",
                  "clone"
                )
                , info = "Available public methods for PackageDependencyReporter not as expected."
