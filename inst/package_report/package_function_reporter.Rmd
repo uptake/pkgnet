@@ -1,0 +1,22 @@
+---
+title: "Package Function Report"
+output: html_document
+params: 
+   reporter: params$reporter
+---
+
+## Function Network
+
+### Description
+This report will give you a view of what packages you rely on
+
+
+```{r}
+#reporter$get_summary_view()
+```
+
+### Visualization
+
+```{r echo=FALSE}
+reporter$plot_network()
+```

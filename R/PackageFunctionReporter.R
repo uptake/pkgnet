@@ -113,6 +113,17 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             return(metricsList)
+        }, 
+        
+        
+        # For report Generation
+        get_report_markdown_path = function(){
+          system.file(file.path("package_report","package_function_reporter.Rmd"),package = "pkgnet")
+        }, 
+        
+        get_summary_view = function(){
+          #TODO: DO something with this
+          return(NULL)
         }
     ),
     
@@ -176,9 +187,8 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             return(edges)
-        }, 
+        },
         
-        # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
         package_test_coverage = function(){
           # Given private$nodes & package path
           # result: update nodes table 

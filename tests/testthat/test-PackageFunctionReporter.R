@@ -24,6 +24,8 @@ test_that('PackageFunctionReporter structure is as expected', {
                  "calculate_all_metrics", 
                  "extract_network", 
                  "calculate_test_coverage",
+                 "get_report_markdown_path",
+                 "get_summary_view",
                  "clone"
                )
                , info = "Available public methods for PackageFunctionReporter not as expected."
