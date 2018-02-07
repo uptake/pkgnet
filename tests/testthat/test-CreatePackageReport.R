@@ -10,13 +10,31 @@ if (!identical(loggerOptions, list())){
 futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
 
 test_that("Test that CreatingPackageReport Runs", {
-    testReportPath <- tempfile(pattern = "baseball"
-                               , fileext = ".html")
-    reporters <- CreatePackageReport(packageName = "baseballstats"
-                                     ,reportPath = testReportPath)
-    testthat::expect_true(all(unlist(lapply(reporters,function(x) "AbstractPackageReporter" %in% class(x)))))
+    
+    testReportPath <- tempfile(
+        pattern = "baseball"
+        , fileext = ".html"
+    )
+    
+    reporters <- CreatePackageReport(
+        packageName = "baseballstats"
+        , reportPath = testReportPath
+    )
+    
+    testthat::expect_true(all(unlist(lapply(reporters, function(x) "AbstractPackageReporter" %in% class(x)))))
     testthat::expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
     file.remove(testReportPath)
+})
+
+test_that("CreatePackageReport rejects bad inputs to reporters", {
+    
+    expect_error({
+        CreatePackageReport(
+            packageName = "baseballstats"
+            , packageReporters = list(a = rnorm(100))
+        )
+    }, regexp = "At least one of the reporters passed to CreatePackageReport is not a PackageReporter")
+    
 })
 
 
