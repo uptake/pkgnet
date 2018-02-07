@@ -4,12 +4,14 @@
 \alias{RenderPackageReport}
 \title{Package Report Renderer}
 \usage{
-RenderPackageReport(reportPath, packageReporters)
+RenderPackageReport(reportPath, packageReporters, packageName)
 }
 \arguments{
 \item{reportPath}{a file.path to where the report should be rendered}
 
 \item{packageReporters}{a list of package reporters that have already been initialized and have calculated}
+
+\item{packageName}{(string) The name of the package.}
 }
 \value{
 Nothing
