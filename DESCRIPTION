@@ -9,10 +9,11 @@ Authors@R: c(
     person("Jay", "Qi", email = "jay.qi@uptake.com", role = c("ctb"))
     )
 Maintainer: Brian Burns <brian.burns@uptake.com>
-Description: Tools from the  domain of graph theory can be used to quantify the complexity
-             and vulnerability to failure of a software package. That is the guiding philosophy
-             of this package. "pkgnet" provides tools to analyze the dependencies between functions
-             in an R package and between its imported packages.
+Description: Tools from the domain of graph theory can be used to quantify
+    the complexity and vulnerability to failure of a software package. That is
+    the guiding philosophy of this package. "pkgnet" provides tools to analyze
+    the dependencies between functions in an R package and between its imported
+    packages.
 Imports:
     assertthat,
     covr,
@@ -23,7 +24,9 @@ Imports:
     methods,
     mvbutils,
     R6,
-    visNetwork
+    visNetwork, 
+    rmarkdown, 
+    knitr
 Suggests:
     devtools,
     testthat
