@@ -18,8 +18,10 @@ CreatePackageReport <- function(packageName
                                 , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))) {
     
     # Input checks
-    assertthat::assert_that(assertthat::is.string(packageName)
-                            , is.list(packageReporters))
+    assertthat::assert_that(
+        assertthat::is.string(packageName)
+        , is.list(packageReporters)
+    )
     
     # Confirm that all reporters are actually reporters
     checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})

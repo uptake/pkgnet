@@ -5,6 +5,6 @@
 DefaultReporters <- function() {
     return(list(
          PackageFunctionReporter$new()
-        ,PackageDependencyReporter$new()
+        , PackageDependencyReporter$new()
     ))
 }

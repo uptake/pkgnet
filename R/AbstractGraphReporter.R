@@ -74,9 +74,12 @@ AbstractGraphReporter <- R6::R6Class(
             nodes <- self$nodes
             
             if (nrow(edges) > 0) {
+                
                 # A graph with edges
-                inGraph <- igraph::graph.edgelist(as.matrix(edges[,list(SOURCE,TARGET)])
-                                                  , directed = TRUE)
+                inGraph <- igraph::graph.edgelist(
+                    as.matrix(edges[,list(SOURCE,TARGET)])
+                    , directed = TRUE
+                )
                 
                 # add isolated nodes
                 allNodes <- nodes$node
@@ -109,8 +112,9 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # out degree
             #--------------#
-            outDegreeResult <- igraph::centralization.degree(graph = pkgGraph
-                                                       , mode = "out"
+            outDegreeResult <- igraph::centralization.degree(
+                graph = pkgGraph
+                , mode = "out"
             )
             # update data.tables
             outNodeDT[, outDegree := outDegreeResult[['res']]] # nodes
@@ -119,9 +123,11 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # betweeness
             #--------------#
-            outBetweenessResult <- igraph::centralization.betweenness(graph = pkgGraph
-                                                                , directed = TRUE
+            outBetweenessResult <- igraph::centralization.betweenness(
+                graph = pkgGraph
+                , directed = TRUE
             )
+            
             # update data.tables
             outNodeDT[, outBetweeness := outBetweenessResult$res] # nodes
             outNetworkList[['centralization.betweenness']] <- outBetweenessResult$centralization
@@ -129,9 +135,11 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # closeness
             #--------------#
-            outClosenessResult <- igraph::centralization.closeness(graph = pkgGraph
-                                                             , mode = "out"
+            outClosenessResult <- igraph::centralization.closeness(
+                graph = pkgGraph
+                , mode = "out"
             )
+            
             # update data.tables
             outNodeDT[, outCloseness := outClosenessResult$res] # nodes
             outNetworkList[['centralization.closeness']] <- outClosenessResult$centralization
@@ -143,9 +151,10 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # Number of Decendants - a.k.a neightborhood or ego
             #--------------#
-            neighborHoodSizeResult <- igraph::neighborhood.size(graph = pkgGraph
-                                                          , order = vcount(pkgGraph)
-                                                          , mode = "out"
+            neighborHoodSizeResult <- igraph::neighborhood.size(
+                graph = pkgGraph
+                , order = vcount(pkgGraph)
+                , mode = "out"
             )
             
             # update data.tables
@@ -154,10 +163,12 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # Hub Score 
             #--------------#
-            hubScoreResult <- igraph::hub_score(graph = pkgGraph
-                                          , scale = TRUE
+            hubScoreResult <- igraph::hub_score(
+                graph = pkgGraph
+                , scale = TRUE
             )
             outNodeDT[, hubScore := hubScoreResult$vector] # nodes
+            
             #--------------#
             # PageRank
             #--------------#
@@ -201,9 +212,11 @@ AbstractGraphReporter <- R6::R6Class(
             
             # It might be important to get the nodes from pkgGraph so that they
             # are in the same order as in plotMat?
-            plotDT <- data.table::data.table(node = names(igraph::V(self$pkgGraph))
-                                             , level = plotMat[,2]
-                                             , horizontal = plotMat[,1])
+            plotDT <- data.table::data.table(
+                node = names(igraph::V(self$pkgGraph))
+                , level = plotMat[,2]
+                , horizontal = plotMat[,1]
+            )
             
             # Update nodes with layout information
             private$update_nodes(plotDT)
@@ -229,7 +242,7 @@ AbstractGraphReporter <- R6::R6Class(
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
             
-            if(length(self$edges) > 0) {
+            if (length(self$edges) > 0) {
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
@@ -239,7 +252,7 @@ AbstractGraphReporter <- R6::R6Class(
             }
             
             # Color By Field
-            if(is.null(private$plotNodeColorScheme[['field']])) {
+            if (is.null(private$plotNodeColorScheme[['field']])) {
                 
                 # Default Color for all Nodes
                 plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
@@ -253,9 +266,9 @@ AbstractGraphReporter <- R6::R6Class(
                 log_info(sprintf("Coloring plot nodes by %s..."
                                  , colorFieldName))
               
-                
                 # If colorFieldValues are character 
-                if(is.character(colorFieldValues) | is.factor(colorFieldValues)) {
+                if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
+
                     # Create pallete by unique values
                     valCount <- data.table::uniqueN(colorFieldValues)
                     newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
@@ -317,6 +330,7 @@ AbstractGraphReporter <- R6::R6Class(
         
         set_plot_node_color_scheme = function(field
                                               , pallete){
+            
             # Check field is length 1 string vector
             if (typeof(field) != "character" || length(field) != 1) {
                 log_fatal(paste0("'field' in set_plot_node_color_scheme must be a string vector of length one. "
@@ -347,8 +361,10 @@ AbstractGraphReporter <- R6::R6Class(
             }
             
             
-            private$plotNodeColorScheme <- list(field = field
-                                                , pallete = pallete)
+            private$plotNodeColorScheme <- list(
+                field = field
+                , pallete = pallete
+            )
             
             log_info(sprintf("Node color scheme updated: field [%s], pallete [%s]."
                              , private$plotNodeColorScheme[['field']]
@@ -397,8 +413,9 @@ AbstractGraphReporter <- R6::R6Class(
     ),
     
     private = list(
-        plotNodeColorScheme = list(field = NULL
-                                   , pallete = '#97C2FC'
+        plotNodeColorScheme = list(
+            field = NULL
+            , pallete = '#97C2FC'
         ),
         
         # Create a "cache" to be used when evaluating active bindings
@@ -425,6 +442,7 @@ AbstractGraphReporter <- R6::R6Class(
         # This function updates the cached nodes data.table, and if it exists, the pkgGraph object
         update_nodes = function(metadataDT) {
             log_info('Updating cached nodes data.table with metadata...')
+            
             # Merge new DT with cached DT, but overwrite any colliding columns
             colsToKeep <- setdiff(names(self$nodes), names(metadataDT))
             private$cache$nodes <- merge(x = self$nodes[, .SD, .SDcols = c("node", colsToKeep)]
