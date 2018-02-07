@@ -5,15 +5,18 @@ params:
    reporter: params$reporter
 ---
 
-## Description
+## Dependency Network
+
+
+### Description
 This report will give you a view of what packages you rely on
 
 
 ```{r}
-reporter$get_summary_view()
+#reporter$get_summary_view()
 ```
 
-## Visualization
+### Visualization
 
 ```{r pressure, echo=FALSE}
 reporter$plot_network()

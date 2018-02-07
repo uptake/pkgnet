@@ -1,12 +1,18 @@
 ---
-title: "Package Report"
-output: html_document
+output: 
+  html_document:
+    theme: flatly
 params: 
    reporters: params$reporters
+   packageName: params$packageName
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r title, results="asis"}
+cat(sprintf("# pkgnet: %s", packageName))
 ```
 
 ```{r}
@@ -16,6 +22,8 @@ reportTabs <- lapply(params$reporters,function(reporter) {
 
 ```
 
+
 ```{r results="asis"}
-cat(paste(paste0("### \n",reportTabs), collapse = '\n'))
+cat(paste0("# {.tabset} \n",paste(reportTabs, collapse = '\n')))
 ```
+

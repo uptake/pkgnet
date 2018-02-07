@@ -47,7 +47,8 @@ CreatePackageReport <- function(packageName
     }
     
     RenderPackageReport(reportPath = reportPath,
-                        packageReporters = packageReporters)
+                        packageReporters = packageReporters,
+                        packageName = packageName)
     
     return(invisible(packageReporters))
 }
@@ -62,7 +63,8 @@ CreatePackageReport <- function(packageName
 #' @param packageReporters a list of package reporters that have already been initialized and have calculated 
 #' @return Nothing
 RenderPackageReport <- function(reportPath 
-                                , packageReporters) {
+                                , packageReporters
+                                , packageName) {
     log_info(paste("Outputting Package Report to ",reportPath))
     loggerOptions <- futile.logger::logger.options()
     if (!identical(loggerOptions, list())){
@@ -74,7 +76,9 @@ RenderPackageReport <- function(reportPath
                       , output_file = reportPath
                       , quiet = TRUE
                       , envir = new.env()
-                      , params = list(reporters = packageReporters))
+                      , params = list(reporters = packageReporters
+                                      , packageName = packageName)
+                      )
     futile.logger::flog.threshold(origLogThreshold)
     return(invisible(NULL))                   
 }

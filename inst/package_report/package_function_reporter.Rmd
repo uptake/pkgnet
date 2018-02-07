@@ -5,15 +5,17 @@ params:
    reporter: params$reporter
 ---
 
-## Description
+## Function Network
+
+### Description
 This report will give you a view of what packages you rely on
 
 
 ```{r}
-reporter$get_summary_view()
+#reporter$get_summary_view()
 ```
 
-## Visualization
+### Visualization
 
 ```{r echo=FALSE}
 reporter$plot_network()
