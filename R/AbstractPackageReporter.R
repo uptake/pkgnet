@@ -119,12 +119,14 @@ AbstractPackageReporter <- R6::R6Class(
         
         # Reset cached variables
         reset_cache = function() {
-            if (!all(unlist(lapply(private$cache, is.null)))) {
+            # If cache is NULL, we're setting it to default for the first time
+            # then no need to print a log message
+            if (!is.null(private$cache)) {
                 log_info("Resetting cached network information...")
-                for (cacheVar in names(private$cache)){
-                    private$cache[[cacheVar]] <- NULL
-                }
             }
+            # Set cache to default cache
+            private$cache <- private$defaultCache
+            
             return(invisible(NULL))
         }
     )

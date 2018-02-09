@@ -196,35 +196,6 @@ AbstractGraphReporter <- R6::R6Class(
             return(list(networkMeasures = outNetworkList, nodeMeasures = outNodeDT))
         },
         
-        set_graph_layout = function(layoutType = "tree"){
-            
-            log_info(paste("Setting graph layout type to:", layoutType))
-            
-            if (layoutType == "tree"){
-                plotMat <- suppressWarnings(igraph::layout_as_tree(self$pkgGraph)) 
-            } else if (layout == "circle"){
-                plotMat <- igraph::layout_in_circle(self$pkgGraph)
-            } else {
-                log_fatal(paste("Unknown layoutType passed to set_graph_layout:",layoutType))
-            }
-            
-            # Set cached graphLayoutType, so that we know we don't need to recalculate
-            private$cache$graphLayoutType <- layoutType
-            
-            # It might be important to get the nodes from pkgGraph so that they
-            # are in the same order as in plotMat?
-            plotDT <- data.table::data.table(
-                node = names(igraph::V(self$pkgGraph))
-                , level = plotMat[,2]
-                , horizontal = plotMat[,1]
-            )
-            
-            # Update nodes with layout information
-            private$update_nodes(plotDT)
-            
-            return(invisible(NULL))
-        },
-        
         # Creates visNetwork graph viz object
         # Uses pkgGraph active binding
         plot_network = function(...){
@@ -233,17 +204,18 @@ AbstractGraphReporter <- R6::R6Class(
             
             # If layout type is passed in
             if (methods::hasArg("layoutType")) {
-                self$set_graph_layout(layoutType)
+                self$graphLayoutType <- layoutType
             }
-            
-            log_info(paste("Plotting with layout:", self$graphLayoutType))
             
             # format for plot
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
             
-            if (length(self$edges) > 0) {
+            log_info(paste("Plotting with layout:", self$graphLayoutType))
+            plotDTnodes <- private$calculate_graph_layout(plotDTnodes, self$pkgGraph, self$graphLayoutType)
+            
+            if(length(self$edges) > 0) {
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
@@ -306,6 +278,20 @@ AbstractGraphReporter <- R6::R6Class(
                 
             } # end color field creation
             
+            # If threshold to group orphan nodes, then assign group
+            numOrphanNodes <- length(self$orphanNodes)
+            numOrphanThreshold <- self$orphanNodeClusteringThreshold
+            if (numOrphanNodes > numOrphanThreshold) {
+                log_info(paste(sprintf("Number of orphan nodes %s exceeds orphanNodeClusteringThreshold %s."
+                                 , numOrphanNodes
+                                 , numOrphanThreshold
+                                 )
+                               , "Clustering orphan nodes..."
+                               ))
+                plotDTnodes[, group := NA_character_]
+                plotDTnodes[node %in% self$orphanNodes, group := "orphan"]
+            }
+            
             # Create Plot
             g <- visNetwork::visNetwork(nodes = plotDTnodes
                                         , edges = plotDTedges) %>%
@@ -315,6 +301,11 @@ AbstractGraphReporter <- R6::R6Class(
                 visNetwork::visOptions(highlightNearest = list(enabled = TRUE
                                                                , degree = nrow(plotDTnodes) #guarantee full path
                                                                , algorithm = "hierarchical")) 
+            
+            # Add orphan node clustering
+            if (numOrphanNodes > numOrphanThreshold) {
+                g <- g %>% visNetwork::visClusteringByGroup(groups = c("orphan"))
+            }
             
             log_info("Done creating plot.")
             
@@ -394,13 +385,6 @@ AbstractGraphReporter <- R6::R6Class(
             }
             return(private$cache$networkMeasures)
         },
-        graphLayoutType = function(){
-            if (is.null(private$cache$graphLayoutType)){
-                log_info("Graph layout hasn't yet been set. Using default...")
-                self$set_graph_layout()
-            }
-            return(private$cache$graphLayoutType)
-        },
         graphViz = function(){
             if (is.null(private$cache$graphViz)) {
                 log_info('Creating graph visualization plot...')
@@ -408,6 +392,47 @@ AbstractGraphReporter <- R6::R6Class(
                 log_info('Done creating graph visualization plot.')
             }
             return(private$cache$graphViz)
+        },
+        orphanNodes = function() {
+            if (is.null(private$cache$orphanNodes)) {
+                private$cache$orphanNodes <- private$identify_orphan_nodes()
+            }
+            return(private$cache$orphanNodes)
+        },
+        graphLayoutType = function(value) {
+            if (missing(value)) {
+                return(private$reporterCache$graphLayoutType)
+            }
+            if (!value %in% names(private$graph_layout_functions)) {
+                log_fatal(paste("Unsupported graphLayoutType:", value))
+            }
+            if (!is.null(private$cache$graphViz)) {
+                private$reset_graph_viz()
+            }
+            private$reporterCache$graphLayoutType <- value
+            return(private$reporterCache$graphLayoutType)
+        },
+        orphanNodeClusteringThreshold = function(value) {
+            if (missing(value)) {
+                return(private$reporterCache$orphanNodeClusteringThreshold)
+            }
+                
+            if (class(value) != 'numeric') {
+                log_fatal("orphanNodeClusteringThreshold must be numeric.")
+            }
+            
+            if (value != private$reporterCache$orphanNodeClusteringThreshold) {
+                if (value < 1) {
+                    log_fatal("orphanNodeClusteringThreshold must at least 1.")
+                }
+                
+                # Set new value and reset graph viz
+                if (!is.null(private$cache$graphViz)) {
+                    private$reset_graph_viz()
+                }
+                private$reporterCache$orphanNodeClusteringThreshold <- value
+            }
+            return(private$reporterCache$orphanNodeClusteringThreshold)
         }
     ),
     
@@ -418,13 +443,21 @@ AbstractGraphReporter <- R6::R6Class(
         ),
         
         # Create a "cache" to be used when evaluating active bindings
-        cache = list(
+        # There is a default cache to reset to
+        defaultCache = list(
             nodes = NULL,
             edges = NULL,
             pkgGraph = NULL,
             networkMeasures = NULL,
-            graphLayoutType = NULL,
-            graphViz = NULL
+            graphViz = NULL,
+            orphanNodes = NULL
+        ),
+        cache = NULL,
+        
+        # This cache contains reporting parameters. We don't want to reset this
+        reporterCache = list(
+            graphLayoutType = "tree",
+            orphanNodeClusteringThreshold = Inf
         ),
         
         # Check if user passed arguments for extract_network. If so, explicitly call extract_network
@@ -449,6 +482,57 @@ AbstractGraphReporter <- R6::R6Class(
                                          , by = "node"
                                          , all.x = TRUE)
             return(invisible(NULL))
+        },
+        
+        # Function to reset cached graphViz
+        reset_graph_viz = function() {
+            log_info('Resetting cached graphViz...')
+            private$cache$graphViz <- NULL
+            return(invisible(NULL))
+        },
+        
+        # Identify orphan nodes
+        identify_orphan_nodes = function() {
+            orphanNodes <- base::setdiff(self$nodes[, node]
+                                         , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
+                                        )
+            # If there are none, then will be character(0)
+            return(orphanNodes)
+        },
+        
+        graph_layout_functions = list(
+            "tree" = function(pkgGraph) {igraph::layout_as_tree(pkgGraph)},
+            "circle" = function(pkgGraph) {igraph::layout_in_circle(pkgGraph)}
+        ),
+        
+        calculate_graph_layout = function(plotDT, pkgGraph, layoutType) {
+            
+            log_info(paste("Calculating graph layout for type:", layoutType))
+            
+            # NOTE: This doesn't quite work. 
+            # If we need to cluster orphan nodes, hack the pkgGraph object to 
+            # pretend they're just one node
+            # if (length(self$orphanNodes) > self$orphanNodeClusteringThreshold) {
+            #     pkgGraph <- (pkgGraph
+            #                     %>% igraph::delete_vertices(self$orphanNodes)
+            #                     %>% igraph::vertex("orphan")
+            #                 )
+            # }
+            
+            # Calculate positions for specified layoutType
+            plotMat <- private$graph_layout_functions[[layoutType]](pkgGraph)
+            
+            # It might be important to get the nodes from pkgGraph so that they
+            # are in the same order as in plotMat?
+            coordsDT <- data.table::data.table(node = names(igraph::V(pkgGraph))
+                                             , level = plotMat[,2]
+                                             , horizontal = plotMat[,1]
+                                             )
+            
+            # Merge coordinates with plotDT
+            plotDT <- merge(plotDT, coordsDT, by = 'node', all.x = TRUE)
+            
+            return(plotDT)
         }
     )
 )
