@@ -6,6 +6,8 @@
 #' @param packageReporters a list of package reporters
 #' @param packagePath (optional) the path to the package repository.  
 #' If given, coverage will be calculated for each function.
+#' @param reportPath The path and filename of the output report.  Default
+#' report will be produced in working directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
@@ -61,6 +63,7 @@ CreatePackageReport <- function(packageName
 #' @author P. Boueri
 #' @param reportPath a file.path to where the report should be rendered
 #' @param packageReporters a list of package reporters that have already been initialized and have calculated 
+#' @param packageName (string) The name of the package.
 #' @return Nothing
 RenderPackageReport <- function(reportPath 
                                 , packageReporters
