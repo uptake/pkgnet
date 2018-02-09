@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -93,17 +93,33 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="dependency-methods"><a class="anchor" href="#dependency-methods"></a>Dependency Methods</h2>
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
     <dl class='dl-horizontal'>
-    <code>set_package</code>Uses <code>ExtractFunctionNetwork</code> to create edges
-   <code>package_test_coverage</code>Uses <code>GetCoverageByFunction</code> to calculate node test coverage
-    </dl>
+    <dt><code>set_package(packageName, packagePath)</code></dt><dd><p><ul>
+<li><p>Set properties of this reporter. If packageName overrides a 
+                previously-set package name, any cached data will be removed.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>packageName</code></b>: String with the name of the package</p></li>
+<li><p><b><code>packagePath</code></b>: Optional path to the source code. 
+                    To be used for test coverage, if provided.</p></li>
+</ul></p></li>
+</ul></p></dd>
+    <dt><code>calculate_metrics()</code></dt><dd><p><ul>
+<li><p>Create an edgelist with relationships between functions in a package</p></li>
+</ul></p></dd>
+    <dt><code>extract_network()</code></dt><dd><p><ul>
+<li><p>This function maps the relationships between
+                  functions in a package.</p></li>
+</ul></p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other PackageReporters: <code><a href='PackageDependencyReporter.html'>PackageDependencyReporter</a></code></p>
+    <p>Other PackageReporters: <code><a href='PackageDependencyReporter.html'>PackageDependencyReporter</a></code>,
+  <code><a href='PackageSummaryReporter.html'>PackageSummaryReporter</a></code></p>
     
 
   </div>
@@ -113,7 +129,7 @@
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#dependency-methods">Dependency Methods</a></li>
+      <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
@@ -127,7 +143,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

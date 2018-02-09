@@ -1,6 +1,6 @@
 template:
   params:
-    bootswatch: cosmo
+    bootswatch: flatly
 
 navbar:
   title: "pkgnet"
@@ -15,8 +15,4 @@ navbar:
    - icon: fa-github
      href: https://github.com/uptakeopensource/pkgnet
 
-reference:
-  - title: "Network Extraction"
-    contents:
-      - ExtractDependencyNetwork
-      - ExtractFunctionNetwork
+

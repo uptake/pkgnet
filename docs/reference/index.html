@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -94,22 +94,58 @@
       <tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-network-extraction" class="hasAnchor"><a href="#section-network-extraction" class="anchor"></a>Network Extraction</h2>
+            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
             <p class="section-desc"></p>
           </th>
         </tr>
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="ExtractDependencyNetwork.html">ExtractDependencyNetwork</a></code> </p>
+            <p><code><a href="AbstractGraphReporter.html">AbstractGraphReporter</a></code> </p>
           </td>
-          <td><p>Extract the Dependency Network from a Package</p></td>
+          <td><p>Abstract Graph Reporter Class</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="ExtractFunctionNetwork.html">ExtractFunctionNetwork</a></code> </p>
+            <p><code><a href="AbstractPackageReporter.html">AbstractPackageReporter</a></code> </p>
           </td>
-          <td><p>Extract the Network Relationship Between Functions in A Package</p></td>
+          <td><p>Abstract Package Reporter Class</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="CreatePackageReport.html">CreatePackageReport</a></code> </p>
+          </td>
+          <td><p>Surface the internal and external dependencies of an R package.</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="DefaultReporters.html">DefaultReporters</a></code> </p>
+          </td>
+          <td><p>Default Reporters</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="PackageDependencyReporter.html">PackageDependencyReporter</a></code> </p>
+          </td>
+          <td><p>Package Dependency Reporter Class</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="PackageFunctionReporter.html">PackageFunctionReporter</a></code> </p>
+          </td>
+          <td><p>Package Function Reporter Class</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="PackageSummaryReporter.html">PackageSummaryReporter</a></code> </p>
+          </td>
+          <td><p>Package Summary Reporter Class</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="RenderPackageReport.html">RenderPackageReport</a></code> </p>
+          </td>
+          <td><p>Package Report Renderer</p></td>
         </tr>
       </tbody>
       </table>
@@ -119,7 +155,7 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-network-extraction">Network Extraction</a></li>
+      <li><a href="#section-all-functions">All functions</a></li>
     </ul>
   </div>
 </div>
@@ -130,7 +166,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

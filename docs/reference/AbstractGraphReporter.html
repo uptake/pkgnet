@@ -11,7 +11,7 @@
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -96,14 +96,34 @@
 
     
     <dl class='dl-horizontal'>
-    <code>calculate_network_metrics</code>Uses <code>CalcNetworkFeatures</code> to 
-         calculate nodes and edges to create summary metrics of the overall 
-         graph structure, including centrality measures etc.
-       <code>get_summary_view</code>Returns the output of calculateNetworkMetrics
-       <code>set_graph_layout</code>Accepts a layoutType from either "tree" or "circle"
-         and augments the nodes private field with level/horizontal coordinates 
-         for a prettified layout
-       <code>plot_network</code>Calls <code>PlotNetwork</code> and returns a plotly object
+    <code>calculate_network_measures()</code>
+            <ul>
+<li><p>extract network features on a node and network level</p></li>
+<li><p><b>Returns:</b> A list containing:
+                    <ul>
+<li><p><b><code>networkMeasures</code></b>: a list of network measures.</p></li>
+<li><p><b><code>nodeMeasures</code></b>: the nodes data.table with additional columns of node measures.</p></li>
+</ul></p></li>
+</ul>
+    <code>set_graph_layout</code>Sets the layout of the graph plotted by
+           <code>plot_network</code>. This method augments the nodes data.table
+           with level/horizontal coordinates. The following layout types are
+           supported:<ul>
+<li><p>`tree` (default)</p></li>
+<li><p>`circle`</p></li>
+</ul>
+        <code>plot_network</code>
+            <ul>
+<li><p>Creates a network visualization of extracted package graph.</p></li>
+<li><p><b>Args:</b>
+                    <ul>
+<li><p><b><code>...</code></b>: ...</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                    <ul>
+<li><p>A `visNetwork` object</p></li>
+</ul></p></li>
+</ul>
     </dl>
     
     <h2 class="hasAnchor" id="public-members"><a class="anchor" href="#public-members"></a>Public Members</h2>
@@ -113,7 +133,9 @@
     <code>edges</code>A data.table from SOURCE to TARGET nodes describing the connections
    <code>nodes</code>A data.table with node as an identifier, and augmenting information about each node
    <code>pkgGraph</code>An igraph object describing the package graph
-   <code>networkMeasures</code>A list of network measures calculated by <code>CalcNetworkFeatures</code>
+   <code>networkMeasures</code>A list of network measures calculated by <code>calculate_network_features</code>
+   <code>graphLayoutType</code>Character string indicating currently active graph layout
+   <code>graphViz</code><code>visNetwork</code> object of package graph
     </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -144,7 +166,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
