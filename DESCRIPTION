@@ -25,7 +25,8 @@ Imports:
     R6,
     visNetwork, 
     rmarkdown, 
-    knitr
+    knitr, 
+    DT
 Suggests:
     devtools,
     testthat
