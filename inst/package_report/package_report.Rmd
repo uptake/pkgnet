@@ -1,18 +1,26 @@
 ---
+name: "pkgnet"
 output: 
   html_document:
     theme: flatly
+    include:
+      after_body: footer.html
 params: 
    reporters: params$reporters
    packageName: params$packageName
 ---
+
+<!-- This is HTML code for the header at the top of the page --> 
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="http://uptakeopensource.github.io/pkgnet">pkgnet</a>
+</nav>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r title, results="asis"}
-cat(sprintf("# pkgnet: %s", packageName))
+cat(sprintf("# %s", packageName))
 ```
 
 ```{r}

@@ -15,7 +15,8 @@ This report will give you a high level description of a package
 DT::datatable(data = reporter$get_description()
               , rownames = FALSE
               , options = list(searching = FALSE
-                               , pageLength = 50)
+                               , pageLength = 50
+                               , lengthChange = FALSE)
               )
 ```
 
