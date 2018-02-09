@@ -59,6 +59,7 @@
 #' @importFrom igraph centralization.closeness centralization.degree hub_score
 #' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex
 #' @importFrom magrittr %>%
+#' @importFrom methods hasArg formalArgs
 #' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
 #' @export
 AbstractGraphReporter <- R6::R6Class(
@@ -231,7 +232,7 @@ AbstractGraphReporter <- R6::R6Class(
             log_info("Creating plot...")
             
             # If layout type is passed in
-            if (hasArg("layoutType")) {
+            if (methods::hasArg("layoutType")) {
                 self$set_graph_layout(layoutType)
             }
             
@@ -272,7 +273,6 @@ AbstractGraphReporter <- R6::R6Class(
                     # Create pallete by unique values
                     valCount <- data.table::uniqueN(colorFieldValues)
                     newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
-                    
                     
                     # For each character value, update all nodes with that value
                     plotDTnodes[, color := newPallete[.GRP]
@@ -360,7 +360,6 @@ AbstractGraphReporter <- R6::R6Class(
                                   , notColorsTXT))
             }
             
-            
             private$plotNodeColorScheme <- list(
                 field = field
                 , pallete = pallete
@@ -431,8 +430,8 @@ AbstractGraphReporter <- R6::R6Class(
         # Check if user passed arguments for extract_network. If so, explicitly call extract_network
         # with those arguments
         parse_extract_args = function(argsList) {
-            if (any(formalArgs(self$extract_network) %in% names(argsList))) {
-                extractArgsNames <- intersect(formalArgs(self$extract_network), names(argsList))
+            if (any(methods::formalArgs(self$extract_network) %in% names(argsList))) {
+                extractArgsNames <- intersect(methods::formalArgs(self$extract_network), names(argsList))
                 do.call(self$extract_network, argsList[extractArgsNames])
             }
             return(invisible(NULL))

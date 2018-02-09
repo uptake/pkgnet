@@ -22,5 +22,4 @@ log_warn <- function(msg, ...){
 log_fatal <- function(msg, ...){
     futile.logger::flog.fatal(msg = msg, ...)
     stop(msg)
-    return(invisible(NULL))
 }

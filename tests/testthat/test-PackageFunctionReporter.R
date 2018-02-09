@@ -65,18 +65,18 @@ test_that('PackageFunctionReporter Methods Work', {
   testObj <- PackageFunctionReporter$new()
   
   # inherited set_package
-  expect_silent(object = testObj$set_package(packageName = "baseballstats"
-                                             # Covr only works on source code. find.package path will not work
-                                             , packagePath = system.file("baseballstats",package="pkgnet")
-                                             ) 
-  )
+  expect_silent(object = testObj$set_package(
+      packageName = "baseballstats"
+      # Covr only works on source code. find.package path will not work
+      , packagePath = system.file("baseballstats", package = "pkgnet")
+  ))
   
   expect_equal(object = testObj$get_raw_data()$packageName
                , expected = "baseballstats"
                , info = "set_package did not set expected package name")
   
   expect_equal(object = testObj$get_raw_data()$packagePath
-               , expected = system.file('baseballstats',package="pkgnet")
+               , expected = system.file('baseballstats', package = "pkgnet")
                , info = "set_package did not set expected package path")
   
   
@@ -115,13 +115,9 @@ test_that('PackageFunctionReporter Methods Work', {
   
   # TODO: Need to test that nodes were properly extracted
   testNodeDT <- testObj$nodes
-  
-  
-  
+ 
   # inherited make_graph_object
-  
-  expect_silent(object = testPkgGraph <- testObj$make_graph_object()
-  )
+  expect_silent(object = testPkgGraph <- testObj$make_graph_object())
   
   expect_true(object = igraph::is_igraph(testPkgGraph)
               , info = "Graph object not and igraph formatted object")
@@ -139,7 +135,10 @@ test_that('PackageFunctionReporter Methods Work', {
   
   # "calculate_metrics"
 
-  expect_silent(object = testObj$calculate_all_metrics()) 
+  expect_true({
+      testObj$calculate_all_metrics()
+      TRUE
+  })
   
   # Nodes table with coverage and metrics too
   # TODO: Test that calculate_all_measures and other calculates attach metadata correctly
