@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Surface the internal and external dependencies of an R package. — CreatePackageReport • pkgnet</title>
+<title>Package Summary Reporter Class — PackageSummaryReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,57 +77,71 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Surface the internal and external dependencies of an R package.</h1>
+    <h1>Package Summary Reporter Class</h1>
     </div>
 
     
-    <p>Surface the internal and external dependencies of an R package.</p>
+    <p>Defines a concrete implementation of <a href='AbstractPackageReporter.html'>AbstractPackageReporter</a> for a high level overview
+             of a particular package. It will summarize things like Lines of code, whether it's on CRAN, etc.</p>
     
 
-    <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>packageName</span>, <span class='kw'>packageReporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
-  <span class='kw'>packagePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reportPath</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>packageName</span>,
-  <span class='st'>"_report.html"</span>)))</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>packageName</th>
-      <td><p>name of a package</p></td>
-    </tr>
-    <tr>
-      <th>packageReporters</th>
-      <td><p>a list of package reporters</p></td>
-    </tr>
-    <tr>
-      <th>packagePath</th>
-      <td><p>(optional) the path to the package repository.
-If given, coverage will be calculated for each function.</p></td>
-    </tr>
-    <tr>
-      <th>reportPath</th>
-      <td><p>The path and filename of the output report.  Default
-report will be produced in working directory.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='no'>PackageSummaryReporter</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A list of instantiated packageReporters the user can then interact with</p>
+    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    
+    <h2 class="hasAnchor" id="public"><a class="anchor" href="#public"></a>Public</h2>
+
+    
+    <dl class='dl-horizontal'>
+    <dt><code>get_package()</code></dt><dd><p><ul>
+<li><p>Returns a string with the name of the package used to construct
+                this object</p></li>
+</ul></p></dd>
+    <dt><code>set_package(packageName)</code></dt><dd><p><ul>
+<li><p>Set the package that all operations in the object are done for.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>packageName</code></b>: a string with the name of the package you are
+                  analyzing.</p></li>
+<li><p><b><code>packagePath</code></b>: directory path to source code of package</p></li>
+</ul></p></li>
+</ul></p></dd>
+    <dt><code>get_report()</code></dt><dd><p><ul>
+<li><p>Returns a particular reporter's report on the package</p></li>
+</ul></p></dd>
+    <dt><code>get_report_markdown_path()</code></dt><dd><p><ul>
+<li><p>Returns the path to the markdown report associated with this reporter</p></li>
+</ul></p></dd>
+    <dt><code>get_summary_view()</code></dt><dd><p><ul>
+<li><p>Returns a particular reporters summary report on the package for use in a high level view</p></li>
+</ul></p></dd>
+    <dt><code>calculate_package_metrics()</code></dt><dd><p><ul>
+<li><p>Calculates all the relevant metrics for a set package and updates the reporter</p></li>
+</ul></p></dd>
+    <dt><code>get_raw_data()</code></dt><dd><p><ul>
+<li><p>Returns a particular reporter's raw data.</p></li>
+</ul></p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>Other PackageReporters: <code><a href='PackageDependencyReporter.html'>PackageDependencyReporter</a></code>,
+  <code><a href='PackageFunctionReporter.html'>PackageFunctionReporter</a></code></p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-          </ul>
+      <li><a href="#format">Format</a></li>
 
-    <h2>Author</h2>
-    
-B. Burns
+      <li><a href="#public">Public</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

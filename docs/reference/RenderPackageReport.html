@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Surface the internal and external dependencies of an R package. — CreatePackageReport • pkgnet</title>
+<title>Package Report Renderer — RenderPackageReport • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -77,43 +77,35 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Surface the internal and external dependencies of an R package.</h1>
+    <h1>Package Report Renderer</h1>
     </div>
 
     
-    <p>Surface the internal and external dependencies of an R package.</p>
+    <p>Renders an html report based on the initialized reporters provided</p>
     
 
-    <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>packageName</span>, <span class='kw'>packageReporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
-  <span class='kw'>packagePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reportPath</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>packageName</span>,
-  <span class='st'>"_report.html"</span>)))</pre>
+    <pre class="usage"><span class='fu'>RenderPackageReport</span>(<span class='no'>reportPath</span>, <span class='no'>packageReporters</span>, <span class='no'>packageName</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>packageName</th>
-      <td><p>name of a package</p></td>
+      <th>reportPath</th>
+      <td><p>a file.path to where the report should be rendered</p></td>
     </tr>
     <tr>
       <th>packageReporters</th>
-      <td><p>a list of package reporters</p></td>
+      <td><p>a list of package reporters that have already been initialized and have calculated</p></td>
     </tr>
     <tr>
-      <th>packagePath</th>
-      <td><p>(optional) the path to the package repository.
-If given, coverage will be calculated for each function.</p></td>
-    </tr>
-    <tr>
-      <th>reportPath</th>
-      <td><p>The path and filename of the output report.  Default
-report will be produced in working directory.</p></td>
+      <th>packageName</th>
+      <td><p>(string) The name of the package.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of instantiated packageReporters the user can then interact with</p>
+    <p>Nothing</p>
     
 
   </div>
@@ -127,7 +119,7 @@ report will be produced in working directory.</p></td>
 
     <h2>Author</h2>
     
-B. Burns
+P. Boueri
 
   </div>
 </div>
