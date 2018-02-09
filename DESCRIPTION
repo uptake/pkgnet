@@ -17,16 +17,16 @@ Imports:
     assertthat,
     covr,
     data.table,
+    DT,
     futile.logger,
     igraph,
+    knitr,
     magrittr,
     methods,
     mvbutils,
     R6,
-    visNetwork, 
-    rmarkdown, 
-    knitr, 
-    DT
+    rmarkdown,
+    visNetwork
 Suggests:
     devtools,
     testthat
