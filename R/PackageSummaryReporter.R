@@ -14,11 +14,11 @@ PackageSummaryReporter <- R6::R6Class(
             system.file(file.path("package_report","package_summary_reporter.Rmd"),package = "pkgnet")
         },
         get_description = function(){
-            obj <- private$packageDescription
-            dt <- data.table::data.table(Field = names(obj)
-                                         , Values = unlist(obj)
+            PkgDescObj <- private$packageDescription
+            PkgDescDT <- data.table::data.table(Field = names(PkgDescObj)
+                                         , Values = unlist(PkgDescObj)
                                          )
-            return(dt)
+            return(PkgDescDT)
         },
         get_objects = function(){
             return(private$packageObjects)
