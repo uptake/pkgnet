@@ -19,9 +19,13 @@ PackageSummaryReporter <- R6::R6Class(
         get_objects = function(){
             return(private$packageObjects)
         },
-        calculate_metrics = function(){
+        calculate_all_metrics = function(){
             private$get_package_description()
             private$get_num_objects()
+        }, 
+        plot_network = function(){
+          # No network in summary reporter
+          return(NULL)
         }
     ),
     

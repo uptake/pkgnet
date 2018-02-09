@@ -5,7 +5,9 @@ params:
    reporter: params$reporter
 ---
 
-## Description
+## Package Summary
+
+### Description
 This report will give you a high level description of a package
 
 
@@ -13,7 +15,7 @@ This report will give you a high level description of a package
 reporter$get_description()
 ```
 
-## Num Objects
+### Num Objects
 
 Number of objects
 
