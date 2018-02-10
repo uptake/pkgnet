@@ -117,6 +117,9 @@ AbstractPackageReporter <- R6::R6Class(
         packageName = NULL,
         packagePath = NULL,
         
+        cache = NULL,
+        defaultCache = NULL,
+        
         # Reset cached variables
         reset_cache = function() {
             # If cache is NULL, we're setting it to default for the first time
