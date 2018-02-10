@@ -2,12 +2,15 @@
 #' @name CreatePackageReport
 #' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
-#' @param packageName name of a package
-#' @param packageReporters a list of package reporters
-#' @param packagePath (optional) the path to the package repository.  
+#' @param packageName (string) name of a package
+#' @param packageReporters (list) a list of package reporters
+#' @param packagePath (string) The path to the package repository.  
 #' If given, coverage will be calculated for each function.
-#' @param reportPath The path and filename of the output report.  Default
+#' @param reportPath (string) The path and filename of the output report.  Default
 #' report will be produced in working directory.
+#' @param orphanNodeClusteringThreshold (integer) The maximum number of ophan nodes (a.k.a.  unconnected nodes) 
+#' allowed in the network graphs.  If the number of orphan nodes exceed this value, they are clustered together into 
+#' one "cluster node" in the display. 
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
