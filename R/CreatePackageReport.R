@@ -17,7 +17,8 @@
 CreatePackageReport <- function(packageName
                                 , packageReporters = DefaultReporters()
                                 , packagePath = NULL
-                                , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))) {
+                                , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))
+                                , orphanNodeClusteringThreshold = Inf) {
     
     # Input checks
     assertthat::assert_that(
@@ -39,14 +40,21 @@ CreatePackageReport <- function(packageName
                    , paste(unlist(lapply(packageReporters, function(x) class(x)[1]))
                            , collapse = "\n")))
 
+
     # Make them plots
     for (reporter in packageReporters){
         log_info(paste("Running Package Reporter", class(reporter)[1]))
         reporter$set_package(packageName, packagePath)
         
         reporter$calculate_all_metrics()
-        # TODO: replace plot_network() with render_report() which is then rendered into a parent report.
-        reporter$plot_network()
+        
+        
+        # For AbstractGraphReporter Types Only
+        if ("AbstractGraphReporter" %in% class(reporter)) {
+          reporter$orphanNodeClusteringThreshold <- orphanNodeClusteringThreshold
+          reporter$plot_network()
+        }
+
         log_info(paste("Done Package Reporter",class(reporter)[1]))
     }
     
