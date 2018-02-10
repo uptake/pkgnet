@@ -18,13 +18,6 @@
 #'                 }
 #'             }
 #'        }
-#'        \item{\code{set_graph_layout}{Sets the layout of the graph plotted by
-#'            \code{plot_network}. This method augments the nodes data.table
-#'            with level/horizontal coordinates. The following layout types are
-#'            supported:}}{\itemize{
-#'                \item{`tree` (default)}
-#'                \item{`circle`}
-#'            }}
 #'         \item{\code{plot_network}}{
 #'             \itemize{
 #'                 \item{Creates a network visualization of extracted package graph.}
@@ -49,7 +42,7 @@
 #'    \item{\code{nodes}{A data.table with node as an identifier, and augmenting information about each node}}
 #'    \item{\code{pkgGraph}{An igraph object describing the package graph}}
 #'    \item{\code{networkMeasures}{A list of network measures calculated by \code{calculate_network_features}}}
-#'    \item{\code{graphLayoutType}{Character string indicating currently active graph layout}}
+#'    \item{\code{layoutType}{Character string indicating currently active graph layout}}
 #'    \item{\code{graphViz}{\code{visNetwork} object of package graph}}
 #'   }
 #' }
@@ -204,7 +197,15 @@ AbstractGraphReporter <- R6::R6Class(
             
             # If layout type is passed in
             if (methods::hasArg("layoutType")) {
-                self$graphLayoutType <- layoutType
+                layoutType <- list(...)$layoutType
+                log_info(paste("Setting layoutType to:", layoutType))
+                self$layoutType <- layoutType
+            }
+            # If orphanNodeClusteringThreshold is passed in
+            if (methods::hasArg("orphanNodeClusteringThreshold")) {
+                orphanNodeClusteringThreshold <- list(...)$orphanNodeClusteringThreshold
+                log_info(paste("Setting orphanNodeClusteringThreshold to:", orphanNodeClusteringThreshold))
+                self$orphanNodeClusteringThreshold <- orphanNodeClusteringThreshold
             }
             
             # format for plot
@@ -212,8 +213,8 @@ AbstractGraphReporter <- R6::R6Class(
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
             
-            log_info(paste("Plotting with layout:", self$graphLayoutType))
-            plotDTnodes <- private$calculate_graph_layout(plotDTnodes, self$pkgGraph, self$graphLayoutType)
+            log_info(paste("Plotting with layout:", self$layoutType))
+            plotDTnodes <- private$calculate_graph_layout(plotDTnodes, self$pkgGraph, self$layoutType)
             
             if(length(self$edges) > 0) {
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
@@ -399,18 +400,18 @@ AbstractGraphReporter <- R6::R6Class(
             }
             return(private$cache$orphanNodes)
         },
-        graphLayoutType = function(value) {
+        layoutType = function(value) {
             if (missing(value)) {
-                return(private$reporterCache$graphLayoutType)
+                return(private$reporterCache$layoutType)
             }
             if (!value %in% names(private$graph_layout_functions)) {
-                log_fatal(paste("Unsupported graphLayoutType:", value))
+                log_fatal(paste("Unsupported layoutType:", value))
             }
             if (!is.null(private$cache$graphViz)) {
                 private$reset_graph_viz()
             }
-            private$reporterCache$graphLayoutType <- value
-            return(private$reporterCache$graphLayoutType)
+            private$reporterCache$layoutType <- value
+            return(private$reporterCache$layoutType)
         },
         orphanNodeClusteringThreshold = function(value) {
             if (missing(value)) {
@@ -456,7 +457,7 @@ AbstractGraphReporter <- R6::R6Class(
         
         # This cache contains reporting parameters. We don't want to reset this
         reporterCache = list(
-            graphLayoutType = "tree",
+            layoutType = "tree",
             orphanNodeClusteringThreshold = Inf
         ),
         
