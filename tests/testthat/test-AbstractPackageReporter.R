@@ -51,7 +51,9 @@ test_that('AbstractPackageReporter structure is as expected', {
   expect_named(object = AbstractPackageReporter$private_fields
                , expected = c(
                  "packageName", 
-                 "packagePath"
+                 "packagePath",
+                 "cache",
+                 "defaultCache"
                  )
                , info = "Available private fields for AbstractPackageReporter not as expected."
                , ignore.order = TRUE

@@ -22,7 +22,6 @@ test_that('AbstractGraphReporter structure is as expected', {
                  , expected = c(
                      "make_graph_object",
                      "calculate_network_measures",
-                     "set_graph_layout",
                      "plot_network",
                      "set_plot_node_color_scheme",
                      "get_plot_node_color_scheme",
@@ -41,20 +40,24 @@ test_that('AbstractGraphReporter structure is as expected', {
     )
     
     expect_named(object = AbstractGraphReporter$private_methods
-                 , expected = c(
-                     "parse_extract_args",
-                     "update_nodes"
-                 )
+                 , expected = c('calculate_graph_layout'
+                                , 'identify_orphan_nodes'
+                                , 'parse_extract_args'
+                                , 'reset_graph_viz'
+                                , 'update_nodes'
+                                )
                  , info = "Available private methods for AbstractGraphReporter not as expected."
                  , ignore.order = TRUE
                  , ignore.case = FALSE
     )
     
     expect_named(object = AbstractGraphReporter$private_fields
-                 , expected = c(
-                     "plotNodeColorScheme", 
-                     "cache"
-                 )
+                 , expected = c('cache'
+                                , 'defaultCache'
+                                , 'graph_layout_functions'
+                                , 'plotNodeColorScheme'
+                                , 'reporterCache'
+                                )
                  , info = "Available private fields for AbstractGraphReporter not as expected."
                  , ignore.order = TRUE
                  , ignore.case = FALSE
