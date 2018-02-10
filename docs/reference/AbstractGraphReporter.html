@@ -105,14 +105,7 @@
 <li><p><b><code>nodeMeasures</code></b>: the nodes data.table with additional columns of node measures.</p></li>
 </ul></p></li>
 </ul>
-    <code>set_graph_layout</code>Sets the layout of the graph plotted by
-           <code>plot_network</code>. This method augments the nodes data.table
-           with level/horizontal coordinates. The following layout types are
-           supported:<ul>
-<li><p>`tree` (default)</p></li>
-<li><p>`circle`</p></li>
-</ul>
-        <code>plot_network</code>
+    <code>plot_network()</code>
             <ul>
 <li><p>Creates a network visualization of extracted package graph.</p></li>
 <li><p><b>Args:</b>
@@ -130,13 +123,27 @@
 
     
     <dl class='dl-horizontal'>
-    <code>edges</code>A data.table from SOURCE to TARGET nodes describing the connections
-   <code>nodes</code>A data.table with node as an identifier, and augmenting information about each node
-   <code>pkgGraph</code>An igraph object describing the package graph
-   <code>networkMeasures</code>A list of network measures calculated by <code>calculate_network_features</code>
-   <code>graphLayoutType</code>Character string indicating currently active graph layout
-   <code>graphViz</code><code>visNetwork</code> object of package graph
-    </dl>
+   <dt><code>edges</code></dt><dd><p>A data.table from SOURCE to TARGET nodes describing the connections</p></dd>
+   <dt><code>nodes</code></dt><dd><p>A data.table with node as an identifier, and augmenting information about each node</p></dd>
+   <dt><code>pkgGraph</code></dt><dd><p>An igraph object describing the package graph</p></dd>
+   <dt><code>networkMeasures</code></dt><dd><p>A list of network measures calculated by <code>calculate_network_features</code></p></dd>
+   <dt><code>layoutType</code></dt><dd><p>Character string indicating currently active graph layout</p></dd>
+   <dt><code>graphViz</code></dt><dd><p><code>visNetwork</code> object of package graph</p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active Bindings</h2>
+
+    
+    <dl class='dl-horizontal'>
+   <dt><code>pkgGraph()</code></dt><dd><p>Returns the graph object</p></dd>
+   <dt><code>networkMeasures()</code></dt><dd><p>Returns a table of network measures, one row per node</p></dd>
+   <dt><code>graphViz()</code></dt><dd><p>Returns ths graph visualization object</p></dd>
+   <dt><code>orphanNodes()</code></dt><dd><p>Returns the list of orphan nodes</p></dd>
+   <dt><code>layoutType(value)</code></dt><dd><p>If no value given, the current layout type for the graph visualization is returned.  
+   If a vaild layput type is given, this fucntion will update the layoutType field.</p></dd>
+   <dt><code>orphanNodeClusteringThreshold(value)</code></dt><dd><p>If no value given, the current orphan node clustering threshold is returned. 
+   If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.</p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -153,6 +160,8 @@
       <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#public-members">Public Members</a></li>
+
+      <li><a href="#active-bindings">Active Bindings</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
