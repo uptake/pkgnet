@@ -91,17 +91,6 @@ PackageFunctionReporter <- R6::R6Class(
             
             log_info(msg = "Done calculating package coverage...")
             return(list(testCoverage = pkgCov))
-            
-            # log_info('Checking package coverage...')
-            # packageObj <- .UpdateNodes(nodes
-            #                            , metadataDT = GetCoverageByFunction(pkgPath)) 
-            # 
-            # # weighted test coverage
-            # dependencyWeightedTestCoverage <- packageObj[['nodes']][,sum(test_coverage * (outDegree + 1)) / sum((outDegree + 1))]
-            # packageObj <- .UpdateNetworkMeasures(pkgGraph = packageObj
-            #                             , networkMeasureList = list(dependencyWeightedTestCoverage = dependencyWeightedTestCoverage)
-            # )
-            # log_info'DONE.\n')
         },
         
         calculate_all_metrics = function() {
@@ -253,7 +242,7 @@ PackageFunctionReporter <- R6::R6Class(
 # [param] pkgPath path to the package you want to examine
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
-GetCoverageByFunction <- function(pkgPath) {
+.GetCoverageByFunction <- function(pkgPath) {
     
     # Grab Test Coverage
     coverage <- covr::package_coverage(pkgPath)
