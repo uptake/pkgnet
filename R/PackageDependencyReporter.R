@@ -112,7 +112,7 @@ PackageDependencyReporter <- R6::R6Class(
                 log_info(paste("For package:"
                                , private$packageName
                                , "with dependency types:"
-                               , paste(which,collapse = ",")    
+                               , paste(which,collapse = ",")
                                , "could not find dependencies:"
                                , paste(names(nullList), collapse = ",")))
             }
@@ -149,8 +149,7 @@ PackageDependencyReporter <- R6::R6Class(
             metricsList <- c(metricsList, self$calculate_network_measures())
             
             return(metricsList)
-        }, 
-        
+        },
         
         # For report generation
         get_report_markdown_path = function(){

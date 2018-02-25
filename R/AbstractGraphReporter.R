@@ -84,7 +84,6 @@ AbstractGraphReporter <- R6::R6Class(
                 # An unconnected graph
                 allNodes <- nodes$node
                 outGraph <- igraph::make_empty_graph() + igraph::vertex(allNodes)
-                
             }
             
             private$cache$pkgGraph <- outGraph
@@ -301,7 +300,7 @@ AbstractGraphReporter <- R6::R6Class(
                 visNetwork::visEdges(arrows = 'to') %>%
                 visNetwork::visOptions(highlightNearest = list(enabled = TRUE
                                                                , degree = nrow(plotDTnodes) #guarantee full path
-                                                               , algorithm = "hierarchical")) 
+                                                               , algorithm = "hierarchical"))
             
             # Add orphan node clustering
             if (numOrphanNodes > numOrphanThreshold) {

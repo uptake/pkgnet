@@ -1,14 +1,15 @@
 ---
 title: "Package Function Report"
 output: html_document
-params: 
+params:
    reporter: params$reporter
 ---
 
 ## Function Network
 
 ### Description
-This report will give you a view of what packages you rely on
+
+This report provides an overview of the functions defined in your package.
 
 
 ```{r}

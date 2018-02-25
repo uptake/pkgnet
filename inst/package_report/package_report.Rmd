@@ -1,16 +1,16 @@
 ---
 name: "pkgnet"
-output: 
+output:
   html_document:
     theme: flatly
     include:
       after_body: footer.html
-params: 
+params:
    reporters: params$reporters
    packageName: params$packageName
 ---
 
-<!-- This is HTML code for the header at the top of the page --> 
+<!-- This is HTML code for the header at the top of the page -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <a class="navbar-brand" href="http://uptakeopensource.github.io/pkgnet">pkgnet</a>
 </nav>
@@ -25,13 +25,14 @@ cat(sprintf("# %s", packageName))
 
 ```{r}
 reportTabs <- lapply(params$reporters,function(reporter) {
-  knitr::knit_child(reporter$get_report_markdown_path()
-                    , envir = list(reporter = reporter))})
-
+  knitr::knit_child(
+    reporter$get_report_markdown_path()
+    , envir = list(reporter = reporter)
+  )
+})
 ```
 
 
 ```{r results="asis"}
 cat(paste0("# {.tabset} \n",paste(reportTabs, collapse = '\n')))
 ```
-

@@ -28,13 +28,6 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
                 }
             }
        }
-       \item{\code{set_graph_layout}{Sets the layout of the graph plotted by
-           \code{plot_network}. This method augments the nodes data.table
-           with level/horizontal coordinates. The following layout types are
-           supported:}}{\itemize{
-               \item{`tree` (default)}
-               \item{`circle`}
-           }}
         \item{\code{plot_network}}{
             \itemize{
                 \item{Creates a network visualization of extracted package graph.}
@@ -62,7 +55,7 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
    \item{\code{nodes}{A data.table with node as an identifier, and augmenting information about each node}}
    \item{\code{pkgGraph}{An igraph object describing the package graph}}
    \item{\code{networkMeasures}{A list of network measures calculated by \code{calculate_network_features}}}
-   \item{\code{graphLayoutType}{Character string indicating currently active graph layout}}
+   \item{\code{layoutType}{Character string indicating currently active graph layout}}
    \item{\code{graphViz}{\code{visNetwork} object of package graph}}
   }
 }

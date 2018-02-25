@@ -97,4 +97,3 @@ OPS <- function(outcomes){
 
     return(slugging_avg(outcomes) + batting_avg(outcomes))
 }
-

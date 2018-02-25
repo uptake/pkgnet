@@ -5,9 +5,9 @@
 #' @param packageName name of a package
 #' @param packageReporters a list of package reporters
 #' @param packagePath (optional) the path to the package repository.  
-#' If given, coverage will be calculated for each function.
+#'     If given, coverage will be calculated for each function.
 #' @param reportPath The path and filename of the output report.  Default
-#' report will be produced in working directory.
+#'     report will be produced in working directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
@@ -50,13 +50,14 @@ CreatePackageReport <- function(packageName
         log_info(paste("Done Package Reporter",class(reporter)[1]))
     }
     
-    RenderPackageReport(reportPath = reportPath,
-                        packageReporters = packageReporters,
-                        packageName = packageName)
+    RenderPackageReport(
+      reportPath = reportPath
+      , packageReporters = packageReporters
+      , packageName = packageName
+    )
     
     return(invisible(packageReporters))
 }
-
 
 
 #' @title Package Report Renderer
@@ -76,14 +77,15 @@ RenderPackageReport <- function(reportPath
         origLogThreshold <- loggerOptions[[1]][['threshold']]
     }
     futile.logger::flog.threshold(0)
-    rmarkdown::render(system.file(file.path("package_report","package_report.Rmd"), package = "pkgnet")
-                      , output_format = "html_document"
-                      , output_file = reportPath
-                      , quiet = TRUE
-                      , envir = new.env()
-                      , params = list(reporters = packageReporters
-                                      , packageName = packageName)
-                      )
+    rmarkdown::render(
+        system.file(file.path("package_report","package_report.Rmd"), package = "pkgnet")
+        , output_format = "html_document"
+        , output_file = reportPath
+        , quiet = TRUE
+        , envir = new.env()
+        , params = list(reporters = packageReporters
+                      , packageName = packageName)
+    )
     futile.logger::flog.threshold(origLogThreshold)
-    return(invisible(NULL))                   
+    return(invisible(NULL))
 }

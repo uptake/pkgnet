@@ -197,7 +197,7 @@ PackageFunctionReporter <- R6::R6Class(
         
         package_test_coverage = function(){
           # Given private$nodes & package path
-          # result: update nodes table 
+          # result: update nodes table
           
           repoPath <- file.path(self$get_package_path())
           
