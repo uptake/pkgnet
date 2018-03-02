@@ -1,23 +1,26 @@
 ---
 title: "Package Summary Report"
 output: html_document
-params: 
+params:
    reporter: params$reporter
 ---
 
 ## Package Summary
 
 ### Description
+
 This report will give you a high level description of a package
 
-
 ```{r results='asis'}
-DT::datatable(data = reporter$get_description()
-              , rownames = FALSE
-              , options = list(searching = FALSE
-                               , pageLength = 50
-                               , lengthChange = FALSE)
-              )
+DT::datatable(
+    data = reporter$get_description()
+    , rownames = FALSE
+    , options = list(
+        searching = FALSE
+        , pageLength = 50
+        , lengthChange = FALSE
+    )
+)
 ```
 
 ### Num Objects
