@@ -40,6 +40,17 @@
 #' @importFrom utils installed.packages
 #' @importFrom tools package_dependencies
 #' @export
+#' @examples 
+#' \donttest{
+#' 
+#' # Instantiate an object
+#' reporter <- PackageDependencyReporter$new()
+#' 
+#' # Seed it with a package
+#' reporter$set_package("ggplot2")
+#' 
+#' # 
+#' }
 PackageDependencyReporter <- R6::R6Class(
     "PackageDependencyReporter",
     inherit = AbstractGraphReporter,

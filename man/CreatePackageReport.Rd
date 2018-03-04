@@ -20,7 +20,7 @@ If given, coverage will be calculated for each function.}
 report will be produced in working directory.}
 }
 \value{
-A list of instantiated packageReporters the user can then interact with
+A list of instantiated packageReporters fitted to \code{packageName}
 }
 \description{
 Surface the internal and external dependencies of an R package.

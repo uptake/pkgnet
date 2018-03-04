@@ -18,6 +18,7 @@ params:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+pkgnet:::silence_logger()
 ```
 
 ```{r title, results="asis"}
@@ -25,7 +26,7 @@ cat(sprintf("# %s", packageName))
 ```
 
 ```{r}
-reportTabs <- lapply(params$reporters,function(reporter) {
+reportTabs <- lapply(params$reporters, function(reporter) {
   knitr::knit_child(
     reporter$get_report_markdown_path()
     , envir = list(reporter = reporter)
@@ -35,5 +36,9 @@ reportTabs <- lapply(params$reporters,function(reporter) {
 
 
 ```{r results="asis"}
-cat(paste0("# {.tabset} \n",paste(reportTabs, collapse = '\n')))
+cat(paste0("# {.tabset} \n", paste(reportTabs, collapse = '\n')))
+```
+
+```{r echo = FALSE}
+pkgnet:::unsilence_logger()
 ```

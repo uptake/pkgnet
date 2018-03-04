@@ -23,3 +23,21 @@ log_fatal <- function(msg, ...){
     futile.logger::flog.fatal(msg = msg, ...)
     stop(msg)
 }
+
+#' @importFrom futile.logger flog.threshold logger.options
+silence_logger <- function() {
+    
+    loggerOptions <- futile.logger::logger.options()
+    if (!identical(loggerOptions, list())){
+        origLogThreshold <- loggerOptions[[1]][['threshold']]
+    }
+    futile.logger::flog.threshold(0)
+    return(invisible(NULL))
+}
+
+#' @importFrom futile.logger INFO flog.threshold
+unsilence_logger <- function(thresh = futile.logger::INFO) {
+    futile.logger::flog.threshold(thresh)
+    return(invisible(NULL))
+}
+

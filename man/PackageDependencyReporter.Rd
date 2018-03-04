@@ -46,6 +46,18 @@ This Reporter takes a package and uncovers the structure from
 }
 }
 
+\examples{
+\donttest{
+
+# Instantiate an object
+reporter <- PackageDependencyReporter$new()
+
+# Seed it with a package
+reporter$set_package("ggplot2")
+
+# 
+}
+}
 \seealso{
 Other PackageReporters: \code{\link{PackageFunctionReporter}},
   \code{\link{PackageSummaryReporter}}
