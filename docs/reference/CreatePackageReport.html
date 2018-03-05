@@ -86,7 +86,7 @@
 
     <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>packageName</span>, <span class='kw'>packageReporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
   <span class='kw'>packagePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reportPath</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>packageName</span>,
-  <span class='st'>"_report.html"</span>)), <span class='kw'>orphanNodeClusteringThreshold</span> <span class='kw'>=</span> <span class='fl'>Inf</span>)</pre>
+  <span class='st'>"_report.html"</span>)))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -108,12 +108,6 @@ If given, coverage will be calculated for each function.</p></td>
       <th>reportPath</th>
       <td><p>(string) The path and filename of the output report.  Default
 report will be produced in working directory.</p></td>
-    </tr>
-    <tr>
-      <th>orphanNodeClusteringThreshold</th>
-      <td><p>(integer) The maximum number of ophan nodes (a.k.a.  unconnected nodes) 
-allowed in the network graphs.  If the number of orphan nodes exceed this value, they are clustered together into 
-one "cluster node" in the display.</p></td>
     </tr>
     </table>
     
