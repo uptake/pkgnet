@@ -8,9 +8,6 @@
 #' If given, coverage will be calculated for each function.
 #' @param reportPath (string) The path and filename of the output report.  Default
 #' report will be produced in working directory.
-#' @param orphanNodeClusteringThreshold (integer) The maximum number of ophan nodes (a.k.a.  unconnected nodes) 
-#' allowed in the network graphs.  If the number of orphan nodes exceed this value, they are clustered together into 
-#' one "cluster node" in the display. 
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
@@ -21,7 +18,7 @@ CreatePackageReport <- function(packageName
                                 , packageReporters = DefaultReporters()
                                 , packagePath = NULL
                                 , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))
-                                , orphanNodeClusteringThreshold = Inf) {
+                                ) {
     
     # Input checks
     assertthat::assert_that(
@@ -51,12 +48,7 @@ CreatePackageReport <- function(packageName
         
         reporter$calculate_all_metrics()
         
-        
-        # For AbstractGraphReporter Types Only
-        if ("AbstractGraphReporter" %in% class(reporter)) {
-          reporter$orphanNodeClusteringThreshold <- orphanNodeClusteringThreshold
-          reporter$plot_network()
-        }
+        reporter$plot_network()
 
         log_info(paste("Done Package Reporter",class(reporter)[1]))
     }

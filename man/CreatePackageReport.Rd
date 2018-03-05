@@ -6,7 +6,7 @@
 \usage{
 CreatePackageReport(packageName, packageReporters = DefaultReporters(),
   packagePath = NULL, reportPath = file.path(getwd(), paste0(packageName,
-  "_report.html")), orphanNodeClusteringThreshold = Inf)
+  "_report.html")))
 }
 \arguments{
 \item{packageName}{(string) name of a package}
@@ -18,10 +18,6 @@ If given, coverage will be calculated for each function.}
 
 \item{reportPath}{(string) The path and filename of the output report.  Default
 report will be produced in working directory.}
-
-\item{orphanNodeClusteringThreshold}{(integer) The maximum number of ophan nodes (a.k.a.  unconnected nodes) 
-allowed in the network graphs.  If the number of orphan nodes exceed this value, they are clustered together into 
-one "cluster node" in the display.}
 }
 \value{
 A list of instantiated packageReporters the user can then interact with

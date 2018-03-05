@@ -467,7 +467,7 @@ AbstractGraphReporter <- R6::R6Class(
         # This cache contains reporting parameters. We don't want to reset this
         reporterCache = list(
             layoutType = "tree",
-            orphanNodeClusteringThreshold = Inf
+            orphanNodeClusteringThreshold = 10
         ),
         
         # Check if user passed arguments for extract_network. If so, explicitly call extract_network
