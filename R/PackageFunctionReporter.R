@@ -90,9 +90,10 @@ PackageFunctionReporter <- R6::R6Class(
             private$update_nodes(metadataDT = pkgCov)
             
             # Set Graph to Color By Coverage
-            self$set_plot_node_color_scheme(field = "coverageRatio"
-                                            , pallete = c("red", "green")
-                                            )
+            self$set_plot_node_color_scheme(
+              field = "coverageRatio"
+              , pallete = c("red", "green")
+              )
             
             log_info(msg = "Done calculating package coverage...")
             return(list(testCoverage = pkgCov))
