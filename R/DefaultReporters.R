@@ -5,7 +5,7 @@
 DefaultReporters <- function() {
     return(list(
           PackageSummaryReporter$new()
-        , PackageFunctionReporter$new()
         , PackageDependencyReporter$new()
+        , PackageFunctionReporter$new()
     ))
 }

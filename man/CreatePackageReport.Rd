@@ -9,14 +9,14 @@ CreatePackageReport(packageName, packageReporters = DefaultReporters(),
   "_report.html")))
 }
 \arguments{
-\item{packageName}{name of a package}
+\item{packageName}{(string) name of a package}
 
-\item{packageReporters}{a list of package reporters}
+\item{packageReporters}{(list) a list of package reporters}
 
-\item{packagePath}{(optional) the path to the package repository.
+\item{packagePath}{(string) The path to the package repository.
 If given, coverage will be calculated for each function.}
 
-\item{reportPath}{The path and filename of the output report.  Default
+\item{reportPath}{(string) The path and filename of the output report.  Default
 report will be produced in working directory.}
 }
 \value{

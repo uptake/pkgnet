@@ -2,6 +2,7 @@
 name: "pkgnet"
 output:
   html_document:
+    self_contained: TRUE
     theme: flatly
     include:
       after_body: footer.html

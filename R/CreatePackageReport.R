@@ -2,12 +2,12 @@
 #' @name CreatePackageReport
 #' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
-#' @param packageName name of a package
-#' @param packageReporters a list of package reporters
-#' @param packagePath (optional) the path to the package repository.  
-#'     If given, coverage will be calculated for each function.
-#' @param reportPath The path and filename of the output report.  Default
-#'     report will be produced in working directory.
+#' @param packageName (string) name of a package
+#' @param packageReporters (list) a list of package reporters
+#' @param packagePath (string) The path to the package repository.  
+#' If given, coverage will be calculated for each function.
+#' @param reportPath (string) The path and filename of the output report.  Default
+#' report will be produced in working directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
@@ -17,7 +17,8 @@
 CreatePackageReport <- function(packageName
                                 , packageReporters = DefaultReporters()
                                 , packagePath = NULL
-                                , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))) {
+                                , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))
+                                ) {
     
     # Input checks
     assertthat::assert_that(
@@ -39,14 +40,16 @@ CreatePackageReport <- function(packageName
                    , paste(unlist(lapply(packageReporters, function(x) class(x)[1]))
                            , collapse = "\n")))
 
+
     # Make them plots
     for (reporter in packageReporters){
         log_info(paste("Running Package Reporter", class(reporter)[1]))
         reporter$set_package(packageName, packagePath)
         
         reporter$calculate_all_metrics()
-        # TODO: replace plot_network() with render_report() which is then rendered into a parent report.
+        
         reporter$plot_network()
+
         log_info(paste("Done Package Reporter",class(reporter)[1]))
     }
     
