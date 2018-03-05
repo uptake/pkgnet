@@ -1,14 +1,14 @@
 ---
 title: "Package Dependency Report"
 output: html_document
-params: 
+params:
    reporter: params$reporter
 ---
 
 ## Dependency Network
 
-
 ### Description
+
 This report will give you a view of what packages you rely on
 
 
