@@ -1,4 +1,4 @@
-context("CreatePackageReport")
+context("GetPackageGraphs")
 
 # Configure logger (suppress all logs in testing)
 loggerOptions <- futile.logger::logger.options()
@@ -9,27 +9,24 @@ if (!identical(loggerOptions, list())){
 }
 futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
 
-test_that("Test that CreatingPackageReport Runs", {
+test_that("Test that GetPackageGraphs Runs", {
     
     testReportPath <- tempfile(
         pattern = "baseball"
         , fileext = ".html"
     )
     
-    reporters <- CreatePackageReport(
+    graphList <- GetPackageGraphs(
         packageName = "baseballstats"
-        , reportPath = testReportPath
     )
     
-    testthat::expect_true(all(unlist(lapply(reporters, function(x) "AbstractPackageReporter" %in% class(x)))))
-    testthat::expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
-    file.remove(testReportPath)
+    testthat::expect_true(all(unlist(lapply(graphList, igraph::is.igraph))))
 })
 
-test_that("CreatePackageReport rejects bad inputs to reporters", {
+test_that("GetPackageGraphs rejects bad inputs to reporters", {
     
     expect_error({
-        CreatePackageReport(
+       GetPackageGraphs(
             packageName = "baseballstats"
             , packageReporters = list(a = rnorm(100))
         )

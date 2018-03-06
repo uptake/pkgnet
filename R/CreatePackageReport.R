@@ -24,8 +24,7 @@ CreatePackageReport <- function(packageName
     # Build the package reporters
     packgeReporters <- .BuildPackageReporters(packageName
                                               , packageReporters
-                                              , packagePath
-                                              , reportPath)
+                                              , packagePath)
     
     # Create the Report
     RenderPackageReport(
@@ -79,8 +78,7 @@ CreatePackageReport <- function(packageName
 
 .BuildPackageReporters <- function(packageName
                                    , packageReporters
-                                   , packagePath
-                                   , reportPath){
+                                   , packagePath){
       # Input checks
       assertthat::assert_that(
         assertthat::is.string(packageName)
@@ -90,7 +88,7 @@ CreatePackageReport <- function(packageName
       # Confirm that all reporters are actually reporters
       checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})
       if (!all(checks)){
-        msg <- paste0("At least one of the reporters passed to CreatePackageReport ",
+        msg <- paste0("At least one of the reporters in the packageReporters parameter ",
                       "is not a PackageReporter. See ?AbstractPackageReporter for details.")
         log_fatal(msg)
       }
