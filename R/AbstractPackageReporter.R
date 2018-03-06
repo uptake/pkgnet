@@ -70,6 +70,9 @@ AbstractPackageReporter <- R6::R6Class(
             
             if (exists("packagePath") && !is.null(packagePath)) {
                 if (dir.exists(packagePath)) {
+                  if (basename(packagePath) != packageName) {
+                    log_fatal(paste0("The folder name at the end of packagePath does not match packageName."))
+                  }
                     private$packagePath <- packagePath
                 } else {
                     log_fatal(paste0("Package directory does not exist: ", packagePath))
