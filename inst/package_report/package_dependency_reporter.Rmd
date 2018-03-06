@@ -7,17 +7,16 @@ params:
 
 ## Dependency Network
 
-### Description
-
-This report will give you a view of what packages you rely on
-
-
-```{r}
-#reporter$get_summary_view()
-```
+Here's an overview of of the packages **`r reporter$get_package()`** relies upon.
 
 ### Visualization
 
 ```{r pressure, echo=FALSE}
 reporter$plot_network()
+```
+
+### Table
+
+```{r}
+reporter$get_summary_view()
 ```

@@ -7,17 +7,16 @@ params:
 
 ## Function Network
 
-### Description
-
-This report provides an overview of the functions defined in your package.
-
-
-```{r}
-#reporter$get_summary_view()
-```
+Here's an overview of the functions defined in **`r reporter$get_package()`**.
 
 ### Visualization
 
 ```{r echo=FALSE}
 reporter$plot_network()
+```
+
+### Table
+
+```{r}
+reporter$get_summary_view()
 ```

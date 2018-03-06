@@ -30,6 +30,18 @@ PackageSummaryReporter <- R6::R6Class(
         plot_network = function(){
           # No network in summary reporter
           return(NULL)
+        },
+        get_summary_view = function(){
+          tableObj <- DT::datatable(
+            data = self$get_description()
+            , rownames = FALSE
+            , options = list(
+              searching = FALSE
+              , pageLength = 50
+              , lengthChange = FALSE
+            )
+          )
+          return(tableObj)
         }
     ),
     
