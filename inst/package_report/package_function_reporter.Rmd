@@ -13,7 +13,7 @@ This report provides an overview of the functions defined in your package.
 
 
 ```{r}
-#reporter$get_summary_view()
+reporter$get_summary_view()
 ```
 
 ### Visualization

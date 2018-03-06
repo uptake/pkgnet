@@ -121,8 +121,16 @@ PackageFunctionReporter <- R6::R6Class(
         }, 
         
         get_summary_view = function(){
-          #TODO: DO something with this
-          return(NULL)
+          tableObj <- DT::datatable(
+            data = self$nodes
+            , rownames = FALSE
+            , options = list(
+              searching = FALSE
+              , pageLength = 50
+              , lengthChange = FALSE
+            )
+          )
+          return(tableObj)
         }
     ),
     
