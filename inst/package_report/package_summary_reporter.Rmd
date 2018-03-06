@@ -7,13 +7,7 @@ params:
 
 ## Package Summary
 
-### Description
-
-This report will give you a high level description of a package
-
-```{r results='asis'}
-reporter$get_summary_view()
-```
+Here' some general information about **`r reporter$get_package()`**. 
 
 ### Num Objects
 
@@ -21,4 +15,10 @@ Number of objects
 
 ```{r echo=FALSE}
 reporter$get_objects()
+```
+
+### Table
+
+```{r results='asis'}
+reporter$get_summary_view()
 ```
