@@ -34,6 +34,14 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
             , packageReporters = list(a = rnorm(100))
         )
     }, regexp = "At least one of the reporters passed to CreatePackageReport is not a PackageReporter")
+  
+  expect_error({
+    CreatePackageReport(
+      packageName = "baseballstats"
+      , packagePath = system.file('sartre', package = "pkgnet")
+    )
+  }, regexp = "The folder name at the end of packagePath does not match packageName")
+  
     
 })
 
