@@ -112,8 +112,7 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             return(metricsList)
-        }, 
-        
+        },
         
         # For report Generation
         get_report_markdown_path = function(){

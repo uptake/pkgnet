@@ -118,6 +118,7 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkgGraph
                 , mode = "out"
             )
+
             # update data.tables
             outNodeDT[, outDegree := outDegreeResult[['res']]] # nodes
             outNetworkList[['centralization.OutDegree']] <- outDegreeResult$centralization
@@ -209,6 +210,7 @@ AbstractGraphReporter <- R6::R6Class(
                 log_info(paste("Setting layoutType to:", layoutType))
                 self$layoutType <- layoutType
             }
+
             # If orphanNodeClusteringThreshold is passed in
             if (methods::hasArg("orphanNodeClusteringThreshold")) {
                 orphanNodeClusteringThreshold <- list(...)$orphanNodeClusteringThreshold
@@ -224,7 +226,7 @@ AbstractGraphReporter <- R6::R6Class(
             log_info(paste("Plotting with layout:", self$layoutType))
             plotDTnodes <- private$calculate_graph_layout(plotDTnodes, self$pkgGraph, self$layoutType)
             
-            if(length(self$edges) > 0) {
+            if (length(self$edges) > 0) {
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
@@ -321,13 +323,10 @@ AbstractGraphReporter <- R6::R6Class(
             # Save plot in the cache
             private$cache$graphViz <- g
             
-            print(g) # to be removed once we have an HTML report function
             return(g)
-            
-        }, 
+        },
         
         # Variables for the plot 
-        
         set_plot_node_color_scheme = function(field
                                               , pallete){
             
@@ -518,25 +517,16 @@ AbstractGraphReporter <- R6::R6Class(
             
             log_info(paste("Calculating graph layout for type:", layoutType))
             
-            # NOTE: This doesn't quite work. 
-            # If we need to cluster orphan nodes, hack the pkgGraph object to 
-            # pretend they're just one node
-            # if (length(self$orphanNodes) > self$orphanNodeClusteringThreshold) {
-            #     pkgGraph <- (pkgGraph
-            #                     %>% igraph::delete_vertices(self$orphanNodes)
-            #                     %>% igraph::vertex("orphan")
-            #                 )
-            # }
-            
             # Calculate positions for specified layoutType
             plotMat <- private$graph_layout_functions[[layoutType]](pkgGraph)
             
             # It might be important to get the nodes from pkgGraph so that they
             # are in the same order as in plotMat?
-            coordsDT <- data.table::data.table(node = names(igraph::V(pkgGraph))
-                                             , level = plotMat[,2]
-                                             , horizontal = plotMat[,1]
-                                             )
+            coordsDT <- data.table::data.table(
+                node = names(igraph::V(pkgGraph))
+                , level = plotMat[,2]
+                , horizontal = plotMat[,1]
+            )
             
             # Merge coordinates with plotDT
             plotDT <- merge(plotDT, coordsDT, by = 'node', all.x = TRUE)

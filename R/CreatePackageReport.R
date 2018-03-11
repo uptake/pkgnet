@@ -12,7 +12,7 @@
 #' @importFrom covr package_coverage tally_coverage
 #' @importFrom data.table as.data.table setnames
 #' @importFrom methods is
-#' @return A list of instantiated packageReporters the user can then interact with
+#' @return A list of instantiated packageReporters fitted to \code{packageName}
 #' @export
 CreatePackageReport <- function(packageName
                                 , packageReporters = DefaultReporters()
@@ -24,6 +24,8 @@ CreatePackageReport <- function(packageName
     assertthat::assert_that(
         assertthat::is.string(packageName)
         , is.list(packageReporters)
+        , {is.null(packagePath) | assertthat::is.string(packagePath)}
+        , assertthat::is.string(reportPath)
     )
     
     # Confirm that all reporters are actually reporters
@@ -34,28 +36,21 @@ CreatePackageReport <- function(packageName
         log_fatal(msg)
     }
     
-    log_info(paste0("Creating package report for package "
-                   , packageName
-                   , " with reporters:\n\n"
-                   , paste(unlist(lapply(packageReporters, function(x) class(x)[1]))
-                           , collapse = "\n")))
+    # Fit reporters with package name and (maybe) package path
+    reporters <- lapply(
+        packageReporters
+        , function(reporter, packageName, packagePath){
+            reporter$set_package(packageName, packagePath)
+            reporter$calculate_all_metrics()
+            return(reporter)
+        }
+        , packageName = packageName
+        , packagePath = packagePath
+    )
 
-
-    # Make them plots
-    for (reporter in packageReporters){
-        log_info(paste("Running Package Reporter", class(reporter)[1]))
-        reporter$set_package(packageName, packagePath)
-        
-        reporter$calculate_all_metrics()
-        
-        reporter$plot_network()
-
-        log_info(paste("Done Package Reporter",class(reporter)[1]))
-    }
-    
-    RenderPackageReport(
+    .RenderPackageReport(
       reportPath = reportPath
-      , packageReporters = packageReporters
+      , packageReporters = reporters
       , packageName = packageName
     )
     
@@ -63,32 +58,32 @@ CreatePackageReport <- function(packageName
 }
 
 
-#' @title Package Report Renderer
-#' @name RenderPackageReport
-#' @description Renders an html report based on the initialized reporters provided
-#' @author P. Boueri
-#' @param reportPath a file.path to where the report should be rendered
-#' @param packageReporters a list of package reporters that have already been initialized and have calculated 
-#' @param packageName (string) The name of the package.
-#' @return Nothing
-RenderPackageReport <- function(reportPath 
+# [title] Package Report Renderer
+# [name] RenderPackageReport
+# [description] Renders an html report based on the initialized reporters provided
+# [author] P. Boueri
+# [param] reportPath a file.path to where the report should be rendered
+# [param] packageReporters a list of package reporters that have already been initialized and have calculated 
+# [param] packageName (string) The name of the package.
+# [return] Nothing
+.RenderPackageReport <- function(reportPath 
                                 , packageReporters
                                 , packageName) {
-    log_info(paste("Outputting Package Report to ",reportPath))
-    loggerOptions <- futile.logger::logger.options()
-    if (!identical(loggerOptions, list())){
-        origLogThreshold <- loggerOptions[[1]][['threshold']]
-    }
-    futile.logger::flog.threshold(0)
+    
+    log_info("Rendering package report...")
+    
+    silence_logger
     rmarkdown::render(
         system.file(file.path("package_report","package_report.Rmd"), package = "pkgnet")
-        , output_format = "html_document"
         , output_file = reportPath
         , quiet = TRUE
-        , envir = new.env()
-        , params = list(reporters = packageReporters
-                      , packageName = packageName)
+        , params = list(
+            reporters = packageReporters
+            , packageName = packageName
+        )
     )
-    futile.logger::flog.threshold(origLogThreshold)
+    unsilence_logger()
+
+    log_info(sprintf("Done creating package report! It is available at %s", reportPath))
     return(invisible(NULL))
 }
