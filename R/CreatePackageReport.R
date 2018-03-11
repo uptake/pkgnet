@@ -27,7 +27,7 @@ CreatePackageReport <- function(packageName
                                               , packagePath)
     
     # Create the Report
-    RenderPackageReport(
+    .RenderPackageReport(
       reportPath = reportPath
       , packageReporters = reporters
       , packageName = packageName

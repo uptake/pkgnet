@@ -5,8 +5,7 @@
 \title{Get The Graph Objects From The Package}
 \usage{
 GetPackageGraphs(packageName, packageReporters = DefaultReporters(),
-  packagePath = NULL, reportPath = file.path(getwd(), paste0(packageName,
-  "_report.html")))
+  packagePath = NULL)
 }
 \arguments{
 \item{packageName}{(string) name of a package}
@@ -15,9 +14,6 @@ GetPackageGraphs(packageName, packageReporters = DefaultReporters(),
 
 \item{packagePath}{(string) The path to the package repository.
 If given, coverage will be calculated for each function.}
-
-\item{reportPath}{(string) The path and filename of the output report.  Default
-report will be produced in working directory.}
 }
 \value{
 A list with 2 \code{igraph} objects: \describe{
@@ -29,6 +25,9 @@ A list with 2 \code{igraph} objects: \describe{
 This function will extract and return the graph structues that represent 
 the functions within the package and the depencies external to the package.  No HTML report
 will be produced.
+}
+\seealso{
+CreatePackageReport
 }
 \author{
 B. Burns
