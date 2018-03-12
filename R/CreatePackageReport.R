@@ -22,18 +22,18 @@ CreatePackageReport <- function(packageName
                                 ) {
     
     # Build the package reporters
-    packgeReporters <- .BuildPackageReporters(packageName
+  packageReportersBuilt <- .BuildPackageReporters(packageName
                                               , packageReporters
                                               , packagePath)
     
     # Create the Report
     .RenderPackageReport(
       reportPath = reportPath
-      , packageReporters = reporters
+      , packageReporters = packageReportersBuilt
       , packageName = packageName
     )
     
-    return(invisible(packageReporters))
+    return(invisible(packageReportersBuilt))
 }
 
 
@@ -111,6 +111,8 @@ CreatePackageReport <- function(packageName
         
         log_info(paste("Done Package Reporter",class(reporter)[1]))
       }
+      
+      names(packageReporters) <- sapply(packageReporters, function(x) class(x)[1])
       
       return(packageReporters)
   
