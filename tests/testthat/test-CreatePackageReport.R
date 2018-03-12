@@ -23,6 +23,9 @@ test_that("Test that CreatingPackageReport Runs", {
     
     testthat::expect_true(all(unlist(lapply(reporters, function(x) "AbstractPackageReporter" %in% class(x)))))
     testthat::expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
+    testthat::expect_named(object = reporters
+                           , expected = sapply(DefaultReporters(), function(x){class(x)[1]})
+                           , info = "Ensure Named List")
     file.remove(testReportPath)
 })
 

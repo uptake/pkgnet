@@ -22,18 +22,18 @@ CreatePackageReport <- function(packageName
                                 ) {
     
     # Build the package reporters
-  packageReportersBuilt <- .BuildPackageReporters(packageName
-                                              , packageReporters
-                                              , packagePath)
+  builtReporters <- .BuildPackageReporters(packageName
+                                           , packageReporters
+                                           , packagePath)
     
     # Create the Report
     .RenderPackageReport(
       reportPath = reportPath
-      , packageReporters = packageReportersBuilt
+      , packageReporters = builtReporters
       , packageName = packageName
     )
     
-    return(invisible(packageReportersBuilt))
+    return(invisible(builtReporters))
 }
 
 
