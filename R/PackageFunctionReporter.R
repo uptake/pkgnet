@@ -95,6 +95,15 @@ PackageFunctionReporter <- R6::R6Class(
               , pallete = c("red", "green")
               )
             
+            # Update Network Measures
+            private$cache$networkMeasures[['packageTestCoverage.mean']] <- pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
+            
+            weightVector <- private$cache$nodes$outBetweeness / sum(private$cache$nodes$outBetweeness, na.rm = TRUE)
+            private$cache$networkMeasures[['packageTestCoverage.betweenessWeightedMean']] <- weighted.mean(x = private$cache$nodes$coverageRatio
+                                                                                        , w = weightVector
+                                                                                        , na.rm = TRUE)
+            
+            
             log_info(msg = "Done calculating package coverage...")
             return(list(testCoverage = pkgCov))
         },
