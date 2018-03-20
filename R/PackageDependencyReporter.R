@@ -59,8 +59,61 @@ PackageDependencyReporter <- R6::R6Class(
     #TODO [patrick.boueri@uptake.com]: Add version information to dependency structure
 
     public = list(
-
-        extract_network = function(depTypes = "Imports", installed = TRUE, ignorePackages = NULL){
+        
+        initialize = function(depTypes = "Imports", installed = TRUE){
+            
+            # Check inputs
+            assertthat::assert_that(
+                assertthat::is.string(depTypes)
+                , assertthat::is.flag(installed)
+            )
+            
+            private$depTypes <- depTypes
+            private$installed <- installed
+            return(invisible(NULL))
+        },
+        
+        get_summary_view = function(){
+          tableObj <- DT::datatable(
+            data = self$nodes
+            , rownames = FALSE
+            , options = list(
+              searching = FALSE
+              , pageLength = 50
+              , lengthChange = FALSE
+            )
+          )
+          return(tableObj)
+        }
+        
+    ),
+    
+    active = list(
+        edges = function(){
+            if (is.null(private$cache$edges)){
+                log_info("Calling extract_network() with default arguments...")
+                private$extract_network()
+            }
+            return(private$cache$edges)
+        },
+        nodes = function(){
+            if (is.null(private$cache$nodes)){
+                log_info("Calling extract_network() with default arguments...")
+                private$extract_network()
+            }
+            return(private$cache$nodes)
+        },
+        report_markdown_path = function(){
+            system.file(file.path("package_report", "package_dependency_reporter.Rmd"), package = "pkgnet")
+        }
+    ),
+    
+    private = list(
+        
+        depTypes = NULL,
+        ignorePackages = NULL,
+        installed = NULL,
+        extract_network = function(){
             
             # Check that package has been set
             if (is.null(private$packageName)){
@@ -73,14 +126,14 @@ PackageDependencyReporter <- R6::R6Class(
             log_info(sprintf('Constructing reverse dependency graph for %s', private$packageName))
             
             # Consider only installed packages when building dependency network
-            if (installed){
+            if (private$installed){
                 db <- utils::installed.packages()
                 if (!is.element(private$packageName, db[,1])) {
                     msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', private$packageName)
                     log_fatal(msg)
                 }
                 
-            # Otherwise consider all CRAN packages
+                # Otherwise consider all CRAN packages
             } else {
                 db <- NULL
             }
@@ -89,8 +142,6 @@ PackageDependencyReporter <- R6::R6Class(
             allDependencies <- private$recursive_dependencies(
                 package = private$packageName
                 , db = db
-                , depTypes = depTypes
-                , ignorePackages = ignorePackages
             )
             
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
@@ -103,11 +154,11 @@ PackageDependencyReporter <- R6::R6Class(
                     ,  horizontal = 0.5
                 )
                 
-                return(list(nodes = nodeDT, edges = list(), networkMeasures = list()))
+                return(invisible(NULL))
             }
             
             # Remove ignorePackages from getting constructed again
-            allDependencies <- setdiff(allDependencies, ignorePackages)
+            allDependencies <- setdiff(allDependencies, private$ignorePackages)
             
             # Get dependency relationships for all packages
             dependencyList <- tools::package_dependencies(
@@ -115,10 +166,12 @@ PackageDependencyReporter <- R6::R6Class(
                 , reverse = FALSE
                 , recursive = FALSE
                 , db = db
-                , which = depTypes
+                , which = private$depTypes
             )
             
-            nullList <- Filter(function(x){is.null(x)},dependencyList)
+            # Get list of dependencies that were not present
+            nullList <- Filter(function(x){is.null(x)}, dependencyList)
+            
             if (length(nullList) > 0){
                 log_info(paste("For package:"
                                , private$packageName
@@ -147,63 +200,13 @@ PackageDependencyReporter <- R6::R6Class(
                                                             , self$edges[, TARGET])))
             private$cache$nodes <- nodes
             
-            return(list(edges = edges, nodes = nodes))
+            return(invisible(NULL))
         },
         
-        calculate_all_metrics = function(...) {
-            # Check if we need to re-extract network
-            private$parse_extract_args(list(...))
-            
-            metricsList <- list()
-            
-            # Calculate network measures
-            metricsList <- c(metricsList, self$calculate_network_measures())
-            
-            return(metricsList)
-        },
-        
-        # For report generation
-        get_report_markdown_path = function(){
-          system.file(file.path("package_report","package_dependency_reporter.Rmd"),package = "pkgnet")
-        },
-        
-        get_summary_view = function(){
-          tableObj <- DT::datatable(
-            data = self$nodes
-            , rownames = FALSE
-            , options = list(
-              searching = FALSE
-              , pageLength = 50
-              , lengthChange = FALSE
-            )
-          )
-          return(tableObj)
-        }
-        
-    ),
-    
-    active = list(
-        nodes = function(){
-            if (is.null(private$cache$nodes)){
-                log_info("Calling extract_network() with default arguments...")
-                invisible(self$extract_network())
-            }
-            return(private$cache$nodes)
-        },
-        edges = function(){
-            if (is.null(private$cache$edges)){
-                log_info("Calling extract_network() with default arguments...")
-                invisible(self$extract_network())
-            }
-            return(private$cache$edges)
-        }
-    ),
-    
-    private = list(
-        recursive_dependencies = function(package, db, depTypes, ignorePackages, seenPackages = NULL) {
+        recursive_dependencies = function(package, db, seenPackages = NULL) {
             
             # Case 1: Package is blacklisted by ignorePackages, stop searching
-            if (package %in% ignorePackages){
+            if (package %in% private$ignorePackages){
                 return(c(seenPackages, package))
             }
 
@@ -218,7 +221,7 @@ PackageDependencyReporter <- R6::R6Class(
                 , reverse = FALSE
                 , recursive = FALSE
                 , db = db
-                , which = depTypes
+                , which = private$depTypes
             ))
             
             outPackages <- c(seenPackages, package)
@@ -226,18 +229,16 @@ PackageDependencyReporter <- R6::R6Class(
             # Identify new packages to search dependencies for
             newDeps <- setdiff(deps, outPackages)
             for (dep in newDeps) {
-                outPackages <- unique(c(outPackages
-                                        , private$recursive_dependencies(
-                                            package = dep
-                                            , db = db
-                                            , depTypes = depTypes
-                                            , ignorePackages = ignorePackages
-                                            , seenPackages = outPackages
-                                        )
+                outPackages <- unique(c(
+                    outPackages
+                    , private$recursive_dependencies(
+                        package = dep
+                        , db = db
+                        , seenPackages = outPackages
+                    )
                 ))
             }
             return(outPackages)
-            
         }
     )
 )

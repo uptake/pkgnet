@@ -9,7 +9,7 @@ if (!identical(loggerOptions, list())){
 }
 futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
 
-test_that("Test that CreatingPackageReport Runs", {
+test_that("Test that CreatePackageReport Runs", {
     
     testReportPath <- tempfile(
         pattern = "baseball"

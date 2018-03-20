@@ -20,10 +20,8 @@ test_that('PackageDependencyReporter structure is as expected', {
   
   expect_named(object = PackageDependencyReporter$public_methods
                , expected = c(
-                 "calculate_all_metrics", 
-                 "get_report_markdown_path",
-                 "extract_network", 
                  "get_summary_view",
+                 "initialize",
                  "clone"
                )
                , info = "Available public methods for PackageDependencyReporter not as expected."
@@ -38,22 +36,6 @@ test_that('PackageDependencyReporter structure is as expected', {
                , ignore.case = FALSE
   )
   
-  expect_named(object = PackageDependencyReporter$private_methods
-               , expected = c(
-                   "recursive_dependencies"
-               )
-               , info = "Available private methods for PackageDependencyReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
-  expect_named(object = PackageDependencyReporter$private_fields
-               , expected = NULL
-               , info = "Available private fields for PackageDependencyReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
 })
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS
@@ -62,54 +44,33 @@ test_that('PackageDependencyReporter Methods Work', {
   testObj <- PackageDependencyReporter$new()
   
   # inherited set_package
-  expect_silent(object = testObj$set_package(packageName = "baseballstats"
-                                             , packagePath = system.file('baseballstats',package="pkgnet")) 
-  )
-  
-  expect_equal(object = testObj$get_raw_data()$packageName
-               , expected = "baseballstats"
-               , info = "set_package did not set expected package name")
-  
-  expect_equal(object = testObj$get_raw_data()$packagePath
-               , expected = system.file('baseballstats',package="pkgnet")
-               , info = "set_package did not set expected package path")
-  
-  
-  # inherited get_package
-  
-  expect_equal(object = testObj$get_package()
-               , expected = "baseballstats"
-               , info = "get_package did not return expected package name")
-  
-  expect_equal(object = testObj$get_package_path()
-               , expected = system.file('baseballstats',package="pkgnet")
-               , info = "get_package did not return expected package path")
+  expect_silent({
+      testObj$set_package(
+          packageName = "baseballstats"
+          , packagePath = system.file('baseballstats', package="pkgnet")
+      ) 
+  })
   
   # "extract_network"
+  expect_silent({
+      testObj$.__enclos_env__$private$extract_network()
+  })
   
-  expect_silent(object = networkDTList <- testObj$extract_network())
-  
-  expect_named(object = networkDTList
-               , expected = c("edges", "nodes")
-               , info = "extract_network did not return edges and nodes as expected"
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-               )
-  
-  expect_named(object = networkDTList$edges
-               , expected = c("SOURCE", "TARGET")
-               , info = "more than edges created by extract_network"
-               , ignore.order = FALSE # enforcing this convention
-               , ignore.case = FALSE
+  expect_named(
+      object = testObj$edges
+      , expected = c("SOURCE", "TARGET")
+      , info = "more than edges created by extract_network"
+      , ignore.order = FALSE # enforcing this convention
+      , ignore.case = FALSE
   )
   
-  expect_true(object = all(networkDTList$edges[,unique(c(SOURCE, TARGET))] %in% c("base",
-                                                                               "methods",
-                                                                               "utils",
-                                                                               "stats",
-                                                                               "grDevices",
-                                                                               "graphics", 
-                                                                               "baseballstats"))
+  expect_true(object = all(testObj$edges[,unique(c(SOURCE, TARGET))] %in% c("base",
+                                                                            "methods",
+                                                                            "utils",
+                                                                            "stats",
+                                                                            "grDevices",
+                                                                            "graphics", 
+                                                                            "baseballstats"))
               , info = "unexpected package dependencies derived for baseballstats"
   )
   
@@ -118,8 +79,7 @@ test_that('PackageDependencyReporter Methods Work', {
   
   # inherited make_graph_object
   
-  expect_silent(object = testPkgGraph <- testObj$make_graph_object()
-  )
+  expect_silent(object = testPkgGraph <- testObj$pkgGraph)
   
   expect_true(object = igraph::is_igraph(testPkgGraph)
               , info = "Graph object not an igraph formatted object")
@@ -127,24 +87,13 @@ test_that('PackageDependencyReporter Methods Work', {
   expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
               , info = "Graph nodes not as expected")
   
-  expect_identical(object = igraph::get.edgelist(testPkgGraph)
-                   , expected = matrix(unlist(networkDTList$edges), ncol = 2, dimnames = NULL)
-                   , info = "Graph edges not as expected")
-  
   expect_true(object = all(igraph::get.vertex.attribute(testObj$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
               , info = "pkgGraph field nodes not as expected")
   
   expect_identical(object = igraph::get.edgelist(testObj$pkgGraph)
                    , expected = igraph::get.edgelist(testPkgGraph)
                    , info = "pkgGraph field edges not as expected")
-  
-  # "calculate_all_metrics"
-  # TODO: Need test for this
-
-  expect_silent(object = testObj$calculate_all_metrics())
-
 })
-
 
 ##### TEST TEAR DOWN #####
 

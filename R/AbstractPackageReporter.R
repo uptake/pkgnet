@@ -81,44 +81,26 @@ AbstractPackageReporter <- R6::R6Class(
             
             return(invisible(NULL))
         },
-        
-        get_package = function(){
-            return(private$packageName)
-        },
-   
-        get_report =  function(output_file = NULL) {
-            rmarkdown::render(self$get_report_markdown_path()
-                              , output_format = "html_document"
-                              , output_file = output_file
-                              , quiet = TRUE
-                              , envir = new.env()
-                              , params = list(reporter = self))
-        },
-        
-
-        get_package_path = function(){
-            return(private$packagePath)
-        },
-        
-        get_report_markdown_path =  function() {
-            stop("get_report_markdown_path has not been implemented.")
-        },
-        
         get_summary_view  = function(){
             stop("get_summary_view has not been implemented.")
+        }
+    ),
+    
+    active = list(
+        
+        package_name = function(){
+            return(private$packageName)
         },
-
-        get_raw_data = function(){
-            return(as.list(private))
+        
+        report_markdown_path = function(){
+            log_fatal("this reporter does not have a report markdown path")
         }
     ),
     
     private = list(
         packageName = NULL,
         packagePath = NULL,
-        
         cache = NULL,
-        defaultCache = NULL,
         
         # Reset cached variables
         reset_cache = function() {
@@ -126,10 +108,10 @@ AbstractPackageReporter <- R6::R6Class(
             # then no need to print a log message
             if (!is.null(private$cache)) {
                 log_info("Resetting cached network information...")
+                for (item in names(private$cache)){
+                    private$cache[[item]] <- NULL
+                }
             }
-            # Set cache to default cache
-            private$cache <- private$defaultCache
-            
             return(invisible(NULL))
         }
     )

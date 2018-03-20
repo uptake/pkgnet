@@ -7,15 +7,7 @@ params:
 
 ## Package Summary
 
-Here' some general information about **`r reporter$get_package()`**. 
-
-### Num Objects
-
-Number of objects
-
-```{r echo=FALSE}
-reporter$get_objects()
-```
+Here' some general information about **`r reporter$package_name`**. 
 
 ### Table
 

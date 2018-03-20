@@ -17,17 +17,6 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 
 \describe{
    \itemize{
-        \item{\code{calculate_network_measures()}}{
-            \itemize{
-                \item{extract network features on a node and network level}
-                \item{\bold{Returns:} A list containing:}{
-                    \itemize{
-                    \item{\bold{\code{networkMeasures}}: a list of network measures.}
-                    \item{\bold{\code{nodeMeasures}}: the nodes data.table with additional columns of node measures.}
-                   }
-                }
-            }
-       }
         \item{\code{plot_network()}}{
             \itemize{
                 \item{Creates a network visualization of extracted package graph.}

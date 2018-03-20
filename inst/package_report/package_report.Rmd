@@ -28,12 +28,11 @@ cat(sprintf("# %s", packageName))
 ```{r}
 reportTabs <- lapply(params$reporters, function(reporter) {
   knitr::knit_child(
-    reporter$get_report_markdown_path()
+    reporter$report_markdown_path
     , envir = list(reporter = reporter)
   )
 })
 ```
-
 
 ```{r results="asis"}
 cat(paste0("# {.tabset} \n", paste(reportTabs, collapse = '\n')))

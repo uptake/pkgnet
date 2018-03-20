@@ -42,92 +42,6 @@ PackageFunctionReporter <- R6::R6Class(
     inherit = AbstractGraphReporter,
     
     public = list(
-        
-        extract_network = function(){
-            # Reset cache, because any cached stuff will be outdated with a new network
-            private$reset_cache()
-            
-            log_info(sprintf('Extracting edges from %s...', private$packageName))
-            private$cache$edges <- private$extract_edges()
-            log_info('Done extracting edges.')
-            
-            log_info(sprintf('Extracting nodes from %s...', private$packageName))
-            private$cache$nodes <- private$extract_nodes()
-            log_info('Done extracting nodes.')
-            
-            return(list(edges = private$cache$edges, nodes = private$cache$nodes))
-        },
-        
-        calculate_test_coverage = function(){
-            # Given private$nodes & package path
-            # result: update nodes table 
-            
-            if (is.null(private$packagePath)) {
-                log.fatal("Path to package required in set_package() to calculate test coverage.")
-            }
-            
-            repoPath <- file.path(private$packagePath)
-            
-            log_info(msg = "Calculating package coverage...")
-            
-            pkgCov <- covr::package_coverage(
-                path = repoPath
-                , type = "tests"
-                , combine_types = FALSE
-            )
-            
-            pkgCov <- data.table::as.data.table(pkgCov)
-            pkgCov <- pkgCov[, list(coveredLines = sum(value > 0)
-                                    , totalLines = .N
-                                    , coverageRatio = sum(value > 0)/.N
-                                    , meanCoveragePerLine = sum(value)/.N
-                                    , filename = filename[1]
-                                    )
-                             , by = list(node = functions)]
-            
-            # Update Node with Coverage Info
-            private$update_nodes(metadataDT = pkgCov)
-            
-            # Set Graph to Color By Coverage
-            self$set_plot_node_color_scheme(
-              field = "coverageRatio"
-              , pallete = c("red", "green")
-              )
-            
-            # Update Network Measures
-            meanCoverage <-  pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
-            private$cache$networkMeasures[['packageTestCoverage.mean']] <- meanCoverage
-            
-            weightVector <- private$cache$nodes$outBetweeness / sum(private$cache$nodes$outBetweeness, na.rm = TRUE)
-            private$cache$networkMeasures[['packageTestCoverage.betweenessWeightedMean']] <- weighted.mean(x = private$cache$nodes$coverageRatio
-                                                                                        , w = weightVector
-                                                                                        , na.rm = TRUE)
-            
-            
-            log_info(msg = "Done calculating package coverage...")
-            return(list(testCoverage = pkgCov))
-        },
-        
-        calculate_all_metrics = function() {
-            
-            metricsList <- list()
-            
-            # Calculate network measures
-            metricsList <- c(metricsList, self$calculate_network_measures())
-            
-            # Calculate package coverage
-            if (!is.null(private$packagePath)){
-                metricsList <- c(metricsList, self$calculate_test_coverage())
-            }
-            
-            return(metricsList)
-        },
-        
-        # For report Generation
-        get_report_markdown_path = function(){
-          system.file(file.path("package_report","package_function_reporter.Rmd"),package = "pkgnet")
-        }, 
-        
         get_summary_view = function(){
           tableObj <- DT::datatable(
             data = self$nodes
@@ -142,7 +56,96 @@ PackageFunctionReporter <- R6::R6Class(
         }
     ),
     
+    active = list(
+        edges = function(){
+            if (is.null(private$cache$edges)){
+                log_info("Calling extract_network() to extract nodes and edges...")
+                private$extract_network()
+            }
+            return(private$cache$edges)
+        },
+        nodes = function(){
+            if (is.null(private$cache$nodes)){
+                log_info("Calling extract_network() to extract nodes and edges...")
+                private$extract_network()
+            }
+            return(private$cache$nodes)
+        },
+        report_markdown_path = function(){
+            system.file(file.path("package_report", "package_function_reporter.Rmd"), package = "pkgnet")
+        }
+    ),
+    
     private = list(
+        
+        # add coverage to nodes table
+        calculate_test_coverage = function(){
+            
+            log_info(msg = "Calculating package coverage...")
+            
+            pkgCov <- covr::package_coverage(
+                path = private$packagePath
+                , type = "tests"
+                , combine_types = FALSE
+            )
+            
+            pkgCov <- data.table::as.data.table(pkgCov)
+            pkgCov <- pkgCov[, list(coveredLines = sum(value > 0)
+                                    , totalLines = .N
+                                    , coverageRatio = sum(value > 0)/.N
+                                    , meanCoveragePerLine = sum(value)/.N
+                                    , filename = filename[1]
+            )
+            , by = list(node = functions)]
+            
+            # Update Node with Coverage Info
+            private$update_nodes(metadataDT = pkgCov)
+            
+            # Set Graph to Color By Coverage
+            private$set_plot_node_color_scheme(
+                field = "coverageRatio"
+                , pallete = c("red", "green")
+            )
+            
+            # Update Network Measures
+            private$calculate_network_measures()
+            
+            meanCoverage <-  pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
+            private$cache$networkMeasures[['packageTestCoverage.mean']] <- meanCoverage
+            
+            weightVector <- self$nodes$outBetweeness / sum(self$nodes$outBetweeness, na.rm = TRUE)
+
+            betweenness_mean <- weighted.mean(
+                x = self$nodes$coverageRatio
+                , w = weightVector
+                , na.rm = TRUE
+            )
+            private$cache$networkMeasures[['packageTestCoverage.betweenessWeightedMean']] <- betweenness_mean
+            
+            log_info(msg = "Done calculating package coverage")
+            return(invisible(NULL))
+        },
+        
+        extract_network = function(){
+            # Reset cache, because any cached stuff will be outdated with a new network
+            private$reset_cache()
+            
+            log_info(sprintf('Extracting edges from %s...', private$packageName))
+            private$cache$edges <- private$extract_edges()
+            log_info('Done extracting edges.')
+            
+            log_info(sprintf('Extracting nodes from %s...', private$packageName))
+            private$cache$nodes <- private$extract_nodes()
+            log_info('Done extracting nodes.')
+            
+            # TODO (james.lamb@uptake.com):
+            # Make this handoff with coverage cleaner
+            if (!is.null(private$packagePath)){
+                private$calculate_test_coverage()
+            }
+
+            return(invisible(NULL))
+        },
         
         extract_nodes = function(){
             if (is.null(private$packageName)) {
@@ -171,16 +174,18 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             log_info(sprintf('Constructing network representation...'))
+            
             # foodweb will output a warning for "In par(oldpar) : calling par(new=TRUE) with no plot" all the time. 
             # does not seem to be an issue
-            funcMap <-
-                suppressWarnings(mvbutils::foodweb(
+            funcMap <- suppressWarnings({
+                mvbutils::foodweb(
                     where = paste("package"
                                   , private$packageName
                                   , sep = ":")
                     ,
                     plotting = FALSE
-                ))
+                )
+            })
             
             log_info("Done constructing network representation")
             
@@ -204,22 +209,6 @@ PackageFunctionReporter <- R6::R6Class(
             }
             
             return(edges)
-        }),
-    
-    active = list(
-        nodes = function(){
-            if (is.null(private$cache$nodes)){
-                log_info("Calling extract_network() to extract nodes and edges...")
-                invisible(self$extract_network())
-            }
-            return(private$cache$nodes)
-        },
-        edges = function(){
-            if (is.null(private$cache$edges)){
-                log_info("Calling extract_network() to extract nodes and edges...")
-                invisible(self$extract_network())
-            }
-            return(private$cache$edges)
         }
     )
 )

@@ -21,10 +21,6 @@ test_that('PackageFunctionReporter structure is as expected', {
   
   expect_named(object = PackageFunctionReporter$public_methods
                , expected = c(
-                 "calculate_all_metrics", 
-                 "extract_network", 
-                 "calculate_test_coverage",
-                 "get_report_markdown_path",
                  "get_summary_view",
                  "clone"
                )
@@ -40,22 +36,6 @@ test_that('PackageFunctionReporter structure is as expected', {
                , ignore.case = FALSE
   )
   
-  expect_named(object = PackageFunctionReporter$private_methods
-               , expected = c("extract_nodes"
-                              , "extract_edges"
-                              )
-               , info = "Available private methods for PackageFunctionReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
-  expect_named(object = PackageFunctionReporter$private_fields
-               , expected = NULL
-               , info = "Available private fields for PackageFunctionReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
 })
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS
@@ -64,48 +44,30 @@ test_that('PackageFunctionReporter Methods Work', {
   testObj <- PackageFunctionReporter$new()
   
   # inherited set_package
-  expect_silent(object = testObj$set_package(
-      packageName = "baseballstats"
-      # Covr only works on source code. find.package path will not work
-      , packagePath = system.file("baseballstats", package = "pkgnet")
-  ))
-  
-  expect_equal(object = testObj$get_raw_data()$packageName
-               , expected = "baseballstats"
-               , info = "set_package did not set expected package name")
-  
-  expect_equal(object = testObj$get_raw_data()$packagePath
-               , expected = system.file('baseballstats', package = "pkgnet")
-               , info = "set_package did not set expected package path")
-  
+  expect_silent({
+      testObj$set_package(
+        packageName = "baseballstats"
+        # Covr only works on source code. find.package path will not work
+        , packagePath = system.file("baseballstats", package = "pkgnet")
+      )
+  })
   
   # inherited get_package
-  
-  expect_equal(object = testObj$get_package()
+  expect_equal(object = testObj$package_name
                , expected = "baseballstats"
                , info = "get_package did not return expected package name")
   
-  expect_equal(object = testObj$get_package_path()
-               , expected = system.file('baseballstats',package="pkgnet")
-               , info = "get_package did not return expected package path")
-  
   # "extract_network"
+  expect_warning({
+      testObj$.__enclos_env__$private$extract_network()
+  }, regexp = "closeness centrality is not well-defined for disconnected graphs")
   
-  expect_silent(object = networkDTList <- testObj$extract_network())
-  
-  expect_named(object = networkDTList
-               , expected = c("edges", "nodes")
-               , info = "extract_network did not return edges and nodes as expected"
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
-  expect_named(object = networkDTList$edges
+  expect_named(object = testObj$edges
                , expected = c("SOURCE", "TARGET")
                , info = "more than SOURCE and TARGET fields created by extract_network"
   )
   
-  expect_true(object = all(networkDTList$edges[,unique(SOURCE, TARGET)] %in% c("at_bats"
+  expect_true(object = all(testObj$edges[,unique(SOURCE, TARGET)] %in% c("at_bats"
                                                                        , "batting_avg"
                                                                        , "slugging_avg")
                            )
@@ -116,29 +78,14 @@ test_that('PackageFunctionReporter Methods Work', {
   testNodeDT <- testObj$nodes
  
   # inherited make_graph_object
-  expect_silent(object = testPkgGraph <- testObj$make_graph_object())
+  expect_silent(object = testPkgGraph <- testObj$pkgGraph)
   
   expect_true(object = igraph::is_igraph(testPkgGraph)
               , info = "Graph object not and igraph formatted object")
   
   expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
               , info = "Graph nodes not as expected")
-  
-  expect_identical(object = igraph::get.edgelist(testPkgGraph)
-                   , expected = matrix(unlist(networkDTList$edges), ncol = 2, dimnames = NULL)
-                   , info = "Graph edges not as expected")
-  
-  expect_identical(object = testObj$edges
-                   , expected = networkDTList$edges
-                   , info = "Edge data.table not created as expected")
-  
-  # "calculate_metrics"
 
-  expect_true({
-      testObj$calculate_all_metrics()
-      TRUE
-  })
-  
   # Nodes table with coverage and metrics too
   # TODO: Test that calculate_all_measures and other calculates attach metadata correctly
   # expect_identical(object = sort(testObj$get_raw_data()$nodes$node)
@@ -147,12 +94,14 @@ test_that('PackageFunctionReporter Methods Work', {
   
   
   # network measures
-  expect_true(object = all( c("centralization.OutDegree",
-                            "centralization.betweenness",
-                            "centralization.closeness"
-                            ) %in% names(testObj$networkMeasures))
-              , info = "Not all expected network measures are in networkMeasures list"
-  )
+  expect_true({
+      suppressWarnings({
+          all( c("centralization.OutDegree",
+                 "centralization.betweenness",
+                 "centralization.closeness"
+          ) %in% names(testObj$networkMeasures))
+      })
+  } , info = "Not all expected network measures are in networkMeasures list")
   expect_true(object = all( c("outDegree",
                               "outBetweeness",
                               "outCloseness",
@@ -170,7 +119,7 @@ test_that('PackageFunctionReporter Methods Work', {
                               , "coveredLines"
                               , "filename") %in% names(testObj$nodes)
                             )
-              , info = "Not all expected function coverages measures are in nodes table"
+              , info = "Not all expected function coverage measures are in nodes table"
   )
   
   expect_true(object = all(igraph::get.vertex.attribute(testObj$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
