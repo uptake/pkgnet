@@ -2,6 +2,7 @@
 #' @name CreatePackageReport
 #' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
+#' @seealso GetPackageGraphs
 #' @param packageName (string) name of a package
 #' @param packageReporters (list) a list of package reporters
 #' @param packagePath (string) The path to the package repository.  
@@ -20,41 +21,19 @@ CreatePackageReport <- function(packageName
                                 , reportPath = file.path(getwd(),paste0(packageName,"_report.html"))
                                 ) {
     
-    # Input checks
-    assertthat::assert_that(
-        assertthat::is.string(packageName)
-        , is.list(packageReporters)
-        , {is.null(packagePath) | assertthat::is.string(packagePath)}
-        , assertthat::is.string(reportPath)
-    )
+    # Build the package reporters
+  builtReporters <- .BuildPackageReporters(packageName
+                                           , packageReporters
+                                           , packagePath)
     
-    # Confirm that all reporters are actually reporters
-    checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})
-    if (!all(checks)){
-        msg <- paste0("At least one of the reporters passed to CreatePackageReport ",
-                      "is not a PackageReporter. See ?AbstractPackageReporter for details.")
-        log_fatal(msg)
-    }
-    
-    # Fit reporters with package name and (maybe) package path
-    reporters <- lapply(
-        packageReporters
-        , function(reporter, packageName, packagePath){
-            reporter$set_package(packageName, packagePath)
-            reporter$calculate_all_metrics()
-            return(reporter)
-        }
-        , packageName = packageName
-        , packagePath = packagePath
-    )
-
+    # Create the Report
     .RenderPackageReport(
       reportPath = reportPath
-      , packageReporters = reporters
+      , packageReporters = builtReporters
       , packageName = packageName
     )
     
-    return(invisible(packageReporters))
+    return(invisible(builtReporters))
 }
 
 
@@ -86,4 +65,55 @@ CreatePackageReport <- function(packageName
 
     log_info(sprintf("Done creating package report! It is available at %s", reportPath))
     return(invisible(NULL))
+}
+
+
+
+# [Title] Build The Package Reporters
+# [Author] B. Burns
+# [Desc] This function creates an instance of each package reporter
+#        and enriches its content.   
+#
+#  For param descriptions, see CreatePackageReport
+
+.BuildPackageReporters <- function(packageName
+                                   , packageReporters
+                                   , packagePath){
+      # Input checks
+      assertthat::assert_that(
+        assertthat::is.string(packageName)
+        , is.list(packageReporters)
+      )
+      
+      # Confirm that all reporters are actually reporters
+      checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})
+      if (!all(checks)){
+        msg <- paste0("At least one of the reporters in the packageReporters parameter ",
+                      "is not a PackageReporter. See ?AbstractPackageReporter for details.")
+        log_fatal(msg)
+      }
+      
+      log_info(paste0("Creating package report for package "
+                      , packageName
+                      , " with reporters:\n\n"
+                      , paste(unlist(lapply(packageReporters, function(x) class(x)[1]))
+                              , collapse = "\n")))
+      
+      
+      # Make them plots
+      for (reporter in packageReporters){
+        log_info(paste("Running Package Reporter", class(reporter)[1]))
+        reporter$set_package(packageName, packagePath)
+        
+        reporter$calculate_all_metrics()
+        
+        reporter$plot_network()
+        
+        log_info(paste("Done Package Reporter",class(reporter)[1]))
+      }
+      
+      names(packageReporters) <- sapply(packageReporters, function(x) class(x)[1])
+      
+      return(packageReporters)
+  
 }

@@ -25,6 +25,9 @@ A list of instantiated packageReporters fitted to \code{packageName}
 \description{
 Surface the internal and external dependencies of an R package.
 }
+\seealso{
+GetPackageGraphs
+}
 \author{
 B. Burns
 }

@@ -23,6 +23,9 @@ test_that("Test that CreatingPackageReport Runs", {
     
     testthat::expect_true(all(unlist(lapply(reporters, function(x) "AbstractPackageReporter" %in% class(x)))))
     testthat::expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
+    testthat::expect_named(object = reporters
+                           , expected = sapply(DefaultReporters(), function(x){class(x)[1]})
+                           , info = "Ensure Named List")
     file.remove(testReportPath)
 })
 
@@ -33,7 +36,7 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
             packageName = "baseballstats"
             , packageReporters = list(a = rnorm(100))
         )
-    }, regexp = "At least one of the reporters passed to CreatePackageReport is not a PackageReporter")
+    }, regexp = "At least one of the reporters in the packageReporters parameter is not a PackageReporter")
     
 })
 
