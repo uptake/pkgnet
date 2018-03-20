@@ -43,7 +43,6 @@ test_that('PackageFunctionReporter structure is as expected', {
   expect_named(object = PackageFunctionReporter$private_methods
                , expected = c("extract_nodes"
                               , "extract_edges"
-                              , "package_test_coverage"
                               )
                , info = "Available private methods for PackageFunctionReporter not as expected."
                , ignore.order = TRUE
