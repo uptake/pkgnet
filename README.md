@@ -16,7 +16,8 @@
 1. [How it Works](#howitworks)
 2. [Installation](#installation)
 3. [Usage Examples](#examples)
-4. [Next Steps](#nextsteps)
+4. [How to Contribute](#contributing)
+5. [Next Steps](#nextsteps)
 
 ## How it Works <a name="howitworks"></a>
 
@@ -40,6 +41,12 @@ Try it out!
 library(pkgnet)
 result <- CreatePackageReport('ggplot2')
 ```
+
+## How to Contribute <a name="contributing"></a>
+
+To report bugs, request features, or ask questions about the structure of the code, please [open an issue](https://github.com/UptakeOpenSource/pkgnet/issues).
+
+If you'd like to contribute to the project, please [open a pull request](https://github.com/UptakeOpenSource/pkgnet/pulls). PRs should follow the project's [contribution guidelines](https://github.com/UptakeOpenSource/pkgnet/blob/master/CONTRIBUTING.md).
 
 ## Next Steps <a name="nextsteps"></a>
 
