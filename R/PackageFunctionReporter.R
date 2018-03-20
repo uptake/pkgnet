@@ -58,7 +58,6 @@ PackageFunctionReporter <- R6::R6Class(
             return(list(edges = private$cache$edges, nodes = private$cache$nodes))
         },
         
-        # TODO [patrick.bouer@uptake.com]: Implement packageTestCoverage metrics
         calculate_test_coverage = function(){
             # Given private$nodes & package path
             # result: update nodes table 
@@ -96,7 +95,8 @@ PackageFunctionReporter <- R6::R6Class(
               )
             
             # Update Network Measures
-            private$cache$networkMeasures[['packageTestCoverage.mean']] <- pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
+            meanCoverage <-  pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
+            private$cache$networkMeasures[['packageTestCoverage.mean']] <- meanCoverage
             
             weightVector <- private$cache$nodes$outBetweeness / sum(private$cache$nodes$outBetweeness, na.rm = TRUE)
             private$cache$networkMeasures[['packageTestCoverage.betweenessWeightedMean']] <- weighted.mean(x = private$cache$nodes$coverageRatio
