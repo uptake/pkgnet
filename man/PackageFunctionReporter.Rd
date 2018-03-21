@@ -17,7 +17,21 @@ This Reporter takes a package and uncovers the structure from
 \section{Public Methods}{
 
 \describe{
-    \item{\code{set_package(packageName, packagePath)}}{
+   
+   \itemize{
+        \item{\code{plot_network()}}{
+            \itemize{
+                \item{Creates a network visualization of extracted package graph.}
+                \item{\bold{Returns:}}{
+                    \itemize{
+                        \item{A `visNetwork` object}
+                   }
+                }
+            }
+       }
+   }
+    
+    \item{\code{set_package(packageName, packagePath = NULL)}}{
         \itemize{
             \item{Set properties of this reporter. If packageName overrides a 
                 previously-set package name, any cached data will be removed.}
@@ -28,17 +42,6 @@ This Reporter takes a package and uncovers the structure from
                     To be used for test coverage, if provided.}
                }
             }
-        }
-    }
-    \item{\code{calculate_metrics()}}{
-        \itemize{
-            \item{Create an edgelist with relationships between functions in a package}
-        }
-    }
-    \item{\code{extract_network()}}{
-        \itemize{
-            \item{This function maps the relationships between
-                  functions in a package.}
         }
     }
 }

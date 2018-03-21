@@ -8,8 +8,13 @@
 <title>Get Network Representation of an R Package • pkgnet</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="jquery.sticky-kit.min.js"></script><script src="pkgdown.js"></script><meta property="og:title" content="Get Network Representation of an R Package">
+<meta property="og:description" content="Tools from the domain of graph theory can be used to quantify the complexity
+             and vulnerability to failure of a software package. That is the guiding philosophy
+             of this package. " pkgnet provides tools to analyze the dependencies between functions in an r package and its imported packages.>
+<meta name="twitter:card" content="summary">
+<!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
@@ -77,6 +82,7 @@
 <li><a href="#howitworks">How it Works</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#examples">Usage Examples</a></li>
+<li><a href="#contributing">How to Contribute</a></li>
 <li><a href="#nextsteps">Next Steps</a></li>
 </ol>
 <div id="how-it-works" class="section level2">
@@ -101,6 +107,13 @@
 <pre><code>library(pkgnet)
 result &lt;- CreatePackageReport('ggplot2')</code></pre>
 </div>
+<div id="how-to-contribute" class="section level2">
+<h2 class="hasAnchor">
+<a href="#how-to-contribute" class="anchor"></a>How to Contribute <a name="contributing"></a>
+</h2>
+<p>To report bugs, request features, or ask questions about the structure of the code, please <a href="https://github.com/UptakeOpenSource/pkgnet/issues">open an issue</a>.</p>
+<p>If you’d like to contribute to the project, please <a href="https://github.com/UptakeOpenSource/pkgnet/pulls">open a pull request</a>. PRs should follow the project’s <a href="https://github.com/UptakeOpenSource/pkgnet/blob/master/CONTRIBUTING.html">contribution guidelines</a>.</p>
+</div>
 <div id="next-steps" class="section level2">
 <h2 class="hasAnchor">
 <a href="#next-steps" class="anchor"></a>Next Steps <a name="nextsteps"></a>
@@ -112,18 +125,36 @@ result &lt;- CreatePackageReport('ggplot2')</code></pre>
   </div>
 
   <div class="col-md-3" id="sidebar">
-    <h2>License</h2>
-<p><a href="https://opensource.org/licenses/BSD-3-Clause">BSD_3_clause</a> + file <a href="LICENSE.html">LICENSE</a></p>
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Report a bug at <br><a href="NA">NA</a>
+</li>
+</ul>
+</div>
+<div class="license">
+<h2>License</h2>
+<ul class="list-unstyled">
+<li>
+<a href="https://opensource.org/licenses/BSD-3-Clause">BSD_3_clause</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
+</ul>
+</div>
+<div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Brian Burns <br><small class="roles"> Author, maintainer </small> </li>
-<li>James Lamb <br><small class="roles"> Author </small> </li>
+<li>Brian Burns <br><small class="roles"> Author, maintainer </small>  </li>
+<li>James Lamb <br><small class="roles"> Author </small>  </li>
 <li><a href="authors.html">All authors...</a></li>
 </ul>
+</div>
+
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.org/UptakeOpenSource/pkgnet"><img src="https://travis-ci.org/UptakeOpenSource/pkgnet.svg?branch=master" alt="Build Status"></a></li>
 </ul>
+</div>
 </div>
 </div>
 
