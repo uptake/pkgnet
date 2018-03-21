@@ -7,7 +7,7 @@ params:
 
 ## Function Network
 
-Here's an overview of the functions defined in **`r reporter$package_name`**.
+Here's an overview of the functions defined in **`r reporter$pkg_name`**.
 
 ### Visualization
 

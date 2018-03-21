@@ -46,14 +46,14 @@ test_that('PackageFunctionReporter Methods Work', {
   # inherited set_package
   expect_silent({
       testObj$set_package(
-        package_name = "baseballstats"
+        pkg_name = "baseballstats"
         # Covr only works on source code. find.package path will not work
-        , package_path = system.file("baseballstats", package = "pkgnet")
+        , pkg_path = system.file("baseballstats", package = "pkgnet")
       )
   })
   
   # inherited get_package
-  expect_equal(object = testObj$package_name
+  expect_equal(object = testObj$pkg_name
                , expected = "baseballstats"
                , info = "get_package did not return expected package name")
   

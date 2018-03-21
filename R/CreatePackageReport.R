@@ -3,51 +3,51 @@
 #' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
 #' @seealso GetPackageGraphs
-#' @param package_name (string) name of a package
-#' @param package_reporters (list) a list of package reporters
-#' @param package_path (string) The path to the package repository.  
+#' @param pkg_name (string) name of a package
+#' @param pkg_reporters (list) a list of package reporters
+#' @param pkg_path (string) The path to the package repository.  
 #'                     If given, coverage will be calculated for each function.
 #' @param report_path (string) The path and filename of the output report.  Default
 #'                   report will be produced in working directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
-#' @return A list of instantiated package_reporters fitted to \code{package_name}
+#' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
-CreatePackageReport <- function(package_name
-                                , package_reporters = DefaultReporters()
-                                , package_path = NULL
-                                , report_path = file.path(getwd(), paste0(package_name, "_report.html"))
+CreatePackageReport <- function(pkg_name
+                                , pkg_reporters = DefaultReporters()
+                                , pkg_path = NULL
+                                , report_path = file.path(getwd(), paste0(pkg_name, "_report.html"))
                                 ) {
     # Input checks
     assertthat::assert_that(
-        assertthat::is.string(package_name)
-        , is.list(package_reporters)
+        assertthat::is.string(pkg_name)
+        , is.list(pkg_reporters)
     )
     
     # Confirm that all reporters are actually reporters
-    checks <- sapply(package_reporters, function(x){methods::is(x, "AbstractPackageReporter")})
+    checks <- sapply(pkg_reporters, function(x){methods::is(x, "AbstractPackageReporter")})
     if (!all(checks)){
-        msg <- paste0("At least one of the reporters in the package_reporters parameter ",
+        msg <- paste0("At least one of the reporters in the pkg_reporters parameter ",
                       "is not a PackageReporter. See ?AbstractPackageReporter for details.")
         log_fatal(msg)
     }
     
     log_info(paste0("Creating package report for package "
-                    , package_name
+                    , pkg_name
                     , " with reporters:\n\n"
-                    , paste(unlist(lapply(package_reporters, function(x) class(x)[1]))
+                    , paste(unlist(lapply(pkg_reporters, function(x) class(x)[1]))
                             , collapse = "\n")))
     
     builtReporters <- .BuildPackageReporters(
-      package_name
-      , package_reporters
-      , package_path
+      pkg_name
+      , pkg_reporters
+      , pkg_path
     )
     
     .RenderPackageReport(
       report_path = report_path
-      , package_reporters = builtReporters
-      , package_name = package_name
+      , pkg_reporters = builtReporters
+      , pkg_name = pkg_name
     )
     
     return(invisible(builtReporters))
@@ -59,13 +59,13 @@ CreatePackageReport <- function(package_name
 # [description] Renders an html report based on the initialized reporters provided
 # [author] P. Boueri
 # [param] report_path a file.path to where the report should be rendered
-# [param] package_reporters a list of package reporters that have already been initialized and have calculated 
-# [param] package_name (string) The name of the package.
+# [param] pkg_reporters a list of package reporters that have already been initialized and have calculated 
+# [param] pkg_name (string) The name of the package.
 # [return] Nothing
 #' @importFrom rmarkdown render
 .RenderPackageReport <- function(report_path 
-                                , package_reporters
-                                , package_name) {
+                                , pkg_reporters
+                                , pkg_name) {
     
     log_info("Rendering package report...")
     
@@ -75,8 +75,8 @@ CreatePackageReport <- function(package_name
         , output_file = report_path
         , quiet = TRUE
         , params = list(
-            reporters = package_reporters
-            , package_name = package_name
+            reporters = pkg_reporters
+            , pkg_name = pkg_name
         )
     )
     unsilence_logger()
@@ -92,18 +92,18 @@ CreatePackageReport <- function(package_name
 #        and enriches its content.   
 #
 # [seealso] For param descriptions, see CreatePackageReport
-.Buildpackage_reporters <- function(package_name
-                                   , package_reporters
-                                   , package_path){
+.BuildPackageReporters <- function(pkg_name
+                                   , pkg_reporters
+                                   , pkg_path){
       
-      package_reporters <- sapply(
-          X = package_reporters
+      pkg_reporters <- sapply(
+          X = pkg_reporters
           , FUN = function(reporter){
-              reporter$set_package(package_name, package_path)
+              reporter$set_package(pkg_name, pkg_path)
               return(reporter)
           }
       )
-      names(package_reporters) <- sapply(package_reporters, function(x) class(x)[1])
+      names(pkg_reporters) <- sapply(pkg_reporters, function(x) class(x)[1])
       
-      return(package_reporters)
+      return(pkg_reporters)
 }

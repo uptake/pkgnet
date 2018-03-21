@@ -7,14 +7,14 @@
 #' @importFrom R6 R6Class
 #' @section Public Methods:
 #' \describe{
-#'     \item{\code{set_package(package_name, package_path = NULL)}}{
+#'     \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
 #'         \itemize{
 #'             \item{Set the package that all operations in the object are done for.}
 #'             \item{\bold{Args:}}{
 #'                 \itemize{
-#'                 \item{\bold{\code{package_name}}: a string with the name of the package you are
+#'                 \item{\bold{\code{pkg_name}}: a string with the name of the package you are
 #'                   analyzing.}
-#'                   \item{\bold{\code{package_path}}: directory path to source code of package}
+#'                   \item{\bold{\code{pkg_path}}: directory path to source code of package}
 #'                  }
 #'              }
 #'          }
@@ -31,15 +31,15 @@ AbstractPackageReporter <- R6::R6Class(
     
     public = list(
         
-        set_package = function(package_name, package_path = NULL) {
+        set_package = function(pkg_name, pkg_path = NULL) {
             
-            private$private_package_name <- package_name
+            private$private_pkg_name <- pkg_name
             
-            if (exists("package_path") && !is.null(package_path)) {
-                if (dir.exists(package_path)) {
-                    private$package_path <- package_path
+            if (exists("pkg_path") && !is.null(pkg_path)) {
+                if (dir.exists(pkg_path)) {
+                    private$pkg_path <- pkg_path
                 } else {
-                    log_fatal(paste0("Package directory does not exist: ", package_path))
+                    log_fatal(paste0("Package directory does not exist: ", pkg_path))
                 }
             }
             
@@ -55,8 +55,8 @@ AbstractPackageReporter <- R6::R6Class(
     
     active = list(
         
-        package_name = function(){
-            return(private$private_package_name)
+        pkg_name = function(){
+            return(private$private_pkg_name)
         },
         
         report_markdown_path = function(){
@@ -65,8 +65,8 @@ AbstractPackageReporter <- R6::R6Class(
     ),
     
     private = list(
-        private_package_name = NULL,
-        package_path = NULL,
+        private_pkg_name = NULL,
+        pkg_path = NULL,
         cache = NULL,
         
         # Reset cached variables

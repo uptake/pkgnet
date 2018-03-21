@@ -46,8 +46,8 @@ test_that('PackageDependencyReporter Methods Work', {
   # inherited set_package
   expect_silent({
       testObj$set_package(
-          package_name = "baseballstats"
-          , package_path = system.file('baseballstats', package="pkgnet")
+          pkg_name = "baseballstats"
+          , pkg_path = system.file('baseballstats', package="pkgnet")
       ) 
   })
   

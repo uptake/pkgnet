@@ -17,7 +17,7 @@ test_that("Test that CreatePackageReport Runs", {
     )
     
     reporters <- CreatePackageReport(
-        package_name = "baseballstats"
+        pkg_name = "baseballstats"
         , report_path = testReportPath
     )
     
@@ -33,8 +33,8 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
     
     expect_error({
         CreatePackageReport(
-            package_name = "baseballstats"
-            , package_reporters = list(a = rnorm(100))
+            pkg_name = "baseballstats"
+            , pkg_reporters = list(a = rnorm(100))
         )
     }, regexp = "At least one of the reporters in the package_reporters parameter is not a PackageReporter")
     

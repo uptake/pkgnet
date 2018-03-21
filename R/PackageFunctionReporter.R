@@ -7,14 +7,14 @@
 #'              to plan testing efforts.
 #' @section Public Methods:
 #' \describe{
-#'     \item{\code{set_package(package_name, package_path)}}{
+#'     \item{\code{set_package(pkg_name, pkg_path)}}{
 #'         \itemize{
-#'             \item{Set properties of this reporter. If package_name overrides a 
+#'             \item{Set properties of this reporter. If pkg_name overrides a 
 #'                 previously-set package name, any cached data will be removed.}
 #'             \item{\bold{Args:}}{
 #'                 \itemize{
-#'                 \item{\bold{\code{package_name}}: String with the name of the package}
-#'                 \item{\bold{\code{package_path}}: Optional path to the source code. 
+#'                 \item{\bold{\code{pkg_name}}: String with the name of the package}
+#'                 \item{\bold{\code{pkg_path}}: Optional path to the source code. 
 #'                     To be used for test coverage, if provided.}
 #'                }
 #'             }
@@ -75,7 +75,7 @@ PackageFunctionReporter <- R6::R6Class(
             log_info(msg = "Calculating package coverage...")
             
             pkgCov <- covr::package_coverage(
-                path = private$package_path
+                path = private$pkg_path
                 , type = "tests"
                 , combine_types = FALSE
             )
@@ -121,17 +121,17 @@ PackageFunctionReporter <- R6::R6Class(
             # Reset cache, because any cached stuff will be outdated with a new network
             private$reset_cache()
             
-            log_info(sprintf('Extracting edges from %s...', private$package_name))
+            log_info(sprintf('Extracting edges from %s...', self$pkg_name))
             private$cache$edges <- private$extract_edges()
             log_info('Done extracting edges.')
             
-            log_info(sprintf('Extracting nodes from %s...', private$package_name))
+            log_info(sprintf('Extracting nodes from %s...', self$pkg_name))
             private$cache$nodes <- private$extract_nodes()
             log_info('Done extracting nodes.')
             
             # TODO (james.lamb@uptake.com):
             # Make this handoff with coverage cleaner
-            if (!is.null(private$package_path)){
+            if (!is.null(private$pkg_path)){
                 private$calculate_test_coverage()
             }
 
@@ -139,26 +139,26 @@ PackageFunctionReporter <- R6::R6Class(
         },
         
         extract_nodes = function(){
-            if (is.null(private$package_name)) {
+            if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
-            nodes <- data.table::data.table(node = as.character(unlist(utils::lsf.str(asNamespace(private$package_name)))))
+            nodes <- data.table::data.table(node = as.character(unlist(utils::lsf.str(asNamespace(self$pkg_name)))))
             return(nodes)
         },
         
         extract_edges = function(){
-            if (is.null(private$package_name)) {
+            if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting edges.')
             }
             
-            log_info(sprintf('Loading %s...', private$package_name))
+            log_info(sprintf('Loading %s...', self$pkg_name))
             suppressPackageStartupMessages({
-                require(private$package_name, character.only = TRUE)
+                require(self$pkg_name, character.only = TRUE)
             })
-            log_info(sprintf('Done loading %s', private$package_name))
+            log_info(sprintf('Done loading %s', self$pkg_name))
             
             # Avoid mvbutils::foodweb bug on one function packages
-            numFuncs <- as.character(unlist(utils::lsf.str(asNamespace(private$package_name)))) # list of functions within Package
+            numFuncs <- as.character(unlist(utils::lsf.str(asNamespace(self$pkg_name)))) # list of functions within Package
             if (length(numFuncs) == 1) {
                 log_info("Only one function. Edge list is empty")
                 return(data.table::data.table(SOURCE = character(), TARGET = character()))
@@ -171,7 +171,7 @@ PackageFunctionReporter <- R6::R6Class(
             funcMap <- suppressWarnings({
                 mvbutils::foodweb(
                     where = paste("package"
-                                  , private$package_name
+                                  , self$pkg_name
                                   , sep = ":")
                     ,
                     plotting = FALSE

@@ -17,14 +17,14 @@ This Reporter takes a package and uncovers the structure from
 \section{Public Methods}{
 
 \describe{
-    \item{\code{set_package(package_name, package_path)}}{
+    \item{\code{set_package(pkg_name, pkg_path)}}{
         \itemize{
-            \item{Set properties of this reporter. If package_name overrides a 
+            \item{Set properties of this reporter. If pkg_name overrides a 
                 previously-set package name, any cached data will be removed.}
             \item{\bold{Args:}}{
                 \itemize{
-                \item{\bold{\code{package_name}}: String with the name of the package}
-                \item{\bold{\code{package_path}}: Optional path to the source code. 
+                \item{\bold{\code{pkg_name}}: String with the name of the package}
+                \item{\bold{\code{pkg_path}}: Optional path to the source code. 
                     To be used for test coverage, if provided.}
                }
             }

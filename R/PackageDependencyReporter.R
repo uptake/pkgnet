@@ -83,25 +83,25 @@ PackageDependencyReporter <- R6::R6Class(
     private = list(
         
         dep_types = NULL,
-        ignorePackages = NULL,
+        ignore_packages = NULL,
         installed = NULL,
         extract_network = function(){
             
             # Check that package has been set
-            if (is.null(private$package_name)){
+            if (is.null(self$pkg_name)){
                 log_fatal('Must set_package() before extracting dependency network.')
             }
             
             # Reset cache, because any cached stuff will be outdated with a new package
             private$reset_cache()
             
-            log_info(sprintf('Constructing reverse dependency graph for %s', private$package_name))
+            log_info(sprintf('Constructing reverse dependency graph for %s', self$pkg_name))
             
             # Consider only installed packages when building dependency network
             if (private$installed){
                 db <- utils::installed.packages()
-                if (!is.element(private$package_name, db[,1])) {
-                    msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', private$package_name)
+                if (!is.element(self$pkg_name, db[,1])) {
+                    msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', self$pkg_name)
                     log_fatal(msg)
                 }
                 
@@ -112,16 +112,16 @@ PackageDependencyReporter <- R6::R6Class(
             
             # Recursively search dependencies, terminating search at ignorePackage nodes
             allDependencies <- private$recursive_dependencies(
-                package = private$package_name
+                package = self$pkg_name
                 , db = db
             )
             
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
-                msg <- sprintf('Could not resolve dependencies for package %s',private$package_name)
+                msg <- sprintf('Could not resolve dependencies for package %s',self$pkg_name)
                 log_warn(msg)
                 
                 nodeDT <- data.table::data.table(
-                    nodes = private$package_name
+                    nodes = self$pkg_name
                     , level = 1
                     ,  horizontal = 0.5
                 )
@@ -129,8 +129,8 @@ PackageDependencyReporter <- R6::R6Class(
                 return(invisible(NULL))
             }
             
-            # Remove ignorePackages from getting constructed again
-            allDependencies <- setdiff(allDependencies, private$ignorePackages)
+            # Remove ignore_packages from getting constructed again
+            allDependencies <- setdiff(allDependencies, private$ignore_packages)
             
             # Get dependency relationships for all packages
             dependencyList <- tools::package_dependencies(
@@ -146,7 +146,7 @@ PackageDependencyReporter <- R6::R6Class(
             
             if (length(nullList) > 0){
                 log_info(paste("For package:"
-                               , private$package_name
+                               , self$pkg_name
                                , "with dependency types:"
                                , paste(which,collapse = ",")
                                , "could not find dependencies:"
@@ -177,8 +177,8 @@ PackageDependencyReporter <- R6::R6Class(
         
         recursive_dependencies = function(package, db, seen_packages = NULL) {
             
-            # Case 1: Package is blacklisted by ignorePackages, stop searching
-            if (package %in% private$ignorePackages){
+            # Case 1: Package is blacklisted by ignore_packages, stop searching
+            if (package %in% private$ignore_packages){
                 return(c(seen_packages, package))
             }
 

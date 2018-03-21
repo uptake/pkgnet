@@ -7,7 +7,7 @@ params:
 
 ## Dependency Network
 
-Here's an overview of of the packages **`r reporter$package_name`** relies upon.
+Here's an overview of of the packages **`r reporter$pkg_name`** relies upon.
 
 ### Visualization
 
