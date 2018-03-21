@@ -314,10 +314,12 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # closeness
             #--------------#
-            outClosenessResult <- igraph::centralization.closeness(
-                graph = pkgGraph
-                , mode = "out"
-            )
+            suppressWarnings({
+                outClosenessResult <- igraph::centralization.closeness(
+                    graph = pkgGraph
+                    , mode = "out"
+                )
+            })
             
             # update data.tables
             outNodeDT[, outCloseness := outClosenessResult$res] # nodes

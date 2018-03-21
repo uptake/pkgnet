@@ -93,6 +93,7 @@ PackageDependencyReporter <- R6::R6Class(
             if (is.null(private$cache$edges)){
                 log_info("Calling extract_network() with default arguments...")
                 private$extract_network()
+                private$calculate_network_measures()
             }
             return(private$cache$edges)
         },
@@ -100,6 +101,7 @@ PackageDependencyReporter <- R6::R6Class(
             if (is.null(private$cache$nodes)){
                 log_info("Calling extract_network() with default arguments...")
                 private$extract_network()
+                private$calculate_network_measures()
             }
             return(private$cache$nodes)
         },
