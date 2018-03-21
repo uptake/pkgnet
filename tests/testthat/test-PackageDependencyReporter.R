@@ -46,8 +46,8 @@ test_that('PackageDependencyReporter Methods Work', {
   # inherited set_package
   expect_silent({
       testObj$set_package(
-          packageName = "baseballstats"
-          , packagePath = system.file('baseballstats', package="pkgnet")
+          package_name = "baseballstats"
+          , package_path = system.file('baseballstats', package="pkgnet")
       ) 
   })
   
@@ -79,20 +79,20 @@ test_that('PackageDependencyReporter Methods Work', {
   
   # inherited make_graph_object
   
-  expect_silent(object = testPkgGraph <- testObj$pkgGraph)
+expect_silent(object = test$pkg_graph <- testObj$pkg_graph)
   
-  expect_true(object = igraph::is_igraph(testPkgGraph)
+  expect_true(object = igraph::is_igraph(test$pkg_graph)
               , info = "Graph object not an igraph formatted object")
   
-  expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
+  expect_true(object = all(igraph::get.vertex.attribute(test$pkg_graph)[[1]] %in% testNodeDT$node)
               , info = "Graph nodes not as expected")
   
-  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
-              , info = "pkgGraph field nodes not as expected")
+  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% igraph::get.vertex.attribute(test$pkg_graph)[[1]])
+              , info = "$pkg_graph field nodes not as expected")
   
-  expect_identical(object = igraph::get.edgelist(testObj$pkgGraph)
-                   , expected = igraph::get.edgelist(testPkgGraph)
-                   , info = "pkgGraph field edges not as expected")
+  expect_identical(object = igraph::get.edgelist(testObj$pkg_graph)
+                   , expected = igraph::get.edgelist(test$pkg_graph)
+                   , info = "$pkg_graph field edges not as expected")
 })
 
 ##### TEST TEAR DOWN #####

@@ -18,23 +18,23 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 \describe{
    \item{\code{edges}}{A data.table from SOURCE to TARGET nodes describing the connections}
    \item{\code{nodes}}{A data.table with node as an identifier, and augmenting information about each node}
-   \item{\code{pkgGraph}}{An igraph object describing the package graph}
-   \item{\code{networkMeasures}}{A list of network measures calculated by \code{calculate_network_features}}
-   \item{\code{layoutType}}{Character string indicating currently active graph layout}
-   \item{\code{graphViz}}{\code{visNetwork} object of package graph}
+   \item{\code{pkg_graph}}{An igraph object describing the package graph}
+   \item{\code{network_measures}}{A list of network measures calculated by \code{calculate_network_features}}
+   \item{\code{layout_type}}{Character string indicating currently active graph layout}
+   \item{\code{graph_viz}}{\code{visNetwork} object of package graph}
 }
 }
 
 \section{Active Bindings}{
 
 \describe{
-   \item{\code{pkgGraph}}{Returns the graph object}
-   \item{\code{networkMeasures}}{Returns a table of network measures, one row per node}
-   \item{\code{graphViz}}{Returns ths graph visualization object}
-   \item{\code{orphanNodes}}{Returns the list of orphan nodes}
-   \item{\code{layoutType}}{If no value given, the current layout type for the graph visualization is returned.  
-       If a vaild layput type is given, this fucntion will update the layoutType field.}
-   \item{\code{orphanNodeClusteringThreshold}}{If no value given, the current orphan node clustering threshold is returned. 
+   \item{\code{pkg_graph}}{Returns the graph object}
+   \item{\code{network_measures}}{Returns a table of network measures, one row per node}
+   \item{\code{graph_viz}}{Returns ths graph visualization object}
+   \item{\code{orphan_nodes}}{Returns the list of orphan nodes}
+   \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.  
+       If a vaild layput type is given, this fucntion will update the layout_type field.}
+   \item{\code{orphan_node_clustering_threshold}}{If no value given, the current orphan node clustering threshold is returned. 
        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
 }
 }

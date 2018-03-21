@@ -13,25 +13,6 @@ This Reporter takes a package and uncovers the structure from
              its other package dependencies, determining which package it relies on is most central,
              allowing for a developer to determine how to vet its dependency tree
 }
-\section{Public Methods}{
-
-\describe{
-    \item{\code{set_package(packageName, packagePath)}}{
-        \itemize{
-            \item{Set properties of this reporter. If packageName overrides a 
-                previously-set package name, any cached data will be removed.}
-            \item{\bold{Args:}}{
-                \itemize{
-                \item{\bold{\code{packageName}}: String with the name of the package}
-                \item{\bold{\code{packagePath}}: Optional path to the source code. 
-                    To be used for test coverage, if provided.}
-               }
-            }
-        }
-    }
-}
-}
-
 \examples{
 \donttest{
 

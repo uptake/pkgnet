@@ -4,23 +4,23 @@
 \alias{CreatePackageReport}
 \title{Surface the internal and external dependencies of an R package.}
 \usage{
-CreatePackageReport(packageName, packageReporters = DefaultReporters(),
-  packagePath = NULL, reportPath = file.path(getwd(), paste0(packageName,
+CreatePackageReport(package_name, package_reporters = DefaultReporters(),
+  package_path = NULL, report_path = file.path(getwd(), paste0(package_name,
   "_report.html")))
 }
 \arguments{
-\item{packageName}{(string) name of a package}
+\item{package_name}{(string) name of a package}
 
-\item{packageReporters}{(list) a list of package reporters}
+\item{package_reporters}{(list) a list of package reporters}
 
-\item{packagePath}{(string) The path to the package repository.
+\item{package_path}{(string) The path to the package repository.
 If given, coverage will be calculated for each function.}
 
-\item{reportPath}{(string) The path and filename of the output report.  Default
+\item{report_path}{(string) The path and filename of the output report.  Default
 report will be produced in working directory.}
 }
 \value{
-A list of instantiated packageReporters fitted to \code{packageName}
+A list of instantiated package_reporters fitted to \code{package_name}
 }
 \description{
 Surface the internal and external dependencies of an R package.

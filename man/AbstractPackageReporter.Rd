@@ -16,15 +16,15 @@ Defines the Abstract Class for all PackageReporters defined in pkgnet.
 \section{Public Methods}{
 
 \describe{
-    \item{\code{set_package(packageName, packagePath = NULL)}}{
+    \item{\code{set_package(package_name, package_path = NULL)}}{
         \itemize{
             \item{Set the package that all operations in the object are done for.}
             \item{\bold{Args:}}{
                 \itemize{
-                    \item{\bold{\code{packageName}}: a string with the name of the package you are
-                        analyzing.}
-                    \item{\bold{\code{packagePath}}: directory path to source code of package}
-                }
+                \item{\bold{\code{package_name}}: a string with the name of the package you are
+                  analyzing.}
+                  \item{\bold{\code{package_path}}: directory path to source code of package}
+                 }
              }
          }
     }

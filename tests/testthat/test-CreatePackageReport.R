@@ -17,8 +17,8 @@ test_that("Test that CreatePackageReport Runs", {
     )
     
     reporters <- CreatePackageReport(
-        packageName = "baseballstats"
-        , reportPath = testReportPath
+        package_name = "baseballstats"
+        , report_path = testReportPath
     )
     
     testthat::expect_true(all(unlist(lapply(reporters, function(x) "AbstractPackageReporter" %in% class(x)))))
@@ -33,10 +33,10 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
     
     expect_error({
         CreatePackageReport(
-            packageName = "baseballstats"
-            , packageReporters = list(a = rnorm(100))
+            package_name = "baseballstats"
+            , package_reporters = list(a = rnorm(100))
         )
-    }, regexp = "At least one of the reporters in the packageReporters parameter is not a PackageReporter")
+    }, regexp = "At least one of the reporters in the package_reporters parameter is not a PackageReporter")
     
 })
 

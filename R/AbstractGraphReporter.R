@@ -8,20 +8,20 @@
 #' \describe{
 #'    \item{\code{edges}}{A data.table from SOURCE to TARGET nodes describing the connections}
 #'    \item{\code{nodes}}{A data.table with node as an identifier, and augmenting information about each node}
-#'    \item{\code{pkgGraph}}{An igraph object describing the package graph}
-#'    \item{\code{networkMeasures}}{A list of network measures calculated by \code{calculate_network_features}}
-#'    \item{\code{layoutType}}{Character string indicating currently active graph layout}
-#'    \item{\code{graphViz}}{\code{visNetwork} object of package graph}
+#'    \item{\code{pkg_graph}}{An igraph object describing the package graph}
+#'    \item{\code{network_measures}}{A list of network measures calculated by \code{calculate_network_features}}
+#'    \item{\code{layout_type}}{Character string indicating currently active graph layout}
+#'    \item{\code{graph_viz}}{\code{visNetwork} object of package graph}
 #' }
 #' @section Active Bindings:
 #' \describe{
-#'    \item{\code{pkgGraph}}{Returns the graph object}
-#'    \item{\code{networkMeasures}}{Returns a table of network measures, one row per node}
-#'    \item{\code{graphViz}}{Returns ths graph visualization object}
-#'    \item{\code{orphanNodes}}{Returns the list of orphan nodes}
-#'    \item{\code{layoutType}}{If no value given, the current layout type for the graph visualization is returned.  
-#'        If a vaild layput type is given, this fucntion will update the layoutType field.}
-#'    \item{\code{orphanNodeClusteringThreshold}}{If no value given, the current orphan node clustering threshold is returned. 
+#'    \item{\code{pkg_graph}}{Returns the graph object}
+#'    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
+#'    \item{\code{graph_viz}}{Returns ths graph visualization object}
+#'    \item{\code{orphan_nodes}}{Returns the list of orphan nodes}
+#'    \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.  
+#'        If a vaild layput type is given, this fucntion will update the layout_type field.}
+#'    \item{\code{orphan_node_clustering_threshold}}{If no value given, the current orphan node clustering threshold is returned. 
 #'        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
 #' }
 #' @importFrom data.table data.table copy uniqueN
@@ -36,72 +36,71 @@
 AbstractGraphReporter <- R6::R6Class(
     "AbstractGraphReporter",
     inherit = AbstractPackageReporter,
-    
     active = list(
-        pkgGraph = function(){
-            if (is.null(private$cache$pkgGraph)){
+        pkg_graph = function(){
+            if (is.null(private$cache$pkg_graph)){
                 log_info("Creating graph object...")
                 private$make_graph_object()
                 private$calculate_network_measures()
                 log_info("Done creating graph object")
             }
-            return(private$cache$pkgGraph)
+            return(private$cache$pkg_graph)
         },
-        networkMeasures = function(){
-            if (is.null(private$cache$networkMeasures)){
+        network_measures = function(){
+            if (is.null(private$cache$network_measures)){
                 log_info("Calculating network measures...")
                 private$calculate_network_measures()
                 log_info("Done calculating network measures.")
             }
-            return(private$cache$networkMeasures)
+            return(private$cache$network_measures)
         },
-        graphViz = function(){
-            if (is.null(private$cache$graphViz)) {
+        graph_viz = function(){
+            if (is.null(private$cache$graph_viz)) {
                 log_info('Creating graph visualization plot...')
                 private$cache$graphViz <- private$plot_network()
                 log_info('Done creating graph visualization plot.')
             }
-            return(private$cache$graphViz)
+            return(private$cache$graph_viz)
         },
-        orphanNodes = function() {
-            if (is.null(private$cache$orphanNodes)) {
-                private$cache$orphanNodes <- private$identify_orphan_nodes()
+        orphan_nodes = function() {
+            if (is.null(private$cache$orphan_nodes)) {
+                private$cache$orphan_nodes <- private$identify_orphan_nodes()
             }
-            return(private$cache$orphanNodes)
+            return(private$cache$orphan_nodes)
         },
-        layoutType = function(value) {
+        layout_type = function(value) {
             
             # If the person isn't using <- assignment, return the cached value
             if (!missing(value)) {
                 if (!value %in% names(private$graph_layout_functions)) {
-                    log_fatal(paste("Unsupported layoutType:", value))
+                    log_fatal(paste("Unsupported layout_type:", value))
                 }
-                if (!is.null(private$cache$graphViz)) {
+                if (!is.null(private$cache$graph_viz)) {
                     private$reset_graph_viz()
                 }
-                private$private_layoutType <- value
+                private$private_layout_type <- value
             }
-            return(private$private_layoutType)
+            return(private$private_layout_type)
         },
-        orphanNodeClusteringThreshold = function(value) {
+        orphan_node_clustering_threshold = function(value) {
             
             # If the person isn't using <- assignment, return the cached value
             if (!missing(value)) {
                 if (class(value) != 'numeric') {
-                    log_fatal("orphanNodeClusteringThreshold must be numeric.")
+                    log_fatal("orphan_node_clustering_threshold must be numeric.")
                 }
                 
                 if (value < 1) {
-                    log_fatal("orphanNodeClusteringThreshold must at least 1.")
+                    log_fatal("orphan_node_clustering_threshold must at least 1.")
                 }
                 
                 # Set new value and reset graph viz
-                if (!is.null(private$cache$graphViz)) {
+                if (!is.null(private$cache$graph_viz)) {
                     private$reset_graph_viz()
                 }
-                private$private_orphanNodeClusteringThreshold <- value
+                private$private_orphan_node_clustering_threshold <- value
             }
-            return(private$private_orphanNodeClusteringThreshold)
+            return(private$private_orphan_node_clustering_threshold)
         }
     ),
     
@@ -116,20 +115,20 @@ AbstractGraphReporter <- R6::R6Class(
         cache = list(
             nodes = NULL,
             edges = NULL,
-            pkgGraph = NULL,
-            networkMeasures = NULL,
-            graphViz = NULL,
-            orphanNodes = NULL
+            pkg_graph = NULL,
+            network_measures = NULL,
+            graph_viz = NULL,
+            orphan_nodes = NULL
         ),
         
-        private_orphanNodeClusteringThreshold = 10,
-        private_layoutType = "tree",
+        private_orphan_node_clustering_threshold = 10,
+        private_layout_type = "tree",
         
-        # Calculate graph-related measures for pkgGraph
+        # Calculate graph-related measures for pkg_graph
         calculate_network_measures = function(){
             
             # Create igraph
-            pkgGraph <- self$pkgGraph
+            pkg_graph <- self$pkg_graph
             
             # inital Data.tables
             outNodeDT <- self$nodes
@@ -139,7 +138,7 @@ AbstractGraphReporter <- R6::R6Class(
             # out degree
             #--------------#
             outDegreeResult <- igraph::centralization.degree(
-                graph = pkgGraph
+                graph = pkg_graph
                 , mode = "out"
             )
             
@@ -151,7 +150,7 @@ AbstractGraphReporter <- R6::R6Class(
             # betweeness
             #--------------#
             outBetweenessResult <- igraph::centralization.betweenness(
-                graph = pkgGraph
+                graph = pkg_graph
                 , directed = TRUE
             )
             
@@ -181,8 +180,8 @@ AbstractGraphReporter <- R6::R6Class(
             # Number of Decendants - a.k.a neightborhood or ego
             #--------------#
             neighborHoodSizeResult <- igraph::neighborhood.size(
-                graph = pkgGraph
-                , order = vcount(pkgGraph)
+                graph = pkg_graph
+                , order = vcount(pkg_graph)
                 , mode = "out"
             )
             
@@ -193,7 +192,7 @@ AbstractGraphReporter <- R6::R6Class(
             # Hub Score 
             #--------------#
             hubScoreResult <- igraph::hub_score(
-                graph = pkgGraph
+                graph = pkg_graph
                 , scale = TRUE
             )
             outNodeDT[, hubScore := hubScoreResult$vector] # nodes
@@ -201,13 +200,13 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # PageRank
             #--------------#
-            pageRankResult <- igraph::page_rank(graph = pkgGraph, directed = TRUE)
+            pageRankResult <- igraph::page_rank(graph = pkg_graph, directed = TRUE)
             outNodeDT[, pageRank := pageRankResult$vector] # nodes
             
             #--------------#
             # in degree
             #--------------#
-            inDegreeResult <- igraph::degree(pkgGraph, mode = "in")
+            inDegreeResult <- igraph::degree(pkg_graph, mode = "in")
             outNodeDT[, inDegree := inDegreeResult] # nodes
             
             #--------------------------------------------------------------#
@@ -217,13 +216,13 @@ AbstractGraphReporter <- R6::R6Class(
             #motifs?
             #knn/assortivity?
             
-            private$cache$networkMeasures <- outNetworkList
+            private$cache$network_measures <- outNetworkList
             private$cache$nodes <- outNodeDT
             
             return(invisible(NULL))
         },
         
-        # Creates pkgGraph igraph object
+        # Creates pkg_graph igraph object
         # Requires edges and nodes
         make_graph_object = function(){
             edges <- self$edges
@@ -248,7 +247,7 @@ AbstractGraphReporter <- R6::R6Class(
                 outGraph <- igraph::make_empty_graph() + igraph::vertex(allNodes)
             }
             
-            private$cache$pkgGraph <- outGraph
+            private$cache$pkg_graph <- outGraph
             
             return(invisible(NULL))
         },
@@ -292,7 +291,7 @@ AbstractGraphReporter <- R6::R6Class(
         },
         
         # Function to update nodes
-        # This function updates the cached nodes data.table, and if it exists, the pkgGraph object
+        # This function updates the cached nodes data.table, and if it exists, the pkg_graph object
         update_nodes = function(metadataDT) {
             log_info('Updating cached nodes data.table with metadata...')
             
@@ -437,37 +436,37 @@ AbstractGraphReporter <- R6::R6Class(
         
         # Function to reset cached graphViz
         reset_graph_viz = function() {
-            log_info('Resetting cached graphViz...')
-            private$cache$graphViz <- NULL
+            log_info('Resetting cached graph_viz...')
+            private$cache$graph_viz <- NULL
             return(invisible(NULL))
         },
         
         # Identify orphan nodes
         identify_orphan_nodes = function() {
-            orphanNodes <- base::setdiff(self$nodes[, node]
+            orphan_nodes <- base::setdiff(self$nodes[, node]
                                          , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
                                         )
             # If there are none, then will be character(0)
-            return(orphanNodes)
+            return(orphan_nodes)
         },
         
         graph_layout_functions = list(
-            "tree" = function(pkgGraph) {igraph::layout_as_tree(pkgGraph)},
-            "circle" = function(pkgGraph) {igraph::layout_in_circle(pkgGraph)}
+            "tree" = function(pkg_graph) {igraph::layout_as_tree(pkg_graph)},
+            "circle" = function(pkg_graph) {igraph::layout_in_circle(pkg_graph)}
         ),
         
         calculate_graph_layout = function(plotDT) {
             
-            log_info(paste("Calculating graph layout for type:", self$layoutType))
+            log_info(paste("Calculating graph layout for type:", self$layout_type))
             
-            # Calculate positions for specified layoutType
-            graph_func <- private$graph_layout_functions[[self$layoutType]]
-            plotMat <- graph_func(self$pkgGraph)
+            # Calculate positions for specified layout_type
+            graph_func <- private$graph_layout_functions[[self$layout_type]]
+            plotMat <- graph_func(self$pkg_graph)
             
-            # It might be important to get the nodes from pkgGraph so that they
+            # It might be important to get the nodes from pkg_graph so that they
             # are in the same order as in plotMat?
             coordsDT <- data.table::data.table(
-                node = names(igraph::V(self$pkgGraph))
+                node = names(igraph::V(self$pkg_graph))
                 , level = plotMat[, 2]
                 , horizontal = plotMat[, 1]
             )
