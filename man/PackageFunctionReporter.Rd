@@ -17,7 +17,21 @@ This Reporter takes a package and uncovers the structure from
 \section{Public Methods}{
 
 \describe{
-    \item{\code{set_package(packageName, packagePath)}}{
+   
+   \itemize{
+        \item{\code{plot_network()}}{
+            \itemize{
+                \item{Creates a network visualization of extracted package graph.}
+                \item{\bold{Returns:}}{
+                    \itemize{
+                        \item{A `visNetwork` object}
+                   }
+                }
+            }
+       }
+   }
+    
+    \item{\code{set_package(packageName, packagePath = NULL)}}{
         \itemize{
             \item{Set properties of this reporter. If packageName overrides a 
                 previously-set package name, any cached data will be removed.}

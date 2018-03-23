@@ -5,13 +5,23 @@
 #'              its other functions, determining useful information such as which function is most 
 #'              central to the package. Combined with testing information it can be used as a powerful tool
 #'              to plan testing efforts.
-#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder
-#' @importFrom mvbutils foodweb
-#' @importFrom R6 R6Class
-#' @importFrom utils lsf.str
 #' @section Public Methods:
 #' \describe{
-#'     \item{\code{set_package(packageName, packagePath)}}{
+#'    
+#'    \itemize{
+#'         \item{\code{plot_network()}}{
+#'             \itemize{
+#'                 \item{Creates a network visualization of extracted package graph.}
+#'                 \item{\bold{Returns:}}{
+#'                     \itemize{
+#'                         \item{A `visNetwork` object}
+#'                    }
+#'                 }
+#'             }
+#'        }
+#'    }
+#'     
+#'     \item{\code{set_package(packageName, packagePath = NULL)}}{
 #'         \itemize{
 #'             \item{Set properties of this reporter. If packageName overrides a 
 #'                 previously-set package name, any cached data will be removed.}
@@ -25,6 +35,10 @@
 #'         }
 #'     }
 #' }
+#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder
+#' @importFrom mvbutils foodweb
+#' @importFrom R6 R6Class
+#' @importFrom utils lsf.str
 #' @export
 PackageFunctionReporter <- R6::R6Class(
     "PackageFunctionReporter",
@@ -50,6 +64,7 @@ PackageFunctionReporter <- R6::R6Class(
             if (is.null(private$cache$edges)){
                 log_info("Calling extract_network() to extract nodes and edges...")
                 private$extract_network()
+                private$calculate_network_measures()
             }
             return(private$cache$edges)
         },
@@ -57,6 +72,7 @@ PackageFunctionReporter <- R6::R6Class(
             if (is.null(private$cache$nodes)){
                 log_info("Calling extract_network() to extract nodes and edges...")
                 private$extract_network()
+                private$calculate_network_measures()
             }
             return(private$cache$nodes)
         },

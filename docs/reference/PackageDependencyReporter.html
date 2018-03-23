@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Package Dependency Reporter Class — PackageDependencyReporter" />
+
+<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
+             its other package dependencies, determining which package it relies on is most central,
+             allowing for a developer to determine how to vet its dependency tree" />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -78,6 +84,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Dependency Reporter Class</h1>
+    
     </div>
 
     
@@ -96,27 +103,22 @@
 
     
     <dl class='dl-horizontal'>
-    <dt><code>extract_network(which = "Imports", installed = TRUE, ignorePackages = NULL)</code></dt><dd><p><ul>
-<li><p>This function maps a package's reverse dependency
-                  network, allowing for analysis of a package's imports</p></li>
+    <code>plot_network()</code>
+            <ul>
+<li><p>Creates a network visualization of extracted package graph.</p></li>
+<li><p><b>Returns:</b>
+                    <ul>
+<li><p>A `visNetwork` object</p></li>
+</ul></p></li>
+</ul>
+    <dt><code>set_package(packageName, packagePath = NULL)</code></dt><dd><p><ul>
+<li><p>Set properties of this reporter. If packageName overrides a 
+                previously-set package name, any cached data will be removed.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>depTypes</code></b>: a character vector passed on to <code>which</code> argument of
-                    <a href='http://www.rdocumentation.org/packages/tools/topics/package_dependencies'>package_dependencies</a> indicating what to count
-                    as a package dependency. Default is "Imports".</p></li>
-<li><p><b><code>installed</code></b>: a boolean whether to consider installed
-                    packages or CRAN packages. default is TRUE. FALSE is useful if you 
-                    would like to vet a package before adding it as a dependency</p></li>
-<li><p><b><code>ignorePackages</code></b>: a vector of package names to ignore 
-                    in dependency analysis. They will show up if a package depends on them
-                    but their dependencies will be ignored. Useful if you know certain packages
-                    are required and have and have a large number of dependencies that clutter
-                    the analysis.</p></li>
-</ul></p></li>
-<li><p><b>Returns: a list with</b>
-            <ul>
-<li><p><b><code>edges</code></b>: A data.table of directed edges from SOURCE package to TARGET package</p></li>
-<li><p><b><code>nodes</code></b>: A data.table of nodes, where each node is a package</p></li>
+<li><p><b><code>packageName</code></b>: String with the name of the package</p></li>
+<li><p><b><code>packagePath</code></b>: Optional path to the source code. 
+                    To be used for test coverage, if provided.</p></li>
 </ul></p></li>
 </ul></p></dd>
 </dl>
@@ -133,9 +135,17 @@
 <span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>PackageDependencyReporter</span>$<span class='fu'>new</span>()
 
 <span class='co'># Seed it with a package</span>
-<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)
-
-<span class='co'># </span></div></pre>
+<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-03-21 00:55:21] Resetting cached network information...</div><div class='input'>
+<span class='co'># plot it up</span>
+<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; INFO [2018-03-21 00:55:21] Creating plot...
+#&gt; INFO [2018-03-21 00:55:21] Calling extract_network() with default arguments...
+#&gt; INFO [2018-03-21 00:55:21] Resetting cached network information...
+#&gt; INFO [2018-03-21 00:55:21] Constructing reverse dependency graph for ggplot2
+#&gt; INFO [2018-03-21 00:55:21] Creating graph object...
+#&gt; INFO [2018-03-21 00:55:21] Done creating graph object
+#&gt; INFO [2018-03-21 00:55:21] Plotting with layout: tree
+#&gt; INFO [2018-03-21 00:55:21] Calculating graph layout for type: tree
+#&gt; INFO [2018-03-21 00:55:21] Done creating plot.</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -167,3 +177,4 @@
 
   </body>
 </html>
+

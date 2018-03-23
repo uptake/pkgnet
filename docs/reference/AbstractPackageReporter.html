@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Abstract Package Reporter Class — AbstractPackageReporter" />
+
+<meta property="og:description" content="Defines the Abstract Class for all PackageReporters defined in pkgnet.
+             The class is not meant to be instantiated, but inherited from and its methods
+             overloaded such that each Metric implements certain functionality." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -78,6 +84,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Abstract Package Reporter Class</h1>
+    
     </div>
 
     
@@ -92,48 +99,22 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="public"><a class="anchor" href="#public"></a>Public</h2>
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>get_package()</code></dt><dd><p><ul>
-<li><p>Returns a string with the name of the package used to construct
-                this object</p></li>
-</ul></p></dd>
-    <dt><code>set_package(packageName)</code></dt><dd><p><ul>
+    <dt><code>set_package(packageName, packagePath = NULL)</code></dt><dd><p><ul>
 <li><p>Set the package that all operations in the object are done for.</p></li>
 <li><p><b>Args:</b>
                 <ul>
 <li><p><b><code>packageName</code></b>: a string with the name of the package you are
-                  analyzing.</p></li>
+                        analyzing.</p></li>
 <li><p><b><code>packagePath</code></b>: directory path to source code of package</p></li>
 </ul></p></li>
-</ul></p></dd>
-    <dt><code>get_report()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporter's report on the package</p></li>
-</ul></p></dd>
-    <dt><code>get_report_markdown_path()</code></dt><dd><p><ul>
-<li><p>Returns the path to the markdown report associated with this reporter</p></li>
 </ul></p></dd>
     <dt><code>get_summary_view()</code></dt><dd><p><ul>
 <li><p>Returns a particular reporters summary report on the package for use in a high level view</p></li>
 </ul></p></dd>
-    <dt><code>calculate_package_metrics()</code></dt><dd><p><ul>
-<li><p>Calculates all the relevant metrics for a set package and updates the reporter</p></li>
-</ul></p></dd>
-    <dt><code>get_raw_data()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporter's raw data.</p></li>
-</ul></p></dd>
-</dl>
-    
-    <h2 class="hasAnchor" id="abstract-methods"><a class="anchor" href="#abstract-methods"></a>Abstract Methods</h2>
-
-    
-    <dl class='dl-horizontal'>
-   <dt><code>getPackageMetrics</code></dt><dd><p>Accepts a package name as a string and calculates the PackageMetrics required for that reporter</p></dd>
-   <dt><code>generateReport</code></dt><dd><p>Generates a a child report for an overall knit package report</p></dd>
-   <dt><code>getSummaryView</code></dt><dd><p>Returns a summarized view of the package metrics as a data.table</p></dd>
-   <dt><code>getRawData</code></dt><dd><p>Returns the internal data of the packageReporter as a list</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -148,9 +129,7 @@
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#public">Public</a></li>
-
-      <li><a href="#abstract-methods">Abstract Methods</a></li>
+      <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
@@ -172,3 +151,4 @@
 
   </body>
 </html>
+

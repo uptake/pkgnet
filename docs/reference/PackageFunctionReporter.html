@@ -18,13 +18,20 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Package Function Reporter Class — PackageFunctionReporter" />
+
+<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
+             its other functions, determining useful information such as which function is most 
+             central to the package. Combined with testing information it can be used as a powerful tool
+             to plan testing efforts." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -78,6 +85,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Function Reporter Class</h1>
+    
     </div>
 
     
@@ -97,7 +105,15 @@
 
     
     <dl class='dl-horizontal'>
-    <dt><code>set_package(packageName, packagePath)</code></dt><dd><p><ul>
+    <code>plot_network()</code>
+            <ul>
+<li><p>Creates a network visualization of extracted package graph.</p></li>
+<li><p><b>Returns:</b>
+                    <ul>
+<li><p>A `visNetwork` object</p></li>
+</ul></p></li>
+</ul>
+    <dt><code>set_package(packageName, packagePath = NULL)</code></dt><dd><p><ul>
 <li><p>Set properties of this reporter. If packageName overrides a 
                 previously-set package name, any cached data will be removed.</p></li>
 <li><p><b>Args:</b>
@@ -106,13 +122,6 @@
 <li><p><b><code>packagePath</code></b>: Optional path to the source code. 
                     To be used for test coverage, if provided.</p></li>
 </ul></p></li>
-</ul></p></dd>
-    <dt><code>calculate_metrics()</code></dt><dd><p><ul>
-<li><p>Create an edgelist with relationships between functions in a package</p></li>
-</ul></p></dd>
-    <dt><code>extract_network()</code></dt><dd><p><ul>
-<li><p>This function maps the relationships between
-                  functions in a package.</p></li>
 </ul></p></dd>
 </dl>
     
@@ -151,3 +160,4 @@
 
   </body>
 </html>
+

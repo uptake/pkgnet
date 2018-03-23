@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Package Summary Reporter Class — PackageSummaryReporter" />
+
+<meta property="og:description" content="Defines a concrete implementation of AbstractPackageReporter 
+             for a high level overview of a particular package. It will summarize
+             things like lines of code, whether it's on CRAN, etc." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -78,11 +84,13 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Summary Reporter Class</h1>
+    
     </div>
 
     
-    <p>Defines a concrete implementation of <a href='AbstractPackageReporter.html'>AbstractPackageReporter</a> for a high level overview
-             of a particular package. It will summarize things like Lines of code, whether it's on CRAN, etc.</p>
+    <p>Defines a concrete implementation of <a href='AbstractPackageReporter.html'>AbstractPackageReporter</a> 
+             for a high level overview of a particular package. It will summarize
+             things like lines of code, whether it's on CRAN, etc.</p>
     
 
     <pre class="usage"><span class='no'>PackageSummaryReporter</span></pre>
@@ -91,37 +99,21 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="public"><a class="anchor" href="#public"></a>Public</h2>
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>get_package()</code></dt><dd><p><ul>
-<li><p>Returns a string with the name of the package used to construct
-                this object</p></li>
-</ul></p></dd>
-    <dt><code>set_package(packageName)</code></dt><dd><p><ul>
+    <dt><code>set_package(packageName, packagePath = NULL)</code></dt><dd><p><ul>
 <li><p>Set the package that all operations in the object are done for.</p></li>
 <li><p><b>Args:</b>
                 <ul>
 <li><p><b><code>packageName</code></b>: a string with the name of the package you are
-                  analyzing.</p></li>
+                        analyzing.</p></li>
 <li><p><b><code>packagePath</code></b>: directory path to source code of package</p></li>
 </ul></p></li>
 </ul></p></dd>
-    <dt><code>get_report()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporter's report on the package</p></li>
-</ul></p></dd>
-    <dt><code>get_report_markdown_path()</code></dt><dd><p><ul>
-<li><p>Returns the path to the markdown report associated with this reporter</p></li>
-</ul></p></dd>
     <dt><code>get_summary_view()</code></dt><dd><p><ul>
 <li><p>Returns a particular reporters summary report on the package for use in a high level view</p></li>
-</ul></p></dd>
-    <dt><code>calculate_package_metrics()</code></dt><dd><p><ul>
-<li><p>Calculates all the relevant metrics for a set package and updates the reporter</p></li>
-</ul></p></dd>
-    <dt><code>get_raw_data()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporter's raw data.</p></li>
 </ul></p></dd>
 </dl>
     
@@ -138,7 +130,7 @@
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#public">Public</a></li>
+      <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
@@ -160,3 +152,4 @@
 
   </body>
 </html>
+

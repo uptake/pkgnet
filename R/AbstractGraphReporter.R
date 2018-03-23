@@ -15,14 +15,14 @@
 #' }
 #' @section Active Bindings:
 #' \describe{
-#'    \item{\code{pkgGraph()}}{Returns the graph object}
-#'    \item{\code{networkMeasures()}}{Returns a table of network measures, one row per node}
-#'    \item{\code{graphViz()}}{Returns ths graph visualization object}
-#'    \item{\code{orphanNodes()}}{Returns the list of orphan nodes}
-#'    \item{\code{layoutType(value)}}{If no value given, the current layout type for the graph visualization is returned.  
-#'    If a vaild layput type is given, this fucntion will update the layoutType field.}
-#'    \item{\code{orphanNodeClusteringThreshold(value)}}{If no value given, the current orphan node clustering threshold is returned. 
-#'    If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
+#'    \item{\code{pkgGraph}}{Returns the graph object}
+#'    \item{\code{networkMeasures}}{Returns a table of network measures, one row per node}
+#'    \item{\code{graphViz}}{Returns ths graph visualization object}
+#'    \item{\code{orphanNodes}}{Returns the list of orphan nodes}
+#'    \item{\code{layoutType}}{If no value given, the current layout type for the graph visualization is returned.  
+#'        If a vaild layput type is given, this fucntion will update the layoutType field.}
+#'    \item{\code{orphanNodeClusteringThreshold}}{If no value given, the current orphan node clustering threshold is returned. 
+#'        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
 #' }
 #' @importFrom data.table data.table copy uniqueN
 #' @importFrom R6 R6Class
