@@ -58,9 +58,7 @@ test_that('PackageFunctionReporter Methods Work', {
                , info = "get_package did not return expected package name")
   
   # "extract_network"
-  expect_warning({
-      testObj$.__enclos_env__$private$extract_network()
-  }, regexp = "closeness centrality is not well-defined for disconnected graphs")
+  testObj$.__enclos_env__$private$extract_network()
   
   expect_named(object = testObj$edges
                , expected = c("SOURCE", "TARGET")

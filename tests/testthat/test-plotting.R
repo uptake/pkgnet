@@ -39,10 +39,9 @@ test_that('node coloring by discrete and continuous', {
     )
   })
   
-  expect_warning({
-      b$graphViz
-  }, regexp = "closeness centrality is not well-defined for disconnected graphs")
-  
+  viz <- b$graphViz
+  expect_is(viz, "visNetwork")
+  expect_is(viz, "htmlwidget")
 })
 
 ##### TEST TEAR DOWN #####
