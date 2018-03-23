@@ -12,7 +12,7 @@ Here's an overview of of the packages **`r reporter$pkg_name`** relies upon.
 ### Visualization
 
 ```{r pressure, echo=FALSE}
-reporter$graphViz
+reporter$graph_viz
 ```
 
 ### Table

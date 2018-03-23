@@ -110,7 +110,7 @@ PackageDependencyReporter <- R6::R6Class(
                 db <- NULL
             }
             
-            # Recursively search dependencies, terminating search at ignorePackage nodes
+            # Recursively search dependencies, terminating search at ignore_package nodes
             allDependencies <- private$recursive_dependencies(
                 package = self$pkg_name
                 , db = db

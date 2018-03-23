@@ -39,7 +39,7 @@ test_that('node coloring by discrete and continuous', {
     )
   })
   
-  viz <- b$graphViz
+  viz <- b$graph_viz
   expect_is(viz, "visNetwork")
   expect_is(viz, "htmlwidget")
 })

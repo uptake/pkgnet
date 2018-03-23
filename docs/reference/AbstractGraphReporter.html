@@ -25,6 +25,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+  
+  
 <meta property="og:title" content="Abstract Graph Reporter Class — AbstractGraphReporter" />
 
 <meta property="og:description" content="Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
@@ -84,7 +86,6 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Abstract Graph Reporter Class</h1>
-    
     </div>
 
     
@@ -99,43 +100,29 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
-
-    
-    <dl class='dl-horizontal'>
-    <code>plot_network()</code>
-            <ul>
-<li><p>Creates a network visualization of extracted package graph.</p></li>
-<li><p><b>Returns:</b>
-                    <ul>
-<li><p>A `visNetwork` object</p></li>
-</ul></p></li>
-</ul>
-    </dl>
-    
     <h2 class="hasAnchor" id="public-members"><a class="anchor" href="#public-members"></a>Public Members</h2>
 
     
     <dl class='dl-horizontal'>
    <dt><code>edges</code></dt><dd><p>A data.table from SOURCE to TARGET nodes describing the connections</p></dd>
    <dt><code>nodes</code></dt><dd><p>A data.table with node as an identifier, and augmenting information about each node</p></dd>
-   <dt><code>pkgGraph</code></dt><dd><p>An igraph object describing the package graph</p></dd>
-   <dt><code>networkMeasures</code></dt><dd><p>A list of network measures calculated by <code>calculate_network_features</code></p></dd>
-   <dt><code>layoutType</code></dt><dd><p>Character string indicating currently active graph layout</p></dd>
-   <dt><code>graphViz</code></dt><dd><p><code>visNetwork</code> object of package graph</p></dd>
+   <dt><code>pkg_graph</code></dt><dd><p>An igraph object describing the package graph</p></dd>
+   <dt><code>network_measures</code></dt><dd><p>A list of network measures calculated by <code>calculate_network_features</code></p></dd>
+   <dt><code>layout_type</code></dt><dd><p>Character string indicating currently active graph layout</p></dd>
+   <dt><code>graph_viz</code></dt><dd><p><code>visNetwork</code> object of package graph</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="active-bindings"><a class="anchor" href="#active-bindings"></a>Active Bindings</h2>
 
     
     <dl class='dl-horizontal'>
-   <dt><code>pkgGraph</code></dt><dd><p>Returns the graph object</p></dd>
-   <dt><code>networkMeasures</code></dt><dd><p>Returns a table of network measures, one row per node</p></dd>
-   <dt><code>graphViz</code></dt><dd><p>Returns ths graph visualization object</p></dd>
-   <dt><code>orphanNodes</code></dt><dd><p>Returns the list of orphan nodes</p></dd>
-   <dt><code>layoutType</code></dt><dd><p>If no value given, the current layout type for the graph visualization is returned.  
-       If a vaild layput type is given, this fucntion will update the layoutType field.</p></dd>
-   <dt><code>orphanNodeClusteringThreshold</code></dt><dd><p>If no value given, the current orphan node clustering threshold is returned. 
+   <dt><code>pkg_graph</code></dt><dd><p>Returns the graph object</p></dd>
+   <dt><code>network_measures</code></dt><dd><p>Returns a table of network measures, one row per node</p></dd>
+   <dt><code>graph_viz</code></dt><dd><p>Returns ths graph visualization object</p></dd>
+   <dt><code>orphan_nodes</code></dt><dd><p>Returns the list of orphan nodes</p></dd>
+   <dt><code>layout_type</code></dt><dd><p>If no value given, the current layout type for the graph visualization is returned.  
+       If a vaild layput type is given, this fucntion will update the layout_type field.</p></dd>
+   <dt><code>orphan_node_clustering_threshold</code></dt><dd><p>If no value given, the current orphan node clustering threshold is returned. 
        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.</p></dd>
 </dl>
     
@@ -150,8 +137,6 @@
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#format">Format</a></li>
-
-      <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#public-members">Public Members</a></li>
 
@@ -177,4 +162,3 @@
 
   </body>
 </html>
-

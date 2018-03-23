@@ -57,7 +57,7 @@ AbstractGraphReporter <- R6::R6Class(
         graph_viz = function(){
             if (is.null(private$cache$graph_viz)) {
                 log_info('Creating graph visualization plot...')
-                private$cache$graphViz <- private$plot_network()
+                private$cache$graph_viz <- private$plot_network()
                 log_info('Done creating graph visualization plot.')
             }
             return(private$cache$graph_viz)
@@ -163,7 +163,7 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             suppressWarnings({
                 outClosenessResult <- igraph::centralization.closeness(
-                    graph = pkgGraph
+                    graph = pkg_graph
                     , mode = "out"
                 )
             })
@@ -305,22 +305,22 @@ AbstractGraphReporter <- R6::R6Class(
         },
         
         # Creates visNetwork graph viz object
-        # Uses pkgGraph active binding
+        # Uses pkg_graph active binding
         plot_network = function(){
             
             log_info("Creating plot...")
             
             # TODO:
             # Open these up to users or remove all the active binding code
-            self$layoutType <- "tree"
-            self$orphanNodeClusteringThreshold <- 10
+            self$layout_type <- "tree"
+            self$orphan_node_clustering_threshold <- 10
             
             # format for plot
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
             
-            log_info(paste("Plotting with layout:", self$layoutType))
+            log_info(paste("Plotting with layout:", self$layout_type))
             plotDTnodes <- private$calculate_graph_layout(
                 plotDT = plotDTnodes
             )
@@ -399,7 +399,7 @@ AbstractGraphReporter <- R6::R6Class(
             
             # If threshold to group orphan nodes, then assign group
             numOrphanNodes <- length(self$orphanNodes)
-            numOrphanThreshold <- self$orphanNodeClusteringThreshold
+            numOrphanThreshold <- self$orphan_node_clustering_threshold
             if (numOrphanNodes > numOrphanThreshold) {
                 log_info(paste(sprintf("Number of orphan nodes %s exceeds orphanNodeClusteringThreshold %s."
                                        , numOrphanNodes
@@ -408,7 +408,7 @@ AbstractGraphReporter <- R6::R6Class(
                 , "Clustering orphan nodes..."
                 ))
                 plotDTnodes[, group := NA_character_]
-                plotDTnodes[node %in% self$orphanNodes, group := "orphan"]
+                plotDTnodes[node %in% self$orphan_nodes, group := "orphan"]
             }
             
             # Create Plot
@@ -429,12 +429,12 @@ AbstractGraphReporter <- R6::R6Class(
             log_info("Done creating plot.")
             
             # Save plot in the cache
-            private$cache$graphViz <- g
+            private$cache$graph_viz <- g
             
             return(g)
         },
         
-        # Function to reset cached graphViz
+        # Function to reset cached graph_viz
         reset_graph_viz = function() {
             log_info('Resetting cached graph_viz...')
             private$cache$graph_viz <- NULL
