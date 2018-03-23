@@ -13,40 +13,6 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
              The class is not meant to be instantiated, but inherited from and its methods
              overloaded such that each Metric implements certain functionality.
 }
-\section{Public Methods}{
-
-\describe{
-   \itemize{
-        \item{\code{calculate_network_measures()}}{
-            \itemize{
-                \item{extract network features on a node and network level}
-                \item{\bold{Returns:} A list containing:}{
-                    \itemize{
-                    \item{\bold{\code{networkMeasures}}: a list of network measures.}
-                    \item{\bold{\code{nodeMeasures}}: the nodes data.table with additional columns of node measures.}
-                   }
-                }
-            }
-       }
-        \item{\code{plot_network()}}{
-            \itemize{
-                \item{Creates a network visualization of extracted package graph.}
-                \item{\bold{Args:}}{
-                    \itemize{
-                        \item{\bold{\code{...}}: ...}
-                    }
-                }
-                \item{\bold{Returns:}}{
-                    \itemize{
-                        \item{A `visNetwork` object}
-                   }
-                }
-            }
-       }
-   }
-}
-}
-
 \section{Public Members}{
 
 \describe{
@@ -62,14 +28,14 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 \section{Active Bindings}{
 
 \describe{
-   \item{\code{pkgGraph()}}{Returns the graph object}
-   \item{\code{networkMeasures()}}{Returns a table of network measures, one row per node}
-   \item{\code{graphViz()}}{Returns ths graph visualization object}
-   \item{\code{orphanNodes()}}{Returns the list of orphan nodes}
-   \item{\code{layoutType(value)}}{If no value given, the current layout type for the graph visualization is returned.  
-   If a vaild layput type is given, this fucntion will update the layoutType field.}
-   \item{\code{orphanNodeClusteringThreshold(value)}}{If no value given, the current orphan node clustering threshold is returned. 
-   If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
+   \item{\code{pkgGraph}}{Returns the graph object}
+   \item{\code{networkMeasures}}{Returns a table of network measures, one row per node}
+   \item{\code{graphViz}}{Returns ths graph visualization object}
+   \item{\code{orphanNodes}}{Returns the list of orphan nodes}
+   \item{\code{layoutType}}{If no value given, the current layout type for the graph visualization is returned.  
+       If a vaild layput type is given, this fucntion will update the layoutType field.}
+   \item{\code{orphanNodeClusteringThreshold}}{If no value given, the current orphan node clustering threshold is returned. 
+       If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
 }
 }
 

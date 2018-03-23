@@ -18,13 +18,19 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+<meta property="og:title" content="Abstract Graph Reporter Class — AbstractGraphReporter" />
+
+<meta property="og:description" content="Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
+             The class is not meant to be instantiated, but inherited from and its methods
+             overloaded such that each Metric implements certain functionality." />
+<meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -78,6 +84,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Abstract Graph Reporter Class</h1>
+    
     </div>
 
     
@@ -96,22 +103,9 @@
 
     
     <dl class='dl-horizontal'>
-    <code>calculate_network_measures()</code>
-            <ul>
-<li><p>extract network features on a node and network level</p></li>
-<li><p><b>Returns:</b> A list containing:
-                    <ul>
-<li><p><b><code>networkMeasures</code></b>: a list of network measures.</p></li>
-<li><p><b><code>nodeMeasures</code></b>: the nodes data.table with additional columns of node measures.</p></li>
-</ul></p></li>
-</ul>
     <code>plot_network()</code>
             <ul>
 <li><p>Creates a network visualization of extracted package graph.</p></li>
-<li><p><b>Args:</b>
-                    <ul>
-<li><p><b><code>...</code></b>: ...</p></li>
-</ul></p></li>
 <li><p><b>Returns:</b>
                     <ul>
 <li><p>A `visNetwork` object</p></li>
@@ -135,14 +129,14 @@
 
     
     <dl class='dl-horizontal'>
-   <dt><code>pkgGraph()</code></dt><dd><p>Returns the graph object</p></dd>
-   <dt><code>networkMeasures()</code></dt><dd><p>Returns a table of network measures, one row per node</p></dd>
-   <dt><code>graphViz()</code></dt><dd><p>Returns ths graph visualization object</p></dd>
-   <dt><code>orphanNodes()</code></dt><dd><p>Returns the list of orphan nodes</p></dd>
-   <dt><code>layoutType(value)</code></dt><dd><p>If no value given, the current layout type for the graph visualization is returned.  
-   If a vaild layput type is given, this fucntion will update the layoutType field.</p></dd>
-   <dt><code>orphanNodeClusteringThreshold(value)</code></dt><dd><p>If no value given, the current orphan node clustering threshold is returned. 
-   If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.</p></dd>
+   <dt><code>pkgGraph</code></dt><dd><p>Returns the graph object</p></dd>
+   <dt><code>networkMeasures</code></dt><dd><p>Returns a table of network measures, one row per node</p></dd>
+   <dt><code>graphViz</code></dt><dd><p>Returns ths graph visualization object</p></dd>
+   <dt><code>orphanNodes</code></dt><dd><p>Returns the list of orphan nodes</p></dd>
+   <dt><code>layoutType</code></dt><dd><p>If no value given, the current layout type for the graph visualization is returned.  
+       If a vaild layput type is given, this fucntion will update the layoutType field.</p></dd>
+   <dt><code>orphanNodeClusteringThreshold</code></dt><dd><p>If no value given, the current orphan node clustering threshold is returned. 
+       If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.</p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
@@ -183,3 +177,4 @@
 
   </body>
 </html>
+

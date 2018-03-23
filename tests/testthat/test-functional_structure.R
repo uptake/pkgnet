@@ -27,45 +27,45 @@ futile.logger::flog.threshold(0)
   })
 
   test_that('PackageFunctionReporter returns graph of functions', {
-        t <- PackageFunctionReporter$new()
-        t$set_package(packageName = "baseballstats")
-        t$calculate_all_metrics()
-        
+        reporter <- PackageFunctionReporter$new()
+        reporter$set_package(packageName = "baseballstats")
+
         # Nodes
-        expect_equivalent(object = sort(t$nodes$node)
-                          , expected = sort(as.character(unlist(utils::lsf.str(asNamespace(t$get_package())))))
+        expect_equivalent(object = sort(reporter$nodes$node)
+                          , expected = sort(as.character(unlist(utils::lsf.str(asNamespace(reporter$package_name)))))
                           , info = "All functions are nodes, even ones without connections.")
         
-        expect_true(object = is.element("node", names(t$nodes))
+        expect_true(object = is.element("node", names(reporter$nodes))
                     , info = "Node column created")
         
-        expect_s3_class(object = t$nodes
+        expect_s3_class(object = reporter$nodes
                         , class =  "data.table")
         
         # Edges
-        expect_s3_class(object = t$edges
+        expect_s3_class(object = reporter$edges
                         , class =  "data.table")
         
-        expect_true(object = all(c("TARGET", "SOURCE") %in% names(t$edges))
+        expect_true(object = all(c("TARGET", "SOURCE") %in% names(reporter$edges))
                     , info = "TARGET and SCORE fields in edge table at minimum")
 
         # Plots
-        expect_true(object = is.element("visNetwork", attributes(t$graphViz)))
+        expect_true(object = is.element("visNetwork", attributes(reporter$graphViz)))
         
   })
 
   test_that('PackageFunctionReporter works on edge case one function', {
     t2 <- PackageFunctionReporter$new()
     t2$set_package('sartre')
-    t2$calculate_all_metrics()
     
-    expect_true(object = (nrow(t2$nodes) == 1)
-                , info = "One row in nodes table."
-                )
+    expect_true(
+        object = (nrow(t2$nodes) == 1)
+        , info = "One row in nodes table."
+    )
     
-    expect_true(object = (nrow(t2$edges) == 0)
-                , info = "Edges table is empty since there are no edges."
-                )
+    expect_true(
+        object = (nrow(t2$edges) == 0)
+        , info = "Edges table is empty since there are no edges."
+    )
     
     expect_true(object = is.element("visNetwork", attributes(t2$graphViz)))
     

@@ -7,12 +7,12 @@ params:
 
 ## Function Network
 
-Here's an overview of the functions defined in **`r reporter$get_package()`**.
+Here's an overview of the functions defined in **`r reporter$package_name`**.
 
 ### Visualization
 
 ```{r echo=FALSE}
-reporter$plot_network()
+reporter$graphViz
 ```
 
 ### Table

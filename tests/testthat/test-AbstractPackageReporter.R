@@ -21,12 +21,7 @@ test_that('AbstractPackageReporter structure is as expected', {
   expect_named(object = AbstractPackageReporter$public_methods
                , expected = c(
                  "set_package",
-                 "get_package",
-                 "get_package_path",
-                 "get_report",
-                 "get_report_markdown_path",
                  "get_summary_view",
-                 "get_raw_data",
                  "clone"
                )
                , info = "Available public methods for AbstractPackageReporter not as expected."
@@ -37,25 +32,6 @@ test_that('AbstractPackageReporter structure is as expected', {
   expect_named(object = AbstractPackageReporter$public_fields
                , expected = NULL
                , info = "Available public fields for AbstractPackageReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
-  expect_named(object = AbstractPackageReporter$private_methods
-               , expected = c("reset_cache")
-               , info = "Available private methods for AbstractPackageReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
-  expect_named(object = AbstractPackageReporter$private_fields
-               , expected = c(
-                 "packageName", 
-                 "packagePath",
-                 "cache",
-                 "defaultCache"
-                 )
-               , info = "Available private fields for AbstractPackageReporter not as expected."
                , ignore.order = TRUE
                , ignore.case = FALSE
   )

@@ -9,53 +9,28 @@
 PackageSummaryReporter
 }
 \description{
-Defines a concrete implementation of \link{AbstractPackageReporter} for a high level overview
-             of a particular package. It will summarize things like Lines of code, whether it's on CRAN, etc.
+Defines a concrete implementation of \link{AbstractPackageReporter} 
+             for a high level overview of a particular package. It will summarize
+             things like lines of code, whether it's on CRAN, etc.
 }
-\section{Public}{
+\section{Public Methods}{
 
 \describe{
-    \item{\code{get_package()}}{
-        \itemize{
-            \item{Returns a string with the name of the package used to construct
-                this object}
-      }
-    }
-    \item{\code{set_package(packageName)}}{
+    \item{\code{set_package(packageName, packagePath = NULL)}}{
         \itemize{
             \item{Set the package that all operations in the object are done for.}
             \item{\bold{Args:}}{
                 \itemize{
-                \item{\bold{\code{packageName}}: a string with the name of the package you are
-                  analyzing.}
-                  \item{\bold{\code{packagePath}}: directory path to source code of package}
-                 }
+                    \item{\bold{\code{packageName}}: a string with the name of the package you are
+                        analyzing.}
+                    \item{\bold{\code{packagePath}}: directory path to source code of package}
+                }
              }
          }
-    }
-    \item{\code{get_report()}}{
-        \itemize{
-            \item{Returns a particular reporter's report on the package}
-      }
-    }
-    \item{\code{get_report_markdown_path()}}{
-        \itemize{
-            \item{Returns the path to the markdown report associated with this reporter}
-      }
     }
     \item{\code{get_summary_view()}}{
         \itemize{
             \item{Returns a particular reporters summary report on the package for use in a high level view}
-      }
-    }
-    \item{\code{calculate_package_metrics()}}{
-        \itemize{
-            \item{Calculates all the relevant metrics for a set package and updates the reporter}
-      }
-    }
-    \item{\code{get_raw_data()}}{
-        \itemize{
-            \item{Returns a particular reporter's raw data.}
       }
     }
 }
