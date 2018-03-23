@@ -36,7 +36,7 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
             pkg_name = "baseballstats"
             , pkg_reporters = list(a = rnorm(100))
         )
-    }, regexp = "At least one of the reporters in the package_reporters parameter is not a PackageReporter")
+    }, regexp = "At least one of the reporters in the pkg_reporters parameter is not a PackageReporter")
     
 })
 

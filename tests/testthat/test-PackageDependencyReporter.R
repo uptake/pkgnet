@@ -77,22 +77,27 @@ test_that('PackageDependencyReporter Methods Work', {
   # TODO: Need to test that nodes were properly extracted
   testNodeDT <- testObj$nodes
   
-  # inherited make_graph_object
+    expect_silent({
+        testObj$pkg_graph
+    })
   
-expect_silent(object = test$pkg_graph <- testObj$pkg_graph)
-  
-  expect_true(object = igraph::is_igraph(test$pkg_graph)
-              , info = "Graph object not an igraph formatted object")
-  
-  expect_true(object = all(igraph::get.vertex.attribute(test$pkg_graph)[[1]] %in% testNodeDT$node)
-              , info = "Graph nodes not as expected")
-  
-  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% igraph::get.vertex.attribute(test$pkg_graph)[[1]])
-              , info = "$pkg_graph field nodes not as expected")
-  
-  expect_identical(object = igraph::get.edgelist(testObj$pkg_graph)
-                   , expected = igraph::get.edgelist(test$pkg_graph)
-                   , info = "$pkg_graph field edges not as expected")
+    expect_true({
+        igraph::is_igraph(testObj$pkg_graph)
+    }, info = "Graph object not an igraph formatted object")
+    
+    expect_true({
+        all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% testNodeDT$node)
+    }, info = "Graph nodes not as expected")
+    
+    expect_true({
+        all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% igraph::get.vertex.attribute(testObj$pkg_graph)[[1]])
+    }, info = "$pkg_graph field nodes not as expected")
+    
+    expect_identical(
+        igraph::get.edgelist(testObj$pkg_graph)
+        , expected = igraph::get.edgelist(testObj$pkg_graph)
+        , info = "$pkg_graph field edges not as expected"
+    )
 })
 
 ##### TEST TEAR DOWN #####

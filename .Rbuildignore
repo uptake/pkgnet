@@ -4,5 +4,6 @@
 _pkgdown.yml
 cran-comments.md
 CONDUCT.md
+CONTRIBUTING.md
 .travis.yml
 ^_pkgdown\.yml$
