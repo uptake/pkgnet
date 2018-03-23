@@ -24,17 +24,6 @@
 #'             }
 #'         }
 #'     }
-#'     \item{\code{calculate_metrics()}}{
-#'         \itemize{
-#'             \item{Create an edgelist with relationships between functions in a package}
-#'         }
-#'     }
-#'     \item{\code{extract_network()}}{
-#'         \itemize{
-#'             \item{This function maps the relationships between
-#'                   functions in a package.}
-#'         }
-#'     }
 #' }
 #' @export
 PackageFunctionReporter <- R6::R6Class(

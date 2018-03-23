@@ -6,35 +6,20 @@
 #'              allowing for a developer to determine how to vet its dependency tree
 #' @section Public Methods:
 #' \describe{
-#'     \item{\code{extract_network(which = "Imports", installed = TRUE, ignorePackages = NULL)}}{
+#'     \item{\code{set_package(packageName, packagePath)}}{
 #'         \itemize{
-#'             \item{This function maps a package's reverse dependency
-#'                   network, allowing for analysis of a package's imports}
+#'             \item{Set properties of this reporter. If packageName overrides a 
+#'                 previously-set package name, any cached data will be removed.}
 #'             \item{\bold{Args:}}{
 #'                 \itemize{
-#'                 \item{\bold{\code{depTypes}}: a character vector passed on to \code{which} argument of
-#'                     \link[tools]{package_dependencies} indicating what to count
-#'                     as a package dependency. Default is "Imports".}
-#'                 \item{\bold{\code{installed}}: a boolean whether to consider installed
-#'                     packages or CRAN packages. default is TRUE. FALSE is useful if you 
-#'                     would like to vet a package before adding it as a dependency}
-#'                 \item{\bold{\code{ignorePackages}}: a vector of package names to ignore 
-#'                     in dependency analysis. They will show up if a package depends on them
-#'                     but their dependencies will be ignored. Useful if you know certain packages
-#'                     are required and have and have a large number of dependencies that clutter
-#'                     the analysis.}
-#'             }
-#'         }
-#'         \item{\bold{Returns: a list with}}{
-#'             \itemize{
-#'                 \item{\bold{\code{edges}}: A data.table of directed edges from SOURCE package to TARGET package}
-#'                 \item{\bold{\code{nodes}}: A data.table of nodes, where each node is a package}
+#'                 \item{\bold{\code{packageName}}: String with the name of the package}
+#'                 \item{\bold{\code{packagePath}}: Optional path to the source code. 
+#'                     To be used for test coverage, if provided.}
+#'                }
 #'             }
 #'         }
 #'     }
-#'   }
 #' }
-#' 
 #' @importFrom data.table data.table setnames rbindlist
 #' @importFrom R6 R6Class
 #' @importFrom utils installed.packages

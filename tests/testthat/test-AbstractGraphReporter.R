@@ -18,21 +18,20 @@ futile.logger::flog.threshold(0)
 
 test_that('AbstractGraphReporter structure is as expected', {
     
-    expect_named(object = AbstractGraphReporter$public_methods
-                 , expected = c(
-                     "plot_network",
-                     "clone"
-                 )
-                 , info = "Available public methods for AbstractGraphReporter not as expected."
-                 , ignore.order = TRUE
-                 , ignore.case = FALSE
+    expect_named(
+        object = AbstractGraphReporter$public_methods
+        , expected = c("clone")
+        , info = "Available public methods for AbstractGraphReporter not as expected."
+        , ignore.order = TRUE
+        , ignore.case = FALSE
     )
     
-    expect_named(object = AbstractGraphReporter$public_fields
-                 , expected = NULL
-                 , info = "Available public fields for AbstractGraphReporter not as expected."
-                 , ignore.order = TRUE
-                 , ignore.case = FALSE
+    expect_named(
+        object = AbstractGraphReporter$public_fields
+        , expected = NULL
+        , info = "Available public fields for AbstractGraphReporter not as expected."
+        , ignore.order = TRUE
+        , ignore.case = FALSE
     )
 })
 

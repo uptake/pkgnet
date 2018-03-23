@@ -4,26 +4,6 @@
 #'              The class is not meant to be instantiated, but inherited from and its methods
 #'              overloaded such that each Metric implements certain functionality.
 #' @family AbstractReporters
-#' @section Public Methods:
-#' \describe{
-#'    \itemize{
-#'         \item{\code{plot_network()}}{
-#'             \itemize{
-#'                 \item{Creates a network visualization of extracted package graph.}
-#'                 \item{\bold{Args:}}{
-#'                     \itemize{
-#'                         \item{\bold{\code{...}}: ...}
-#'                     }
-#'                 }
-#'                 \item{\bold{Returns:}}{
-#'                     \itemize{
-#'                         \item{A `visNetwork` object}
-#'                    }
-#'                 }
-#'             }
-#'        }
-#'    }
-#' }
 #' @section Public Members:
 #' \describe{
 #'    \item{\code{edges}}{A data.table from SOURCE to TARGET nodes describing the connections}
@@ -57,144 +37,12 @@ AbstractGraphReporter <- R6::R6Class(
     "AbstractGraphReporter",
     inherit = AbstractPackageReporter,
     
-    public = list(
-        
-        # Creates visNetwork graph viz object
-        # Uses pkgGraph active binding
-        plot_network = function(){
-            
-            log_info("Creating plot...")
-            
-            # TODO:
-            # Open these up to users or remove all the active binding code
-            self$layoutType <- "tree"
-            self$orphanNodeClusteringThreshold <- 10
-
-            # format for plot
-            plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
-            plotDTnodes[, id := node]
-            plotDTnodes[, label := id]
-            
-            log_info(paste("Plotting with layout:", self$layoutType))
-            plotDTnodes <- private$calculate_graph_layout(
-                plotDT = plotDTnodes
-            )
-            
-            if (length(self$edges) > 0) {
-                plotDTedges <- data.table::copy(self$edges) # Don't modify original
-                plotDTedges[, from := SOURCE]
-                plotDTedges[, to := TARGET]
-                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
-            } else {
-                plotDTedges <- NULL
-            }
-            
-            # Color By Field
-            if (is.null(private$plotNodeColorScheme[['field']])) {
-                
-                # Default Color for all Nodes
-                plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
-                
-            } else {
-              
-                # Fetch Color Scheme Values
-                colorFieldName <- private$plotNodeColorScheme[['field']]
-                
-                # Check that that column exists in nodes table
-                if (!is.element(colorFieldName, names(self$nodes))) {
-                    log_fatal(sprintf(paste0("'%s' is not a field in the nodes table",
-                                             " and as such cannot be used in plot color scheme.")
-                                      , private$plotNodeColorScheme[['field']])
-                    )
-                }
-                
-                colorFieldPallete <- private$plotNodeColorScheme[['pallete']]
-                colorFieldValues <- plotDTnodes[[colorFieldName]]
-                log_info(sprintf("Coloring plot nodes by %s..."
-                                 , colorFieldName))
-              
-                # If colorFieldValues are character 
-                if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
-
-                    # Create pallete by unique values
-                    valCount <- data.table::uniqueN(colorFieldValues)
-                    newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
-                    
-                    # For each character value, update all nodes with that value
-                    plotDTnodes[, color := newPallete[.GRP]
-                                , by = list(get(colorFieldName))]
-                    
-                } else if (is.numeric(colorFieldValues)) {
-                    # If colorFieldValues are numeric, assume continuous
-                  
-                    # Create Continuous Color Pallete
-                    newPallete <- grDevices::colorRamp(colors = colorFieldPallete)
-                    
-                    # Scale Values to be with range 0 - 1
-                    plotDTnodes[!is.na(get(colorFieldName)), scaledColorValues := get(colorFieldName) / max(get(colorFieldName))]
-                    
-                    # Assign Color Values From Pallete
-                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPallete(scaledColorValues), maxColorValue = 255)]
-                    
-                    # NA Values get gray color
-                    plotDTnodes[is.na(scaledColorValues), color := "gray"]
-                    
-                } else {
-                    # Error Out
-                    log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
-                                             , "Field %s is of type %s.")
-                                      , colorFieldName
-                                      , typeof(colorFieldValues)
-                                      )
-                              )
-                    
-                } # end non-default color field
-                
-            } # end color field creation
-            
-            # If threshold to group orphan nodes, then assign group
-            numOrphanNodes <- length(self$orphanNodes)
-            numOrphanThreshold <- self$orphanNodeClusteringThreshold
-            if (numOrphanNodes > numOrphanThreshold) {
-                log_info(paste(sprintf("Number of orphan nodes %s exceeds orphanNodeClusteringThreshold %s."
-                                 , numOrphanNodes
-                                 , numOrphanThreshold
-                                 )
-                               , "Clustering orphan nodes..."
-                               ))
-                plotDTnodes[, group := NA_character_]
-                plotDTnodes[node %in% self$orphanNodes, group := "orphan"]
-            }
-            
-            # Create Plot
-            g <- visNetwork::visNetwork(nodes = plotDTnodes
-                                        , edges = plotDTedges) %>%
-                 visNetwork::visHierarchicalLayout(sortMethod = "directed"
-                                                   , direction = "UD") %>%
-                 visNetwork::visEdges(arrows = 'to') %>%
-                 visNetwork::visOptions(highlightNearest = list(enabled = TRUE
-                                                                , degree = nrow(plotDTnodes) #guarantee full path
-                                                                , algorithm = "hierarchical"))
-            
-            # Add orphan node clustering
-            if (numOrphanNodes > numOrphanThreshold) {
-                g <- g %>% visNetwork::visClusteringByGroup(groups = c("orphan"))
-            }
-            
-            log_info("Done creating plot.")
-            
-            # Save plot in the cache
-            private$cache$graphViz <- g
-            
-            return(g)
-        }
-    ),
-    
     active = list(
         pkgGraph = function(){
             if (is.null(private$cache$pkgGraph)){
                 log_info("Creating graph object...")
                 private$make_graph_object()
+                private$calculate_network_measures()
                 log_info("Done creating graph object")
             }
             return(private$cache$pkgGraph)
@@ -210,7 +58,7 @@ AbstractGraphReporter <- R6::R6Class(
         graphViz = function(){
             if (is.null(private$cache$graphViz)) {
                 log_info('Creating graph visualization plot...')
-                private$cache$graphViz <- self$plot_network()
+                private$cache$graphViz <- private$plot_network()
                 log_info('Done creating graph visualization plot.')
             }
             return(private$cache$graphViz)
@@ -314,10 +162,12 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------#
             # closeness
             #--------------#
-            outClosenessResult <- igraph::centralization.closeness(
-                graph = pkgGraph
-                , mode = "out"
-            )
+            suppressWarnings({
+                outClosenessResult <- igraph::centralization.closeness(
+                    graph = pkgGraph
+                    , mode = "out"
+                )
+            })
             
             # update data.tables
             outNodeDT[, outCloseness := outClosenessResult$res] # nodes
@@ -453,6 +303,136 @@ AbstractGraphReporter <- R6::R6Class(
                                          , by = "node"
                                          , all.x = TRUE)
             return(invisible(NULL))
+        },
+        
+        # Creates visNetwork graph viz object
+        # Uses pkgGraph active binding
+        plot_network = function(){
+            
+            log_info("Creating plot...")
+            
+            # TODO:
+            # Open these up to users or remove all the active binding code
+            self$layoutType <- "tree"
+            self$orphanNodeClusteringThreshold <- 10
+            
+            # format for plot
+            plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
+            plotDTnodes[, id := node]
+            plotDTnodes[, label := id]
+            
+            log_info(paste("Plotting with layout:", self$layoutType))
+            plotDTnodes <- private$calculate_graph_layout(
+                plotDT = plotDTnodes
+            )
+            
+            if (length(self$edges) > 0) {
+                plotDTedges <- data.table::copy(self$edges) # Don't modify original
+                plotDTedges[, from := SOURCE]
+                plotDTedges[, to := TARGET]
+                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+            } else {
+                plotDTedges <- NULL
+            }
+            
+            # Color By Field
+            if (is.null(private$plotNodeColorScheme[['field']])) {
+                
+                # Default Color for all Nodes
+                plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
+                
+            } else {
+                
+                # Fetch Color Scheme Values
+                colorFieldName <- private$plotNodeColorScheme[['field']]
+                
+                # Check that that column exists in nodes table
+                if (!is.element(colorFieldName, names(self$nodes))) {
+                    log_fatal(sprintf(paste0("'%s' is not a field in the nodes table",
+                                             " and as such cannot be used in plot color scheme.")
+                                      , private$plotNodeColorScheme[['field']])
+                    )
+                }
+                
+                colorFieldPallete <- private$plotNodeColorScheme[['pallete']]
+                colorFieldValues <- plotDTnodes[[colorFieldName]]
+                log_info(sprintf("Coloring plot nodes by %s..."
+                                 , colorFieldName))
+                
+                # If colorFieldValues are character 
+                if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
+                    
+                    # Create pallete by unique values
+                    valCount <- data.table::uniqueN(colorFieldValues)
+                    newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
+                    
+                    # For each character value, update all nodes with that value
+                    plotDTnodes[, color := newPallete[.GRP]
+                                , by = list(get(colorFieldName))]
+                    
+                } else if (is.numeric(colorFieldValues)) {
+                    # If colorFieldValues are numeric, assume continuous
+                    
+                    # Create Continuous Color Pallete
+                    newPallete <- grDevices::colorRamp(colors = colorFieldPallete)
+                    
+                    # Scale Values to be with range 0 - 1
+                    plotDTnodes[!is.na(get(colorFieldName)), scaledColorValues := get(colorFieldName) / max(get(colorFieldName))]
+                    
+                    # Assign Color Values From Pallete
+                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPallete(scaledColorValues), maxColorValue = 255)]
+                    
+                    # NA Values get gray color
+                    plotDTnodes[is.na(scaledColorValues), color := "gray"]
+                    
+                } else {
+                    # Error Out
+                    log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
+                                             , "Field %s is of type %s.")
+                                      , colorFieldName
+                                      , typeof(colorFieldValues)
+                    )
+                    )
+                    
+                } # end non-default color field
+                
+            } # end color field creation
+            
+            # If threshold to group orphan nodes, then assign group
+            numOrphanNodes <- length(self$orphanNodes)
+            numOrphanThreshold <- self$orphanNodeClusteringThreshold
+            if (numOrphanNodes > numOrphanThreshold) {
+                log_info(paste(sprintf("Number of orphan nodes %s exceeds orphanNodeClusteringThreshold %s."
+                                       , numOrphanNodes
+                                       , numOrphanThreshold
+                )
+                , "Clustering orphan nodes..."
+                ))
+                plotDTnodes[, group := NA_character_]
+                plotDTnodes[node %in% self$orphanNodes, group := "orphan"]
+            }
+            
+            # Create Plot
+            g <- visNetwork::visNetwork(nodes = plotDTnodes
+                                        , edges = plotDTedges) %>%
+                visNetwork::visHierarchicalLayout(sortMethod = "directed"
+                                                  , direction = "UD") %>%
+                visNetwork::visEdges(arrows = 'to') %>%
+                visNetwork::visOptions(highlightNearest = list(enabled = TRUE
+                                                               , degree = nrow(plotDTnodes) #guarantee full path
+                                                               , algorithm = "hierarchical"))
+            
+            # Add orphan node clustering
+            if (numOrphanNodes > numOrphanThreshold) {
+                g <- g %>% visNetwork::visClusteringByGroup(groups = c("orphan"))
+            }
+            
+            log_info("Done creating plot.")
+            
+            # Save plot in the cache
+            private$cache$graphViz <- g
+            
+            return(g)
         },
         
         # Function to reset cached graphViz

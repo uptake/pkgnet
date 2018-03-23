@@ -13,29 +13,6 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
              The class is not meant to be instantiated, but inherited from and its methods
              overloaded such that each Metric implements certain functionality.
 }
-\section{Public Methods}{
-
-\describe{
-   \itemize{
-        \item{\code{plot_network()}}{
-            \itemize{
-                \item{Creates a network visualization of extracted package graph.}
-                \item{\bold{Args:}}{
-                    \itemize{
-                        \item{\bold{\code{...}}: ...}
-                    }
-                }
-                \item{\bold{Returns:}}{
-                    \itemize{
-                        \item{A `visNetwork` object}
-                   }
-                }
-            }
-       }
-   }
-}
-}
-
 \section{Public Members}{
 
 \describe{

@@ -10,10 +10,6 @@ PackageSummaryReporter <- R6::R6Class(
     classname = "PackageSummaryReporter",
     inherit = AbstractPackageReporter,
     public = list(
-        plot_network = function(){
-          # No network in summary reporter
-          return(invisible(NULL))
-        },
         get_summary_view = function(){
           
           # Read DESCRIPTION file into a table

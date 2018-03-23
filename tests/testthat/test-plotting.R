@@ -40,7 +40,7 @@ test_that('node coloring by discrete and continuous', {
   })
   
   expect_warning({
-      b$plot_network()
+      b$graphViz
   }, regexp = "closeness centrality is not well-defined for disconnected graphs")
   
 })
