@@ -4,22 +4,6 @@
 #' @description This Reporter takes a package and uncovers the structure from
 #'              its other package dependencies, determining which package it relies on is most central,
 #'              allowing for a developer to determine how to vet its dependency tree
-#' @section Public Methods:
-#' \describe{
-#'     \item{\code{set_package(packageName, packagePath)}}{
-#'         \itemize{
-#'             \item{Set properties of this reporter. If packageName overrides a 
-#'                 previously-set package name, any cached data will be removed.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                 \item{\bold{\code{packageName}}: String with the name of the package}
-#'                 \item{\bold{\code{packagePath}}: Optional path to the source code. 
-#'                     To be used for test coverage, if provided.}
-#'                }
-#'             }
-#'         }
-#'     }
-#' }
 #' @importFrom data.table data.table setnames rbindlist
 #' @importFrom R6 R6Class
 #' @importFrom utils installed.packages
@@ -46,15 +30,15 @@ PackageDependencyReporter <- R6::R6Class(
 
     public = list(
         
-        initialize = function(depTypes = "Imports", installed = TRUE){
+        initialize = function(dep_types = "Imports", installed = TRUE){
             
             # Check inputs
             assertthat::assert_that(
-                assertthat::is.string(depTypes)
+                assertthat::is.string(dep_types)
                 , assertthat::is.flag(installed)
             )
             
-            private$depTypes <- depTypes
+            private$dep_types <- dep_types
             private$installed <- installed
             return(invisible(NULL))
         },
@@ -98,26 +82,26 @@ PackageDependencyReporter <- R6::R6Class(
     
     private = list(
         
-        depTypes = NULL,
-        ignorePackages = NULL,
+        dep_types = NULL,
+        ignore_packages = NULL,
         installed = NULL,
         extract_network = function(){
             
             # Check that package has been set
-            if (is.null(private$packageName)){
+            if (is.null(self$pkg_name)){
                 log_fatal('Must set_package() before extracting dependency network.')
             }
             
             # Reset cache, because any cached stuff will be outdated with a new package
             private$reset_cache()
             
-            log_info(sprintf('Constructing reverse dependency graph for %s', private$packageName))
+            log_info(sprintf('Constructing reverse dependency graph for %s', self$pkg_name))
             
             # Consider only installed packages when building dependency network
             if (private$installed){
                 db <- utils::installed.packages()
-                if (!is.element(private$packageName, db[,1])) {
-                    msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', private$packageName)
+                if (!is.element(self$pkg_name, db[,1])) {
+                    msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', self$pkg_name)
                     log_fatal(msg)
                 }
                 
@@ -126,18 +110,18 @@ PackageDependencyReporter <- R6::R6Class(
                 db <- NULL
             }
             
-            # Recursively search dependencies, terminating search at ignorePackage nodes
+            # Recursively search dependencies, terminating search at ignore_package nodes
             allDependencies <- private$recursive_dependencies(
-                package = private$packageName
+                package = self$pkg_name
                 , db = db
             )
             
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
-                msg <- sprintf('Could not resolve dependencies for package %s',private$packageName)
+                msg <- sprintf('Could not resolve dependencies for package %s',self$pkg_name)
                 log_warn(msg)
                 
                 nodeDT <- data.table::data.table(
-                    nodes = private$packageName
+                    nodes = self$pkg_name
                     , level = 1
                     ,  horizontal = 0.5
                 )
@@ -145,8 +129,8 @@ PackageDependencyReporter <- R6::R6Class(
                 return(invisible(NULL))
             }
             
-            # Remove ignorePackages from getting constructed again
-            allDependencies <- setdiff(allDependencies, private$ignorePackages)
+            # Remove ignore_packages from getting constructed again
+            allDependencies <- setdiff(allDependencies, private$ignore_packages)
             
             # Get dependency relationships for all packages
             dependencyList <- tools::package_dependencies(
@@ -154,7 +138,7 @@ PackageDependencyReporter <- R6::R6Class(
                 , reverse = FALSE
                 , recursive = FALSE
                 , db = db
-                , which = private$depTypes
+                , which = private$dep_types
             )
             
             # Get list of dependencies that were not present
@@ -162,7 +146,7 @@ PackageDependencyReporter <- R6::R6Class(
             
             if (length(nullList) > 0){
                 log_info(paste("For package:"
-                               , private$packageName
+                               , self$pkg_name
                                , "with dependency types:"
                                , paste(which,collapse = ",")
                                , "could not find dependencies:"
@@ -191,16 +175,16 @@ PackageDependencyReporter <- R6::R6Class(
             return(invisible(NULL))
         },
         
-        recursive_dependencies = function(package, db, seenPackages = NULL) {
+        recursive_dependencies = function(package, db, seen_packages = NULL) {
             
-            # Case 1: Package is blacklisted by ignorePackages, stop searching
-            if (package %in% private$ignorePackages){
-                return(c(seenPackages, package))
+            # Case 1: Package is blacklisted by ignore_packages, stop searching
+            if (package %in% private$ignore_packages){
+                return(c(seen_packages, package))
             }
 
             # Case 2: If package is already seen (memoization)
-            if (package %in% seenPackages){
-                return(seenPackages)
+            if (package %in% seen_packages){
+                return(seen_packages)
             }
             
             # Case 3: Otherwise, get all of packages dependencies, and call this function recursively
@@ -209,10 +193,10 @@ PackageDependencyReporter <- R6::R6Class(
                 , reverse = FALSE
                 , recursive = FALSE
                 , db = db
-                , which = private$depTypes
+                , which = private$dep_types
             ))
             
-            outPackages <- c(seenPackages, package)
+            outPackages <- c(seen_packages, package)
             
             # Identify new packages to search dependencies for
             newDeps <- setdiff(deps, outPackages)
@@ -222,7 +206,7 @@ PackageDependencyReporter <- R6::R6Class(
                     , private$recursive_dependencies(
                         package = dep
                         , db = db
-                        , seenPackages = outPackages
+                        , seen_packages = outPackages
                     )
                 ))
             }

@@ -25,6 +25,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+  
+  
 <meta property="og:title" content="Surface the internal and external dependencies of an R package. — CreatePackageReport" />
 
 <meta property="og:description" content="Surface the internal and external dependencies of an R package." />
@@ -82,35 +84,34 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Surface the internal and external dependencies of an R package.</h1>
-    
     </div>
 
     
     <p>Surface the internal and external dependencies of an R package.</p>
     
 
-    <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>packageName</span>, <span class='kw'>packageReporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
-  <span class='kw'>packagePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reportPath</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>packageName</span>,
+    <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>pkg_name</span>, <span class='kw'>pkg_reporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
+  <span class='kw'>pkg_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report_path</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>pkg_name</span>,
   <span class='st'>"_report.html"</span>)))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>packageName</th>
+      <th>pkg_name</th>
       <td><p>(string) name of a package</p></td>
     </tr>
     <tr>
-      <th>packageReporters</th>
+      <th>pkg_reporters</th>
       <td><p>(list) a list of package reporters</p></td>
     </tr>
     <tr>
-      <th>packagePath</th>
+      <th>pkg_path</th>
       <td><p>(string) The path to the package repository.
 If given, coverage will be calculated for each function.</p></td>
     </tr>
     <tr>
-      <th>reportPath</th>
+      <th>report_path</th>
       <td><p>(string) The path and filename of the output report.  Default
 report will be produced in working directory.</p></td>
     </tr>
@@ -118,7 +119,7 @@ report will be produced in working directory.</p></td>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of instantiated packageReporters fitted to <code>packageName</code></p>
+    <p>A list of instantiated pkg_reporters fitted to <code>pkg_name</code></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -157,4 +158,3 @@ B. Burns
 
   </body>
 </html>
-

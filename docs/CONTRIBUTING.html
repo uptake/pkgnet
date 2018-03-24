@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Table of contents • pkgnet</title>
+<title>/Users/jlamb/repos/pkgnet/CONTRIBUTING.md • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,7 +25,9 @@
 <link href="pkgdown.css" rel="stylesheet">
 <script src="jquery.sticky-kit.min.js"></script>
 <script src="pkgdown.js"></script>
-<meta property="og:title" content="Table of contents" />
+  
+  
+<meta property="og:title" content="/Users/jlamb/repos/pkgnet/CONTRIBUTING.md" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -76,9 +78,9 @@
       </header>
 
       <div class="row">
-  <div class="contents col-md-9">
+  <div class="contents col-md-12">
     <div class="page-header">
-      <h1>Table of contents</h1>
+      <h1>/Users/jlamb/repos/pkgnet/CONTRIBUTING.md</h1>
     </div>
 
 
@@ -88,7 +90,8 @@
 <p>The goal of this guide is to help you contribute to <code>pkgnet</code> as quickly and as easily possible.</p>
 </div>
 <div id="table-of-contents" class="section level1">
-
+<h1 class="hasAnchor">
+<a href="#table-of-contents" class="anchor"></a>Table of contents</h1>
 <ol>
 <li><a href="#issues">Creating an Issue</a></li>
 <li><a href="#prs">Submitting a Pull Request</a></li>
@@ -206,6 +209,7 @@ some_function &lt;- function(n){
 <li>
 <strong>method arguments</strong>: snake_case</li>
 </ul>
+<p>There is one exception to these rules. <code>data.table</code> objects should use the convention <code>nameDT</code> (ending in <code>DT</code>) so they’re easily identified. This is important because <code>data.table</code> uses non-standard evaluation.</p>
 </div>
 <div id="exported-functions" class="section level3">
 <h3 class="hasAnchor">
@@ -351,4 +355,3 @@ RandomNumberPlotter &lt;- R6::R6Class(
 
   </body>
 </html>
-

@@ -46,14 +46,14 @@ test_that('PackageFunctionReporter Methods Work', {
   # inherited set_package
   expect_silent({
       testObj$set_package(
-        packageName = "baseballstats"
+        pkg_name = "baseballstats"
         # Covr only works on source code. find.package path will not work
-        , packagePath = system.file("baseballstats", package = "pkgnet")
+        , pkg_path = system.file("baseballstats", package = "pkgnet")
       )
   })
   
   # inherited get_package
-  expect_equal(object = testObj$package_name
+  expect_equal(object = testObj$pkg_name
                , expected = "baseballstats"
                , info = "get_package did not return expected package name")
   
@@ -76,7 +76,7 @@ test_that('PackageFunctionReporter Methods Work', {
   testNodeDT <- testObj$nodes
  
   # inherited make_graph_object
-  expect_silent(object = testPkgGraph <- testObj$pkgGraph)
+  expect_silent(object = testPkgGraph <- testObj$pkg_graph)
   
   expect_true(object = igraph::is_igraph(testPkgGraph)
               , info = "Graph object not and igraph formatted object")
@@ -97,9 +97,9 @@ test_that('PackageFunctionReporter Methods Work', {
           all( c("centralization.OutDegree",
                  "centralization.betweenness",
                  "centralization.closeness"
-          ) %in% names(testObj$networkMeasures))
+          ) %in% names(testObj$network_measures))
       })
-  } , info = "Not all expected network measures are in networkMeasures list")
+  } , info = "Not all expected network measures are in network_measures list")
   expect_true(object = all( c("outDegree",
                               "outBetweeness",
                               "outCloseness",
@@ -120,10 +120,10 @@ test_that('PackageFunctionReporter Methods Work', {
               , info = "Not all expected function coverage measures are in nodes table"
   )
   
-  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
+  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
               , info = "pkgGraph field nodes not as expected")
   
-  expect_identical(object = igraph::get.edgelist(testObj$pkgGraph)
+  expect_identical(object = igraph::get.edgelist(testObj$pkg_graph)
                    , expected = igraph::get.edgelist(testPkgGraph)
                    , info = "pkgGraph field edges not as expected")
 })

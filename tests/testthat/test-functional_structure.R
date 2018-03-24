@@ -28,11 +28,11 @@ futile.logger::flog.threshold(0)
 
   test_that('PackageFunctionReporter returns graph of functions', {
         reporter <- PackageFunctionReporter$new()
-        reporter$set_package(packageName = "baseballstats")
+        reporter$set_package(pkg_name = "baseballstats")
 
         # Nodes
         expect_equivalent(object = sort(reporter$nodes$node)
-                          , expected = sort(as.character(unlist(utils::lsf.str(asNamespace(reporter$package_name)))))
+                          , expected = sort(as.character(unlist(utils::lsf.str(asNamespace(reporter$pkg_name)))))
                           , info = "All functions are nodes, even ones without connections.")
         
         expect_true(object = is.element("node", names(reporter$nodes))
@@ -49,7 +49,7 @@ futile.logger::flog.threshold(0)
                     , info = "TARGET and SCORE fields in edge table at minimum")
 
         # Plots
-        expect_true(object = is.element("visNetwork", attributes(reporter$graphViz)))
+        expect_true(object = is.element("visNetwork", attributes(reporter$graph_viz)))
         
   })
 
@@ -67,7 +67,7 @@ futile.logger::flog.threshold(0)
         , info = "Edges table is empty since there are no edges."
     )
     
-    expect_true(object = is.element("visNetwork", attributes(t2$graphViz)))
+    expect_true(object = is.element("visNetwork", attributes(t2$graph_viz)))
     
   })
 

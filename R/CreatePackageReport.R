@@ -3,51 +3,51 @@
 #' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
 #' @seealso GetPackageGraphs
-#' @param packageName (string) name of a package
-#' @param packageReporters (list) a list of package reporters
-#' @param packagePath (string) The path to the package repository.  
-#' If given, coverage will be calculated for each function.
-#' @param reportPath (string) The path and filename of the output report.  Default
-#' report will be produced in working directory.
+#' @param pkg_name (string) name of a package
+#' @param pkg_reporters (list) a list of package reporters
+#' @param pkg_path (string) The path to the package repository.  
+#'                     If given, coverage will be calculated for each function.
+#' @param report_path (string) The path and filename of the output report.  Default
+#'                   report will be produced in working directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
-#' @return A list of instantiated packageReporters fitted to \code{packageName}
+#' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
-CreatePackageReport <- function(packageName
-                                , packageReporters = DefaultReporters()
-                                , packagePath = NULL
-                                , reportPath = file.path(getwd(), paste0(packageName, "_report.html"))
+CreatePackageReport <- function(pkg_name
+                                , pkg_reporters = DefaultReporters()
+                                , pkg_path = NULL
+                                , report_path = file.path(getwd(), paste0(pkg_name, "_report.html"))
                                 ) {
     # Input checks
     assertthat::assert_that(
-        assertthat::is.string(packageName)
-        , is.list(packageReporters)
+        assertthat::is.string(pkg_name)
+        , is.list(pkg_reporters)
     )
     
     # Confirm that all reporters are actually reporters
-    checks <- sapply(packageReporters, function(x){methods::is(x, "AbstractPackageReporter")})
+    checks <- sapply(pkg_reporters, function(x){methods::is(x, "AbstractPackageReporter")})
     if (!all(checks)){
-        msg <- paste0("At least one of the reporters in the packageReporters parameter ",
+        msg <- paste0("At least one of the reporters in the pkg_reporters parameter ",
                       "is not a PackageReporter. See ?AbstractPackageReporter for details.")
         log_fatal(msg)
     }
     
     log_info(paste0("Creating package report for package "
-                    , packageName
+                    , pkg_name
                     , " with reporters:\n\n"
-                    , paste(unlist(lapply(packageReporters, function(x) class(x)[1]))
+                    , paste(unlist(lapply(pkg_reporters, function(x) class(x)[1]))
                             , collapse = "\n")))
     
     builtReporters <- .BuildPackageReporters(
-      packageName
-      , packageReporters
-      , packagePath
+      pkg_name
+      , pkg_reporters
+      , pkg_path
     )
     
     .RenderPackageReport(
-      reportPath = reportPath
-      , packageReporters = builtReporters
-      , packageName = packageName
+      report_path = report_path
+      , pkg_reporters = builtReporters
+      , pkg_name = pkg_name
     )
     
     return(invisible(builtReporters))
@@ -58,30 +58,30 @@ CreatePackageReport <- function(packageName
 # [name] RenderPackageReport
 # [description] Renders an html report based on the initialized reporters provided
 # [author] P. Boueri
-# [param] reportPath a file.path to where the report should be rendered
-# [param] packageReporters a list of package reporters that have already been initialized and have calculated 
-# [param] packageName (string) The name of the package.
+# [param] report_path a file.path to where the report should be rendered
+# [param] pkg_reporters a list of package reporters that have already been initialized and have calculated 
+# [param] pkg_name (string) The name of the package.
 # [return] Nothing
 #' @importFrom rmarkdown render
-.RenderPackageReport <- function(reportPath 
-                                , packageReporters
-                                , packageName) {
+.RenderPackageReport <- function(report_path 
+                                , pkg_reporters
+                                , pkg_name) {
     
     log_info("Rendering package report...")
     
     silence_logger
     rmarkdown::render(
         system.file(file.path("package_report", "package_report.Rmd"), package = "pkgnet")
-        , output_file = reportPath
+        , output_file = report_path
         , quiet = TRUE
         , params = list(
-            reporters = packageReporters
-            , packageName = packageName
+            reporters = pkg_reporters
+            , pkg_name = pkg_name
         )
     )
     unsilence_logger()
 
-    log_info(sprintf("Done creating package report! It is available at %s", reportPath))
+    log_info(sprintf("Done creating package report! It is available at %s", report_path))
     return(invisible(NULL))
 }
 
@@ -92,18 +92,18 @@ CreatePackageReport <- function(packageName
 #        and enriches its content.   
 #
 # [seealso] For param descriptions, see CreatePackageReport
-.BuildPackageReporters <- function(packageName
-                                   , packageReporters
-                                   , packagePath){
+.BuildPackageReporters <- function(pkg_name
+                                   , pkg_reporters
+                                   , pkg_path){
       
-      packageReporters <- sapply(
-          X = packageReporters
+      pkg_reporters <- sapply(
+          X = pkg_reporters
           , FUN = function(reporter){
-              reporter$set_package(packageName, packagePath)
+              reporter$set_package(pkg_name, pkg_path)
               return(reporter)
           }
       )
-      names(packageReporters) <- sapply(packageReporters, function(x) class(x)[1])
+      names(pkg_reporters) <- sapply(pkg_reporters, function(x) class(x)[1])
       
-      return(packageReporters)
+      return(pkg_reporters)
 }

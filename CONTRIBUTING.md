@@ -117,6 +117,8 @@ This package relies heavily on [R6](https://github.com/r-lib/R6) objects. Elemen
 - **private field names**: snake_case
 - **method arguments**: snake_case
 
+There is one exception to these rules. `data.table` objects should use the convention `nameDT` (ending in `DT`) so they're easily identified. This is important because `data.table` uses non-standard evaluation.
+
 ### Exported Functions
 
 Exported functions should be named with UpperCamelCase. 

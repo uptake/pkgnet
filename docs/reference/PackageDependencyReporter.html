@@ -25,6 +25,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+  
+  
 <meta property="og:title" content="Package Dependency Reporter Class — PackageDependencyReporter" />
 
 <meta property="og:description" content="This Reporter takes a package and uncovers the structure from
@@ -84,7 +86,6 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Dependency Reporter Class</h1>
-    
     </div>
 
     
@@ -99,30 +100,6 @@
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
-
-    
-    <dl class='dl-horizontal'>
-    <code>plot_network()</code>
-            <ul>
-<li><p>Creates a network visualization of extracted package graph.</p></li>
-<li><p><b>Returns:</b>
-                    <ul>
-<li><p>A `visNetwork` object</p></li>
-</ul></p></li>
-</ul>
-    <dt><code>set_package(packageName, packagePath = NULL)</code></dt><dd><p><ul>
-<li><p>Set properties of this reporter. If packageName overrides a 
-                previously-set package name, any cached data will be removed.</p></li>
-<li><p><b>Args:</b>
-                <ul>
-<li><p><b><code>packageName</code></b>: String with the name of the package</p></li>
-<li><p><b><code>packagePath</code></b>: Optional path to the source code. 
-                    To be used for test coverage, if provided.</p></li>
-</ul></p></li>
-</ul></p></dd>
-</dl>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p>Other PackageReporters: <code><a href='PackageFunctionReporter.html'>PackageFunctionReporter</a></code>,
@@ -135,25 +112,15 @@
 <span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>PackageDependencyReporter</span>$<span class='fu'>new</span>()
 
 <span class='co'># Seed it with a package</span>
-<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-03-21 00:55:21] Resetting cached network information...</div><div class='input'>
+<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-03-22 22:35:00] Resetting cached network information...</div><div class='input'>
 <span class='co'># plot it up</span>
-<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; INFO [2018-03-21 00:55:21] Creating plot...
-#&gt; INFO [2018-03-21 00:55:21] Calling extract_network() with default arguments...
-#&gt; INFO [2018-03-21 00:55:21] Resetting cached network information...
-#&gt; INFO [2018-03-21 00:55:21] Constructing reverse dependency graph for ggplot2
-#&gt; INFO [2018-03-21 00:55:21] Creating graph object...
-#&gt; INFO [2018-03-21 00:55:21] Done creating graph object
-#&gt; INFO [2018-03-21 00:55:21] Plotting with layout: tree
-#&gt; INFO [2018-03-21 00:55:21] Calculating graph layout for type: tree
-#&gt; INFO [2018-03-21 00:55:21] Done creating plot.</div></pre>
+<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): attempt to apply non-function</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#format">Format</a></li>
-
-      <li><a href="#public-methods">Public Methods</a></li>
 
       <li><a href="#see-also">See also</a></li>
       
@@ -177,4 +144,3 @@
 
   </body>
 </html>
-

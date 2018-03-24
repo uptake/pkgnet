@@ -25,6 +25,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+  
+  
 <meta property="og:title" content="Package Function Reporter Class — PackageFunctionReporter" />
 
 <meta property="og:description" content="This Reporter takes a package and uncovers the structure from
@@ -85,7 +87,6 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Function Reporter Class</h1>
-    
     </div>
 
     
@@ -105,21 +106,13 @@
 
     
     <dl class='dl-horizontal'>
-    <code>plot_network()</code>
-            <ul>
-<li><p>Creates a network visualization of extracted package graph.</p></li>
-<li><p><b>Returns:</b>
-                    <ul>
-<li><p>A `visNetwork` object</p></li>
-</ul></p></li>
-</ul>
-    <dt><code>set_package(packageName, packagePath = NULL)</code></dt><dd><p><ul>
-<li><p>Set properties of this reporter. If packageName overrides a 
+    <dt><code>set_package(pkg_name, pkg_path)</code></dt><dd><p><ul>
+<li><p>Set properties of this reporter. If pkg_name overrides a 
                 previously-set package name, any cached data will be removed.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>packageName</code></b>: String with the name of the package</p></li>
-<li><p><b><code>packagePath</code></b>: Optional path to the source code. 
+<li><p><b><code>pkg_name</code></b>: String with the name of the package</p></li>
+<li><p><b><code>pkg_path</code></b>: Optional path to the source code. 
                     To be used for test coverage, if provided.</p></li>
 </ul></p></li>
 </ul></p></dd>
@@ -160,4 +153,3 @@
 
   </body>
 </html>
-

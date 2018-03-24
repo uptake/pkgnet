@@ -8,7 +8,7 @@ output:
       after_body: footer.html
 params:
    reporters: params$reporters
-   packageName: params$packageName
+   pkg_name: params$pkg_name
 ---
 
 <!-- This is HTML code for the header at the top of the page -->
@@ -22,7 +22,7 @@ pkgnet:::silence_logger()
 ```
 
 ```{r title, results="asis"}
-cat(sprintf("# %s", packageName))
+cat(sprintf("# %s", pkg_name))
 ```
 
 ```{r}

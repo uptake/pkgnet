@@ -46,8 +46,8 @@ test_that('PackageDependencyReporter Methods Work', {
   # inherited set_package
   expect_silent({
       testObj$set_package(
-          packageName = "baseballstats"
-          , packagePath = system.file('baseballstats', package="pkgnet")
+          pkg_name = "baseballstats"
+          , pkg_path = system.file('baseballstats', package="pkgnet")
       ) 
   })
   
@@ -77,22 +77,27 @@ test_that('PackageDependencyReporter Methods Work', {
   # TODO: Need to test that nodes were properly extracted
   testNodeDT <- testObj$nodes
   
-  # inherited make_graph_object
+    expect_silent({
+        testObj$pkg_graph
+    })
   
-  expect_silent(object = testPkgGraph <- testObj$pkgGraph)
-  
-  expect_true(object = igraph::is_igraph(testPkgGraph)
-              , info = "Graph object not an igraph formatted object")
-  
-  expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
-              , info = "Graph nodes not as expected")
-  
-  expect_true(object = all(igraph::get.vertex.attribute(testObj$pkgGraph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
-              , info = "pkgGraph field nodes not as expected")
-  
-  expect_identical(object = igraph::get.edgelist(testObj$pkgGraph)
-                   , expected = igraph::get.edgelist(testPkgGraph)
-                   , info = "pkgGraph field edges not as expected")
+    expect_true({
+        igraph::is_igraph(testObj$pkg_graph)
+    }, info = "Graph object not an igraph formatted object")
+    
+    expect_true({
+        all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% testNodeDT$node)
+    }, info = "Graph nodes not as expected")
+    
+    expect_true({
+        all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% igraph::get.vertex.attribute(testObj$pkg_graph)[[1]])
+    }, info = "$pkg_graph field nodes not as expected")
+    
+    expect_identical(
+        igraph::get.edgelist(testObj$pkg_graph)
+        , expected = igraph::get.edgelist(testObj$pkg_graph)
+        , info = "$pkg_graph field edges not as expected"
+    )
 })
 
 ##### TEST TEAR DOWN #####
