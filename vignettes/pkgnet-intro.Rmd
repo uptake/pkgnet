@@ -1,0 +1,159 @@
+---
+title: "Exploring The Structure and Dependencies of An R Package"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setupVignette, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center'
+)
+```
+
+
+<!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
+<style>
+.column-left{
+  float: left;
+  width: 50%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 50%;
+  text-align: left;
+}
+</style>
+
+
+<!--  CODE BELOW HERE WILL RENDER  -->
+
+`pkgnet` is an R library designed for the analysis of R libraries! The goal of the package is to build a graph representation of a package and its dependencies to inform a variety of activities, including:
+
+- prioritizing functions to unit test based on their centrality
+- examining the recursive dependencies you are taking on by using a given package
+- exploring the structure of a new package provided by a coworker or downloaded from the internet
+
+Below is a brief tour of `pkgnet` and its features. 
+
+***
+# Running pkgnet
+
+`pkgnet` can analyze any R package locally installed.  Run `installed.packages()` to see the full list of packages installed on your system.  For this example, let's say we are analyzing a custom built package, `baseballstats`.
+
+```{r makeDemoPackage, include=FALSE}
+devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
+```
+
+To analyze `baseballstats`, run the following two lines of code: 
+
+```{r pkgnetRunFirst, message=FALSE, warning=FALSE, results='hide'}
+library(pkgnet)
+reportObj <- CreatePackageReport(packageName = "baseballstats")
+```
+
+That's it! You have generated a lot of valuable information with that one call for a CRAN installed package.  
+
+However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage information from [covr](https://cran.r-project.org/web/packages/covr/index.html).  To do so, specify the path to the repository in `CreatePackageReport`.  
+
+
+```{r pkgnetRunFAKE, eval=FALSE}
+library(pkgnet)
+reportObjWithCovr <- CreatePackageReport(packageName = "baseballstats"
+                                 , packagePath = <path to the repo>)
+```
+
+```{r pkgnetRunSecond, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
+library(pkgnet)
+reportObjWithCovr <- CreatePackageReport(packageName = "baseballstats"
+                                 , packagePath = system.file('baseballstats',package="pkgnet")
+                                 )
+```
+
+
+***
+# Examining The Results
+
+An HTML report has been created with the pertinent information and a list object is available with the same information and more.  
+
+## The Report
+
+An HTML reported has been created, and its location is specified in the messages in the terminal.  
+
+This report has three sections: 
+
+1. **Package Summary** -- general information about the package and package level statistics   
+2. **Dependency Network** -- information regarding the packages upon which the current package under analysis relies upon    
+3. **Function Network** -- information regarding the functions within the current package under analysis and their interdependencies     
+
+Each section has helpful tables and visuals.  
+
+### Sample
+As a sample, here's how the **Function Network Visualization** looks for `pkgnet`: 
+
+<!--  SIDE BY SIDE START  -->
+<!--  Take care to ensure equal lengths  -->
+<div class="column-left">
+#### Default
+```{r demoVis1, echo=FALSE}
+reportObj$PackageFunctionReporter$graphViz
+```
+Functional dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
+
+We also see that nothing depends on the `on_base_pct` function.  This might be valuable information to an R package developer. 
+</div>
+
+<div class="column-right">
+#### With Coverage Information 
+```{r demoVis2, echo=FALSE}
+reportObjWithCovr$PackageFunctionReporter$graphViz
+```
+Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%). 
+
+It appears the function that most other functions depend upon, `at_bats`, is well covered.  However, no other functions are covered by unit tests.
+</div>
+
+<!--  SIDE BY SIDE END -->
+
+<br><br>
+
+#### Check out the full HTML report for more results  
+
+## The List Object
+
+The `CreatePackageReport()` function returns a list with three items: 
+
+1. PackageSummaryReporter  
+2. PackageDependencyReporter  
+3. PackageFunctionReporter  
+
+Each items contains information visible in the report *and more*.  We can use this information for a more detailed analysis of the results and/or more easily incorporate `pkgnet` results into other R processes.
+
+Here are a few mentionable items available within the list object.
+
+### full node information
+
+### igraph networks
+
+
+***
+# A More Detailed Package Examination Examples
+
+## Coverage of Most Central Functions
+
+## Discovering Similar Functions
+
+
+
+
+```{r removeDemoPackage, include=FALSE}
+devtools::uninstall(system.file('baseballstats',package="pkgnet"))
+```
+
