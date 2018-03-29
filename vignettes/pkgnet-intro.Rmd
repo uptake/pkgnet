@@ -56,7 +56,7 @@ To analyze `baseballstats`, run the following two lines of code:
 
 ```{r pkgnetRunFirst, message=FALSE, warning=FALSE, results='hide'}
 library(pkgnet)
-reportObj <- CreatePackageReport(packageName = "baseballstats")
+reportObj <- CreatePackageReport(pkg_name = "baseballstats")
 ```
 
 That's it! You have generated a lot of valuable information with that one call for a CRAN installed package.  
@@ -66,14 +66,14 @@ However, if the full source repository for the package is available on your syst
 
 ```{r pkgnetRunFAKE, eval=FALSE}
 library(pkgnet)
-reportObjWithCovr <- CreatePackageReport(packageName = "baseballstats"
-                                 , packagePath = <path to the repo>)
+reportObjWithCovr <- CreatePackageReport(pkg_name = "baseballstats"
+                                 , pkg_path = <path to the repo>)
 ```
 
 ```{r pkgnetRunSecond, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
 library(pkgnet)
-reportObjWithCovr <- CreatePackageReport(packageName = "baseballstats"
-                                 , packagePath = system.file('baseballstats',package="pkgnet")
+reportObjWithCovr <- CreatePackageReport(pkg_name = "baseballstats"
+                                 , pkg_path = system.file('baseballstats',package="pkgnet")
                                  )
 ```
 
@@ -103,7 +103,7 @@ As a sample, here's how the **Function Network Visualization** looks for `pkgnet
 <div class="column-left">
 #### Default
 ```{r demoVis1, echo=FALSE}
-reportObj$PackageFunctionReporter$graphViz
+reportObj$PackageFunctionReporter$graph_viz
 ```
 Functional dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
 
@@ -113,7 +113,7 @@ We also see that nothing depends on the `on_base_pct` function.  This might be v
 <div class="column-right">
 #### With Coverage Information 
 ```{r demoVis2, echo=FALSE}
-reportObjWithCovr$PackageFunctionReporter$graphViz
+reportObjWithCovr$PackageFunctionReporter$graph_viz
 ```
 Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%). 
 
