@@ -85,7 +85,7 @@ An HTML report has been created with the pertinent information and a list object
 
 ## The Report
 
-An HTML reported has been created, and its location is specified in the messages in the terminal.  
+An HTML report has been created, and its location is specified in the messages in the terminal.  
 
 This report has three sections: 
 
@@ -95,7 +95,6 @@ This report has three sections:
 
 Each section has helpful tables and visuals.  
 
-### Sample
 As a sample, here's how the **Function Network Visualization** looks for `pkgnet`: 
 
 <!--  SIDE BY SIDE START  -->
@@ -136,19 +135,110 @@ The `CreatePackageReport()` function returns a list with three items:
 
 Each items contains information visible in the report *and more*.  We can use this information for a more detailed analysis of the results and/or more easily incorporate `pkgnet` results into other R processes.
 
-Here are a few mentionable items available within the list object.
+Here are a few notable items available within the list object.
 
-### full node information
+### Node Information
+Both the `PackageDependencyReporter` and the `PackageFunctionReporter` contain metrics about their package dependencies or functions (a.k.a network nodes) in a `nodes` table.  
 
-### igraph networks
+```{r nodes}
+dim(reportObjWithCovr$PackageFunctionReporter$nodes)
+names(reportObjWithCovr$PackageFunctionReporter$nodes)
+```
 
+### Network Measures 
+Both the `PackageDependencyReporter` and the `PackageFunctionReporter` contain measure based on their network structure in a `network_measures` list. 
+
+```{r networkMeasures}
+reportObjWithCovr$PackageFunctionReporter$network_measures
+```
+
+### Network Object
+Both the `PackageDependencyReporter` and the `PackageFunctionReporter` are available as [igraph](http://igraph.org/r/) objects named `pkg_graph`
+
+```{r networkObj}
+reportObjWithCovr$PackageFunctionReporter$pkg_graph
+```
 
 ***
-# A More Detailed Package Examination Examples
+# A Deeper Look
+With the reports and objects produced by `pkgnet` by default, there is plenty to inform us on the inner workings of an R package.  However, we may want to know MORE! Since the [igraph](http://igraph.org/r/) objects are available, we can leverage those for further analysis.  Here are some examples.  
 
-## Coverage of Most Central Functions
+## Coverage of Most Referenced Functions
+Let's visualize the relationship between centrality and coverage in a large package such as `lubridate`.
+
+<!--  Faked Since lubridate not guaranteed to be installed at time of report creation -->
+```{r fakeDetail1, eval=FALSE}
+# Run pkgnet
+library(pkgnet)
+reportObjWithCovr <- CreatePackageReport(pkg_name = "lubridate"
+                                         , pkg_path = "~/repos/lubridate")
+
+# Extract Nodes Table
+funcNodes <- reportObjWithCovr$PackageFunctionReporter$nodes
+
+# List Coverage For Most Referenced Functions
+mostRef <- funcNodes[order(numDescendants, decreasing = TRUE)][1:10]
+mostRef[,list(node, numDescendants, coverageRatio, totalLines)]
+
+```
+
+|node                   | numDescendants| coverageRatio| totalLines|
+|:----------------------|--------------:|-------------:|----------:|
+|dmicroseconds          |             39|     0.0000000|          1|
+|days_in_months_so_far  |             22|     0.0000000|         10|
+|check_period           |             15|     0.0000000|         12|
+|as.difftime            |             13|            NA|         NA|
+|fast_strptime          |             13|     0.8571429|          7|
+|comp_posix_date        |             12|     0.7692308|         13|
+|date_to_posix          |             12|     1.0000000|          2|
+|ceiling_date           |             10|     0.9666667|         30|
+|add_number_to_duration |              8|     1.0000000|          1|
+|check_interval         |              8|     0.0000000|         11|
+
+Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.  In this case, the most referenced function, `dmicroseconds`, appears to be a simple one line function that may not be necessary to cover in unit testing.  However, the second most referenced function, `days_in_months_so_far`, might benefit from some unit test coverage.
 
 ## Discovering Similar Functions
+Looking at that same large package, let's say we wanted to explore options for consolidating functions.  In that case, we could use the `igraph` object to highlight functions with the same dependencies via Jaccard similarity. 
+
+```{r fakeDetail2, eval=FALSE}
+# Get igraph object
+funcGraph <- reportObjWithCovr$PackageFunctionReporter$pkg_graph
+funcNames <- igraph::vertex_attr(funcGraph, name = "name")
+
+# Jaccard Similarity
+sim <- igraph::similarity(graph = funcGraph
+                          , mode = "in"
+                          , method = "jaccard")
+diag(sim) <- 0
+sim[sim < 1] <- 0
+
+simGraph <- igraph::graph_from_adjacency_matrix(adjmatrix = sim, mode = "undirected")
+
+# Find groups with same dependencies (similarity == 1)
+sameDeps <- igraph::max_cliques(graph = simGraph
+                                , min = 2
+                                )
+
+# Write results
+for (i in seq_along(sameDeps)) {
+         cat(paste0("Group ", i, ": "))
+         cat(paste(funcNames[as.numeric(sameDeps[[i]])], collapse = ", "))
+         cat("\n")
+}
+```
+  
+```{r resultFromFake, echo=FALSE, results='markup'}
+cat("Group 1: stamp_time, stamp_date
+Group 2: ms, hm
+Group 3: new_interval, %--%, int_diff
+Group 4: floor_date, quarter, semester
+Group 5: picoseconds, microseconds, nanoseconds, milliseconds
+Group 6: weeks, days, years, seconds_to_period, seconds, new_period, minutes, hours
+Group 7: yq, dmy, ymd_hms, ymd_hm, ymd_h, ymd, ydm_hms, ydm_hm, ydm_h, ydm, pretty_dates, parse_date_time2, parse_date_time, myd, mdy_hms, mdy_hm, mdy_h, mdy, local_time, fast_strptime, dym, dmy_hms, dmy_hm, dmy_h
+"
+)
+```
+
 
 
 
