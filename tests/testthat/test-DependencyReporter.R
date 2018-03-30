@@ -16,22 +16,22 @@ futile.logger::flog.threshold(0)
 
 ## Structure Available ##
 
-test_that('PackageDependencyReporter structure is as expected', {
+test_that('DependencyReporter structure is as expected', {
   
-  expect_named(object = PackageDependencyReporter$public_methods
+  expect_named(object = DependencyReporter$public_methods
                , expected = c(
                  "get_summary_view",
                  "initialize",
                  "clone"
                )
-               , info = "Available public methods for PackageDependencyReporter not as expected."
+               , info = "Available public methods for DependencyReporter not as expected."
                , ignore.order = TRUE
                , ignore.case = FALSE
   )
   
-  expect_named(object = PackageDependencyReporter$public_fields
+  expect_named(object = DependencyReporter$public_fields
                , expected = NULL
-               , info = "Available public fields for PackageDependencyReporter not as expected."
+               , info = "Available public fields for DependencyReporter not as expected."
                , ignore.order = TRUE
                , ignore.case = FALSE
   )
@@ -40,8 +40,8 @@ test_that('PackageDependencyReporter structure is as expected', {
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS
 
-test_that('PackageDependencyReporter Methods Work', {
-  testObj <- PackageDependencyReporter$new()
+test_that('DependencyReporter Methods Work', {
+  testObj <- DependencyReporter$new()
   
   # inherited set_package
   expect_silent({

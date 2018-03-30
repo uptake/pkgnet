@@ -4,8 +4,8 @@
 #' @export
 DefaultReporters <- function() {
     return(list(
-          PackageSummaryReporter$new()
-        , PackageDependencyReporter$new()
-        , PackageFunctionReporter$new()
+          SummaryReporter$new()
+        , DependencyReporter$new()
+        , FunctionReporter$new()
     ))
 }

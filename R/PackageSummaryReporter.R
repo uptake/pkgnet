@@ -1,5 +1,5 @@
 #' @title Package Summary Reporter Class
-#' @name PackageSummaryReporter
+#' @name SummaryReporter
 #' @family PackageReporters
 #' @description Defines a concrete implementation of \link{AbstractPackageReporter} 
 #'              for a high level overview of a particular package. It will summarize
@@ -7,8 +7,8 @@
 #' @inheritSection AbstractPackageReporter Public Methods
 #' @importFrom R6 R6Class
 #' @export
-PackageSummaryReporter <- R6::R6Class(
-    classname = "PackageSummaryReporter",
+SummaryReporter <- R6::R6Class(
+    classname = "SummaryReporter",
     inherit = AbstractPackageReporter,
     public = list(
         get_summary_view = function(){

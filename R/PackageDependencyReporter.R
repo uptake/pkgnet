@@ -1,5 +1,5 @@
 #' @title Package Dependency Reporter Class
-#' @name PackageDependencyReporter
+#' @name DependencyReporter
 #' @family PackageReporters
 #' @description This Reporter takes a package and uncovers the structure from
 #'              its other package dependencies, determining which package it relies on is most central,
@@ -13,7 +13,7 @@
 #' \donttest{
 #' 
 #' # Instantiate an object
-#' reporter <- PackageDependencyReporter$new()
+#' reporter <- DependencyReporter$new()
 #' 
 #' # Seed it with a package
 #' reporter$set_package("ggplot2")
@@ -21,8 +21,8 @@
 #' # plot it up
 #' reporter$plot_network()
 #' }
-PackageDependencyReporter <- R6::R6Class(
-    "PackageDependencyReporter",
+DependencyReporter <- R6::R6Class(
+    "DependencyReporter",
     inherit = AbstractGraphReporter,
     
     #TODO [patrick.boueri@uptake.com]: Add more robust error checks and logging
