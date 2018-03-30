@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • pkgnet</title>
+<title>Get The Graph Objects From The Package — GetPackageGraphs • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -18,16 +18,13 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
-<!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Function reference" />
-
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -37,12 +34,10 @@
 <![endif]-->
 
 
-
-
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -52,12 +47,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">pkgnet</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -65,9 +56,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li>
-  <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
       
@@ -79,7 +67,6 @@
   </a>
 </li>
       </ul>
-      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -87,78 +74,67 @@
       
       </header>
 
-<div class="row">
-  <div class="contents col-md-9">
+      <div class="row">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get The Graph Objects From The Package</h1>
     </div>
 
-    <table class="ref-index">
+    
+    <p>This function will extract and return the graph structues that represent 
+the functions within the package and the depencies external to the package.  No HTML report
+will be produced.</p>
+    
 
-    <colgroup>
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        <!--  -->
-        <td>
-          <p><code><a href="AbstractGraphReporter.html">AbstractGraphReporter</a></code> </p>
-        </td>
-        <td><p>Abstract Graph Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="AbstractPackageReporter.html">AbstractPackageReporter</a></code> </p>
-        </td>
-        <td><p>Abstract Package Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="CreatePackageReport.html">CreatePackageReport()</a></code> </p>
-        </td>
-        <td><p>Surface the internal and external dependencies of an R package.</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="DefaultReporters.html">DefaultReporters()</a></code> </p>
-        </td>
-        <td><p>Default Reporters</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="PackageDependencyReporter.html">PackageDependencyReporter</a></code> </p>
-        </td>
-        <td><p>Package Dependency Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="PackageFunctionReporter.html">PackageFunctionReporter</a></code> </p>
-        </td>
-        <td><p>Package Function Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="PackageSummaryReporter.html">PackageSummaryReporter</a></code> </p>
-        </td>
-        <td><p>Package Summary Reporter Class</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>GetPackageGraphs</span>(<span class='no'>packageName</span>, <span class='kw'>packageReporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
+  <span class='kw'>packagePath</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>reportPath</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>packageName</span>,
+  <span class='st'>"_report.html"</span>)))</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>packageName</th>
+      <td><p>(string) name of a package</p></td>
+    </tr>
+    <tr>
+      <th>packageReporters</th>
+      <td><p>(list) a list of package reporters</p></td>
+    </tr>
+    <tr>
+      <th>packagePath</th>
+      <td><p>(string) The path to the package repository.
+If given, coverage will be calculated for each function.</p></td>
+    </tr>
+    <tr>
+      <th>reportPath</th>
+      <td><p>(string) The path and filename of the output report.  Default
+report will be produced in working directory.</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A list with 2 <code>igraph</code> objects:</p><dl class='dl-horizontal'>
+<dt>functional</dt><dd><p>the graph of the network of functions with the package</p></dd>
+<dt>dependency</dt><dd><p>the graph of the network of packages upon which this package depends</p></dd>
+</dl>
+
+    
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
+
+    <h2>Author</h2>
+    
+B. Burns
+
   </div>
 </div>
 
@@ -174,8 +150,5 @@
       </footer>
    </div>
 
-  
-
   </body>
 </html>
-
