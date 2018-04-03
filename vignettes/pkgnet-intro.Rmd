@@ -20,6 +20,11 @@ knitr::opts_chunk$set(
 
 <!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
 <style>
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
 .column-left{
   float: left;
   width: 50%;
@@ -187,65 +192,65 @@ Each section has helpful tables and visuals.
 As a sample, here's how the **Function Network Visualization** looks for `pkgnet`: 
 
 <!--  SIDE BY SIDE START  -->
-<!--  Take care to ensure equal lengths  -->
+<div class="row"> <!--  Div to Wrap columns -->
+
 <div class="column-left">
 #### Default
 ```{r demoVis1, echo=FALSE, fig.width=3, fig.height=3}
-report1$PackageFunctionReporter$graph_viz
+report1$FunctionReporter$graph_viz
 ```
 Functional dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
 
 We also see that nothing depends on the `on_base_pct` function.  This might be valuable information to an R package developer. 
-</div>
+</div> <!--  End column-left -->
 
 <div class="column-right">
 #### With Coverage Information 
 ```{r demoVis2, echo=FALSE, , fig.width=3, fig.height=3}
-report2$PackageFunctionReporter$graph_viz
+report2$FunctionReporter$graph_viz
 ```
 Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%). 
 
 It appears the function that most other functions depend upon, `at_bats`, is well covered.  However, no other functions are covered by unit tests.
-</div>
+</div> <!--  End column-right  -->
 
+</div> <!--  End Div to Wrap columns -->
 <!--  SIDE BY SIDE END -->
 
-<br><br>
-
-#### Check out the full HTML report for more results  
+**Check out the full HTML report for more results**  
 
 ## The List Object
 
 The `CreatePackageReport()` function returns a list with three items: 
 
-1. PackageSummaryReporter  
-2. PackageDependencyReporter  
-3. PackageFunctionReporter  
+1. SummaryReporter  
+2. DependencyReporter  
+3. FunctionReporter  
 
 Each items contains information visible in the report *and more*.  We can use this information for a more detailed analysis of the results and/or more easily incorporate `pkgnet` results into other R processes.
 
 Here are a few notable items available within the list object.
 
 ### Node Information
-Both the `PackageDependencyReporter` and the `PackageFunctionReporter` contain metrics about their package dependencies or functions (a.k.a network nodes) in a `nodes` table.  
+Both the `DependencyReporter` and the `FunctionReporter` contain metrics about their package dependencies or functions (a.k.a network nodes) in a `nodes` table.  
 
 ```{r nodes}
-dim(report2$PackageFunctionReporter$nodes)
-names(report2$PackageFunctionReporter$nodes)
+dim(report2$FunctionReporter$nodes)
+names(report2$FunctionReporter$nodes)
 ```
 
 ### Network Measures 
-Both the `PackageDependencyReporter` and the `PackageFunctionReporter` contain measure based on their network structure in a `network_measures` list. 
+Both the `DependencyReporter` and the `FunctionReporter` contain measure based on their network structure in a `network_measures` list. 
 
 ```{r networkMeasures}
-report2$PackageFunctionReporter$network_measures
+report2$FunctionReporter$network_measures
 ```
 
 ### Network Object
-Both the `PackageDependencyReporter` and the `PackageFunctionReporter` are available as [igraph](http://igraph.org/r/) objects named `pkg_graph`
+Both the `DependencyReporter` and the `FunctionReporter` are available as [igraph](http://igraph.org/r/) objects named `pkg_graph`
 
 ```{r networkObj}
-report2$PackageFunctionReporter$pkg_graph
+report2$FunctionReporter$pkg_graph
 ```
 
 ***
@@ -278,7 +283,7 @@ report2 <- CreatePackageReport(pkg_name = "lubridate"
                                          , pkg_path = "~/pkgnet_example/lubridate")
 
 # Extract Nodes Table
-funcNodes <- report2$PackageFunctionReporter$nodes
+funcNodes <- report2$FunctionReporter$nodes
 
 # List Coverage For Most Referenced Functions
 mostRef <- funcNodes[order(numDescendants, decreasing = TRUE)][1:10]
@@ -306,7 +311,7 @@ Looking at that same large package, let's say we wanted to explore options for c
 
 ```{r fakeDetail2, eval=FALSE}
 # Get igraph object
-funcGraph <- report2$PackageFunctionReporter$pkg_graph
+funcGraph <- report2$FunctionReporter$pkg_graph
 funcNames <- igraph::vertex_attr(funcGraph, name = "name")
 
 # Jaccard Similarity
