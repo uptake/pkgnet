@@ -3,6 +3,7 @@ title: "Exploring The Structure and Dependencies of An R Package"
 output: 
   rmarkdown::html_vignette:
     toc: true
+    fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
@@ -27,13 +28,16 @@ knitr::opts_chunk$set(
 }
 .column-left{
   float: left;
-  width: 50%;
-  text-align: left;
+  width: 48%;
+  text-align: justify;
+  text-justify: inter-word;
+  margin-right: 4%;
 }
 .column-right{
   float: right;
-  width: 50%;
-  text-align: left;
+  width: 48%;
+  text-align: justify;
+  text-justify: inter-word;
 }
 </style>
 
@@ -87,53 +91,9 @@ report2 <- CreatePackageReport(
 
 ***
 # Dependencies As a Graph
-Most R packages depend upon other R packages that then depend upon other R packages and so on.  Most R packages also consist of a collection of functions with similar cascading dependencies. To capture and quantify the complexity of these dependency networks, `pkgnet` represents both package depedencies and function dependencies as directed graphs. 
+`pkgnet` represents both package depedencies and function dependencies as directed graphs. Here are few core concepts to keep in mind when looking at `pkgnet` graphs.
 
-## One Dependency
-Functions or Dependencies are represented as nodes, and their dependent relationships are represented as edges (a.k.a. arcs or arrows).  The direction of the edge points towards the node that is dependant on the other node.  
-
-In the example below, **C** is dependant upon **A**. 
-
-```{r whatIsDep, echo=FALSE, message=FALSE, results='markup', fig.height=1}
-nodes <- data.frame(
-  id = 1:2
-  , label = c("A","C")
-  , level = 1:1
-)
-edges <- data.frame(
-  from = 1
-  , to = 2
-)
-
-g <- visNetwork::visNetwork(nodes = nodes
-                       , edges = edges
-                       , width = "100%"
-                       )
-g <- visNetwork::visNodes(graph = g
-                          , shape = "circle"
-                          , font = list(size = 50
-                                        , bold = TRUE
-                                        , align = 'center'
-                                        )
-                       )
-g <- visNetwork::visEdges(graph = g
-                          , arrows = "to"
-                       )
-g <- visNetwork::visHierarchicalLayout(graph = g
-                      , direction = "DU"
-                      )
-g <- visNetwork::visInteraction(graph = g
-                                , dragNodes = TRUE
-                                , dragView = TRUE
-                                , zoomView = FALSE)
-g
-```
-
-
-## A Network of Dependencies
-sdasf dsaf sd fasf asd fsda 
-
-```{r whatIsDepGraph, echo=FALSE, message=FALSE, results='markup'}
+```{r whatIsDepGraph, echo=FALSE, message=FALSE, results='markup', fig.cap = "Example Depedency Graph"}
 nodes <- data.frame(
   id = 1:4
   , label = LETTERS[1:4]
@@ -171,6 +131,22 @@ g <- visNetwork::visInteraction(graph = g
 g
 ```
 
+## Dependency
+Functions or Dependencies are represented as nodes, and their dependent relationships are represented as edges (a.k.a. arcs or arrows).  The direction of the edge points towards the node that is dependent on the other node.  
+
+In the example depedency graph above:
+
+* **C** is dependent upon both **A** and **C**.
+* **D** is dependent upon both **C** and **B**.
+* **D** is indirectly dependent upon **A** through **C** via the transitive property.
+
+## Descendants
+The descendants of a node are all subsetquent nodes that depend on that node, either directly or via the transitive property.
+
+In the example depedency graph above:
+
+* **C** and **D** are descendants of **A**.
+* **B** is **NOT** a descendant of **A**.
 
 ***
 # Examining The Results
