@@ -125,7 +125,6 @@ g
 ```
 
 
-
 ## A Network of Dependencies
 sdasf dsaf sd fasf asd fsda 
 
@@ -191,7 +190,7 @@ As a sample, here's how the **Function Network Visualization** looks for `pkgnet
 <!--  Take care to ensure equal lengths  -->
 <div class="column-left">
 #### Default
-```{r demoVis1, echo=FALSE}
+```{r demoVis1, echo=FALSE, fig.width=3, fig.height=3}
 report1$PackageFunctionReporter$graph_viz
 ```
 Functional dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
@@ -201,7 +200,7 @@ We also see that nothing depends on the `on_base_pct` function.  This might be v
 
 <div class="column-right">
 #### With Coverage Information 
-```{r demoVis2, echo=FALSE}
+```{r demoVis2, echo=FALSE, , fig.width=3, fig.height=3}
 report2$PackageFunctionReporter$graph_viz
 ```
 Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%). 
