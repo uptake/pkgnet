@@ -26,8 +26,8 @@ futile.logger::flog.threshold(0)
                 , info = "Fake test package sartre is not installed")
   })
 
-  test_that('PackageFunctionReporter returns graph of functions', {
-        reporter <- PackageFunctionReporter$new()
+  test_that('FunctionReporter returns graph of functions', {
+        reporter <- FunctionReporter$new()
         reporter$set_package(pkg_name = "baseballstats")
 
         # Nodes
@@ -53,8 +53,8 @@ futile.logger::flog.threshold(0)
         
   })
 
-  test_that('PackageFunctionReporter works on edge case one function', {
-    t2 <- PackageFunctionReporter$new()
+  test_that('FunctionReporter works on edge case one function', {
+    t2 <- FunctionReporter$new()
     t2$set_package('sartre')
     
     expect_true(

@@ -1,5 +1,5 @@
 #' @title Package Function Reporter Class
-#' @name PackageFunctionReporter
+#' @name FunctionReporter
 #' @family PackageReporters
 #' @description This Reporter takes a package and uncovers the structure from
 #'              its other functions, determining useful information such as which function is most 
@@ -26,8 +26,8 @@
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
 #' @export
-PackageFunctionReporter <- R6::R6Class(
-    "PackageFunctionReporter",
+FunctionReporter <- R6::R6Class(
+    "FunctionReporter",
     inherit = AbstractGraphReporter,
     
     public = list(

@@ -14,7 +14,7 @@ if (!identical(loggerOptions, list())){
 futile.logger::flog.threshold(0)
 
 test_that('node coloring by discrete and continuous', {
-  b <- PackageFunctionReporter$new()
+  b <- FunctionReporter$new()
   b$set_package('baseballstats', pkg_path = system.file('baseballstats', package = "pkgnet"))
   b$.__enclos_env__$private$set_plot_node_color_scheme(
       field = "coverageRatio"
