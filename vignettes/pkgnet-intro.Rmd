@@ -53,47 +53,10 @@ knitr::opts_chunk$set(
 Below is a brief tour of `pkgnet` and its features. 
 
 ***
-# Running pkgnet
-
-`pkgnet` can analyze any R package locally installed.  Run `installed.packages()` to see the full list of packages installed on your system.  For this example, let's say we are analyzing a custom built package, `baseballstats`.
-
-```{r makeDemoPackage, include=FALSE}
-devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
-```
-
-To analyze `baseballstats`, run the following two lines of code: 
-
-```{r pkgnetRunFirst, message=FALSE, warning=FALSE, results='hide'}
-library(pkgnet)
-report1 <- CreatePackageReport(pkg_name = "baseballstats")
-```
-
-That's it! You have generated a lot of valuable information with that one call for an installed package.  
-
-However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from [covr](https://cran.r-project.org/web/packages/covr/index.html).  To do so, specify the path to the repository in `CreatePackageReport`.  
-
-
-```{r pkgnetRunFAKE, eval=FALSE}
-library(pkgnet)
-report2 <- CreatePackageReport(
-  pkg_name = "baseballstats"
-  , pkg_path = <path to the repo>
-)
-```
-
-```{r pkgnetRunSecond, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
-library(pkgnet)
-report2 <- CreatePackageReport(
-  pkg_name = "baseballstats"
-  , pkg_path = system.file('baseballstats',package="pkgnet")
-)
-```
-
-***
 # Dependencies As a Graph
-`pkgnet` represents both package depedencies and function dependencies as directed graphs. Here are few core concepts to keep in mind when looking at `pkgnet` graphs.
+`pkgnet` represents both package dependencies and function dependencies as directed graphs. Before we look at the output of `pkgnet`, here are few core concepts to keep in mind.
 
-```{r whatIsDepGraph, echo=FALSE, message=FALSE, results='markup', fig.cap = "Example Depedency Graph"}
+```{r whatIsDepGraph, echo=FALSE, message=FALSE, results='markup', fig.height=3, fig.width=3, fig.cap = "Example Dependency Graph"}
 nodes <- data.frame(
   id = 1:4
   , label = LETTERS[1:4]
@@ -134,19 +97,56 @@ g
 ## Dependency
 Functions or Dependencies are represented as nodes, and their dependent relationships are represented as edges (a.k.a. arcs or arrows).  The direction of the edge points towards the node that is dependent on the other node.  
 
-In the example depedency graph above:
+In the example dependency graph above:
 
 * **C** is dependent upon both **A** and **C**.
 * **D** is dependent upon both **C** and **B**.
 * **D** is indirectly dependent upon **A** through **C** via the transitive property.
 
 ## Descendants
-The descendants of a node are all subsetquent nodes that depend on that node, either directly or via the transitive property.
+The descendants of a node are all subsequent nodes that depend on that node, either directly or via the transitive property.
 
-In the example depedency graph above:
+In the example dependency graph above:
 
 * **C** and **D** are descendants of **A**.
 * **B** is **NOT** a descendant of **A**.
+
+***
+# Running pkgnet
+
+`pkgnet` can analyze any R package locally installed.  Run `installed.packages()` to see the full list of packages installed on your system.  For this example, let's say we are analyzing a custom built package, `baseballstats`.
+
+```{r makeDemoPackage, include=FALSE}
+devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
+```
+
+To analyze `baseballstats`, run the following two lines of code: 
+
+```{r pkgnetRunFirst, message=FALSE, warning=FALSE, results='hide'}
+library(pkgnet)
+report1 <- CreatePackageReport(pkg_name = "baseballstats")
+```
+
+That's it! You have generated a lot of valuable information with that one call for an installed package.  
+
+However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from [covr](https://cran.r-project.org/web/packages/covr/index.html).  To do so, specify the path to the repository in `CreatePackageReport`.  
+
+
+```{r pkgnetRunFAKE, eval=FALSE}
+library(pkgnet)
+report2 <- CreatePackageReport(
+  pkg_name = "baseballstats"
+  , pkg_path = <path to the repo>
+)
+```
+
+```{r pkgnetRunSecond, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
+library(pkgnet)
+report2 <- CreatePackageReport(
+  pkg_name = "baseballstats"
+  , pkg_path = system.file('baseballstats',package="pkgnet")
+)
+```
 
 ***
 # Examining The Results
@@ -161,11 +161,11 @@ This report has three sections:
 
 1. **Package Summary** -- general information about the package and package level statistics   
 2. **Dependency Network** -- information regarding the packages upon which the current package under analysis relies upon    
-3. **Function Network** -- information regarding the functions within the current package under analysis and their interdependencies     
+3. **Function Network** -- information regarding the functions within the current package under analysis and their inter dependencies     
 
 Each section has helpful tables and visuals.  
 
-As a sample, here's how the **Function Network Visualization** looks for `pkgnet`: 
+As a sample, here's how the **Function Network Visualization** looks for `baseballstats`: 
 
 <!--  SIDE BY SIDE START  -->
 <div class="row"> <!--  Div to Wrap columns -->
@@ -175,7 +175,7 @@ As a sample, here's how the **Function Network Visualization** looks for `pkgnet
 ```{r demoVis1, echo=FALSE, fig.width=3, fig.height=3}
 report1$FunctionReporter$graph_viz
 ```
-Functional dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
+All Functions and their dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
 
 We also see that nothing depends on the `on_base_pct` function.  This might be valuable information to an R package developer. 
 </div> <!--  End column-left -->
@@ -187,7 +187,7 @@ report2$FunctionReporter$graph_viz
 ```
 Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%). 
 
-It appears the function that most other functions depend upon, `at_bats`, is well covered.  However, no other functions are covered by unit tests.
+It appears the function with the most dependencies, `at_bats`, is well covered.  However, no other functions are covered by unit tests.
 </div> <!--  End column-right  -->
 
 </div> <!--  End Div to Wrap columns -->
@@ -215,8 +215,10 @@ dim(report2$FunctionReporter$nodes)
 names(report2$FunctionReporter$nodes)
 ```
 
+Note, a few of these metrics provided by default are from the field of [Network Theory](https://en.wikipedia.org/wiki/Network_theory).  You can leverage the **Network Object** described below to derive many more.     
+
 ### Network Measures 
-Both the `DependencyReporter` and the `FunctionReporter` contain measure based on their network structure in a `network_measures` list. 
+Both the `DependencyReporter` and the `FunctionReporter` contain measures based on their network structure in a `network_measures` list. 
 
 ```{r networkMeasures}
 report2$FunctionReporter$network_measures
@@ -232,24 +234,27 @@ report2$FunctionReporter$pkg_graph
 ***
 # A Deeper Look
 With the reports and objects produced by `pkgnet` by default, there is plenty to inform us on the inner workings of an R package.  However, we may want to know MORE! Since the [igraph](http://igraph.org/r/) objects are available, we can leverage those graphs for further analysis.  
-
+     
 In this section, let's examine a larger R package, such as [lubridate](http://lubridate.tidyverse.org/).
-
-If you would like to follow along with the examples in this section^[Examples from version 1.7.3 of Lubridate], run these commands in your terminal to download and install `lubridate`.  
+       
+If you would like to follow along with the examples in this section, run these commands in your terminal to download and install `lubridate`^[Examples from version 1.7.3 of Lubridate].  
 ```{r bashText, engine='bash', eval=FALSE}
 # Create a temporary workspace
 mkdir -p ~/pkgnet_example && cd ~/pkgnet_example
 
 # Grab the lubridate source code
 git clone https://github.com/tidyverse/lubridate
+cd lubridate
+
+# If you want the examples to match exactly
+git reset --hard 9797d69abe1574dd89310c834e52d358137669b8
 
 # Install it
-cd lubridate
 Rscript -e "devtools::install()"
 ```
 
 ## Coverage of Most Referenced Functions
-Let's visualize the relationship between function centrality and code coverage.
+Let's examine the relationship between a function's total number of descendants and the unit test coverage of that function's code.
 
 <!--  Faked Since lubridate not guaranteed to be installed at time of report creation -->
 ```{r fakeDetail1, eval=FALSE}
@@ -263,27 +268,32 @@ funcNodes <- report2$FunctionReporter$nodes
 
 # List Coverage For Most Referenced Functions
 mostRef <- funcNodes[order(numDescendants, decreasing = TRUE)][1:10]
-mostRef[,list(node, numDescendants, coverageRatio, totalLines)]
+mostRef[,list(`Function` = node
+              , `Descendant Count` = numDescendants
+              , `Coverage Ratio` = coverageRatio
+              , `Total Lines` = totalLines)]
 
 ```
 
-|node                   | numDescendants| coverageRatio| totalLines|
-|:----------------------|--------------:|-------------:|----------:|
-|dmicroseconds          |             39|     0.0000000|          1|
-|days_in_months_so_far  |             22|     0.0000000|         10|
-|check_period           |             15|     0.0000000|         12|
-|as.difftime            |             13|            NA|         NA|
-|fast_strptime          |             13|     0.8571429|          7|
-|comp_posix_date        |             12|     0.7692308|         13|
-|date_to_posix          |             12|     1.0000000|          2|
-|ceiling_date           |             10|     0.9666667|         30|
-|add_number_to_duration |              8|     1.0000000|          1|
-|check_interval         |              8|     0.0000000|         11|
+|Function                | Descendant Count| Coverage Ratio| Total Lines|
+|:-----------------------|----------------:|--------------:|-----------:|
+|divide_period_by_period |               39|              1|           2|
+|days                    |               22|              1|           1|
+|check_duration          |               15|              0|           1|
+|as.POSIXt               |               13|              0|           1|
+|eweeks                  |               13|              0|           2|
+|check_interval          |               12|              0|          11|
+|date<-                  |               12|             NA|          NA|
+|add_months              |               10|              1|           4|
+|ceil_multi_unit         |               10|              1|           1|
+|am                      |                6|              1|           1|
 
-Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.  In this case, the most referenced function, `dmicroseconds`, appears to be a simple one line function that may not be necessary to cover in unit testing.  However, the second most referenced function, `days_in_months_so_far`, might benefit from some unit test coverage.
+Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.  
+
+In this case, `check_duration`, one of the most referenced functions (either directly or indirectly), is not covered by unit tests.  However, it appears to be a simple one line function that may not be necessary to cover in unit testing.  `check_interval`, on the other hand, might benefit from some unit test coverage as it is a larger, uncovered function with a similar number of dependencies.
 
 ## Discovering Similar Functions
-Looking at that same large package, let's say we wanted to explore options for consolidating functions.  In that case, we could use the `igraph` object to highlight functions with the same dependencies via Jaccard similarity. 
+Looking at that same large package, let's say we wanted to explore options for consolidating functions.  One approach might be to explore consolidating functions that share the same dependencies.  In that case, we could use the `igraph` object to highlight functions with the same dependencies via [Jaccard similarity](https://en.wikipedia.org/wiki/Jaccard_index). 
 
 ```{r fakeDetail2, eval=FALSE}
 # Get igraph object
@@ -324,7 +334,7 @@ Group 7: yq, dmy, ymd_hms, ymd_hm, ymd_h, ymd, ydm_hms, ydm_hm, ydm_h, ydm, pret
 )
 ```
 
-
+Now, we have identified seven different groups of functions within [lubridate](http://lubridate.tidyverse.org/) that share the _exact same_ dependencies.  We could explore each group of functions for potential consolidation. 
 
 
 

@@ -76,15 +76,23 @@
     
 <!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
 <style>
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
 .column-left{
   float: left;
-  width: 50%;
-  text-align: left;
+  width: 48%;
+  text-align: justify;
+  text-justify: inter-word;
+  margin-right: 4%;
 }
 .column-right{
   float: right;
-  width: 50%;
-  text-align: left;
+  width: 48%;
+  text-align: justify;
+  text-justify: inter-word;
 }
 </style>
 <!--  CODE BELOW HERE WILL RENDER  --><p><code>pkgnet</code> is an R library designed for the analysis of R libraries! The goal of the package is to build a graph representation of a package and its dependencies to inform a variety of activities, including:</p>
@@ -95,18 +103,58 @@
 </ul>
 <p>Below is a brief tour of <code>pkgnet</code> and its features.</p>
 <hr>
+<div id="dependencies-as-a-graph" class="section level1">
+<h1 class="hasAnchor">
+<a href="#dependencies-as-a-graph" class="anchor"></a>Dependencies As a Graph</h1>
+<p><code>pkgnet</code> represents both package dependencies and function dependencies as directed graphs. Before we look at the output of <code>pkgnet</code>, here are few core concepts to keep in mind.</p>
+<div class="figure" style="text-align: center">
+<div id="htmlwidget-85b85aa7969c37fea723" style="width:100%;height:465.984px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-85b85aa7969c37fea723">{"x":{"nodes":{"id":[1,2,3,4],"label":["A","B","C","D"],"x":[1,3,2,4],"y":[1,1,2,3],"level":[1,1,2,3]},"edges":{"from":[1,2,3,2],"to":[3,3,4,4]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"circle","font":{"size":25,"bold":true,"align":"center"}},"manipulation":{"enabled":false},"edges":{"arrows":"to"},"layout":{"hierarchical":{"enabled":true,"direction":"DU"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false}},"groups":null,"width":"100%","height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p class="caption">
+Example Dependency Graph
+</p>
+</div>
+<div id="dependency" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dependency" class="anchor"></a>Dependency</h2>
+<p>Functions or Dependencies are represented as nodes, and their dependent relationships are represented as edges (a.k.a. arcs or arrows). The direction of the edge points towards the node that is dependent on the other node.</p>
+<p>In the example dependency graph above:</p>
+<ul>
+<li>
+<strong>C</strong> is dependent upon both <strong>A</strong> and <strong>C</strong>.</li>
+<li>
+<strong>D</strong> is dependent upon both <strong>C</strong> and <strong>B</strong>.</li>
+<li>
+<strong>D</strong> is indirectly dependent upon <strong>A</strong> through <strong>C</strong> via the transitive property.</li>
+</ul>
+</div>
+<div id="descendants" class="section level2">
+<h2 class="hasAnchor">
+<a href="#descendants" class="anchor"></a>Descendants</h2>
+<p>The descendants of a node are all subsequent nodes that depend on that node, either directly or via the transitive property.</p>
+<p>In the example dependency graph above:</p>
+<ul>
+<li>
+<strong>C</strong> and <strong>D</strong> are descendants of <strong>A</strong>.</li>
+<li>
+<strong>B</strong> is <strong>NOT</strong> a descendant of <strong>A</strong>.</li>
+</ul>
+<hr>
+</div>
+</div>
 <div id="running-pkgnet" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-pkgnet" class="anchor"></a>Running pkgnet</h1>
 <p><code>pkgnet</code> can analyze any R package locally installed. Run <code>installed.packages()</code> to see the full list of packages installed on your system. For this example, let’s say we are analyzing a custom built package, <code>baseballstats</code>.</p>
 <p>To analyze <code>baseballstats</code>, run the following two lines of code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pkgnet)
-reportObj &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(<span class="dt">pkg_name =</span> <span class="st">"baseballstats"</span>)</code></pre></div>
-<p>That’s it! You have generated a lot of valuable information with that one call for a CRAN installed package.</p>
-<p>However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage information from <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a>. To do so, specify the path to the repository in <code>CreatePackageReport</code>.</p>
+report1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(<span class="dt">pkg_name =</span> <span class="st">"baseballstats"</span>)</code></pre></div>
+<p>That’s it! You have generated a lot of valuable information with that one call for an installed package.</p>
+<p>However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from <a href="https://cran.r-project.org/web/packages/covr/index.html">covr</a>. To do so, specify the path to the repository in <code>CreatePackageReport</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pkgnet)
-reportObjWithCovr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(<span class="dt">pkg_name =</span> <span class="st">"baseballstats"</span>
-                                 , <span class="dt">pkg_path =</span> &lt;path to the repo&gt;)</code></pre></div>
+report2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(
+  <span class="dt">pkg_name =</span> <span class="st">"baseballstats"</span>
+  , <span class="dt">pkg_path =</span> &lt;path to the repo&gt;
+)</code></pre></div>
 <hr>
 </div>
 <div id="examining-the-results" class="section level1">
@@ -126,83 +174,84 @@ reportObjWithCovr &lt;-<span class="st"> </span><span class="kw"><a href="../ref
 <strong>Dependency Network</strong> – information regarding the packages upon which the current package under analysis relies upon<br>
 </li>
 <li>
-<strong>Function Network</strong> – information regarding the functions within the current package under analysis and their interdependencies</li>
+<strong>Function Network</strong> – information regarding the functions within the current package under analysis and their inter dependencies</li>
 </ol>
 <p>Each section has helpful tables and visuals.</p>
-<p>As a sample, here’s how the <strong>Function Network Visualization</strong> looks for <code>pkgnet</code>:</p>
+<p>As a sample, here’s how the <strong>Function Network Visualization</strong> looks for <code>baseballstats</code>:</p>
 <!--  SIDE BY SIDE START  -->
-<!--  Take care to ensure equal lengths  -->
+<div class="row">
+<p><!--  Div to Wrap columns --></p>
 <div class="column-left">
 <h4 id="default">Default</h4>
 <p></p>
-<div id="htmlwidget-e4639e4c08542a7c2d00" style="width:700px;height:1132.6px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e4639e4c08542a7c2d00">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"outDegree":[0,2,1,1,0],"outBetweeness":[0,0,0.5,0.5,0],"outCloseness":[0.2,0.444444444444444,0.25,0.25,0.2],"numDescendants":[1,4,2,2,1],"hubScore":[0,1,1,1,0],"pageRank":[0.413720157147174,0.120882441825325,0.172257479601088,0.172257479601088,0.120882441825325],"inDegree":[2,0,1,1,0],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"level":[0,2,1,2,1],"horizontal":[-1,-0.5,-1,0.5,0],"color":["#97C2FC","#97C2FC","#97C2FC","#97C2FC","#97C2FC"]},"edges":{"SOURCE":["at_bats","at_bats","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","OPS","OPS"],"from":["at_bats","at_bats","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","OPS","OPS"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD","sortMethod":"directed"}},"edges":{"arrows":"to"}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)"},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null}},"evals":[],"jsHooks":[]}</script> Functional dependencies are visible. For example, we can see that both <code>batting_avg</code> and <code>slugging_avg</code> functions depend upon the <code>at_bats</code> function.
+<div id="htmlwidget-955ba580d6fe0dae64f0" style="width:288px;height:465.984px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-955ba580d6fe0dae64f0">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"outDegree":[0,2,1,1,0],"outBetweeness":[0,0,0.5,0.5,0],"outCloseness":[0.2,0.444444444444444,0.25,0.25,0.2],"numDescendants":[1,4,2,2,1],"hubScore":[0,1,1,1,0],"pageRank":[0.413720157147174,0.120882441825325,0.172257479601088,0.172257479601088,0.120882441825325],"inDegree":[2,0,1,1,0],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"level":[0,2,1,2,1],"horizontal":[-1,-0.5,-1,0.5,0],"color":["#97C2FC","#97C2FC","#97C2FC","#97C2FC","#97C2FC"]},"edges":{"SOURCE":["at_bats","at_bats","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","OPS","OPS"],"from":["at_bats","at_bats","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","OPS","OPS"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD","sortMethod":"directed"}},"edges":{"arrows":"to"}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)"},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null}},"evals":[],"jsHooks":[]}</script> All Functions and their dependencies are visible. For example, we can see that both <code>batting_avg</code> and <code>slugging_avg</code> functions depend upon the <code>at_bats</code> function.
 <p>We also see that nothing depends on the <code>on_base_pct</code> function. This might be valuable information to an R package developer.</p>
 </div>
+<p><!--  End column-left --></p>
 <div class="column-right">
 <h4 id="with-coverage-information">With Coverage Information</h4>
 <p></p>
-<div id="htmlwidget-ef5a97bb8fd8d3f9f1bc" style="width:700px;height:1132.6px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ef5a97bb8fd8d3f9f1bc">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"coveredLines":[0,2,0,0,0],"totalLines":[3,2,4,6,5],"coverageRatio":[0,1,0,0,0],"meanCoveragePerLine":[0,1,0,0,0],"filename":["R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R"],"outDegree":[2,1,1,0,0],"outBetweeness":[0,0.5,0.5,0,0],"outCloseness":[0.444444444444444,0.25,0.25,0.2,0.2],"numDescendants":[4,2,2,1,1],"hubScore":[1,1,1,0,0],"pageRank":[0.120882441825325,0.172257479601088,0.172257479601088,0.413720157147174,0.120882441825325],"inDegree":[0,1,1,2,0],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"level":[0,2,1,2,1],"horizontal":[-1,-0.5,-1,0.5,0],"scaledColorValues":[0,1,0,0,0],"color":["#FF0000","#00FF00","#FF0000","#FF0000","#FF0000"]},"edges":{"SOURCE":["at_bats","at_bats","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","OPS","OPS"],"from":["at_bats","at_bats","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","OPS","OPS"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD","sortMethod":"directed"}},"edges":{"arrows":"to"}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)"},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null}},"evals":[],"jsHooks":[]}</script> Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%).
-<p>It appears the function that most other functions depend upon, <code>at_bats</code>, is well covered. However, no other functions are covered by unit tests.</p>
+<div id="htmlwidget-0313ff984670985cac83" style="width:288px;height:465.984px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0313ff984670985cac83">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"coveredLines":[0,2,0,0,0],"totalLines":[3,2,4,6,5],"coverageRatio":[0,1,0,0,0],"meanCoveragePerLine":[0,1,0,0,0],"filename":["R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R"],"outDegree":[2,1,1,0,0],"outBetweeness":[0,0.5,0.5,0,0],"outCloseness":[0.444444444444444,0.25,0.25,0.2,0.2],"numDescendants":[4,2,2,1,1],"hubScore":[1,1,1,0,0],"pageRank":[0.120882441825325,0.172257479601088,0.172257479601088,0.413720157147174,0.120882441825325],"inDegree":[0,1,1,2,0],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"level":[0,2,1,2,1],"horizontal":[-1,-0.5,-1,0.5,0],"scaledColorValues":[0,1,0,0,0],"color":["#FF0000","#00FF00","#FF0000","#FF0000","#FF0000"]},"edges":{"SOURCE":["at_bats","at_bats","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","OPS","OPS"],"from":["at_bats","at_bats","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","OPS","OPS"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"direction":"UD","sortMethod":"directed"}},"edges":{"arrows":"to"}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false,"style":"width: 150px; height: 26px","useLabels":true},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)"},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null}},"evals":[],"jsHooks":[]}</script> Same as the default visualization except we can see coverage information as well (Red = 0%, Green = 100%).
+<p>It appears the function with the most dependencies, <code>at_bats</code>, is well covered. However, no other functions are covered by unit tests.</p>
 </div>
-<!--  SIDE BY SIDE END -->
-<p><br><br></p>
-<div id="check-out-the-full-html-report-for-more-results" class="section level4">
-<h4 class="hasAnchor">
-<a href="#check-out-the-full-html-report-for-more-results" class="anchor"></a>Check out the full HTML report for more results</h4>
+<p><!--  End column-right  --></p>
 </div>
+<p><!--  End Div to Wrap columns --> <!--  SIDE BY SIDE END --></p>
+<p><strong>Check out the full HTML report for more results</strong></p>
 </div>
 <div id="the-list-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-list-object" class="anchor"></a>The List Object</h2>
 <p>The <code><a href="../reference/CreatePackageReport.html">CreatePackageReport()</a></code> function returns a list with three items:</p>
 <ol style="list-style-type: decimal">
-<li>PackageSummaryReporter<br>
+<li>SummaryReporter<br>
 </li>
-<li>PackageDependencyReporter<br>
+<li>DependencyReporter<br>
 </li>
-<li>PackageFunctionReporter</li>
+<li>FunctionReporter</li>
 </ol>
 <p>Each items contains information visible in the report <em>and more</em>. We can use this information for a more detailed analysis of the results and/or more easily incorporate <code>pkgnet</code> results into other R processes.</p>
 <p>Here are a few notable items available within the list object.</p>
 <div id="node-information" class="section level3">
 <h3 class="hasAnchor">
 <a href="#node-information" class="anchor"></a>Node Information</h3>
-<p>Both the <code>PackageDependencyReporter</code> and the <code>PackageFunctionReporter</code> contain metrics about their package dependencies or functions (a.k.a network nodes) in a <code>nodes</code> table.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(reportObjWithCovr$PackageFunctionReporter$nodes)
-<span class="co">#&gt; [1]  5 13</span>
-<span class="kw">names</span>(reportObjWithCovr$PackageFunctionReporter$nodes)
-<span class="co">#&gt;  [1] "node"                "coveredLines"        "totalLines"         </span>
-<span class="co">#&gt;  [4] "coverageRatio"       "meanCoveragePerLine" "filename"           </span>
-<span class="co">#&gt;  [7] "outDegree"           "outBetweeness"       "outCloseness"       </span>
-<span class="co">#&gt; [10] "numDescendants"      "hubScore"            "pageRank"           </span>
-<span class="co">#&gt; [13] "inDegree"</span></code></pre></div>
+<p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> contain metrics about their package dependencies or functions (a.k.a network nodes) in a <code>nodes</code> table.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(report2$FunctionReporter$nodes)</code></pre></div>
+<pre><code>#&gt; [1]  5 13</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(report2$FunctionReporter$nodes)</code></pre></div>
+<pre><code>#&gt;  [1] "node"                "coveredLines"        "totalLines"         
+#&gt;  [4] "coverageRatio"       "meanCoveragePerLine" "filename"           
+#&gt;  [7] "outDegree"           "outBetweeness"       "outCloseness"       
+#&gt; [10] "numDescendants"      "hubScore"            "pageRank"           
+#&gt; [13] "inDegree"</code></pre>
+<p>Note, a few of these metrics provided by default are from the field of <a href="https://en.wikipedia.org/wiki/Network_theory">Network Theory</a>. You can leverage the <strong>Network Object</strong> described below to derive many more.</p>
 </div>
 <div id="network-measures" class="section level3">
 <h3 class="hasAnchor">
 <a href="#network-measures" class="anchor"></a>Network Measures</h3>
-<p>Both the <code>PackageDependencyReporter</code> and the <code>PackageFunctionReporter</code> contain measure based on their network structure in a <code>network_measures</code> list.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reportObjWithCovr$PackageFunctionReporter$network_measures
-<span class="co">#&gt; $centralization.OutDegree</span>
-<span class="co">#&gt; [1] 0.3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $centralization.betweenness</span>
-<span class="co">#&gt; [1] 0.03125</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $centralization.closeness</span>
-<span class="co">#&gt; [1] 0.2743056</span></code></pre></div>
+<p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> contain measures based on their network structure in a <code>network_measures</code> list.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">report2$FunctionReporter$network_measures</code></pre></div>
+<pre><code>#&gt; $centralization.OutDegree
+#&gt; [1] 0.3
+#&gt; 
+#&gt; $centralization.betweenness
+#&gt; [1] 0.03125
+#&gt; 
+#&gt; $centralization.closeness
+#&gt; [1] 0.2743056</code></pre>
 </div>
 <div id="network-object" class="section level3">
 <h3 class="hasAnchor">
 <a href="#network-object" class="anchor"></a>Network Object</h3>
-<p>Both the <code>PackageDependencyReporter</code> and the <code>PackageFunctionReporter</code> are available as <a href="http://igraph.org/r/">igraph</a> objects named <code>pkg_graph</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reportObjWithCovr$PackageFunctionReporter$pkg_graph
-<span class="co">#&gt; IGRAPH 9c3b2de DN-- 5 4 -- </span>
-<span class="co">#&gt; + attr: name (v/c)</span>
-<span class="co">#&gt; + edges from 9c3b2de (vertex names):</span>
-<span class="co">#&gt; [1] at_bats     -&gt;batting_avg  at_bats     -&gt;slugging_avg</span>
-<span class="co">#&gt; [3] batting_avg -&gt;OPS          slugging_avg-&gt;OPS</span></code></pre></div>
+<p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> are available as <a href="http://igraph.org/r/">igraph</a> objects named <code>pkg_graph</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">report2$FunctionReporter$pkg_graph</code></pre></div>
+<pre><code>#&gt; IGRAPH 08b4aac DN-- 5 4 -- 
+#&gt; + attr: name (v/c)
+#&gt; + edges from 08b4aac (vertex names):
+#&gt; [1] at_bats     -&gt;batting_avg  at_bats     -&gt;slugging_avg
+#&gt; [3] batting_avg -&gt;OPS          slugging_avg-&gt;OPS</code></pre>
 <hr>
 </div>
 </div>
@@ -210,101 +259,125 @@ reportObjWithCovr &lt;-<span class="st"> </span><span class="kw"><a href="../ref
 <div id="a-deeper-look" class="section level1">
 <h1 class="hasAnchor">
 <a href="#a-deeper-look" class="anchor"></a>A Deeper Look</h1>
-<p>With the reports and objects produced by <code>pkgnet</code> by default, there is plenty to inform us on the inner workings of an R package. However, we may want to know MORE! Since the <a href="http://igraph.org/r/">igraph</a> objects are available, we can leverage those for further analysis. Here are some examples.</p>
+<p>With the reports and objects produced by <code>pkgnet</code> by default, there is plenty to inform us on the inner workings of an R package. However, we may want to know MORE! Since the <a href="http://igraph.org/r/">igraph</a> objects are available, we can leverage those graphs for further analysis.</p>
+<p>In this section, let’s examine a larger R package, such as <a href="http://lubridate.tidyverse.org/">lubridate</a>.</p>
+<p>If you would like to follow along with the examples in this section, run these commands in your terminal to download and install <code>lubridate</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Create a temporary workspace</span>
+<span class="kw">mkdir</span> -p ~/pkgnet_example <span class="kw">&amp;&amp;</span> <span class="kw">cd</span> ~/pkgnet_example
+
+<span class="co"># Grab the lubridate source code</span>
+<span class="kw">git</span> clone https://github.com/tidyverse/lubridate
+<span class="kw">cd</span> lubridate
+
+<span class="co"># If you want the examples to match exactly</span>
+<span class="kw">git</span> reset --hard 9797d69abe1574dd89310c834e52d358137669b8
+
+<span class="co"># Install it</span>
+<span class="kw">Rscript</span> -e <span class="st">"devtools::install()"</span></code></pre></div>
 <div id="coverage-of-most-referenced-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coverage-of-most-referenced-functions" class="anchor"></a>Coverage of Most Referenced Functions</h2>
-<p>Let’s visualize the relationship between centrality and coverage in a large package such as <code>lubridate</code>.</p>
+<p>Let’s examine the relationship between a function’s total number of descendants and the unit test coverage of that function’s code.</p>
 <!--  Faked Since lubridate not guaranteed to be installed at time of report creation -->
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run pkgnet</span>
 <span class="kw">library</span>(pkgnet)
-reportObjWithCovr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(<span class="dt">pkg_name =</span> <span class="st">"lubridate"</span>
-                                         , <span class="dt">pkg_path =</span> <span class="st">"~/repos/lubridate"</span>)
+report2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(<span class="dt">pkg_name =</span> <span class="st">"lubridate"</span>
+                                         , <span class="dt">pkg_path =</span> <span class="st">"~/pkgnet_example/lubridate"</span>)
 
 <span class="co"># Extract Nodes Table</span>
-funcNodes &lt;-<span class="st"> </span>reportObjWithCovr$PackageFunctionReporter$nodes
+funcNodes &lt;-<span class="st"> </span>report2$FunctionReporter$nodes
 
 <span class="co"># List Coverage For Most Referenced Functions</span>
 mostRef &lt;-<span class="st"> </span>funcNodes[<span class="kw">order</span>(numDescendants, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)][<span class="dv">1</span>:<span class="dv">10</span>]
-mostRef[,<span class="kw">list</span>(node, numDescendants, coverageRatio, totalLines)]</code></pre></div>
+mostRef[,<span class="kw">list</span>(<span class="st">`</span><span class="dt">Function</span><span class="st">`</span> =<span class="st"> </span>node
+              , <span class="st">`</span><span class="dt">Descendant Count</span><span class="st">`</span> =<span class="st"> </span>numDescendants
+              , <span class="st">`</span><span class="dt">Coverage Ratio</span><span class="st">`</span> =<span class="st"> </span>coverageRatio
+              , <span class="st">`</span><span class="dt">Total Lines</span><span class="st">`</span> =<span class="st"> </span>totalLines)]</code></pre></div>
 <table class="table">
+<colgroup>
+<col width="34%">
+<col width="25%">
+<col width="22%">
+<col width="18%">
+</colgroup>
 <thead><tr class="header">
-<th align="left">node</th>
-<th align="right">numDescendants</th>
-<th align="right">coverageRatio</th>
-<th align="right">totalLines</th>
+<th align="left">Function</th>
+<th align="right">Descendant Count</th>
+<th align="right">Coverage Ratio</th>
+<th align="right">Total Lines</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">dmicroseconds</td>
+<td align="left">divide_period_by_period</td>
 <td align="right">39</td>
-<td align="right">0.0000000</td>
 <td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">days_in_months_so_far</td>
-<td align="right">22</td>
-<td align="right">0.0000000</td>
-<td align="right">10</td>
-</tr>
-<tr class="odd">
-<td align="left">check_period</td>
-<td align="right">15</td>
-<td align="right">0.0000000</td>
-<td align="right">12</td>
-</tr>
-<tr class="even">
-<td align="left">as.difftime</td>
-<td align="right">13</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">fast_strptime</td>
-<td align="right">13</td>
-<td align="right">0.8571429</td>
-<td align="right">7</td>
-</tr>
-<tr class="even">
-<td align="left">comp_posix_date</td>
-<td align="right">12</td>
-<td align="right">0.7692308</td>
-<td align="right">13</td>
-</tr>
-<tr class="odd">
-<td align="left">date_to_posix</td>
-<td align="right">12</td>
-<td align="right">1.0000000</td>
 <td align="right">2</td>
 </tr>
 <tr class="even">
-<td align="left">ceiling_date</td>
-<td align="right">10</td>
-<td align="right">0.9666667</td>
-<td align="right">30</td>
+<td align="left">days</td>
+<td align="right">22</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="left">add_number_to_duration</td>
-<td align="right">8</td>
-<td align="right">1.0000000</td>
+<td align="left">check_duration</td>
+<td align="right">15</td>
+<td align="right">0</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
+<td align="left">as.POSIXt</td>
+<td align="right">13</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">eweeks</td>
+<td align="right">13</td>
+<td align="right">0</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
 <td align="left">check_interval</td>
-<td align="right">8</td>
-<td align="right">0.0000000</td>
+<td align="right">12</td>
+<td align="right">0</td>
 <td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="left">date&lt;-</td>
+<td align="right">12</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td align="left">add_months</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">ceil_multi_unit</td>
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">am</td>
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
-<p>Inspecting results such as these can help an R package developer decide which function to cover with unit tests next. In this case, the most referenced function, <code>dmicroseconds</code>, appears to be a simple one line function that may not be necessary to cover in unit testing. However, the second most referenced function, <code>days_in_months_so_far</code>, might benefit from some unit test coverage.</p>
+<p>Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.</p>
+<p>In this case, <code>check_duration</code>, one of the most referenced functions (either directly or indirectly), is not covered by unit tests. However, it appears to be a simple one line function that may not be necessary to cover in unit testing. <code>check_interval</code>, on the other hand, might benefit from some unit test coverage as it is a larger, uncovered function with a similar number of dependencies.</p>
 </div>
 <div id="discovering-similar-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#discovering-similar-functions" class="anchor"></a>Discovering Similar Functions</h2>
-<p>Looking at that same large package, let’s say we wanted to explore options for consolidating functions. In that case, we could use the <code>igraph</code> object to highlight functions with the same dependencies via Jaccard similarity.</p>
+<p>Looking at that same large package, let’s say we wanted to explore options for consolidating functions. One approach might be to explore consolidating functions that share the same dependencies. In that case, we could use the <code>igraph</code> object to highlight functions with the same dependencies via <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard similarity</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get igraph object</span>
-funcGraph &lt;-<span class="st"> </span>reportObjWithCovr$PackageFunctionReporter$pkg_graph
+funcGraph &lt;-<span class="st"> </span>report2$FunctionReporter$pkg_graph
 funcNames &lt;-<span class="st"> </span>igraph::<span class="kw">vertex_attr</span>(funcGraph, <span class="dt">name =</span> <span class="st">"name"</span>)
 
 <span class="co"># Jaccard Similarity</span>
@@ -334,7 +407,14 @@ for (i in <span class="kw">seq_along</span>(sameDeps)) {
 #&gt; Group 5: picoseconds, microseconds, nanoseconds, milliseconds
 #&gt; Group 6: weeks, days, years, seconds_to_period, seconds, new_period, minutes, hours
 #&gt; Group 7: yq, dmy, ymd_hms, ymd_hm, ymd_h, ymd, ydm_hms, ydm_hm, ydm_h, ydm, pretty_dates, parse_date_time2, parse_date_time, myd, mdy_hms, mdy_hm, mdy_h, mdy, local_time, fast_strptime, dym, dmy_hms, dmy_hm, dmy_h</code></pre>
+<p>Now, we have identified seven different groups of functions within <a href="http://lubridate.tidyverse.org/">lubridate</a> that share the <em>exact same</em> dependencies. We could explore each group of functions for potential consolidation.</p>
 </div>
+</div>
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Examples from version 1.7.3 of Lubridate<a href="#fnref1">↩</a></p></li>
+</ol>
 </div>
   </div>
 
@@ -343,7 +423,13 @@ for (i in <span class="kw">seq_along</span>(sameDeps)) {
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#running-pkgnet">Running pkgnet</a></li>
+<li>
+<a href="#dependencies-as-a-graph">Dependencies As a Graph</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#dependency">Dependency</a></li>
+      <li><a href="#descendants">Descendants</a></li>
+      </ul>
+</li>
+      <li><a href="#running-pkgnet">Running pkgnet</a></li>
       <li>
 <a href="#examining-the-results">Examining The Results</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#the-report">The Report</a></li>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • pkgnet</title>
+<title>Package Dependency Reporter Class — DependencyReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,7 +25,12 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Package Dependency Reporter Class — DependencyReporter" />
+
+<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
+             its other package dependencies, determining which package it relies on is most central,
+             allowing for a developer to determine how to vet its dependency tree" />
+<meta name="twitter:card" content="summary" />
 
 
 <!-- mathjax -->
@@ -42,7 +47,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -88,77 +93,51 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Package Dependency Reporter Class</h1>
+    
     </div>
 
-    <table class="ref-index">
+    
+    <p>This Reporter takes a package and uncovers the structure from
+             its other package dependencies, determining which package it relies on is most central,
+             allowing for a developer to determine how to vet its dependency tree</p>
+    
 
-    <colgroup>
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='no'>DependencyReporter</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        <!--  -->
-        <td>
-          <p><code><a href="AbstractGraphReporter.html">AbstractGraphReporter</a></code> </p>
-        </td>
-        <td><p>Abstract Graph Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="AbstractPackageReporter.html">AbstractPackageReporter</a></code> </p>
-        </td>
-        <td><p>Abstract Package Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="CreatePackageReport.html">CreatePackageReport()</a></code> </p>
-        </td>
-        <td><p>Surface the internal and external dependencies of an R package.</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="DefaultReporters.html">DefaultReporters()</a></code> </p>
-        </td>
-        <td><p>Default Reporters</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="DependencyReporter.html">DependencyReporter</a></code> </p>
-        </td>
-        <td><p>Package Dependency Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="FunctionReporter.html">FunctionReporter</a></code> </p>
-        </td>
-        <td><p>Package Function Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="SummaryReporter.html">SummaryReporter</a></code> </p>
-        </td>
-        <td><p>Package Summary Reporter Class</p></td>
-      </tr>
-    </tbody>
-    </table>
+    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
+  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># Instantiate an object</span>
+<span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>DependencyReporter</span>$<span class='fu'>new</span>()
+
+<span class='co'># Seed it with a package</span>
+<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-04-04 00:27:26] Resetting cached network information...</div><div class='input'>
+<span class='co'># plot it up</span>
+<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): attempt to apply non-function</span></div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

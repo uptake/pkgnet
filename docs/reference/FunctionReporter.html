@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • pkgnet</title>
+<title>Package Function Reporter Class — FunctionReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,7 +25,13 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Package Function Reporter Class — FunctionReporter" />
+
+<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
+             its other functions, determining useful information such as which function is most 
+             central to the package. Combined with testing information it can be used as a powerful tool
+             to plan testing efforts." />
+<meta name="twitter:card" content="summary" />
 
 
 <!-- mathjax -->
@@ -42,7 +48,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -88,77 +94,59 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Package Function Reporter Class</h1>
+    
     </div>
 
-    <table class="ref-index">
+    
+    <p>This Reporter takes a package and uncovers the structure from
+             its other functions, determining useful information such as which function is most 
+             central to the package. Combined with testing information it can be used as a powerful tool
+             to plan testing efforts.</p>
+    
 
-    <colgroup>
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='no'>FunctionReporter</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        <!--  -->
-        <td>
-          <p><code><a href="AbstractGraphReporter.html">AbstractGraphReporter</a></code> </p>
-        </td>
-        <td><p>Abstract Graph Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="AbstractPackageReporter.html">AbstractPackageReporter</a></code> </p>
-        </td>
-        <td><p>Abstract Package Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="CreatePackageReport.html">CreatePackageReport()</a></code> </p>
-        </td>
-        <td><p>Surface the internal and external dependencies of an R package.</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="DefaultReporters.html">DefaultReporters()</a></code> </p>
-        </td>
-        <td><p>Default Reporters</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="DependencyReporter.html">DependencyReporter</a></code> </p>
-        </td>
-        <td><p>Package Dependency Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="FunctionReporter.html">FunctionReporter</a></code> </p>
-        </td>
-        <td><p>Package Function Reporter Class</p></td>
-      </tr><tr>
-        <!--  -->
-        <td>
-          <p><code><a href="SummaryReporter.html">SummaryReporter</a></code> </p>
-        </td>
-        <td><p>Package Summary Reporter Class</p></td>
-      </tr>
-    </tbody>
-    </table>
+    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
+
+    
+    <dl class='dl-horizontal'>
+    <dt><code>set_package(pkg_name, pkg_path)</code></dt><dd><p><ul>
+<li><p>Set properties of this reporter. If pkg_name overrides a 
+                previously-set package name, any cached data will be removed.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>pkg_name</code></b>: String with the name of the package</p></li>
+<li><p><b><code>pkg_path</code></b>: Optional path to the source code. 
+                    To be used for test coverage, if provided.</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
+  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
+    
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
-    </ul>
+      
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#public-methods">Public Methods</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
+
   </div>
 </div>
 
