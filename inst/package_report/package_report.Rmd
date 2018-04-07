@@ -27,9 +27,10 @@ cat(sprintf("# %s", pkg_name))
 
 ```{r}
 reportTabs <- lapply(params$reporters, function(reporter) {
+  report_env <- list2env(list(reporter = reporter))
   knitr::knit_child(
     reporter$report_markdown_path
-    , envir = list(reporter = reporter)
+    , envir = report_env
   )
 })
 ```

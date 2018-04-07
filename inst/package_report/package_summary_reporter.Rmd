@@ -1,8 +1,6 @@
 ---
 title: "Package Summary Report"
 output: html_document
-params:
-   reporter: params$reporter
 ---
 
 ## Package Summary

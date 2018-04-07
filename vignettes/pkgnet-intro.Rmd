@@ -260,8 +260,10 @@ Let's examine the relationship between a function's total number of descendants 
 ```{r fakeDetail1, eval=FALSE}
 # Run pkgnet
 library(pkgnet)
-report2 <- CreatePackageReport(pkg_name = "lubridate"
-                                         , pkg_path = "~/pkgnet_example/lubridate")
+report2 <- CreatePackageReport(
+    pkg_name = "lubridate"
+    , pkg_path = "~/pkgnet_example/lubridate"
+)
 
 # Extract Nodes Table
 funcNodes <- report2$FunctionReporter$nodes
