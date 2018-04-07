@@ -129,7 +129,7 @@ report1 <- CreatePackageReport(pkg_name = "baseballstats")
 
 That's it! You have generated a lot of valuable information with that one call for an installed package.  
 
-However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from [covr](https://cran.r-project.org/web/packages/covr/index.html).  To do so, specify the path to the repository in `CreatePackageReport`.  
+However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from [covr](https://CRAN.R-project.org/package=covr).  To do so, specify the path to the repository in `CreatePackageReport`.  
 
 
 ```{r pkgnetRunFAKE, eval=FALSE}
