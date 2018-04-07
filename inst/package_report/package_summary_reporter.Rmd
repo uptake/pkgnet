@@ -7,7 +7,7 @@ params:
 
 ## Package Summary
 
-Here' some general information about **`r reporter$pkg_name`**. 
+Here's some general information about **`r reporter$pkg_name`**. 
 
 ### Table
 
