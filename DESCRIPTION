@@ -33,3 +33,4 @@ Suggests:
 License: BSD_3_clause + file LICENSE
 LazyData: TRUE
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

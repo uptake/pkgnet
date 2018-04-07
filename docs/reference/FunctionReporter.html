@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Abstract Package Reporter Class — AbstractPackageReporter • pkgnet</title>
+<title>Package Function Reporter Class — FunctionReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,12 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Abstract Package Reporter Class — AbstractPackageReporter" />
+<meta property="og:title" content="Package Function Reporter Class — FunctionReporter" />
 
-<meta property="og:description" content="Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality." />
+<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
+             its other functions, determining useful information such as which function is most 
+             central to the package. Combined with testing information it can be used as a powerful tool
+             to plan testing efforts." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -95,17 +96,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Abstract Package Reporter Class</h1>
+    <h1>Package Function Reporter Class</h1>
     
     </div>
 
     
-    <p>Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality.</p>
+    <p>This Reporter takes a package and uncovers the structure from
+             its other functions, determining useful information such as which function is most 
+             central to the package. Combined with testing information it can be used as a powerful tool
+             to plan testing efforts.</p>
     
 
-    <pre class="usage"><span class='no'>AbstractPackageReporter</span></pre>
+    <pre class="usage"><span class='no'>FunctionReporter</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
@@ -115,23 +117,22 @@
 
     
     <dl class='dl-horizontal'>
-    <dt><code>set_package(pkg_name, pkg_path = NULL)</code></dt><dd><p><ul>
-<li><p>Set the package that all operations in the object are done for.</p></li>
+    <dt><code>set_package(pkg_name, pkg_path)</code></dt><dd><p><ul>
+<li><p>Set properties of this reporter. If pkg_name overrides a 
+                previously-set package name, any cached data will be removed.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>pkg_name</code></b>: a string with the name of the package you are
-                  analyzing.</p></li>
-<li><p><b><code>pkg_path</code></b>: directory path to source code of package</p></li>
+<li><p><b><code>pkg_name</code></b>: String with the name of the package</p></li>
+<li><p><b><code>pkg_path</code></b>: Optional path to the source code. 
+                    To be used for test coverage, if provided.</p></li>
 </ul></p></li>
-</ul></p></dd>
-    <dt><code>get_summary_view()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporters summary report on the package for use in a high level view</p></li>
 </ul></p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other AbstractReporters: <code><a href='AbstractGraphReporter.html'>AbstractGraphReporter</a></code></p></div>
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
+  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
     
 
   </div>

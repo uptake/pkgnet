@@ -25,14 +25,14 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
 <meta property="og:title" content="Package Dependency Reporter Class — PackageDependencyReporter" />
 
 <meta property="og:description" content="This Reporter takes a package and uncovers the structure from
              its other package dependencies, determining which package it relies on is most central,
              allowing for a developer to determine how to vet its dependency tree" />
 <meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -40,6 +40,8 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
+
 
 
   </head>
@@ -55,8 +57,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">pkgnet</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">pkgnet</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -64,6 +70,9 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
       </ul>
       
@@ -75,6 +84,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -82,10 +92,11 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Dependency Reporter Class</h1>
+    
     </div>
 
     
@@ -102,8 +113,8 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>Other PackageReporters: <code><a href='PackageFunctionReporter.html'>PackageFunctionReporter</a></code>,
-  <code><a href='PackageSummaryReporter.html'>PackageSummaryReporter</a></code></p>
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='PackageFunctionReporter.html'>PackageFunctionReporter</a></code>,
+  <code><a href='PackageSummaryReporter.html'>PackageSummaryReporter</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -112,7 +123,7 @@
 <span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>PackageDependencyReporter</span>$<span class='fu'>new</span>()
 
 <span class='co'># Seed it with a package</span>
-<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-03-22 22:35:00] Resetting cached network information...</div><div class='input'>
+<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-03-30 05:24:30] Resetting cached network information...</div><div class='input'>
 <span class='co'># plot it up</span>
 <span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): attempt to apply non-function</span></div></pre>
   </div>
@@ -142,5 +153,8 @@
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

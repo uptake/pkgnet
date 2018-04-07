@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Abstract Package Reporter Class — AbstractPackageReporter • pkgnet</title>
+<title>Package Summary Reporter Class — SummaryReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,11 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Abstract Package Reporter Class — AbstractPackageReporter" />
+<meta property="og:title" content="Package Summary Reporter Class — SummaryReporter" />
 
-<meta property="og:description" content="Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality." />
+<meta property="og:description" content="Defines a concrete implementation of AbstractPackageReporter 
+             for a high level overview of a particular package. It will summarize
+             things like lines of code, whether it's on CRAN, etc." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -95,17 +95,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Abstract Package Reporter Class</h1>
+    <h1>Package Summary Reporter Class</h1>
     
     </div>
 
     
-    <p>Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality.</p>
+    <p>Defines a concrete implementation of <a href='AbstractPackageReporter.html'>AbstractPackageReporter</a> 
+             for a high level overview of a particular package. It will summarize
+             things like lines of code, whether it's on CRAN, etc.</p>
     
 
-    <pre class="usage"><span class='no'>AbstractPackageReporter</span></pre>
+    <pre class="usage"><span class='no'>SummaryReporter</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
@@ -131,7 +131,8 @@
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other AbstractReporters: <code><a href='AbstractGraphReporter.html'>AbstractGraphReporter</a></code></p></div>
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
+  <code><a href='FunctionReporter.html'>FunctionReporter</a></code></p></div>
     
 
   </div>

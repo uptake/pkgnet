@@ -1,8 +1,6 @@
 ---
 title: "Package Dependency Report"
 output: html_document
-params:
-   reporter: params$reporter
 ---
 
 ## Dependency Network

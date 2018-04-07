@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Abstract Package Reporter Class — AbstractPackageReporter • pkgnet</title>
+<title>Package Dependency Reporter Class — DependencyReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,11 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Abstract Package Reporter Class — AbstractPackageReporter" />
+<meta property="og:title" content="Package Dependency Reporter Class — DependencyReporter" />
 
-<meta property="og:description" content="Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality." />
+<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
+             its other package dependencies, determining which package it relies on is most central,
+             allowing for a developer to determine how to vet its dependency tree" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -95,45 +95,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Abstract Package Reporter Class</h1>
+    <h1>Package Dependency Reporter Class</h1>
     
     </div>
 
     
-    <p>Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality.</p>
+    <p>This Reporter takes a package and uncovers the structure from
+             its other package dependencies, determining which package it relies on is most central,
+             allowing for a developer to determine how to vet its dependency tree</p>
     
 
-    <pre class="usage"><span class='no'>AbstractPackageReporter</span></pre>
+    <pre class="usage"><span class='no'>DependencyReporter</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
-
-    
-    <dl class='dl-horizontal'>
-    <dt><code>set_package(pkg_name, pkg_path = NULL)</code></dt><dd><p><ul>
-<li><p>Set the package that all operations in the object are done for.</p></li>
-<li><p><b>Args:</b>
-                <ul>
-<li><p><b><code>pkg_name</code></b>: a string with the name of the package you are
-                  analyzing.</p></li>
-<li><p><b><code>pkg_path</code></b>: directory path to source code of package</p></li>
-</ul></p></li>
-</ul></p></dd>
-    <dt><code>get_summary_view()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporters summary report on the package for use in a high level view</p></li>
-</ul></p></dd>
-</dl>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other AbstractReporters: <code><a href='AbstractGraphReporter.html'>AbstractGraphReporter</a></code></p></div>
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
+  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='co'># Instantiate an object</span>
+<span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>DependencyReporter</span>$<span class='fu'>new</span>()
+
+<span class='co'># Seed it with a package</span>
+<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-04-04 00:27:26] Resetting cached network information...</div><div class='input'>
+<span class='co'># plot it up</span>
+<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): attempt to apply non-function</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -141,10 +133,10 @@
       
       <li><a href="#format">Format</a></li>
 
-      <li><a href="#public-methods">Public Methods</a></li>
-
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

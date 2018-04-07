@@ -1,5 +1,6 @@
-pandoc: 1.19.2.1
+pandoc: 1.15.2
 pkgdown: 0.1.0.9000
-pkgdown_sha: 491a8fa339dcdd1aa466e8df2f0693f679fba4cc
-articles: []
+pkgdown_sha: 7d8b4882c4eb650f0f869a618f5c445c657313f0
+articles:
+  pkgnet-intro: pkgnet-intro.html
 
