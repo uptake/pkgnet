@@ -15,4 +15,4 @@
 * No issues
 
 ### CRAN Response
-* TBD
+* accepted and available on CRAN
