@@ -1,8 +1,6 @@
 # pkgnet
 
-[![Build Status](https://travis-ci.org/UptakeOpenSource/pkgnet.svg?branch=master)](https://travis-ci.org/UptakeOpenSource/pkgnet)
-
-**WARNING: This package is still under construction. It's API can and will change. Please contribute to the conversation about its future by submitting issues and pull requests, or by contacting the package maintainer (see the DESCRIPTION file) directly.**
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-last-release/pkgnet)](https://cran.r-project.org/package=pkgnet) [![CRAN\_Download\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/pkgnet)](https://cran.r-project.org/package=pkgnet) [![Build Status](https://travis-ci.org/UptakeOpenSource/pkgnet.svg?branch=master)](https://travis-ci.org/UptakeOpenSource/pkgnet)
 
 ## Introduction
 
@@ -25,12 +23,10 @@ The core functionality of this package is the `CreatePackageReport` function.
 
 ## Installation <a name="installation"></a>
 
-This package has not yet been submitted to [CRAN](https://cran.r-project.org/), though we intend to do so soon.
-
-To use the development version of the package, you can install directly from [GitHub](https://github.com/UptakeOpenSource/pkgnet)
+This package is now available from [CRAN](https://cran.r-project.org/)!
 
 ```
-devtools::install_github("UptakeOpenSource/pkgnet")
+install.packages('pkgnet')
 ```
 
 ## Usage Examples <a name="examples"></a>
