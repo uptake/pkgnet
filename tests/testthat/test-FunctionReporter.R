@@ -48,6 +48,7 @@ test_that('FunctionReporter Methods Work', {
       testObj$set_package(
         pkg_name = "baseballstats"
         # Covr only works on source code. find.package path will not work
+        # covr also requires an absolute path, which is provided by system.file
         , pkg_path = system.file("baseballstats", package = "pkgnet")
       )
   })

@@ -13,8 +13,9 @@ CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
 
 \item{pkg_reporters}{(list) a list of package reporters}
 
-\item{pkg_path}{(string) The path to the package repository.
-If given, coverage will be calculated for each function.}
+\item{pkg_path}{(string) The path to the package repository. If given, coverage
+will be calculated for each function. \code{pkg_path} can be an
+absolute or relative path.}
 
 \item{report_path}{(string) The path and filename of the output report.  Default
 report will be produced in working directory.}
