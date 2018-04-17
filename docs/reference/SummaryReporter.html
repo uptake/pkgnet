@@ -59,7 +59,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9000</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Summary Reporter Class</h1>
-    
+    <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/PackageSummaryReporter.R'><code>R/PackageSummaryReporter.R</code></a></small>
     </div>
 
     
@@ -119,9 +119,11 @@
 <li><p>Set the package that all operations in the object are done for.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>pkg_name</code></b>: a string with the name of the package you are
+<li><p><b><code>pkg_name</code></b>: A string with the name of the package you are
                   analyzing.</p></li>
-<li><p><b><code>pkg_path</code></b>: directory path to source code of package</p></li>
+<li><p><b><code>pkg_path</code></b>: Optional directory path to source
+                  code of the package. It is used for calculating test coverage.
+                  It can be an absolute or relative path.</p></li>
 </ul></p></li>
 </ul></p></dd>
     <dt><code>get_summary_view()</code></dt><dd><p><ul>

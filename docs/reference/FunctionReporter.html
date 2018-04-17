@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9000</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Package Function Reporter Class</h1>
-    
+    <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/PackageFunctionReporter.R'><code>R/PackageFunctionReporter.R</code></a></small>
     </div>
 
     
@@ -122,9 +122,10 @@
                 previously-set package name, any cached data will be removed.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>pkg_name</code></b>: String with the name of the package</p></li>
-<li><p><b><code>pkg_path</code></b>: Optional path to the source code. 
-                    To be used for test coverage, if provided.</p></li>
+<li><p><b><code>pkg_name</code></b>: String with the name of the package.</p></li>
+<li><p><b><code>pkg_path</code></b>: Optional directory path to source
+                  code of the package. It is used for calculating test coverage.
+                  It can be an absolute or relative path.</p></li>
 </ul></p></li>
 </ul></p></dd>
 </dl>
