@@ -21,9 +21,11 @@ Defines the Abstract Class for all PackageReporters defined in pkgnet.
             \item{Set the package that all operations in the object are done for.}
             \item{\bold{Args:}}{
                 \itemize{
-                \item{\bold{\code{pkg_name}}: a string with the name of the package you are
+                \item{\bold{\code{pkg_name}}: A string with the name of the package you are
                   analyzing.}
-                  \item{\bold{\code{pkg_path}}: directory path to source code of package}
+                \item{\bold{\code{pkg_path}}: Optional directory path to source
+                  code of the package. It is used for calculating test coverage.
+                  It can be an absolute or relative path.}
                  }
              }
          }

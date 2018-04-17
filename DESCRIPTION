@@ -26,6 +26,7 @@ Imports:
     mvbutils,
     R6,
     rmarkdown,
+    tools,
     visNetwork
 Suggests:
     devtools,

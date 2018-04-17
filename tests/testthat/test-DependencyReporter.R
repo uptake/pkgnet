@@ -45,11 +45,24 @@ test_that('DependencyReporter Methods Work', {
   
   # inherited set_package
   expect_silent({
+      
+      # testing set_package with a pkg_path that is relative to the current directory
+      entry_wd <- getwd()
+      parent_dir <- dirname(system.file('baseballstats', package='pkgnet'))
+      setwd(parent_dir)
+      
       testObj$set_package(
           pkg_name = "baseballstats"
-          , pkg_path = system.file('baseballstats', package="pkgnet")
-      ) 
+          , pkg_path = 'baseballstats'
+      )
+      setwd(entry_wd)
   })
+  
+  expect_identical(
+      testObj$.__enclos_env__$private$pkg_path
+      , expected = system.file('baseballstats', package='pkgnet')
+      , info = "set_package did not use the absolute path of the directory"
+  )
   
   # "extract_network"
   expect_silent({

@@ -5,6 +5,7 @@
 #'              The class is not meant to be instantiated, but inherited from and its methods
 #'              overloaded such that each Metric implements certain functionality.
 #' @importFrom R6 R6Class
+#' @importFrom tools file_path_as_absolute
 #' @section Public Methods:
 #' \describe{
 #'     \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
@@ -12,9 +13,11 @@
 #'             \item{Set the package that all operations in the object are done for.}
 #'             \item{\bold{Args:}}{
 #'                 \itemize{
-#'                 \item{\bold{\code{pkg_name}}: a string with the name of the package you are
+#'                 \item{\bold{\code{pkg_name}}: A string with the name of the package you are
 #'                   analyzing.}
-#'                   \item{\bold{\code{pkg_path}}: directory path to source code of package}
+#'                 \item{\bold{\code{pkg_path}}: Optional directory path to source
+#'                   code of the package. It is used for calculating test coverage.
+#'                   It can be an absolute or relative path.}
 #'                  }
 #'              }
 #'          }
@@ -37,7 +40,7 @@ AbstractPackageReporter <- R6::R6Class(
             
             if (exists("pkg_path") && !is.null(pkg_path)) {
                 if (dir.exists(pkg_path)) {
-                    private$pkg_path <- pkg_path
+                    private$pkg_path <- tools::file_path_as_absolute(pkg_path)
                 } else {
                     log_fatal(paste0("Package directory does not exist: ", pkg_path))
                 }
