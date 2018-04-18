@@ -42,6 +42,10 @@ FunctionReporter <- R6::R6Class(
               , lengthChange = FALSE
             )
           )
+          # Round the double columns to three digits for formatting reasons
+          numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+          tableObj <- DT::formatRound(columns = numCols, table = tableObj
+                                      , digits=3)
           return(tableObj)
         }
     ),
