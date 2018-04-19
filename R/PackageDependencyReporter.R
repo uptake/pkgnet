@@ -9,40 +9,40 @@
 #' @importFrom utils installed.packages
 #' @importFrom tools package_dependencies
 #' @export
-#' @examples 
+#' @examples
 #' \donttest{
-#' 
+#'
 #' # Instantiate an object
 #' reporter <- DependencyReporter$new()
-#' 
+#'
 #' # Seed it with a package
 #' reporter$set_package("ggplot2")
-#' 
+#'
 #' # plot it up
 #' reporter$plot_network()
 #' }
 DependencyReporter <- R6::R6Class(
     "DependencyReporter",
     inherit = AbstractGraphReporter,
-    
+
     #TODO [patrick.boueri@uptake.com]: Add more robust error checks and logging
     #TODO [patrick.boueri@uptake.com]: Add version information to dependency structure
 
     public = list(
-        
+
         initialize = function(dep_types = "Imports", installed = TRUE){
-            
+
             # Check inputs
             assertthat::assert_that(
                 assertthat::is.string(dep_types)
                 , assertthat::is.flag(installed)
             )
-            
+
             private$dep_types <- dep_types
             private$installed <- installed
             return(invisible(NULL))
         },
-        
+
         get_summary_view = function(){
           tableObj <- DT::datatable(
             data = self$nodes
@@ -59,15 +59,14 @@ DependencyReporter <- R6::R6Class(
                                       , digits=3)
           return(tableObj)
         }
-        
+
     ),
-    
+
     active = list(
         edges = function(){
             if (is.null(private$cache$edges)){
                 log_info("Calling extract_network() with default arguments...")
                 private$extract_network()
-                private$calculate_network_measures()
             }
             return(private$cache$edges)
         },
@@ -75,7 +74,6 @@ DependencyReporter <- R6::R6Class(
             if (is.null(private$cache$nodes)){
                 log_info("Calling extract_network() with default arguments...")
                 private$extract_network()
-                private$calculate_network_measures()
             }
             return(private$cache$nodes)
         },
@@ -83,24 +81,24 @@ DependencyReporter <- R6::R6Class(
             system.file(file.path("package_report", "package_dependency_reporter.Rmd"), package = "pkgnet")
         }
     ),
-    
+
     private = list(
-        
+
         dep_types = NULL,
         ignore_packages = NULL,
         installed = NULL,
         extract_network = function(){
-            
+
             # Check that package has been set
             if (is.null(self$pkg_name)){
                 log_fatal('Must set_package() before extracting dependency network.')
             }
-            
+
             # Reset cache, because any cached stuff will be outdated with a new package
             private$reset_cache()
-            
+
             log_info(sprintf('Constructing reverse dependency graph for %s', self$pkg_name))
-            
+
             # Consider only installed packages when building dependency network
             if (private$installed){
                 db <- utils::installed.packages()
@@ -108,34 +106,34 @@ DependencyReporter <- R6::R6Class(
                     msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', self$pkg_name)
                     log_fatal(msg)
                 }
-                
+
                 # Otherwise consider all CRAN packages
             } else {
                 db <- NULL
             }
-            
+
             # Recursively search dependencies, terminating search at ignore_package nodes
             allDependencies <- private$recursive_dependencies(
                 package = self$pkg_name
                 , db = db
             )
-            
+
             if (is.null(allDependencies) | identical(allDependencies, character(0))){
                 msg <- sprintf('Could not resolve dependencies for package %s',self$pkg_name)
                 log_warn(msg)
-                
+
                 nodeDT <- data.table::data.table(
                     nodes = self$pkg_name
                     , level = 1
                     ,  horizontal = 0.5
                 )
-                
+
                 return(invisible(NULL))
             }
-            
+
             # Remove ignore_packages from getting constructed again
             allDependencies <- setdiff(allDependencies, private$ignore_packages)
-            
+
             # Get dependency relationships for all packages
             dependencyList <- tools::package_dependencies(
                 allDependencies
@@ -144,10 +142,10 @@ DependencyReporter <- R6::R6Class(
                 , db = db
                 , which = private$dep_types
             )
-            
+
             # Get list of dependencies that were not present
             nullList <- Filter(function(x){is.null(x)}, dependencyList)
-            
+
             if (length(nullList) > 0){
                 log_info(paste("For package:"
                                , self$pkg_name
@@ -156,11 +154,11 @@ DependencyReporter <- R6::R6Class(
                                , "could not find dependencies:"
                                , paste(names(nullList), collapse = ",")))
             }
-            
+
             dependencyList <- Filter(function(x){!is.null(x)}, dependencyList)
-            
+
             edges <- data.table::rbindlist(lapply(
-                names(dependencyList), 
+                names(dependencyList),
                 function(pkgN){
                     data.table::data.table(
                         SOURCE = dependencyList[[pkgN]]
@@ -168,19 +166,19 @@ DependencyReporter <- R6::R6Class(
                     )
                 }
             ))
-            
+
             private$cache$edges <- edges
-            
+
             # Get and save nodes
             nodes <- data.table::data.table(node = unique(c(self$edges[, SOURCE]
                                                             , self$edges[, TARGET])))
             private$cache$nodes <- nodes
-            
+
             return(invisible(NULL))
         },
-        
+
         recursive_dependencies = function(package, db, seen_packages = NULL) {
-            
+
             # Case 1: Package is blacklisted by ignore_packages, stop searching
             if (package %in% private$ignore_packages){
                 return(c(seen_packages, package))
@@ -190,7 +188,7 @@ DependencyReporter <- R6::R6Class(
             if (package %in% seen_packages){
                 return(seen_packages)
             }
-            
+
             # Case 3: Otherwise, get all of packages dependencies, and call this function recursively
             deps <- unlist(tools::package_dependencies(
                 package
@@ -199,9 +197,9 @@ DependencyReporter <- R6::R6Class(
                 , db = db
                 , which = private$dep_types
             ))
-            
+
             outPackages <- c(seen_packages, package)
-            
+
             # Identify new packages to search dependencies for
             newDeps <- setdiff(deps, outPackages)
             for (dep in newDeps) {
