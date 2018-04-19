@@ -18,6 +18,7 @@ CreatePackageReport <- function(pkg_name
                                 , pkg_reporters = DefaultReporters()
                                 , pkg_path = NULL
                                 , report_path = file.path(path.expand("~"),paste0(pkg_name, "_report.html"))
+                                , auto_open_report = TRUE
                                 ) {
     # Input checks
     assertthat::assert_that(
@@ -51,7 +52,8 @@ CreatePackageReport <- function(pkg_name
       , pkg_name = pkg_name
     )
     
-    browseURL(report_path)
+    # Open Report
+    if (auto_open_report) {browseURL(report_path)}
     
     return(invisible(builtReporters))
 }

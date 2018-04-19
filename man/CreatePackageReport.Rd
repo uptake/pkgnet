@@ -6,7 +6,7 @@
 \usage{
 CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
   pkg_path = NULL, report_path = file.path(path.expand("~"),
-  paste0(pkg_name, "_report.html")))
+  paste0(pkg_name, "_report.html")), auto_open_report = TRUE)
 }
 \arguments{
 \item{pkg_name}{(string) name of a package}
