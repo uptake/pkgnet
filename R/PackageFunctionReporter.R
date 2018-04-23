@@ -33,20 +33,26 @@ FunctionReporter <- R6::R6Class(
 
     public = list(
         get_summary_view = function(){
-          tableObj <- DT::datatable(
-            data = self$nodes
-            , rownames = FALSE
-            , options = list(
-              searching = FALSE
-              , pageLength = 50
-              , lengthChange = FALSE
+            
+            # Calculate network measures if not already done
+            # since we want the node measures in summary
+            invisible(self$network_measures)
+            
+            # Create DT for display
+            tableObj <- DT::datatable(
+                data = self$nodes
+                , rownames = FALSE
+                , options = list(
+                    searching = FALSE
+                    , pageLength = 50
+                    , lengthChange = FALSE
+                )
             )
-          )
-          # Round the double columns to three digits for formatting reasons
-          numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-          tableObj <- DT::formatRound(columns = numCols, table = tableObj
-                                      , digits=3)
-          return(tableObj)
+            # Round the double columns to three digits for formatting reasons
+            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+            tableObj <- DT::formatRound(columns = numCols, table = tableObj
+                                        , digits=3)
+            return(tableObj)
         }
     ),
 
