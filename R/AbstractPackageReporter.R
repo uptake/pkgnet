@@ -18,6 +18,11 @@
 #'                 \item{\bold{\code{pkg_path}}: Optional directory path to source
 #'                   code of the package. It is used for calculating test coverage.
 #'                   It can be an absolute or relative path.}
+#'                  \item{\bold{\code{pkg_lib}}: Optional directory path to the R library 
+#'                  in which the package resides. The default value is the first entry 
+#'                  in .libPaths().  Unless you have a custom R library, you want to leave this 
+#'                  value as the default.  The maintainers of \code{pkgnet} utilize this feature for CRAN 
+#'                  testing purposes.}
 #'                  }
 #'              }
 #'          }
@@ -34,9 +39,10 @@ AbstractPackageReporter <- R6::R6Class(
     
     public = list(
         
-        set_package = function(pkg_name, pkg_path = NULL) {
+        set_package = function(pkg_name, pkg_path = NULL, pkg_lib = .libPaths()[1]) {
             
             private$private_pkg_name <- pkg_name
+            private$pkg_lib <- pkg_lib
             
             if (exists("pkg_path") && !is.null(pkg_path)) {
                 if (dir.exists(pkg_path)) {
@@ -70,6 +76,7 @@ AbstractPackageReporter <- R6::R6Class(
     private = list(
         private_pkg_name = NULL,
         pkg_path = NULL,
+        pkg_lib = NULL,
         cache = NULL,
         
         # Reset cached variables

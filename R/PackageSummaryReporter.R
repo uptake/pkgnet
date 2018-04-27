@@ -14,7 +14,7 @@ SummaryReporter <- R6::R6Class(
         get_summary_view = function(){
           
           # Read DESCRIPTION file into a table
-          desc <- utils::packageDescription(self$pkg_name)
+          desc <- utils::packageDescription(self$pkg_name, lib.loc = private$pkg_lib)
           descDT <- data.table::data.table(
               Field = names(desc)
               , Values = unlist(desc)
