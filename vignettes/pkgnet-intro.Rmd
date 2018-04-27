@@ -117,18 +117,35 @@ In the example dependency graph above:
 `pkgnet` can analyze any R package locally installed.  Run `installed.packages()` to see the full list of packages installed on your system.  For this example, let's say we are analyzing a custom built package, `baseballstats`.
 
 ```{r makeDemoPackage, include=FALSE}
+# DUE TO CRAN POLICY, ALL PACKAGES HERE MUST BE INSTALLED INTO TEMP DIRECTORY
+
 tempLib <- tempdir()
-devtools::install_local(system.file('baseballstats',package="pkgnet")
-                        , force=TRUE
-                        , lib = tempLib
-                        )
+
+# Install Baseball Stats
+install.packages(pkgs = system.file('baseballstats',package="pkgnet")
+                 , lib = tempLib
+                 , repos = NULL
+                 , type = "all"
+                 )
+library(baseballstats, lib.loc = tempLib)
+
+# Install It's Dependencies.  
+# Since they are all base R packages, let's just copy the currently installed ones
+depPaths <- sapply(c('base', 'methods', 'utils'), find.package)
+install.packages(pkgs = depPaths
+                 , lib = tempLib
+                 , repos = NULL
+                 , type = "all")
+
 ```
 
 To analyze `baseballstats`, run the following two lines of code: 
 
 ```{r pkgnetRunFirst, message=FALSE, warning=FALSE, results='hide'}
 library(pkgnet)
-report1 <- CreatePackageReport(pkg_name = "baseballstats")
+report1 <- CreatePackageReport(pkg_name = "baseballstats"
+                               , lib = tempLib
+                               )
 ```
 
 That's it! You have generated a lot of valuable information with that one call for an installed package.  
@@ -145,10 +162,11 @@ report2 <- CreatePackageReport(
 ```
 
 ```{r pkgnetRunSecond, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
-library(pkgnet)
+
 report2 <- CreatePackageReport(
   pkg_name = "baseballstats"
   , pkg_path = system.file('baseballstats',package="pkgnet")
+  , lib = tempLib
 )
 ```
 
@@ -345,9 +363,6 @@ Now, we have identified seven different groups of functions within [lubridate](h
 
 
 ```{r removeDemoPackage, include=FALSE}
-devtools::uninstall(pkg = system.file('baseballstats',package="pkgnet")
-                    , unload = TRUE
-                    , lib = tempLib
-                    )
+remove.packages(pkgs = c('baseballstats','base', 'methods', 'utils'), lib =  tempLib)
 ```
 
