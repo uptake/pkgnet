@@ -1,5 +1,5 @@
 ---
-name: "pkgnet"
+title: "pkgnet"
 output:
   html_document:
     self_contained: TRUE
@@ -33,6 +33,7 @@ reportTabs <- lapply(params$reporters, function(reporter) {
     , envir = report_env
   )
 })
+
 ```
 
 ```{r results="asis"}
