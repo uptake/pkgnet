@@ -5,8 +5,8 @@
 \title{Surface the internal and external dependencies of an R package.}
 \usage{
 CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
-  pkg_path = NULL, report_path = file.path(getwd(), paste0(pkg_name,
-  "_report.html")))
+  pkg_path = NULL, report_path = tempfile(pattern = pkg_name, fileext =
+  ".html"), lib = .libPaths())
 }
 \arguments{
 \item{pkg_name}{(string) name of a package}
@@ -17,8 +17,12 @@ CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
 will be calculated for each function. \code{pkg_path} can be an
 absolute or relative path.}
 
-\item{report_path}{(string) The path and filename of the output report.  Default
-report will be produced in working directory.}
+\item{report_path}{(string) The path and filename of the output report.}
+
+\item{lib}{character vector giving the library directory in which the package 
+in \code{pkg_name} is installed.  The default value is the first element of .libPaths().  
+Unless you maintain a custom library directory, there's no need to change this default 
+value.}
 }
 \value{
 A list of instantiated pkg_reporters fitted to \code{pkg_name}

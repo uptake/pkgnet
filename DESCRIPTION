@@ -25,7 +25,7 @@ Imports:
     methods,
     mvbutils,
     R6,
-    rmarkdown,
+    rmarkdown(>= 1.9),
     tools,
     visNetwork
 Suggests:

@@ -54,6 +54,7 @@ test_that('DependencyReporter Methods Work', {
       testObj$set_package(
           pkg_name = "baseballstats"
           , pkg_path = 'baseballstats'
+          , pkg_lib = tempLib
       )
       setwd(entry_wd)
   })

@@ -1,7 +1,3 @@
----
-title: "Package Dependency Report"
-output: html_document
----
 
 ## Dependency Network
 

@@ -3,21 +3,30 @@
 #' @description Surface the internal and external dependencies of an R package. 
 #' @author B. Burns
 #' @seealso GetPackageGraphs
+#'
 #' @param pkg_name (string) name of a package
 #' @param pkg_reporters (list) a list of package reporters
 #' @param pkg_path (string) The path to the package repository. If given, coverage
 #'                 will be calculated for each function. \code{pkg_path} can be an
 #'                 absolute or relative path.
-#' @param report_path (string) The path and filename of the output report.  Default
-#'                   report will be produced in working directory.
+#' @param lib character vector giving the library directory in which the package 
+#' in \code{pkg_name} is installed.  The default value is the first element of .libPaths().  
+#' Unless you maintain a custom library directory, there's no need to change this default 
+#' value. 
+#' @param report_path (string) The path and filename of the output report.
+#'
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
+#' @importFrom utils browseURL
+#' @importFrom knitr knit_child
+#' @importFrom DT datatable
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
 CreatePackageReport <- function(pkg_name
                                 , pkg_reporters = DefaultReporters()
                                 , pkg_path = NULL
-                                , report_path = file.path(getwd(), paste0(pkg_name, "_report.html"))
+                                , report_path = tempfile(pattern = pkg_name, fileext = ".html")
+                                , lib = .libPaths()
                                 ) {
     # Input checks
     assertthat::assert_that(
@@ -43,6 +52,7 @@ CreatePackageReport <- function(pkg_name
       pkg_name
       , pkg_reporters
       , pkg_path
+      , pkg_lib = lib[1]
     )
     
     .RenderPackageReport(
@@ -50,6 +60,9 @@ CreatePackageReport <- function(pkg_name
       , pkg_reporters = builtReporters
       , pkg_name = pkg_name
     )
+    
+    # Open Report
+    utils::browseURL(report_path)
     
     return(invisible(builtReporters))
 }
@@ -95,12 +108,13 @@ CreatePackageReport <- function(pkg_name
 # [seealso] For param descriptions, see CreatePackageReport
 .BuildPackageReporters <- function(pkg_name
                                    , pkg_reporters
-                                   , pkg_path){
+                                   , pkg_path
+                                   , pkg_lib){
       
       pkg_reporters <- sapply(
           X = pkg_reporters
           , FUN = function(reporter){
-              reporter$set_package(pkg_name, pkg_path)
+              reporter$set_package(pkg_name, pkg_path, pkg_lib = pkg_lib)
               return(reporter)
           }
       )

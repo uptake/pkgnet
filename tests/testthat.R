@@ -9,12 +9,50 @@ Sys.setenv("R_TESTS" = "")
 
 library(pkgnet)
 
-# Install Fake Packages - For local testing if not already installed
-devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
-devtools::install_local(system.file('sartre',package="pkgnet"),force=TRUE)
+#### INSTALL TEST PACKAGES ####
+
+# DUE TO CRAN POLICY, ALL PACKAGES HERE MUST BE INSTALLED INTO TEMP DIRECTORY
+
+tempLib <- tempdir()
+
+# Install Baseball Stats
+install.packages(pkgs = system.file('baseballstats',package="pkgnet")
+                 , lib = tempLib
+                 , repos = NULL
+                 , type = "all"
+)
+
+# Install Dependencies Too
+# Since they are all base R packages, let's just copy the currently installed ones
+depPaths <- sapply(c('base', 'methods', 'utils'), find.package)
+install.packages(pkgs = depPaths
+                 , lib = tempLib
+                 , repos = NULL
+                 , type = "all")
+
+library(baseballstats, lib.loc = tempLib)
+
+# Install sartre
+install.packages(pkgs = system.file('sartre',package="pkgnet")
+                 , lib = tempLib
+                 , repos = NULL
+                 , type = "all"
+)
+
+# sartre has no dependencies
+
+library(sartre, lib.loc = tempLib)
+
+
+#### TEST PKGNET #### 
 
 testthat::test_check('pkgnet')
 
-# Uninstall Fake Packages - For local testing 
-devtools::uninstall(system.file('baseballstats',package="pkgnet"))
-devtools::uninstall(system.file('sartre',package="pkgnet"))
+#### REMOVE TEST PAKCAGES #### 
+
+remove.packages(pkgs = c('sartre'
+                         , 'baseballstats'
+                         , 'base'
+                         , 'methods'
+                         , 'utils')
+                , lib =  tempLib)

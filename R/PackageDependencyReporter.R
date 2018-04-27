@@ -103,10 +103,11 @@ DependencyReporter <- R6::R6Class(
             
             # Consider only installed packages when building dependency network
             if (private$installed){
-                db <- utils::installed.packages()
+                db <- utils::installed.packages(lib.loc = private$pkg_lib)
                 if (!is.element(self$pkg_name, db[,1])) {
-                    msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', self$pkg_name)
-                    log_fatal(msg)
+                        msg <- sprintf('%s is not an installed package. Consider setting installed to FALSE.', self$pkg_name)
+                        log_fatal(msg)
+
                 }
                 
                 # Otherwise consider all CRAN packages
