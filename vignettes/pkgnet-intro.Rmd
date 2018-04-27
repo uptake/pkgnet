@@ -117,7 +117,11 @@ In the example dependency graph above:
 `pkgnet` can analyze any R package locally installed.  Run `installed.packages()` to see the full list of packages installed on your system.  For this example, let's say we are analyzing a custom built package, `baseballstats`.
 
 ```{r makeDemoPackage, include=FALSE}
-devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
+tempLib <- tempdir()
+devtools::install_local(system.file('baseballstats',package="pkgnet")
+                        , force=TRUE
+                        , lib = tempLib
+                        )
 ```
 
 To analyze `baseballstats`, run the following two lines of code: 
@@ -341,6 +345,9 @@ Now, we have identified seven different groups of functions within [lubridate](h
 
 
 ```{r removeDemoPackage, include=FALSE}
-devtools::uninstall(system.file('baseballstats',package="pkgnet"))
+devtools::uninstall(pkg = system.file('baseballstats',package="pkgnet")
+                    , unload = TRUE
+                    , lib = tempLib
+                    )
 ```
 

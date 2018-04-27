@@ -8,10 +8,12 @@
 #' @param pkg_path (string) The path to the package repository. If given, coverage
 #'                 will be calculated for each function. \code{pkg_path} can be an
 #'                 absolute or relative path.
-#' @param report_path (string) The path and filename of the output report.  Default
-#'                   report will be produced in working directory.
+#' @param report_path (string) The path and filename of the output report.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
+#' @importFrom utils browseURL
+#' @importFrom knitr knit_child
+#' @importFrom DT datatable
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
 CreatePackageReport <- function(pkg_name
@@ -52,7 +54,7 @@ CreatePackageReport <- function(pkg_name
     )
     
     # Open Report
-    browseURL(report_path)
+    utils::browseURL(report_path)
     
     return(invisible(builtReporters))
 }

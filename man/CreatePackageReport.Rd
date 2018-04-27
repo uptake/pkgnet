@@ -5,8 +5,8 @@
 \title{Surface the internal and external dependencies of an R package.}
 \usage{
 CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
-  pkg_path = NULL, report_path = file.path(path.expand("~"),
-  paste0(pkg_name, "_report.html")), auto_open_report = TRUE)
+  pkg_path = NULL, report_path = tempfile(pattern = pkg_name, fileext =
+  ".html"))
 }
 \arguments{
 \item{pkg_name}{(string) name of a package}
@@ -17,8 +17,7 @@ CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
 will be calculated for each function. \code{pkg_path} can be an
 absolute or relative path.}
 
-\item{report_path}{(string) The path and filename of the output report.  Default
-report will be produced in working directory.}
+\item{report_path}{(string) The path and filename of the output report.}
 }
 \value{
 A list of instantiated pkg_reporters fitted to \code{pkg_name}
