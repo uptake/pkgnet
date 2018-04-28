@@ -5,8 +5,8 @@
 \title{Surface the internal and external dependencies of an R package.}
 \usage{
 CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
-  pkg_path = NULL, report_path = file.path(getwd(), paste0(pkg_name,
-  "_report.html")))
+  pkg_path = NULL, report_path = tempfile(pattern = pkg_name, fileext =
+  ".html"))
 }
 \arguments{
 \item{pkg_name}{(string) name of a package}
