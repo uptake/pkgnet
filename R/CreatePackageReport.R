@@ -12,12 +12,13 @@
 #'                   report will be produced in working directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
+#' @importFrom utils browseURL
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
 CreatePackageReport <- function(pkg_name
                                 , pkg_reporters = DefaultReporters()
                                 , pkg_path = NULL
-                                , report_path = file.path(getwd(), paste0(pkg_name, "_report.html"))
+                                , report_path = tempfile(pattern = pkg_name, fileext = ".html")
                                 ) {
     # Input checks
     assertthat::assert_that(
@@ -50,6 +51,8 @@ CreatePackageReport <- function(pkg_name
       , pkg_reporters = builtReporters
       , pkg_name = pkg_name
     )
+    
+    utils::browseURL(report_path)
     
     return(invisible(builtReporters))
 }

@@ -1,28 +1,20 @@
 ---
-name: "pkgnet"
+title: "`r params$pkg_name`" 
 output:
   html_document:
     self_contained: TRUE
     theme: flatly
     include:
+      in_header: header.html
       after_body: footer.html
 params:
    reporters: params$reporters
    pkg_name: params$pkg_name
 ---
 
-<!-- This is HTML code for the header at the top of the page -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="http://uptakeopensource.github.io/pkgnet">pkgnet</a>
-</nav>
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 pkgnet:::silence_logger()
-```
-
-```{r title, results="asis"}
-cat(sprintf("# %s", pkg_name))
 ```
 
 ```{r}
@@ -33,6 +25,7 @@ reportTabs <- lapply(params$reporters, function(reporter) {
     , envir = report_env
   )
 })
+
 ```
 
 ```{r results="asis"}
