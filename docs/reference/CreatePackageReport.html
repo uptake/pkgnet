@@ -57,7 +57,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.2.0.9000</span>
       </span>
     </div>
 
@@ -102,8 +102,8 @@
     
 
     <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>pkg_name</span>, <span class='kw'>pkg_reporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
-  <span class='kw'>pkg_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report_path</span> <span class='kw'>=</span> <span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='fu'>paste0</span>(<span class='no'>pkg_name</span>,
-  <span class='st'>"_report.html"</span>)))</pre>
+  <span class='kw'>pkg_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report_path</span> <span class='kw'>=</span> <span class='fu'>tempfile</span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='no'>pkg_name</span>, <span class='kw'>fileext</span> <span class='kw'>=</span>
+  <span class='st'>".html"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -125,7 +125,7 @@ absolute or relative path.</p></td>
     <tr>
       <th>report_path</th>
       <td><p>(string) The path and filename of the output report.  Default
-report will be produced in working directory.</p></td>
+report will be produced in the temporary directory.</p></td>
     </tr>
     </table>
     

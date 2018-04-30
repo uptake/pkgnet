@@ -18,7 +18,7 @@ will be calculated for each function. \code{pkg_path} can be an
 absolute or relative path.}
 
 \item{report_path}{(string) The path and filename of the output report.  Default
-report will be produced in working directory.}
+report will be produced in the temporary directory.}
 }
 \value{
 A list of instantiated pkg_reporters fitted to \code{pkg_name}

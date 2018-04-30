@@ -9,7 +9,7 @@
 #'                 will be calculated for each function. \code{pkg_path} can be an
 #'                 absolute or relative path.
 #' @param report_path (string) The path and filename of the output report.  Default
-#'                   report will be produced in working directory.
+#'                   report will be produced in the temporary directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
 #' @importFrom utils browseURL
