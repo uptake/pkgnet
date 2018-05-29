@@ -12,6 +12,7 @@
 #'                   report will be produced in the temporary directory.
 #' @importFrom assertthat assert_that is.string
 #' @importFrom methods is
+#' @importFrom tools file_path_as_absolute
 #' @importFrom utils browseURL
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export

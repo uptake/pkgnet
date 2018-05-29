@@ -113,6 +113,17 @@ test_that('DependencyReporter Methods Work', {
     )
 })
 
+
+test_that("DependencyReporter rejects bad packages with an informative error", {
+    expect_error({
+        testObj <- DependencyReporter$new()
+        testObj$set_package(
+            pkg_name = "w0uldNEverB33aPackageName"
+        )
+    }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
+})
+
+
 ##### TEST TEAR DOWN #####
 
 futile.logger::flog.threshold(origLogThreshold)

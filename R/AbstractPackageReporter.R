@@ -6,6 +6,7 @@
 #'              overloaded such that each Metric implements certain functionality.
 #' @importFrom R6 R6Class
 #' @importFrom tools file_path_as_absolute
+#' @importFrom utils installed.packages
 #' @section Public Methods:
 #' \describe{
 #'     \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
@@ -35,6 +36,13 @@ AbstractPackageReporter <- R6::R6Class(
     public = list(
         
         set_package = function(pkg_name, pkg_path = NULL) {
+            
+            # check inputs
+            assertthat::assert_that(
+                assertthat::is.string(pkg_name)
+                , pkg_name != ""
+            )
+            private$validate_pkg_name(pkg_name)
             
             private$private_pkg_name <- pkg_name
             
@@ -82,6 +90,23 @@ AbstractPackageReporter <- R6::R6Class(
                     private$cache[[item]] <- NULL
                 }
             }
+            return(invisible(NULL))
+        },
+        
+        # given a string with a package name, check whether
+        # it exists
+        validate_pkg_name = function(pkg_name){
+            log_info("Checking installed packages...")
+            installed_packages <- row.names(
+                utils::installed.packages()
+            )
+            
+            if (! pkg_name %in% installed_packages){
+                msg <- sprintf("pkgnet could not find a package called '%s'.", pkg_name)
+                log_fatal(msg)
+            }
+            
+            log_info(sprintf("Found '%s' in installed packages.", pkg_name))
             return(invisible(NULL))
         }
     )

@@ -40,6 +40,14 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
     
 })
 
+test_that("CreatePackageReport rejects bad packages with an informative error", {
+    expect_error({
+        CreatePackageReport(
+            pkg_name = "w0uldNEverB33aPackageName"
+        )
+    }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
+})
+
 
 ##### TEST TEAR DOWN #####
 
