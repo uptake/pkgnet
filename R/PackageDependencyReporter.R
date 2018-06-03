@@ -162,6 +162,15 @@ DependencyReporter <- R6::R6Class(
             }
 
             dependencyList <- Filter(function(x){!is.null(x)}, dependencyList)
+            
+            if (identical(names(dependencyList), self$pkg_name)){
+                msg <- paste0(
+                    "Package '%s' does not have any dependencies in [%s]. If you think this is an error ", 
+                    "consider adding more dependency types in your definition of DependencyReporter. ",
+                    "For example: DependencyReporter$new(dep_types = c('Imports', 'Depends', 'Suggests'))"
+                )
+                log_fatal(sprintf(msg, self$pkg_name, paste(private$dep_types, collapse = ", ")))
+            }
 
             edges <- data.table::rbindlist(lapply(
                 names(dependencyList),
@@ -181,7 +190,7 @@ DependencyReporter <- R6::R6Class(
                     c(
                         self$edges[, SOURCE]
                         , self$edges[, TARGET]
-                      )
+                     )
                 )
             )
             private$cache$nodes <- nodes

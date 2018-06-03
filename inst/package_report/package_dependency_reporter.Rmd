@@ -6,11 +6,20 @@ Here's an overview of of the packages **`r reporter$pkg_name`** relies upon.
 ### Visualization
 
 ```{r pressure, echo=FALSE}
-reporter$graph_viz
+result <- tryCatch({
+    reporter$graph_viz
+}, error = function(e){
+    return(sprintf("DependencyReporter failed with error -->     %s", e$message))
+})
+result
 ```
 
 ### Table
 
 ```{r}
-reporter$get_summary_view()
+result <- tryCatch({
+    reporter$get_summary_view()
+}, error = function(e){
+    return(sprintf("DependencyReporter failed with error %s", e$message))
+})
 ```

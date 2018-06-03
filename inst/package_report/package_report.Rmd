@@ -13,11 +13,11 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
 pkgnet:::silence_logger()
 ```
 
-```{r}
+```{r warning=FALSE}
 reportTabs <- lapply(params$reporters, function(reporter) {
   report_env <- list2env(list(reporter = reporter))
   knitr::knit_child(
