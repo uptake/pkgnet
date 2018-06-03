@@ -30,11 +30,11 @@ DependencyReporter <- R6::R6Class(
 
     public = list(
 
-        initialize = function(dep_types = "Imports", installed = TRUE){
+        initialize = function(dep_types = c("Imports", "Depends"), installed = TRUE){
 
             # Check inputs
             assertthat::assert_that(
-                assertthat::is.string(dep_types)
+                is.character(dep_types)
                 , assertthat::is.flag(installed)
             )
 
@@ -176,8 +176,14 @@ DependencyReporter <- R6::R6Class(
             private$cache$edges <- edges
 
             # Get and save nodes
-            nodes <- data.table::data.table(node = unique(c(self$edges[, SOURCE]
-                                                            , self$edges[, TARGET])))
+            nodes <- data.table::data.table(
+                node = unique(
+                    c(
+                        self$edges[, SOURCE]
+                        , self$edges[, TARGET]
+                      )
+                )
+            )
             private$cache$nodes <- nodes
 
             return(invisible(NULL))

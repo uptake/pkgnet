@@ -10,7 +10,7 @@ FunctionReporter
 }
 \description{
 This Reporter takes a package and uncovers the structure from
-             its other functions, determining useful information such as which function is most 
+             its other functions, determining useful information such as which function is most
              central to the package. Combined with testing information it can be used as a powerful tool
              to plan testing efforts.
 }
@@ -19,7 +19,7 @@ This Reporter takes a package and uncovers the structure from
 \describe{
     \item{\code{set_package(pkg_name, pkg_path)}}{
         \itemize{
-            \item{Set properties of this reporter. If pkg_name overrides a 
+            \item{Set properties of this reporter. If pkg_name overrides a
                 previously-set package name, any cached data will be removed.}
             \item{\bold{Args:}}{
                 \itemize{
