@@ -32,9 +32,9 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
    \item{\code{graph_viz}}{Returns the graph visualization object}
    \item{\code{orphan_nodes}}{Returns the list of orphan nodes}
-   \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.  
+   \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.
        If a valid layout type is given, this function will update the layout_type field.}
-   \item{\code{orphan_node_clustering_threshold}}{If no value given, the current orphan node clustering threshold is returned. 
+   \item{\code{orphan_node_clustering_threshold}}{If no value given, the current orphan node clustering threshold is returned.
        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
 }
 }
