@@ -38,6 +38,14 @@ test_that('AbstractPackageReporter structure is as expected', {
   
 })
 
+
+test_that("AbstractPackageReporter rejects bad packages with an informative error", {
+    expect_error({
+        x <- AbstractPackageReporter$new()
+        x$set_package("w0uldNEverB33aPackageName")
+    }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
+})
+
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS TO BE TESTED BY CHILD OBJECTS
 
 ##### TEST TEAR DOWN #####
