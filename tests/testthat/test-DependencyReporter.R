@@ -124,6 +124,14 @@ test_that("DependencyReporter rejects bad packages with an informative error", {
 })
 
 
+test_that("DependencyReporter should break with an informative error for packages with no deps", {
+    expect_error({
+        reporter <- DependencyReporter$new()
+        reporter$set_package("base")
+        reporter$graph_viz
+    }, regexp = "consider adding more dependency types in your definition of DependencyReporter")
+})
+
 ##### TEST TEAR DOWN #####
 
 futile.logger::flog.threshold(origLogThreshold)

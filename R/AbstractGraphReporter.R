@@ -263,8 +263,11 @@ AbstractGraphReporter <- R6::R6Class(
             # Confirm All Colors in pallete are Colors
             areColors <- function(x) {
                 sapply(x, function(X) {
-                    tryCatch(is.matrix(col2rgb(X)),
-                             error = function(e) FALSE)
+                    tryCatch({
+                        is.matrix(col2rgb(X))
+                    }, error = function(e){
+                        FALSE
+                    })
                 })
             }
 
@@ -295,10 +298,12 @@ AbstractGraphReporter <- R6::R6Class(
 
             # Merge new DT with cached DT, but overwrite any colliding columns
             colsToKeep <- setdiff(names(self$nodes), names(metadataDT))
-            private$cache$nodes <- merge(x = self$nodes[, .SD, .SDcols = c("node", colsToKeep)]
-                                         , y = metadataDT
-                                         , by = "node"
-                                         , all.x = TRUE)
+            private$cache$nodes <- merge(
+                x = self$nodes[, .SD, .SDcols = c("node", colsToKeep)]
+                , y = metadataDT
+                , by = "node"
+                , all.x = TRUE
+            )
             return(invisible(NULL))
         },
 
@@ -416,7 +421,7 @@ AbstractGraphReporter <- R6::R6Class(
                                                   , direction = "UD") %>%
                 visNetwork::visEdges(arrows = 'to') %>%
                 visNetwork::visOptions(highlightNearest = list(enabled = TRUE
-                                                               , degree = nrow(plotDTnodes) #guarantee full path
+                                                               , degree = nrow(plotDTnodes) # guarantee full path
                                                                , algorithm = "hierarchical"))
 
             # Add orphan node clustering
@@ -441,9 +446,11 @@ AbstractGraphReporter <- R6::R6Class(
 
         # Identify orphan nodes
         identify_orphan_nodes = function() {
-            orphan_nodes <- base::setdiff(self$nodes[, node]
-                                         , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
-                                        )
+            orphan_nodes <- base::setdiff(
+                self$nodes[, node]
+                , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
+            )
+            
             # If there are none, then will be character(0)
             return(orphan_nodes)
         },
@@ -470,7 +477,12 @@ AbstractGraphReporter <- R6::R6Class(
             )
 
             # Merge coordinates with plotDT
-            plotDT <- merge(plotDT, coordsDT, by = 'node', all.x = TRUE)
+            plotDT <- merge(
+                x = plotDT
+                , y = coordsDT
+                , by = 'node'
+                , all.x = TRUE
+            )
 
             return(plotDT)
         }
