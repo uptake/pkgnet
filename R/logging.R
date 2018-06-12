@@ -1,7 +1,7 @@
 
 # [description] Log message. Thin wrapper around 
 #               futile.logger::flog.info to make main package code a little less verbose
-#' @importFrom futile.logger flog.fatal
+#' @importFrom futile.logger flog.info
 log_info <- function(msg, ...){
     futile.logger::flog.info(msg = msg, ...)
     return(invisible(NULL))
@@ -40,4 +40,3 @@ unsilence_logger <- function(thresh = futile.logger::INFO) {
     futile.logger::flog.threshold(thresh)
     return(invisible(NULL))
 }
-
