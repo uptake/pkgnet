@@ -10,9 +10,9 @@
 #'                 absolute or relative path.
 #' @param report_path (string) The path and filename of the output report.  Default
 #'                   report will be produced in the temporary directory.
-#' @importFrom assertthat assert_that is.string
+#' @importFrom assertthat assert_that is.readable is.string is.writeable
 #' @importFrom methods is
-#' @importFrom tools file_path_as_absolute
+#' @importFrom tools file_ext
 #' @importFrom utils browseURL
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
@@ -24,8 +24,17 @@ CreatePackageReport <- function(pkg_name
     # Input checks
     assertthat::assert_that(
         assertthat::is.string(pkg_name)
+        , pkg_name != ""
         , is.list(pkg_reporters)
+        , is.null(pkg_path) || assertthat::is.readable(pkg_path)
+        , assertthat::is.string(report_path)
+        , report_path != ""
     )
+    
+    # Confirm that the report_path looks correct
+    if (! identical(tolower(tools::file_ext(report_path)), "html")){
+        log_fatal(sprintf("report_path must be a .html file path. You gave '%s'.", report_path))
+    }
     
     # Confirm that all reporters are actually reporters
     checks <- sapply(pkg_reporters, function(x){methods::is(x, "AbstractPackageReporter")})

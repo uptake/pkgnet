@@ -48,6 +48,38 @@ test_that("CreatePackageReport rejects bad packages with an informative error", 
     }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
 })
 
+test_that("CeratePackageReport rejects bad pkg_path arguments", {
+    CreatePackageReport(
+        pkg_name = "baseballstats"
+    )
+})
+
+
+test_that("CeratePackageReport rejects bad report_path arguments", {
+    
+    
+    expect_error({
+        CreatePackageReport(
+            pkg_name = "base"
+            , report_path = "~"
+        )  
+    }, regexp = "report_path must be a \\.html file")
+    
+    expect_error({
+        CreatePackageReport(
+            pkg_name = "base"
+            , report_path = "blegh.pdf"
+        )
+    }, regexp = "report_path must be a \\.html file")
+    
+    expect_error({
+        CreatePackageReport(
+            pkg_name = "base"
+            , report_path = list("blegh.html")
+        )  
+    }, regexp = "report_path is not a string")
+})
+
 
 ##### TEST TEAR DOWN #####
 
