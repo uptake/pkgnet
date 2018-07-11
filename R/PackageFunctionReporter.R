@@ -151,8 +151,12 @@ FunctionReporter <- R6::R6Class(
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
-            nodes <- data.table::data.table(
-                node = as.character(unlist(utils::lsf.str(asNamespace(self$pkg_name))))
+            nodes <- data.table::data.table(node = as.character(
+                unlist(
+                    utils::lsf.str(pos = asNamespace(self$pkg_name)
+                                   )
+                    )
+                )
             )
             return(nodes)
         },
@@ -163,8 +167,11 @@ FunctionReporter <- R6::R6Class(
             }
 
             log_info(sprintf('Loading %s...', self$pkg_name))
+            log_info(.GetLibPaths())
             suppressPackageStartupMessages({
-                require(self$pkg_name, character.only = TRUE)
+                require(self$pkg_name
+                        , lib.loc = .GetLibPaths()
+                        , character.only = TRUE)
             })
             log_info(sprintf('Done loading %s', self$pkg_name))
 
