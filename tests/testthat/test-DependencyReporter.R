@@ -48,7 +48,11 @@ test_that('DependencyReporter Methods Work', {
       
       # testing set_package with a pkg_path that is relative to the current directory
       entry_wd <- getwd()
-      parent_dir <- dirname(system.file('baseballstats', package='pkgnet'))
+      parent_dir <- dirname(system.file('baseballstats'
+                                        , package='pkgnet'
+                                        , lib.loc = .GetLibPaths()
+                                        )
+                            )
       setwd(parent_dir)
       
       testObj$set_package(

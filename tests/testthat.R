@@ -7,14 +7,80 @@
 # See https://github.com/hadley/testthat/issues/144
 Sys.setenv("R_TESTS" = "")
 
-library(pkgnet)
+testLibPath <- tempdir()
+#testEnv <- new.env()
+
+# testthat::with_mock(`.GetLibPaths` = function() {return(testLibPath)}
+#                     , .env = testEnv)
+
+
+
+# library(pkgnet)
+# `pkgnet::.GetLibPaths` <- function() {returns(testLibPath)}
 
 # Install Fake Packages - For local testing if not already installed
-devtools::install_local(system.file('baseballstats',package="pkgnet"),force=TRUE)
-devtools::install_local(system.file('sartre',package="pkgnet"),force=TRUE)
+utils::install.packages(pkgs = system.file('baseballstats'
+                                           , package = "pkgnet"
+                                           )
+                        , lib = testLibPath
+                        , repos = NULL
+                        , type = "source"
+                        )
 
-testthat::test_check('pkgnet')
+utils::install.packages(pkgs = system.file('sartre'
+                                           , package = "pkgnet"
+                                           )
+                        , lib = testLibPath
+                        , repos = NULL
+                        , type = "source"
+)
+
+utils::install.packages(pkgs = find.package(package = 'pkgnet'
+                                            , lib.loc = .libPaths()
+                                            )
+, lib = testLibPath
+, repos = NULL
+, type = "source"
+, INSTALL_opts = c('--install-tests')
+)
+
+tmp <- tempfile()
+strCommand <- sprintf(paste0("library('pkgnet', lib.loc = '%s');"
+                             , "`pkgnet::.GetLibPaths` <- function(){return('%s')};"
+                             , "`.GetLibPaths` <- function(){return('%s')};"
+                             )
+                      , testLibPath
+                      , testLibPath
+                      , testLibPath)
+writeLines(strCommand, tmp)
+testEnv <- attach(NULL, name = "testEnv")
+source(file = tmp
+       , local = testEnv)
+
+
+
+testthat::test_dir(path = file.path(find.package(package = "pkgnet"
+                                                 , lib.loc = testLibPath)
+                                    , "tests"
+                                    , "testthat")
+                   , env = testEnv)
+
+
+# 
+# testthat::with_mock(`pkgnet::.GetLibPaths` = function() {return(c(testLibPath))}
+#                     , `.GetLibPaths` = function() {return(c(testLibPath))}
+#                     , {
+#                         # library('pkgnet'
+#                         #         , lib.loc = .GetLibPaths()
+#                         #         )
+#                         log_info(paste0(".GetLibPaths: ", .GetLibPaths()))
+#                         testthat::test_check('pkgnet')
+#                     }
+#                     )
 
 # Uninstall Fake Packages - For local testing 
-devtools::uninstall(system.file('baseballstats',package="pkgnet"))
-devtools::uninstall(system.file('sartre',package="pkgnet"))
+utils::remove.packages(pkgs = c('baseballstats'
+                                , 'sartre'
+                                , 'pkgnet')
+                       , lib = testLibPath
+                       )
