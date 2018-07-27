@@ -18,7 +18,7 @@ test_that('node coloring by discrete and continuous', {
   b$set_package('baseballstats'
                 , pkg_path = system.file('baseballstats'
                                          , package = "pkgnet"
-                                         , lib.loc = .GetLibPaths()
+                                         , lib.loc = .libPaths()
                                          )
                 )
   b$.__enclos_env__$private$set_plot_node_color_scheme(

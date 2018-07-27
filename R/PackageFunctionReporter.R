@@ -167,10 +167,9 @@ FunctionReporter <- R6::R6Class(
             }
 
             log_info(sprintf('Loading %s...', self$pkg_name))
-            log_info(.GetLibPaths())
             suppressPackageStartupMessages({
                 require(self$pkg_name
-                        , lib.loc = .GetLibPaths()
+                        , lib.loc = .libPaths()
                         , character.only = TRUE)
             })
             log_info(sprintf('Done loading %s', self$pkg_name))

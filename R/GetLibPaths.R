@@ -16,6 +16,6 @@
 
 
 # [VALUE] Same thing as .libPaths(): a character vector of file paths.
-.GetLibPaths <- function(){
-    return(.libPaths())
-}
+# .GetLibPaths <- function(){
+#     return(.libPaths())
+# }
