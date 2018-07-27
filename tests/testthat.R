@@ -10,13 +10,7 @@ Sys.setenv("R_TESTS" = "")
 testLibPath <- tempdir()
 #testEnv <- new.env()
 
-# testthat::with_mock(`.GetLibPaths` = function() {return(testLibPath)}
-#                     , .env = testEnv)
 
-
-
-# library(pkgnet)
-# `pkgnet::.GetLibPaths` <- function() {returns(testLibPath)}
 
 # Install Fake Packages - For local testing if not already installed
 utils::install.packages(pkgs = system.file('baseballstats'
@@ -25,6 +19,7 @@ utils::install.packages(pkgs = system.file('baseballstats'
                         , lib = testLibPath
                         , repos = NULL
                         , type = "source"
+                        , INSTALL_opts = c('--install-tests')
                         )
 
 utils::install.packages(pkgs = system.file('sartre'
@@ -33,6 +28,7 @@ utils::install.packages(pkgs = system.file('sartre'
                         , lib = testLibPath
                         , repos = NULL
                         , type = "source"
+                        , INSTALL_opts = c('--install-tests')
 )
 
 utils::install.packages(pkgs = find.package(package = 'pkgnet'
@@ -44,43 +40,39 @@ utils::install.packages(pkgs = find.package(package = 'pkgnet'
 , INSTALL_opts = c('--install-tests')
 )
 
-tmp <- tempfile()
-strCommand <- sprintf(paste0("library('pkgnet', lib.loc = '%s');"
-                             , "`pkgnet::.GetLibPaths` <- function(){return('%s')};"
-                             , "`.GetLibPaths` <- function(){return('%s')};"
-                             )
-                      , testLibPath
-                      , testLibPath
-                      , testLibPath)
-writeLines(strCommand, tmp)
-testEnv <- attach(NULL, name = "testEnv")
-source(file = tmp
-       , local = testEnv)
-
-
-
-testthat::test_dir(path = file.path(find.package(package = "pkgnet"
-                                                 , lib.loc = testLibPath)
-                                    , "tests"
-                                    , "testthat")
-                   , env = testEnv)
-
-
 # 
-# testthat::with_mock(`pkgnet::.GetLibPaths` = function() {return(c(testLibPath))}
-#                     , `.GetLibPaths` = function() {return(c(testLibPath))}
-#                     , {
-#                         # library('pkgnet'
-#                         #         , lib.loc = .GetLibPaths()
-#                         #         )
-#                         log_info(paste0(".GetLibPaths: ", .GetLibPaths()))
-#                         testthat::test_check('pkgnet')
-#                     }
-#                     )
+# depList <- devtools::dev_package_deps(pkg = find.package(package = 'pkgnet'
+#                                               , lib.loc = .libPaths()
+#                                               )
+#                                       , dependencies = TRUE
+#                                       , repos = NULL
+#                            )
+# 
+# depListPaths <- sapply(depList[['package']]
+#                        , find.package
+#                        )
+# 
+# utils::install.packages(pkgs = depListPaths
+#                         , lib = testLibPath
+#                         , repos = NULL
+#                         , type = 'source'
+# )  
+
+
+withr::with_libpaths(new = c(testLibPath, .libPaths())
+                     #, code = test_check('pkgnet')
+                     , code = testthat::test_dir(path = file.path(find.package(package = "pkgnet"
+                                                                               , lib.loc = testLibPath)
+                                                                  , "tests"
+                                                                  , "testthat")
+                                                 )
+                     )
+
 
 # Uninstall Fake Packages - For local testing 
 utils::remove.packages(pkgs = c('baseballstats'
                                 , 'sartre'
-                                , 'pkgnet')
+                                , 'pkgnet'
+                                )
                        , lib = testLibPath
                        )
