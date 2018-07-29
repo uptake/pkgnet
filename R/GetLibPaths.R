@@ -13,9 +13,8 @@
 #           temporary directory and therefore a violation of CRAN policy.  
 #           Loading baseballstats and sartre for use in building a vignette encounters 
 #           the same violation.  
-
-
 # [VALUE] Same thing as .libPaths(): a character vector of file paths.
-# .GetLibPaths <- function(){
-#     return(.libPaths())
-# }
+
+.GetLibPaths <- function(){
+    return(.libPaths())
+}

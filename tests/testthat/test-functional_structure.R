@@ -19,15 +19,15 @@ futile.logger::flog.threshold(0)
 #       and uninstalled after testing.  If running these tests locallaly. 
 
   test_that('test packages installed alright',{
-    context(.libPaths())
-    log_info(paste0(".libPaths: ", .libPaths()))
+    context(.GetLibPaths())
+    log_info(paste0(".GetLibPaths: ", .GetLibPaths()))
     expect_true(object = require("baseballstats"
-                                 , lib.loc = .libPaths()
+                                 , lib.loc = .GetLibPaths()
                                  )
                 , info = "Fake test package baseballstats is not installed.")
     
     expect_true(object =  require("sartre"
-                                  , lib.loc = .libPaths()
+                                  , lib.loc = .GetLibPaths()
                                   )
                 , info = "Fake test package sartre is not installed")
   })
