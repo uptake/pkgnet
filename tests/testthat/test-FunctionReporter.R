@@ -51,7 +51,7 @@ test_that('FunctionReporter Methods Work', {
         # covr also requires an absolute path, which is provided by system.file
         , pkg_path = system.file("baseballstats"
                                  , package = "pkgnet"
-                                 , lib.loc = .GetLibPaths()
+                                 , lib.loc = testLibPath
                                  )
       )
   })
