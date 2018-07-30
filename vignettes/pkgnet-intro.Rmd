@@ -11,7 +11,17 @@ vignette: >
 ---
 
 ```{r setupVignette, include = FALSE}
+# CRAN does not allow the building of baseballstats within the user's library. 
+# Vigettes are built locally before being uploaded to CRAN.  CRAN just checks that the code runs. 
+# This vignette requires baseball stats. 
+# Therefore, suppress chunks on CRAN.  The vignette sans chunks will not be displayed to users.
+# Tests locally and on Travis will still check for errors on full script
+
+# This environment variable is set by devtools and also used in testthat. 
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+
 knitr::opts_chunk$set(
+  eval = NOT_CRAN, 
   collapse = FALSE,
   comment = "#>",
   fig.align = 'center'
