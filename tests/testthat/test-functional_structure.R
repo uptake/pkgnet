@@ -19,8 +19,6 @@ futile.logger::flog.threshold(0)
 #       and uninstalled after testing.  If running these tests locallaly. 
 
   test_that('test packages installed alright',{
-    context(.libPaths()[1])
-    log_info(paste0(".GetLibPaths: ", testLibPath))
     expect_true(object = require("baseballstats"
                                  , lib.loc = testLibPath
                                  )
