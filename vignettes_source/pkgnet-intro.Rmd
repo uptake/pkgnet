@@ -99,7 +99,7 @@ Functions or Dependencies are represented as nodes, and their dependent relation
 
 In the example dependency graph above:
 
-* **C** is dependent upon both **A** and **C**.
+* **C** is dependent upon both **A** and **B**.
 * **D** is dependent upon both **C** and **B**.
 * **D** is indirectly dependent upon **A** through **C** via the transitive property.
 

@@ -5031,7 +5031,7 @@ Example Dependency Graph
 <p>Functions or Dependencies are represented as nodes, and their dependent relationships are represented as edges (a.k.a. arcs or arrows). The direction of the edge points towards the node that is dependent on the other node.</p>
 <p>In the example dependency graph above:</p>
 <ul>
-<li><strong>C</strong> is dependent upon both <strong>A</strong> and <strong>C</strong>.</li>
+<li><strong>C</strong> is dependent upon both <strong>A</strong> and <strong>B</strong>.</li>
 <li><strong>D</strong> is dependent upon both <strong>C</strong> and <strong>B</strong>.</li>
 <li><strong>D</strong> is indirectly dependent upon <strong>A</strong> through <strong>C</strong> via the transitive property.</li>
 </ul>
