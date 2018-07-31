@@ -11,17 +11,25 @@ vignette: >
 ---
 
 ```{r setupVignette, include = FALSE}
-# CRAN does not allow the building of baseballstats within the user's library. 
-# Vigettes are built locally before being uploaded to CRAN.  CRAN just checks that the code runs. 
-# This vignette requires baseball stats. 
-# Therefore, suppress chunks on CRAN.  The vignette sans chunks will not be displayed to users.
-# Tests locally and on Travis will still check for errors on full script
 
-# This environment variable is set by devtools and also used in testthat. 
-NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+## NOTE:    Vignettes are built within their own enviornment. 
+##          Therefore, changing the library paths (libpaths) here will not change the global libpaths.
+
+# Get test library path
+testLibPath <- tempdir()
+
+# Get current library paths
+origLibPaths <- .libPaths()
+
+# Create new library paths for TESTING
+.libPaths(new = c(testLibPath, origLibPaths))
+
+# Create packages within new library
+pkgnet:::.BuildTestLib(currentLibPath = origLibPaths[1]
+                       , targetLibPath = testLibPath
+                       )
 
 knitr::opts_chunk$set(
-  eval = NOT_CRAN, 
   collapse = FALSE,
   comment = "#>",
   fig.align = 'center'
@@ -125,13 +133,6 @@ In the example dependency graph above:
 # Running pkgnet
 
 `pkgnet` can analyze any R package locally installed.  Run `installed.packages()` to see the full list of packages installed on your system.  For this example, let's say we are analyzing a custom built package, `baseballstats`.
-
-```{r makeDemoPackage, include=FALSE}
-devtools::install_local(path = system.file('baseballstats',package="pkgnet")
-                        , force=TRUE
-                        , lib = .libPaths()
-                        )
-```
 
 To analyze `baseballstats`, run the following two lines of code: 
 
@@ -354,6 +355,14 @@ Now, we have identified seven different groups of functions within [lubridate](h
 
 
 ```{r removeDemoPackage, include=FALSE}
-devtools::uninstall(system.file('baseballstats',package="pkgnet"))
+utils::remove.packages(pkgs = c('baseballstats'
+                                , 'sartre'
+                                , 'pkgnet')
+                       , lib = testLibPath
+                       )
+
+# Just in case 
+.libPaths(new = c(origLibPaths))
+unlink(testLibPath)
 ```
 
