@@ -9,6 +9,12 @@ Sys.setenv("R_TESTS" = "")
 
 library("pkgnet")
 
-testthat::test_check('pkgnet')
+testthat::test_dir(path = file.path(find.package(package = "pkgnet"
+                                                 , lib.loc = testLibPath
+                                                 )
+                                    , "tests"
+                                    , "testthat"
+                                    )
+                   )
 
 
