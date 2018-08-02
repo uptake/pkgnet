@@ -50,7 +50,7 @@ test_that('DependencyReporter Methods Work', {
       entry_wd <- getwd()
       parent_dir <- dirname(system.file('baseballstats'
                                         , package='pkgnet'
-                                        , lib.loc = testLibPath
+                                        , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
                                         )
                             )
       setwd(parent_dir)

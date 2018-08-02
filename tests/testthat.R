@@ -7,10 +7,8 @@
 # See https://github.com/hadley/testthat/issues/144
 Sys.setenv("R_TESTS" = "")
 
-library("pkgnet")
-
 testthat::test_dir(path = file.path(find.package(package = "pkgnet"
-                                                 , lib.loc = testLibPath
+                                                 , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
                                                  )
                                     , "tests"
                                     , "testthat"

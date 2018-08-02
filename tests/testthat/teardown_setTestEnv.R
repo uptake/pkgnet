@@ -1,12 +1,11 @@
 
-testLibPath <- Sys.getenv('PKGNET_TEST_LIB')
 
 # Uninstall Fake Packages - For local testing 
 utils::remove.packages(pkgs = c('baseballstats'
                                 , 'sartre'
                                 , 'pkgnet'
 )
-, lib = testLibPath
+, lib = Sys.getenv('PKGNET_TEST_LIB')
 )
 
 .libPaths(origLibPaths)

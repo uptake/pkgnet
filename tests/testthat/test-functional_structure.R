@@ -20,12 +20,12 @@ futile.logger::flog.threshold(0)
 
   test_that('test packages installed alright',{
     expect_true(object = require("baseballstats"
-                                 , lib.loc = testLibPath
+                                 , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
                                  )
                 , info = "Fake test package baseballstats is not installed.")
     
     expect_true(object =  require("sartre"
-                                  , lib.loc = testLibPath
+                                  , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
                                   )
                 , info = "Fake test package sartre is not installed")
   })
