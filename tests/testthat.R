@@ -7,6 +7,26 @@
 # See https://github.com/hadley/testthat/issues/144
 Sys.setenv("R_TESTS" = "")
 
+# Check if setup and helper funs have been run
+Sys.setenv(PKGNET_REBUID = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
+
+# If not yet run, rebuild
+print(getwd())
+
+if(Sys.getenv('PKGNET_REBUID')){
+    library(pkgnet)
+    source('./testthat/setup_setTestEnv.R')
+    source('./testthat/helper_setTestEnv.R')
+}
+
+print(Sys.getenv('PKGNET_TEST_LIB'))
+print(list.files(path = file.path(Sys.getenv('PKGNET_TEST_LIB'), 'pkgnet')
+                 , pattern = 'test'
+                 , full.names = TRUE
+                 , recursive = TRUE
+                 )
+      )
+
 testthat::test_dir(path = file.path(find.package(package = "pkgnet"
                                                  , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
                                                  )
@@ -15,4 +35,9 @@ testthat::test_dir(path = file.path(find.package(package = "pkgnet"
                                     )
                    )
 
+#testthat::test_check('pkgnet')
 
+# burn it down
+if(Sys.getenv('PKGNET_REBUID')){
+    source('./testthat/teardown_setTestEnv.R')
+}

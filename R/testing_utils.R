@@ -6,20 +6,20 @@
 # [param]   currentLibPath (string) path to the current library in which pkgnet resides
 # [param]   targetLibPath (string) path to the location of the new directory
 # [return]  boolean TRUE
-.BuildTestLib <- function(currentLibPath
+.BuildTestLib <- function(currentLibPaths
                          , targetLibPath){
     
     # packages to be built
     pkgList <- list(baseballstats = system.file('baseballstats'
                                                 , package = "pkgnet"
-                                                , lib.loc = currentLibPath
+                                                , lib.loc = currentLibPaths
                                                 )
                     , sartre = system.file('sartre'
                                            , package = "pkgnet"
-                                           , lib.loc = currentLibPath
+                                           , lib.loc = currentLibPaths
                                            )
                     , pkgnet = find.package(package = 'pkgnet'
-                                   , lib.loc = currentLibPath
+                                   , lib.loc = currentLibPaths
                                    )
                     )
     
@@ -30,7 +30,8 @@
                                                         , lib = targetLibPath
                                                         , repos = NULL
                                                         , type = "source"
-                                                        , INSTALL_opts = c('--install-tests')
+                                                        , INSTALL_opts = c('--install-tests'
+                                                                           )
                                 )
                                 
                                 # confirm install

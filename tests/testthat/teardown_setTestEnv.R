@@ -1,6 +1,6 @@
 
 
-# Uninstall Fake Packages - For local testing 
+# Uninstall Fake Packages - For local testing
 utils::remove.packages(pkgs = c('baseballstats'
                                 , 'sartre'
                                 , 'pkgnet'
