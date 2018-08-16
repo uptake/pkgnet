@@ -9,6 +9,25 @@
 .BuildTestLib <- function(currentLibPaths
                          , targetLibPath){
     
+    localDirPathInst <- system.file(package = "pkgnet"
+                                , lib.loc = currentLibPaths
+    )
+    
+    # find PKGNET source dir with tests
+    pkgnetSourcePath <- gsub(pattern = '/tests/testthat$|/vignettes$|pkgnet.Rcheck/tests$'
+                  , replacement = ''
+                  , x = getwd()
+    )
+    
+    print(pkgnetSourcePath)
+    
+    cmdstr <- sprintf(fmt = 'R CMD INSTALL -l "%s" --install-tests "%s"'
+                      , targetLibPath
+                      , pkgnetSourcePath
+                      )
+    
+    system(command = cmdstr)
+    
     # packages to be built
     pkgList <- list(baseballstats = system.file('baseballstats'
                                                 , package = "pkgnet"
@@ -18,10 +37,21 @@
                                            , package = "pkgnet"
                                            , lib.loc = currentLibPaths
                                            )
-                    , pkgnet = find.package(package = 'pkgnet'
-                                   , lib.loc = currentLibPaths
-                                   )
-                    )
+    )
+    
+    print(pkgList)
+    # print(list.dirs(path = dirname(pkgList[['pkgnet']])
+    #                 , recursive = TRUE
+    #                 , full.names = FALSE
+    # )
+    # )
+    # print(list.dirs(path = pkgList[['pkgnet']]
+    #                 , recursive = TRUE
+    #                 , full.names = FALSE
+    #                 )
+    #       )
+    log_info(pkgList)
+    
     
     installResult <- sapply(X = names(pkgList)
                             , FUN = function(p){
@@ -31,7 +61,7 @@
                                                         , repos = NULL
                                                         , type = "source"
                                                         , INSTALL_opts = c('--install-tests'
-                                                                           )
+                                                        )
                                 )
                                 
                                 # confirm install

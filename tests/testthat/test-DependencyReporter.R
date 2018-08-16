@@ -48,11 +48,11 @@ test_that('DependencyReporter Methods Work', {
       
       # testing set_package with a pkg_path that is relative to the current directory
       entry_wd <- getwd()
-      parent_dir <- dirname(system.file('baseballstats'
-                                        , package='pkgnet'
-                                        , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
-                                        )
-                            )
+      baseball_dir <- system.file('baseballstats'
+                                  , package='pkgnet'
+                                  , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
+      )
+      parent_dir <- dirname(baseball_dir)
       setwd(parent_dir)
       
       testObj$set_package(
@@ -62,9 +62,18 @@ test_that('DependencyReporter Methods Work', {
       setwd(entry_wd)
   })
   
+  # Sometimes with R CMD CHECK the temp dir begins /private/vars. Other times, just /vars. 
+  # also, sometimes there are double slashes
+  fmtPath <- function(path){
+      out <- gsub('^/private', '', path)
+      out <- gsub('//', '/', out)
+      return(out)
+  }
+  
+  
   expect_identical(
-      testObj$.__enclos_env__$private$pkg_path
-      , expected = system.file('baseballstats', package='pkgnet')
+        object = fmtPath(testObj$.__enclos_env__$private$pkg_path)
+      , expected = fmtPath(baseball_dir)
       , info = "set_package did not use the absolute path of the directory"
   )
   

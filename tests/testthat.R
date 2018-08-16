@@ -8,36 +8,47 @@
 Sys.setenv("R_TESTS" = "")
 
 # Check if setup and helper funs have been run
-Sys.setenv(PKGNET_REBUID = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
+Sys.setenv(PKGNET_REBUILD = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
 
 # If not yet run, rebuild
 print(getwd())
 
-if(Sys.getenv('PKGNET_REBUID')){
+if(Sys.getenv('PKGNET_REBUILD')){
     library(pkgnet)
     source('./testthat/setup_setTestEnv.R')
     source('./testthat/helper_setTestEnv.R')
 }
 
 print(Sys.getenv('PKGNET_TEST_LIB'))
-print(list.files(path = file.path(Sys.getenv('PKGNET_TEST_LIB'), 'pkgnet')
+print(list.files(path = file.path(Sys.getenv('PKGNET_TEST_LIB'))
                  , pattern = 'test'
                  , full.names = TRUE
                  , recursive = TRUE
                  )
       )
 
-testthat::test_dir(path = file.path(find.package(package = "pkgnet"
-                                                 , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
-                                                 )
-                                    , "tests"
-                                    , "testthat"
-                                    )
-                   )
+print(find.package(package = 'baseballstats'))
+
+# 
+# testthat::test_dir(path = file.path(find.package(package = "pkgnet"
+#                                                  , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
+#                                                  )
+#                                     , "tests"
+#                                     , "testthat"
+#                                     )
+#                    )
+
+# testthat::test_check('pkgnet')
+
+withr::with_libpaths(new =  .libPaths()
+                     , code = {
+                         print(find.package(package = 'baseballstats'))
+                         testthat::test_check('pkgnet')
+                     })
 
 #testthat::test_check('pkgnet')
 
 # burn it down
-if(Sys.getenv('PKGNET_REBUID')){
+if(Sys.getenv('PKGNET_REBUILD')){
     source('./testthat/teardown_setTestEnv.R')
 }
