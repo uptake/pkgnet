@@ -7,48 +7,26 @@
 # See https://github.com/hadley/testthat/issues/144
 Sys.setenv("R_TESTS" = "")
 
-# Check if setup and helper funs have been run
+# Check if setup and helper funs have been run.  
+# If in R CMD CHECK, they may not have been run yet.   
 Sys.setenv(PKGNET_REBUILD = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
 
 # If not yet run, rebuild
-print(getwd())
-
 if(Sys.getenv('PKGNET_REBUILD')){
     library(pkgnet)
     source('./testthat/setup_setTestEnv.R')
     source('./testthat/helper_setTestEnv.R')
 }
 
-print(Sys.getenv('PKGNET_TEST_LIB'))
-print(list.files(path = file.path(Sys.getenv('PKGNET_TEST_LIB'))
-                 , pattern = 'test'
-                 , full.names = TRUE
-                 , recursive = TRUE
-                 )
-      )
-
-print(find.package(package = 'baseballstats'))
-
-# 
-# testthat::test_dir(path = file.path(find.package(package = "pkgnet"
-#                                                  , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
-#                                                  )
-#                                     , "tests"
-#                                     , "testthat"
-#                                     )
-#                    )
-
-# testthat::test_check('pkgnet')
-
+# This withr statement should be redundant.
+# This is within a test enviornment in which .libpaths() has been altered to include PKGNET_TEST_LIB. 
+# Yet, it appears to be necessary. 
 withr::with_libpaths(new =  .libPaths()
                      , code = {
-                         print(find.package(package = 'baseballstats'))
                          testthat::test_check('pkgnet')
                      })
 
-#testthat::test_check('pkgnet')
-
-# burn it down
+# Tear down temporary test enviorment
 if(Sys.getenv('PKGNET_REBUILD')){
     source('./testthat/teardown_setTestEnv.R')
 }

@@ -30,7 +30,8 @@ Imports:
     visNetwork
 Suggests:
     devtools,
-    testthat
+    testthat, 
+    withr
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/UptakeOpenSource/pkgnet
 BugReports: https://github.com/UptakeOpenSource/pkgnet/issues

@@ -63,7 +63,7 @@ test_that('DependencyReporter Methods Work', {
   })
   
   # Sometimes with R CMD CHECK the temp dir begins /private/vars. Other times, just /vars. 
-  # also, sometimes there are double slashes
+  # Also, sometimes there are double slashes.
   fmtPath <- function(path){
       out <- gsub('^/private', '', path)
       out <- gsub('//', '/', out)

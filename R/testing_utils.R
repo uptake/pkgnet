@@ -13,22 +13,14 @@
                                 , lib.loc = currentLibPaths
     )
     
-    # find PKGNET source dir with tests
+    ### find PKGNET source dir within devtools::test, R CMD CHECK, and vignette building
     pkgnetSourcePath <- gsub(pattern = '/tests/testthat$|/vignettes$|pkgnet.Rcheck/tests$'
                   , replacement = ''
                   , x = getwd()
     )
+
     
-    print(pkgnetSourcePath)
-    
-    cmdstr <- sprintf(fmt = 'R CMD INSTALL -l "%s" --install-tests "%s"'
-                      , targetLibPath
-                      , pkgnetSourcePath
-                      )
-    
-    system(command = cmdstr)
-    
-    # packages to be built
+    ### packages to be built
     pkgList <- list(baseballstats = system.file('baseballstats'
                                                 , package = "pkgnet"
                                                 , lib.loc = currentLibPaths
@@ -37,32 +29,21 @@
                                            , package = "pkgnet"
                                            , lib.loc = currentLibPaths
                                            )
+                    , pkgnet = pkgnetSourcePath
     )
     
-    print(pkgList)
-    # print(list.dirs(path = dirname(pkgList[['pkgnet']])
-    #                 , recursive = TRUE
-    #                 , full.names = FALSE
-    # )
-    # )
-    # print(list.dirs(path = pkgList[['pkgnet']]
-    #                 , recursive = TRUE
-    #                 , full.names = FALSE
-    #                 )
-    #       )
-    log_info(pkgList)
     
-    
+    ### Install and confirm
     installResult <- sapply(X = names(pkgList)
                             , FUN = function(p){
-                                # install
-                                utils::install.packages(pkgs = pkgList[[p]]
-                                                        , lib = targetLibPath
-                                                        , repos = NULL
-                                                        , type = "source"
-                                                        , INSTALL_opts = c('--install-tests'
-                                                        )
+
+                                # force install of SOURCE (not binary) in temporary directory for tests
+                                cmdstr <- sprintf(fmt = 'R CMD INSTALL -l "%s" --install-tests "%s"'
+                                                  , targetLibPath
+                                                  , pkgList[[p]]
                                 )
+                                
+                                system(command = cmdstr)
                                 
                                 # confirm install
                                 db <- installed.packages(lib.loc = targetLibPath)
@@ -73,6 +54,7 @@
                                        )
                             })
 
+    ### Message Out
     if(all(installResult)) {
         log_info("Successfully created test library.")
         log_info(paste0("Test Libpath: ", targetLibPath))
