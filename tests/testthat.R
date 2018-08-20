@@ -12,10 +12,12 @@ Sys.setenv("R_TESTS" = "")
 Sys.setenv(PKGNET_REBUILD = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
 
 # If not yet run, rebuild
+print(getwd())
+print(path.expand(file.path(getwd(), 'testthat/setup_setTestEnv.R')))
 if(Sys.getenv('PKGNET_REBUILD')){
     library(pkgnet)
-    source(path.expand(file.path('./testthat/setup_setTestEnv.R')))
-    source(path.expand(file.path('./testthat/helper_setTestEnv.R')))
+    source(path.expand(file.path(getwd(), 'testthat/setup_setTestEnv.R')))
+    source(path.expand(file.path(getwd(), 'testthat/helper_setTestEnv.R')))
 }
 
 # This withr statement should be redundant.
