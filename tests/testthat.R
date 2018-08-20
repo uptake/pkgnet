@@ -14,8 +14,8 @@ Sys.setenv(PKGNET_REBUILD = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
 # If not yet run, rebuild
 if(Sys.getenv('PKGNET_REBUILD')){
     library(pkgnet)
-    source(file.path(getwd(), 'testthat/setup_setTestEnv.R'))
-    source(file.path(getwd(), 'testthat/helper_setTestEnv.R'))
+    source(path.expand(file.path('./testthat/setup_setTestEnv.R')))
+    source(path.expand(file.path('./testthat/helper_setTestEnv.R')))
 }
 
 # This withr statement should be redundant.
@@ -28,5 +28,5 @@ withr::with_libpaths(new =  .libPaths()
 
 # Tear down temporary test enviorment
 if(Sys.getenv('PKGNET_REBUILD')){
-    source(file.path(getwd(), 'testthat/teardown_setTestEnv.R'))
+    source(path.expand(file.path('./testthat/teardown_setTestEnv.R')))
 }
