@@ -12,12 +12,33 @@ Sys.setenv("R_TESTS" = "")
 Sys.setenv(PKGNET_REBUILD = identical(Sys.getenv('PKGNET_TEST_LIB'), ''))
 
 # If not yet run, rebuild
-print(getwd())
-print(path.expand(file.path(getwd(), 'testthat/setup_setTestEnv.R')))
+
 if(Sys.getenv('PKGNET_REBUILD')){
     library(pkgnet)
-    source(path.expand(file.path(getwd(), 'testthat/setup_setTestEnv.R')))
-    source(path.expand(file.path(getwd(), 'testthat/helper_setTestEnv.R')))
+    ## ******************************************************************************************
+    ## THIS IS THIS SAME CONTENT as setup_setTestEnv.R but neccessary to paste here due to 
+    ## travis checks.
+    ## ******************************************************************************************
+    
+    # record original libpaths in order to reset later.  
+    # This should be unnecessary since tests are conducted within a seperate enviornment. 
+    # It's done out of an abundance of caution. 
+    origLibPaths <- .libPaths()
+    
+    # Set the pkgnet library for testing to a temp directory
+    Sys.setenv(PKGNET_TEST_LIB = tempdir())
+    
+    # Set the libpaths for testing. 
+    # This has no effect to global libpaths since testing tests are conducted within a seperate enviornment. 
+    .libPaths(new = c(Sys.getenv('PKGNET_TEST_LIB')
+                      , origLibPaths)
+    )
+    
+    # Install Fake Packages - For local testing if not already installed
+    pkgnet:::.BuildTestLib(currentLibPaths = origLibPaths
+                           , targetLibPath = Sys.getenv('PKGNET_TEST_LIB')
+    )
+    
 }
 
 # This withr statement should be redundant.
@@ -30,5 +51,27 @@ withr::with_libpaths(new =  .libPaths()
 
 # Tear down temporary test enviorment
 if(Sys.getenv('PKGNET_REBUILD')){
-    source(path.expand(file.path('./testthat/teardown_setTestEnv.R')))
+    ## ******************************************************************************************
+    ## THIS IS THIS SAME CONTENT as teardown_setTestEnv.R but neccessary to paste here due to 
+    ## travis checks.
+    ## ******************************************************************************************
+    
+    
+    # Uninstall Fake Packages From Test Library if Not Already Uninstalled
+    try(
+        utils::remove.packages(pkgs = c('baseballstats'
+                                        , 'sartre'
+                                        , 'pkgnet'
+        )
+        , lib = Sys.getenv('PKGNET_TEST_LIB')
+        )   
+    )
+    
+    # Reset libpaths.  
+    # This should be unnecessary since tests are conducted within a seperate enviornment. 
+    # It's done out of an abundance of caution. 
+    .libPaths(origLibPaths)
+    
+    # Remove test libary path eviornment variable.  
+    Sys.unsetenv('PKGNET_TEST_LIB')
 }
