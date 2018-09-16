@@ -48,7 +48,7 @@
 
             # force install of SOURCE (not binary) in temporary directory for tests
             cmdstr <- sprintf(
-                fmt = '%s CMD INSTALL -l "%s" --install-tests "%s"'
+                fmt = '"%s" CMD INSTALL -l "%s" --install-tests "%s"'
                 , R_LOC
                 , targetLibPath
                 , pkgList[[p]]
@@ -83,7 +83,7 @@
         missing <- names(pkgList)[!installResult]
         log_fatal(paste0(
             "Test library incomplete: Missing "
-            , paste(missing, collapse = ",")
+            , paste(missing, collapse = ", ")
         ))
     }
 

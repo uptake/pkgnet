@@ -50,12 +50,12 @@ withr::with_libpaths(new =  .libPaths()
                      })
 
 # Tear down temporary test enviorment
-if(Sys.getenv('PKGNET_REBUILD')){
+if (Sys.getenv('PKGNET_REBUILD')){
+
     ## ******************************************************************************************
     ## THIS IS THIS SAME CONTENT as teardown_setTestEnv.R but neccessary to paste here due to
     ## travis checks.
     ## ******************************************************************************************
-
 
     # Uninstall Fake Packages From Test Library if Not Already Uninstalled
     try(
