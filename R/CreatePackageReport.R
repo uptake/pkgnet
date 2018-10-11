@@ -1,6 +1,6 @@
 #' @title Surface the internal and external dependencies of an R package.
 #' @name CreatePackageReport
-#' @description Surface the internal and external dependencies of an R package. 
+#' @description Surface the internal and external dependencies of an R package.
 #' @author B. Burns
 #' @seealso GetPackageGraphs
 #' @param pkg_name (string) name of a package
@@ -30,12 +30,12 @@ CreatePackageReport <- function(pkg_name
         , assertthat::is.string(report_path)
         , report_path != ""
     )
-    
+
     # Confirm that the report_path looks correct
     if (! identical(tolower(tools::file_ext(report_path)), "html")){
         log_fatal(sprintf("report_path must be a .html file path. You gave '%s'.", report_path))
     }
-    
+
     # Confirm that all reporters are actually reporters
     checks <- sapply(pkg_reporters, function(x){methods::is(x, "AbstractPackageReporter")})
     if (!all(checks)){
@@ -43,27 +43,27 @@ CreatePackageReport <- function(pkg_name
                       "is not a PackageReporter. See ?AbstractPackageReporter for details.")
         log_fatal(msg)
     }
-    
+
     log_info(paste0("Creating package report for package "
                     , pkg_name
                     , " with reporters:\n\n"
                     , paste(unlist(lapply(pkg_reporters, function(x) class(x)[1]))
                             , collapse = "\n")))
-    
+
     builtReporters <- .BuildPackageReporters(
       pkg_name
       , pkg_reporters
       , pkg_path
     )
-    
+
     .RenderPackageReport(
       report_path = report_path
       , pkg_reporters = builtReporters
       , pkg_name = pkg_name
     )
-    
+
     utils::browseURL(report_path)
-    
+
     return(invisible(builtReporters))
 }
 
@@ -73,20 +73,21 @@ CreatePackageReport <- function(pkg_name
 # [description] Renders an html report based on the initialized reporters provided
 # [author] P. Boueri
 # [param] report_path a file.path to where the report should be rendered
-# [param] pkg_reporters a list of package reporters that have already been initialized and have calculated 
+# [param] pkg_reporters a list of package reporters that have already been initialized and have calculated
 # [param] pkg_name (string) The name of the package.
 # [return] Nothing
 #' @importFrom rmarkdown render
-.RenderPackageReport <- function(report_path 
+.RenderPackageReport <- function(report_path
                                 , pkg_reporters
                                 , pkg_name) {
-    
+
     log_info("Rendering package report...")
-    
+
     silence_logger()
     rmarkdown::render(
         system.file(file.path("package_report", "package_report.Rmd"), package = "pkgnet")
-        , output_file = report_path
+        , output_dir = dirname(report_path)
+        , output_file = basename(report_path)
         , quiet = TRUE
         , params = list(
             reporters = pkg_reporters
@@ -103,13 +104,13 @@ CreatePackageReport <- function(pkg_name
 # [Title] Build The Package Reporters
 # [Author] B. Burns
 # [Desc] This function creates an instance of each package reporter
-#        and enriches its content.   
+#        and enriches its content.
 #
 # [seealso] For param descriptions, see CreatePackageReport
 .BuildPackageReporters <- function(pkg_name
                                    , pkg_reporters
                                    , pkg_path){
-      
+
       pkg_reporters <- sapply(
           X = pkg_reporters
           , FUN = function(reporter){
@@ -118,6 +119,6 @@ CreatePackageReport <- function(pkg_name
           }
       )
       names(pkg_reporters) <- sapply(pkg_reporters, function(x) class(x)[1])
-      
+
       return(pkg_reporters)
 }
