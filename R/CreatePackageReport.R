@@ -87,7 +87,7 @@ CreatePackageReport <- function(pkg_name
     rmarkdown::render(
         system.file(file.path("package_report", "package_report.Rmd"), package = "pkgnet")
         , output_dir = dirname(report_path)
-        , output_file = report_path
+        , output_file = basename(report_path)
         , quiet = TRUE
         , params = list(
             reporters = pkg_reporters
