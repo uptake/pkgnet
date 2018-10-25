@@ -25,3 +25,14 @@ globalVariables(c('.'
                   ,'y'
                   ,'yend'
                   ))
+
+# NULL object for common parameter documentation
+#' @param pkg_name (string) name of a package
+#' @param pkg_path (string) The path to the package repository. If given, coverage
+#'                 will be calculated for each function. \code{pkg_path} can be an
+#'                 absolute or relative path.
+#' @name doc_shared
+#' @title NULL Object For Common Documentation
+#' @description This is a NULL object with documentation so that later functions can call
+#' inheritParams
+NULL
