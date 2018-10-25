@@ -332,7 +332,8 @@ AbstractGraphReporter <- R6::R6Class(
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
-                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+                plotDTedges[, color := '#848484']
+                plotDTedges[,title:=paste0("<p>", 1:self$edges,"<br>Tooltip !</p>")# TODO Make edge formatting flexible too
             } else {
                 plotDTedges <- NULL
             }
