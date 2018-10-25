@@ -8,7 +8,7 @@
 `pkgnet` is an R library designed for the analysis of R libraries! The goal of the package is to build a graph representation of a package and its dependencies to inform a variety of activities, including:
 
 - prioritizing functions to unit test based on their centrality
-- examining the recursive depdencies you are taking on by using a given package
+- examining the recursive dependencies you are taking on by using a given package
 - exploring the structure of a new package provided by a coworker or downloaded from the internet
 
 # Table of contents
