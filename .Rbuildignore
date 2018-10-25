@@ -7,5 +7,3 @@ CONDUCT.md
 CONTRIBUTING.md
 .travis.yml
 ^_pkgdown\.yml$
-^.*\.Rproj$
-^\.Rproj\.user$
