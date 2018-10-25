@@ -417,6 +417,10 @@ AbstractGraphReporter <- R6::R6Class(
             # Create Plot
             g <- visNetwork::visNetwork(nodes = plotDTnodes
                                         , edges = plotDTedges) %>%
+                visNetwork::visInteraction(dragNodes = FALSE, 
+                             dragView = FALSE, 
+                             zoomView = FALSE) %>%
+                visNetwork::visLayout(randomSeed = 123)
                 visNetwork::visHierarchicalLayout(sortMethod = "directed"
                                                   , direction = "UD") %>%
                 visNetwork::visEdges(arrows = 'to') %>%
