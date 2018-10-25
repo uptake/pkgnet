@@ -322,7 +322,7 @@ AbstractGraphReporter <- R6::R6Class(
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
-            plotDTedges[,title:=paste0("<p>", 1:id,"<br>Tooltip !</p>")]# TODO Make edge formatting flexible too
+            # TODO Make edge formatting flexible too
                         
 
             log_info(paste("Plotting with layout:", self$layout_type))
