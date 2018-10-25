@@ -322,6 +322,8 @@ AbstractGraphReporter <- R6::R6Class(
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
+            plotDTedges[,title:=paste0("<p>", 1:id,"<br>Tooltip !</p>")# TODO Make edge formatting flexible too
+                        
 
             log_info(paste("Plotting with layout:", self$layout_type))
             plotDTnodes <- private$calculate_graph_layout(
@@ -333,7 +335,7 @@ AbstractGraphReporter <- R6::R6Class(
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
                 plotDTedges[, color := '#848484']
-                plotDTedges[,title:=paste0("<p>", 1:self$edges,"<br>Tooltip !</p>")# TODO Make edge formatting flexible too
+                plotDTedges[,title:=paste0("<p>", SOURCE:TARGET,"<br>Tooltip !</p>")# TODO Make edge formatting flexible too
             } else {
                 plotDTedges <- NULL
             }
@@ -418,10 +420,7 @@ AbstractGraphReporter <- R6::R6Class(
             # Create Plot
             g <- visNetwork::visNetwork(nodes = plotDTnodes
                                         , edges = plotDTedges) %>%
-                visNetwork::visInteraction(dragNodes = FALSE, 
-                             dragView = FALSE, 
-                             zoomView = FALSE) %>%
-                visNetwork::visLayout(randomSeed = 123)
+                
                 visNetwork::visHierarchicalLayout(sortMethod = "directed"
                                                   , direction = "UD") %>%
                 visNetwork::visEdges(arrows = 'to') %>%
