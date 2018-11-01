@@ -42,4 +42,5 @@ Defines a concrete implementation of \link{AbstractPackageReporter}
 Other PackageReporters: \code{\link{DependencyReporter}},
   \code{\link{FunctionReporter}}
 }
+\concept{PackageReporters}
 \keyword{datasets}

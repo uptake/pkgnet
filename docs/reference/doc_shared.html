@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Package Dependency Reporter Class — DependencyReporter • pkgnet</title>
+<title>NULL Object For Common Documentation — doc_shared • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -25,11 +25,10 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-<meta property="og:title" content="Package Dependency Reporter Class — DependencyReporter" />
+<meta property="og:title" content="NULL Object For Common Documentation — doc_shared" />
 
-<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
-             its other package dependencies, determining which package it relies on is most central,
-             allowing for a developer to determine how to vet its dependency tree" />
+<meta property="og:description" content="This is a NULL object with documentation so that later functions can call
+inheritParams" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -95,50 +94,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Package Dependency Reporter Class</h1>
-    <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/PackageDependencyReporter.R'><code>R/PackageDependencyReporter.R</code></a></small>
+    <h1>NULL Object For Common Documentation</h1>
+    <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/pkgnet.R'><code>R/pkgnet.R</code></a></small>
     </div>
 
     
-    <p>This Reporter takes a package and uncovers the structure from
-             its other package dependencies, determining which package it relies on is most central,
-             allowing for a developer to determine how to vet its dependency tree</p>
+    <p>This is a NULL object with documentation so that later functions can call
+inheritParams</p>
     
 
-    <pre class="usage"><span class='no'>DependencyReporter</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other PackageReporters: <code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
-  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pkg_name</th>
+      <td><p>(string) name of a package</p></td>
+    </tr>
+    <tr>
+      <th>pkg_path</th>
+      <td><p>(string) The path to the package repository. If given, coverage
+will be calculated for each function. <code>pkg_path</code> can be an
+absolute or relative path.</p></td>
+    </tr>
+    </table>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># Instantiate an object</span>
-<span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>DependencyReporter</span>$<span class='fu'>new</span>()
-
-<span class='co'># Seed it with a package</span>
-<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2018-11-01 21:48:43] Checking installed packages...
-#&gt; INFO [2018-11-01 21:48:43] Found 'ggplot2' in installed packages.
-#&gt; INFO [2018-11-01 21:48:43] Resetting cached network information...</div><div class='input'>
-<span class='co'># plot it up</span>
-<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): attempt to apply non-function</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
   </div>
 </div>

@@ -38,4 +38,5 @@ This Reporter takes a package and uncovers the structure from
 Other PackageReporters: \code{\link{DependencyReporter}},
   \code{\link{SummaryReporter}}
 }
+\concept{PackageReporters}
 \keyword{datasets}

@@ -42,4 +42,5 @@ Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
 \seealso{
 Other AbstractReporters: \code{\link{AbstractPackageReporter}}
 }
+\concept{AbstractReporters}
 \keyword{datasets}
