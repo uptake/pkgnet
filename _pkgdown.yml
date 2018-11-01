@@ -16,3 +16,9 @@ navbar:
   right:
    - icon: fa-github
      href: https://github.com/uptakeopensource/pkgnet
+     
+reference:
+- title: All Functions
+  contents:
+  - -matches("doc_shared") 
+

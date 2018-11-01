@@ -30,4 +30,5 @@ reporter$plot_network()
 Other PackageReporters: \code{\link{FunctionReporter}},
   \code{\link{SummaryReporter}}
 }
+\concept{PackageReporters}
 \keyword{datasets}
