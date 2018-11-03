@@ -8,8 +8,9 @@
 .BuildTestLib <- function(targetLibPath){
 
     ### find PKGNET source dir within devtools::test, R CMD CHECK, and vignette building
-    pkgnetSourcePath <- gsub('/tests/testthat$', replacement = '', x = getwd())
-    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests$', replacement = '', x = pkgnetSourcePath)
+    write(paste0("working dir: ", getwd()), file = "~/repos/thing.txt", append = TRUE)
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = getwd())
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/vignettes$', replacement = '', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck$', replacement = '', x = pkgnetSourcePath)

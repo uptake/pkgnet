@@ -60,8 +60,8 @@ if (Sys.getenv('PKGNET_REBUILD')){
     try(
         utils::remove.packages(
             pkgs = c('baseballstats', 'sartre', 'pkgnet')
+            , lib = Sys.getenv('PKGNET_TEST_LIB')
         )
-        , lib = Sys.getenv('PKGNET_TEST_LIB')
     )
 
     # Reset libpaths.
