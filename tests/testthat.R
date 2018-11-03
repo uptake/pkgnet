@@ -35,19 +35,18 @@ if (Sys.getenv('PKGNET_REBUILD')){
 
     # Install Fake Packages - For local testing if not already installed
     pkgnet:::.BuildTestLib(
-        currentLibPaths = origLibPaths
-        , targetLibPath = Sys.getenv('PKGNET_TEST_LIB')
+        targetLibPath = Sys.getenv('PKGNET_TEST_LIB')
     )
 
 }
 
 # This withr statement should be redundant.
-# This is within a test enviornment in which .libpaths() has been altered to include PKGNET_TEST_LIB.
+# This is within a test environment in which .libpaths() has been altered to include PKGNET_TEST_LIB.
 # Yet, it appears to be necessary.
-withr::with_libpaths(new =  .libPaths()
-                     , code = {
-                         testthat::test_check('pkgnet')
-                     })
+withr::with_libpaths(
+    new =  .libPaths()
+    , code = {testthat::test_check('pkgnet')}
+)
 
 # Tear down temporary test enviorment
 if (Sys.getenv('PKGNET_REBUILD')){
@@ -59,12 +58,10 @@ if (Sys.getenv('PKGNET_REBUILD')){
 
     # Uninstall Fake Packages From Test Library if Not Already Uninstalled
     try(
-        utils::remove.packages(pkgs = c('baseballstats'
-                                        , 'sartre'
-                                        , 'pkgnet'
+        utils::remove.packages(
+            pkgs = c('baseballstats', 'sartre', 'pkgnet')
         )
         , lib = Sys.getenv('PKGNET_TEST_LIB')
-        )
     )
 
     # Reset libpaths.

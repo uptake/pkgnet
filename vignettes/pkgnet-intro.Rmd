@@ -25,9 +25,7 @@ origLibPaths <- .libPaths()
 .libPaths(new = c(testLibPath, origLibPaths))
 
 # Create packages within new library
-pkgnet:::.BuildTestLib(currentLibPath = origLibPaths[1]
-                       , targetLibPath = testLibPath
-                       )
+pkgnet:::.BuildTestLib(targetLibPath = testLibPath)
 
 knitr::opts_chunk$set(
   collapse = FALSE,
