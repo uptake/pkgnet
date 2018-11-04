@@ -28,7 +28,8 @@ if (Sys.getenv('PKGNET_REBUILD')){
     Sys.setenv(PKGNET_TEST_LIB = tempdir())
 
     # Set the libpaths for testing.
-    # This has no effect to global libpaths since testing tests are conducted within a seperate enviornment.
+    # This has no effect to global libpaths since testing tests are conducted within a
+    # seperate enviornment.
     .libPaths(
         new = c(Sys.getenv('PKGNET_TEST_LIB'), origLibPaths)
     )

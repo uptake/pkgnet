@@ -4,6 +4,10 @@
 # [DESC]    Loads all packages necessary for testing into a another directory,
 #           preferably a temporary directory. This function also confirms successful installation.
 # [param]   targetLibPath (string) path to the location of the new directory
+# [param]   rBinaryLoc (string) full path to the "R" executable. When you run R CMD CHECK,
+#                               it bundles in its own custom R executable. When you try to use
+#                               that version in an "R CMD INSTALL" call while using the --as-cran
+#                               flag to CHECK, things get weird.
 # [return]  boolean TRUE
 .BuildTestLib <- function(targetLibPath){
 
@@ -18,9 +22,6 @@
     write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/repos/thing.txt", append = TRUE)
     write("=========", file = "~/repos/thing.txt", append = TRUE)
 
-    # does it work if we brute-force it
-    pkgnetSourcePath <- "/Users/jlamb/Desktop/pkgnet.Rcheck/00_pkg_src/pkgnet"
-
     ### packages to be built
     pkgList <- c(
         baseballstats = file.path(pkgnetSourcePath, "inst", "baseballstats")
@@ -31,9 +32,22 @@
     ### Install and confirm
 
     # Figure out where R is to avoid those weird warnings about
-    # 'R' should not be used without a path -- see par. 1.6 of the manual
-    R_LOC <- system('which R', intern = TRUE)
-    R_LOC <- "/usr/local/bin/R"
+    # 'R' should not be used without a path -- see par. 1.6 of the manual.
+    # NOTE: we save this to a file here because R CMD CHECK comes with its
+    #       own bundled "R" binary which doesn't work the same way and causes that
+    #       error. Just trust me on this.
+    r_file <- file.path(targetLibPath, ".r_binary_path")
+    if (file.exists(r_file)){
+        R_LOC <- gsub(pattern = "\n", replacement = "", readLines(r_file))
+    } else {
+        # "Sys.which()" would be the correct, portable way to do this but it
+        # doesn't support matching ALL matches, so for now we'll make it work
+        # on unix-alike operating systems and deal with Windows later
+        R_LOC <- system("which -a R", intern = TRUE)
+        R_LOC <- R_LOC[!grepl("R_check_bin", R_LOC)][1]
+        write(x = R_LOC, file = r_file)
+    }
+    #R_LOC <- "/usr/local/bin/R"
 
     # force install of SOURCE (not binary) in temporary directory for tests
     cmdstr <- sprintf(
