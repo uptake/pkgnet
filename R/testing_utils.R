@@ -1,27 +1,28 @@
 
-
 # [Title]   Build A Library For Testing
-# [DESC]    Loads all packages necessary for testing into a another directory,
-#           preferably a temporary directory. This function also confirms successful installation.
+# [DESC]    Installs all packages necessary for testing into a another directory,
+#           preferably a temporary directory. This function will throw a fatal error
+#           if that installation fails.
 # [param]   targetLibPath (string) path to the location of the new directory
-# [param]   rBinaryLoc (string) full path to the "R" executable. When you run R CMD CHECK,
-#                               it bundles in its own custom R executable. When you try to use
-#                               that version in an "R CMD INSTALL" call while using the --as-cran
-#                               flag to CHECK, things get weird.
 # [return]  boolean TRUE
 .BuildTestLib <- function(targetLibPath){
 
-    write("=========", file = "~/repos/thing.txt", append = TRUE)
-    write(list.files(getwd(), recursive = TRUE), file = "~/repos/thing.txt", append = TRUE)
-    ### find PKGNET source dir within devtools::test, R CMD CHECK, and vignette building
-    write(paste0("working dir: ", getwd()), file = "~/repos/thing.txt", append = TRUE)
+    ### find PKGNET source dir within devtools::test(), R CMD CHECK, and vignette building
+    # NOTE: this can be fragile. Uncomment the lines with "# [DEBUG]" and run test.sh
+    #       from the repo root if something goes wrong
+
+    # [DEBUG] write("=========", file = "~/repos/thing.txt", append = TRUE)
+    # [DEBUG] write(list.files(getwd(), recursive = TRUE), file = "~/repos/thing.txt", append = TRUE)
+    # [DEBUG] write(paste0("working dir: ", getwd()), file = "~/repos/thing.txt", append = TRUE)
+
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = getwd())
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet/vignettes$', replacement = '/pkgnet', x = pkgnetSourcePath)
-    pkgnetSourcePath <- gsub('pkgnet/tests/testthat', replace = 'pkgnet', x = pkgnetSourcePath)
-    write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/repos/thing.txt", append = TRUE)
-    write("=========", file = "~/repos/thing.txt", append = TRUE)
+    pkgnetSourcePath <- gsub('pkgnet/tests/testthat', replacement = 'pkgnet', x = pkgnetSourcePath)
+
+    # [DEBUG] write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/repos/thing.txt", append = TRUE)
+    # [DEBUG] write("=========", file = "~/repos/thing.txt", append = TRUE)
 
     ### packages to be built
     pkgList <- c(
@@ -30,7 +31,7 @@
         , pkgnet = pkgnetSourcePath
     )
 
-    ### Install and confirm
+    ### Install
 
     # Figure out where R is to avoid those weird warnings about
     # 'R' should not be used without a path -- see par. 1.6 of the manual.
@@ -66,5 +67,5 @@
         ))
     }
 
-    return(TRUE)
+    return(invisible(TRUE))
 }
