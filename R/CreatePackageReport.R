@@ -59,7 +59,7 @@ CreatePackageReport <- function(pkg_name
       , pkg_name = pkg_name
     )
 
-    utils::browseURL(report_path)
+    #utils::browseURL(report_path)
 
     return(invisible(builtReporters))
 }

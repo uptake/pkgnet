@@ -7,14 +7,19 @@
 # [return]  boolean TRUE
 .BuildTestLib <- function(targetLibPath){
 
+    write("=========", file = "~/repos/thing.txt", append = TRUE)
+    write(list.files(getwd(), recursive = TRUE), file = "~/repos/thing.txt", append = TRUE)
     ### find PKGNET source dir within devtools::test, R CMD CHECK, and vignette building
     write(paste0("working dir: ", getwd()), file = "~/repos/thing.txt", append = TRUE)
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = getwd())
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
-    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '', x = pkgnetSourcePath)
-    pkgnetSourcePath <- gsub('/vignettes$', replacement = '', x = pkgnetSourcePath)
-    pkgnetSourcePath <- gsub('/pkgnet.Rcheck$', replacement = '', x = pkgnetSourcePath)
-    write(pkgnetSourcePath, file = "~/repos/thing.txt", append = TRUE)
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
+    pkgnetSourcePath <- gsub('/pkgnet/vignettes$', replacement = '/pkgnet', x = pkgnetSourcePath)
+    write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/repos/thing.txt", append = TRUE)
+    write("=========", file = "~/repos/thing.txt", append = TRUE)
+
+    # does it work if we brute-force it
+    pkgnetSourcePath <- "/Users/jlamb/Desktop/pkgnet.Rcheck/00_pkg_src/pkgnet"
 
     ### packages to be built
     pkgList <- c(
@@ -28,6 +33,7 @@
     # Figure out where R is to avoid those weird warnings about
     # 'R' should not be used without a path -- see par. 1.6 of the manual
     R_LOC <- system('which R', intern = TRUE)
+    R_LOC <- "/usr/local/bin/R"
 
     # force install of SOURCE (not binary) in temporary directory for tests
     cmdstr <- sprintf(
