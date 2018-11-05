@@ -23,7 +23,6 @@ Imports:
     knitr,
     magrittr,
     methods,
-    mvbutils,
     R6,
     rmarkdown(>= 1.9),
     tools,

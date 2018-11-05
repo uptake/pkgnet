@@ -25,7 +25,6 @@
 #' @importFrom covr package_coverage
 #' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder
 #' @importFrom DT datatable formatRound
-#' @importFrom mvbutils foodweb
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
 #' @export
@@ -155,8 +154,7 @@ FunctionReporter <- R6::R6Class(
             }
             nodes <- data.table::data.table(node = as.character(
                 unlist(
-                    utils::lsf.str(pos = asNamespace(self$pkg_name)
-                                   )
+                    utils::lsf.str(pos = asNamespace(self$pkg_name))
                     )
                 )
             )
@@ -185,40 +183,98 @@ FunctionReporter <- R6::R6Class(
 
             log_info(sprintf('Constructing network representation...'))
 
-            # foodweb will output a warning for "In par(oldpar) : calling par(new=TRUE) with no plot" all the time.
-            # does not seem to be an issue
-            funcMap <- suppressWarnings({
-                mvbutils::foodweb(
-                    where = paste("package"
-                                  , self$pkg_name
-                                  , sep = ":")
-                    ,
-                    plotting = FALSE
-                )
-            })
+            # Get table of edges between functions
+            edgeDT <- .get_edges(pkg_name = self$pkg_name)
 
             log_info("Done constructing network representation")
 
-            # Function Connections: Edges
-            edges <- data.table::melt(
-                data.table::as.data.table(funcMap$funmat, keep.rownames = TRUE)
-                , id.vars = "rn"
-            )[value != 0]
-
-            # Formatting
-            edges[, value := NULL]
-            edges[, SOURCE := as.character(variable)]
-            edges[, TARGET := as.character(rn)]
-            edges[, variable := NULL]
-            edges[, rn := NULL]
-            data.table::setcolorder(edges, c('SOURCE', 'TARGET'))
-
-            # If no edges, return empty data.table
-            if (nrow(edges) == 0) {
-                return(data.table::data.table(SOURCE = character(), TARGET = character()))
-            }
-
-            return(edges)
+            return(edgeDT)
         }
     )
 )
+
+#' @importFrom data.table rbindlist
+.get_edges <- function(pkg_name){
+
+    # find all functions in this package
+    obj_names <- ls(sprintf("package:%s", pkg_name))
+
+    # create a custom environment w/ this package's contents
+    pkg_env <- loadNamespace(pkg_name)
+
+    # Filter to just function objects. This will now be a character
+    # vector full of function names
+    funs <- Filter(
+        f = function(x, p = pkg_env){is.function(get(x, p))}
+        , x = obj_names
+    )
+
+    # for each function, check if anything else in the package
+    # was called by it
+    edgeDT <- data.table::rbindlist(
+        lapply(
+            X = funs
+            , FUN = .called_by
+            , all_functions = funs
+            , pkg_env = pkg_env
+        )
+        , fill = TRUE
+    )
+}
+
+
+# [description] given a function name, return edgelist of
+#               all other functions it calls
+#' @importFrom assertthat is.string
+#' @importFrom data.table data.table
+.called_by <- function(fname, all_functions, pkg_env){
+
+    assertthat::assert_that(
+        is.environment(pkg_env)
+        , is.character(all_functions)
+        , assertthat::is.string(fname)
+    )
+
+    # get the body of the function
+    f <- get(fname, envir = pkg_env)
+
+    # get the literal code of the function
+    f_vec <- .parse_function(f)
+
+    # Figure out which ones mix
+    matches <- match(
+        x = f_vec
+        , table = all_functions
+        , nomatch = 0
+    )
+    matches <- matches[matches > 0]
+
+    if (length(matches) == 0){
+        return(invisible(NULL))
+    }
+
+    edgeDT <- data.table::data.table(
+        SOURCE = fname
+        , TARGET = unique(all_functions[matches])
+    )
+
+    return(edgeDT)
+}
+
+# [description] parse out a function's body into a character
+#               vector separating the individual symbols
+.parse_function <- function (x) {
+
+    listable <- (!is.atomic(x) && !is.symbol(x))
+
+    if (!is.list(x) && listable) {
+        x <- as.list(x)
+    }
+
+    if (listable){
+        out <- unlist(lapply(x, .parse_function), use.names = FALSE)
+    } else {
+        out <- paste(deparse(x), collapse = "\n")
+    }
+    return(out)
+}
