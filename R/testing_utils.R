@@ -11,9 +11,9 @@
     # NOTE: this can be fragile. Uncomment the lines with "# [DEBUG]" and run test.sh
     #       from the repo root if something goes wrong
 
-    # [DEBUG] write("=========", file = "~/repos/thing.txt", append = TRUE)
-    # [DEBUG] write(list.files(getwd(), recursive = TRUE), file = "~/repos/thing.txt", append = TRUE)
-    # [DEBUG] write(paste0("working dir: ", getwd()), file = "~/repos/thing.txt", append = TRUE)
+    # [DEBUG] write("=========", file = "~/thing.txt", append = TRUE)
+    # [DEBUG] write(list.files(getwd(), recursive = TRUE), file = "~/thing.txt", append = TRUE)
+    # [DEBUG] write(paste0("working dir: ", getwd()), file = "~/thing.txt", append = TRUE)
 
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = getwd())
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
@@ -21,8 +21,8 @@
     pkgnetSourcePath <- gsub('/pkgnet/vignettes$', replacement = '/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('pkgnet/tests/testthat', replacement = 'pkgnet', x = pkgnetSourcePath)
 
-    # [DEBUG] write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/repos/thing.txt", append = TRUE)
-    # [DEBUG] write("=========", file = "~/repos/thing.txt", append = TRUE)
+    # [DEBUG] write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/thing.txt", append = TRUE)
+    # [DEBUG] write("=========", file = "~/thing.txt", append = TRUE)
 
     ### packages to be built
     pkgList <- c(

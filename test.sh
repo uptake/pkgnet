@@ -1,10 +1,15 @@
 #!/bin/bash
 
 rm *.tar.gz
-rm ~/repos/thing.txt
+rm ~/thing.txt
 R CMD BUILD .
+
+# Work outside of the source directory to avoid false
+# positives (i.e. test the tarball in isolation)
+mkdir -p ~/pkgnet_test_dir
 cp *.tar.gz ~/Desktop
-pushd ~/Desktop
+
+pushd ~/pkgnet_test_dir
     R CMD CHECK *.tar.gz --as-cran
-    cat ~/repos/thing.txt
+    cat ~/thing.txt
 popd
