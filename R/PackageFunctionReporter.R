@@ -184,7 +184,7 @@ FunctionReporter <- R6::R6Class(
             log_info(sprintf('Constructing network representation...'))
 
             # Get table of edges between functions
-            edgeDT <- .get_edges(pkg_name = self$pkg_name)
+            edgeDT <- .get_function_graph_edges(pkg_name = self$pkg_name)
 
             log_info("Done constructing network representation")
 
@@ -194,7 +194,7 @@ FunctionReporter <- R6::R6Class(
 )
 
 #' @importFrom data.table rbindlist
-.get_edges <- function(pkg_name){
+.get_function_graph_edges <- function(pkg_name){
 
     # find all functions in this package
     obj_names <- ls(sprintf("package:%s", pkg_name))
