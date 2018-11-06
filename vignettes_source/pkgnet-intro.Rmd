@@ -343,4 +343,3 @@ Now, we have identified seven different groups of functions within [lubridate](h
 ```{r removeDemoPackage, include=FALSE}
 devtools::uninstall(system.file('baseballstats',package="pkgnet"))
 ```
-

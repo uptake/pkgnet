@@ -9,7 +9,7 @@
 SummaryReporter
 }
 \description{
-Defines a concrete implementation of \link{AbstractPackageReporter} 
+Defines a concrete implementation of \link{AbstractPackageReporter}
              for a high level overview of a particular package. It will summarize
              things like lines of code, whether it's on CRAN, etc.
 }

@@ -22,7 +22,9 @@
 #'         }
 #'     }
 #' }
+#' @importFrom covr package_coverage
 #' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder
+#' @importFrom DT datatable formatRound
 #' @importFrom mvbutils foodweb
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
@@ -33,11 +35,11 @@ FunctionReporter <- R6::R6Class(
 
     public = list(
         get_summary_view = function(){
-            
+
             # Calculate network measures if not already done
             # since we want the node measures in summary
             invisible(self$network_measures)
-            
+
             # Create DT for display
             tableObj <- DT::datatable(
                 data = self$nodes
@@ -151,8 +153,12 @@ FunctionReporter <- R6::R6Class(
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
-            nodes <- data.table::data.table(
-                node = as.character(unlist(utils::lsf.str(asNamespace(self$pkg_name))))
+            nodes <- data.table::data.table(node = as.character(
+                unlist(
+                    utils::lsf.str(pos = asNamespace(self$pkg_name)
+                                   )
+                    )
+                )
             )
             return(nodes)
         },
@@ -164,7 +170,9 @@ FunctionReporter <- R6::R6Class(
 
             log_info(sprintf('Loading %s...', self$pkg_name))
             suppressPackageStartupMessages({
-                require(self$pkg_name, character.only = TRUE)
+                require(self$pkg_name
+                        , lib.loc = .libPaths()[1]
+                        , character.only = TRUE)
             })
             log_info(sprintf('Done loading %s', self$pkg_name))
 

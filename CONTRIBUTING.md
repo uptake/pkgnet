@@ -6,6 +6,7 @@ The goal of this guide is to help you contribute to `pkgnet` as quickly and as e
 1. [Creating an Issue](#issues)
 2. [Submitting a Pull Request](#prs)
 3. [Code Style](#style)
+4. [Running Tests Locally](#testing)
 
 ## Creating an Issue <a name="issues"></a>
 
@@ -235,3 +236,12 @@ RandomNumberPlotter <- R6::R6Class(
 
 All comments should be above code, not beside it.
 
+## Running Tests Locally <a name="testing"></a>
+
+We use Travis CI to automatically run unit tests and a serious of other automated checks on every PR commit and merge to `master`. Every `pkgnet` release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.
+
+However, these options can lengthen your testing cycle and make the process of contributing tedious. If you wish to run tests locally on whatever machine you are developing `pkgnet` code on, run the following from the repo root:
+
+```{bash}
+./test.sh
+```
