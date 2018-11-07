@@ -1,6 +1,7 @@
 
 # Misc files
 .Rhistory
+*.Rproj
 tests/testthat/Rplots.pdf
 **/.DS_Store
 
@@ -12,3 +13,4 @@ tests/testthat/Rplots.pdf
 # build artifacts
 **/*.tar.gz
 pkgnet.Rcheck/*
+.Rproj.user
