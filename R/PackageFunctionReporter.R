@@ -167,6 +167,12 @@ FunctionReporter <- R6::R6Class(
             nodes <- data.table::data.table(node = funs)
             
             # Figure out which functions are exported
+            # We need the package to be loaded first
+            suppressPackageStartupMessages({
+                require(self$pkg_name
+                        , lib.loc = .libPaths()[1]
+                        , character.only = TRUE)
+            })
             exported_obj_names <- ls(sprintf("package:%s", self$pkg_name))
             nodes[, isExported := FALSE]
             nodes[node %in% exported_obj_names, isExported := TRUE]
