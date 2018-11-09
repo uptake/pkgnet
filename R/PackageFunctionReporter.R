@@ -174,9 +174,8 @@ FunctionReporter <- R6::R6Class(
                         , character.only = TRUE)
             })
             exported_obj_names <- ls(sprintf("package:%s", self$pkg_name))
-            nodes[, isExported := FALSE]
-            nodes[node %in% exported_obj_names, isExported := TRUE]
-            
+            nodes[, isExported := node %in% exported_obj_names]
+
             return(nodes)
         },
 
