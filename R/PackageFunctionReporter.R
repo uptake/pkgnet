@@ -249,10 +249,14 @@ FunctionReporter <- R6::R6Class(
     if (length(matches) == 0){
         return(invisible(NULL))
     }
-
+    
+    # Convention: If B depends on A, then B is the TARGET 
+    # and A is the SOURCE so that it looks like A -> B
+    # fname calls <matches>. So fname depends on <matches>.
+    # So fname is TARGET and <matches> are SOURCEs
     edgeDT <- data.table::data.table(
-        SOURCE = fname
-        , TARGET = unique(all_functions[matches])
+        SOURCE = unique(all_functions[matches])
+        , TARGET = fname
     )
 
     return(edgeDT)
