@@ -413,10 +413,23 @@ FunctionReporter <- R6::R6Class(
     
     # Match to R6 methods
     mbodyDT[grepl('(^self\\$|^private\\$)', SYMBOL)
-            , MATCH := vapply(SYMBOL
-                              , FUN = .match_R6_methods
+            , MATCH := vapply(X = SYMBOL
+                              , FUN = .match_R6_class_methods
                               , FUN.VALUE = character(1)
                               , class_name = class_name
+                              , methodsDT = methodsDT
+                              , inheritanceDT = inheritanceDT
+            )]
+    
+    # Match to R6 superclass methods. This has a different recursion strategy
+    mbodyDT[grepl('(^super\\$)', SYMBOL)
+            , MATCH := vapply(X = unlist(strsplit(
+                                        SYMBOL, split = "$", fixed = TRUE
+                                    ))[[2]]
+                              , FUN = .match_R6_super_methods
+                              , FUN.VALUE = character(1)
+                              , parent_name = inheritanceDT[CLASS_NAME == class_name
+                                                                , PARENT_NAME]
                               , methodsDT = methodsDT
                               , inheritanceDT = inheritanceDT
             )]
@@ -444,16 +457,17 @@ FunctionReporter <- R6::R6Class(
     return(edgeDT)
 }
 
-.match_R6_methods <- function(symbol_name, class_name, methodsDT, inheritanceDT) {
+.match_R6_class_methods <- function(symbol_name, class_name, methodsDT, inheritanceDT) {
     # Check if symbol matches method in this class
     splitSymbol <- unlist(strsplit(symbol_name, split = "$", fixed = TRUE))
+    assertthat::assert_that(splitSymbol[1] %in% c('self', 'private'))
     if (splitSymbol[1] == "self") {
         out <- methodsDT[CLASS_NAME == class_name 
                          & METHOD_TYPE %in% c("public_methods", "active")
                          & splitSymbol[2] == METHOD_NAME
                          , paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
                          ]
-    } else {
+    } else if (splitSymbol[1] == "private") {
         out <- methodsDT[CLASS_NAME == class_name 
                          & METHOD_TYPE == "private_methods"
                          & splitSymbol[2] == METHOD_NAME
@@ -470,7 +484,7 @@ FunctionReporter <- R6::R6Class(
     if (is.na(out) 
         && inheritanceDT[CLASS_NAME == class_name
                          , !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
-        out <- .match_R6_methods(
+        out <- .match_R6_class_methods(
             symbol_name
             , inheritanceDT[CLASS_NAME == class_name, PARENT_NAME]
             , methodsDT
@@ -481,18 +495,53 @@ FunctionReporter <- R6::R6Class(
     return(out)
 }
 
+# super$method_name calls don't specify public, private, or active
+# We have to search all three for a parent class before moving up
+# to the next parent class. Luckily, within one class definition you're not allowed
+# to name things the same. 
+.match_R6_super_methods <- function(method_name, parent_name, methodsDT, inheritanceDT) {
+
+    out <- methodsDT[CLASS_NAME == parent_name 
+                     & method_name == METHOD_NAME
+                     , paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
+                     ]
+    
+    # Above returns character(0) if not matched. Convert to NA_character
+    if (identical(out, character(0))) {
+        out <- NA_character_
+    }
+    
+    # If not matched, try parent if there is one and it is in package
+    if (is.na(out) 
+        && inheritanceDT[CLASS_NAME == parent_name
+                         , !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
+        out <- .match_R6_super_methods(
+            method_name
+            , inheritanceDT[CLASS_NAME == parent_name, PARENT_NAME]
+            , methodsDT
+            , inheritanceDT
+        )
+    }
+    
+    return(out)
+}
+
 .parse_R6_expression <- function(x) {
     
-    # If expression x isnot an atomic type or symbol (i.e., name of object)
+    # If expression x is not an atomic type or symbol (i.e., name of object)
     # then we can break x up into components
+    
     listable <- (!is.atomic(x) && !is.symbol(x))
+    
     if (!is.list(x) && listable) {
         xList <- as.list(x)
         
-        # Check if expression x is of form self$foo or private$foo
+        # Check if expression x is of form self$foo, private$foo, or super$foo
         if (identical(xList[[1]], quote(`$`)) 
             && (identical(xList[[2]], quote(self)) 
-                || identical(xList[[2]], quote(private)))
+                || identical(xList[[2]], quote(private))
+                || identical(xList[[2]], quote(super))
+                )
         ) {
             listable <- FALSE
         } else {
