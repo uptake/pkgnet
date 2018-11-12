@@ -1,3 +1,9 @@
+#' @title Age Four
+#' @name Four
+#' @family TheEnd
+#' @description Age Four
+#' @importFrom R6 R6Class
+#' @export
 Four <- R6::R6Class(
     "Four",
     public = list(
@@ -8,6 +14,12 @@ Four <- R6::R6Class(
     )
 )
 
+#' @title Age Five
+#' @name Five
+#' @family TheEnd
+#' @description Age Five
+#' @importFrom R6 R6Class
+#' @export
 Five <- R6::R6Class(
     "Five",
     inherit = Four,
@@ -18,12 +30,18 @@ Five <- R6::R6Class(
     )
 )
 
+#' @title Age Six
+#' @name Six
+#' @family TheEnd
+#' @description Age Six
+#' @importFrom R6 R6Class
+#' @export
 Six <- R6::R6Class(
     "Six",
     inherit = Five,
     public = list(
         now_i_am_six = function() {
-            sprintf("I'm as %s as ever", .clever())
+            sprintf("I'm as %s as clever", .clever())
         }, 
         last_time = function() {self$when_i_was_five()}
     ),
@@ -34,7 +52,7 @@ Six <- R6::R6Class(
     )
 )
 
+# [description] internal function
 .clever <- function() {
     "clever"
 }
-
