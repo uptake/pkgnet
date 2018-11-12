@@ -344,22 +344,32 @@ FunctionReporter <- R6::R6Class(
 # [description] parse out a function's body into a character
 #               vector separating the individual symbols
 .parse_function <- function (x) {
-
+    # If expression x is not an atomic value or symbol (i.e., name of object) or
+    # an environment pointer then we can break x up into list of components
     listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
-
     if (!is.list(x) && listable) {
         x <- as.list(x)
     }
 
     if (listable){
+        # Filter out atomic values because we don't care about them
+        x <- Filter(f = Negate(is.atomic), x = x)
+        
+        # Parse each listed expression recursively until
+        # they can't be listed anymore
         out <- unlist(lapply(x, .parse_function), use.names = FALSE)
     } else {
+        
+        # If not listable, deparse into a character string
         out <- paste(deparse(x), collapse = "\n")
     }
     return(out)
 }
 
-
+# [description] given an R6 class, returns a data.table 
+# enumerating all of its public, active binding, and private methods
+#' @importFrom assertthat assert_that
+#' @importFrom R6 is.R6Class
 .get_R6_class_methods <- function(thisClass) {
     assertthat::assert_that(
         R6::is.R6Class(thisClass)
@@ -380,6 +390,9 @@ FunctionReporter <- R6::R6Class(
     return(methodsDT)
 }
 
+# [description] given a list of R6 class names and the associated package
+# environment, return a data.table of their parent classes
+#' @importFrom data.table rbindlist
 .get_R6_class_inheritance <- function(class_names, pkg_name, pkg_env) {
     inheritanceDT <- data.table::rbindlist(lapply(
         X = class_names
@@ -394,7 +407,9 @@ FunctionReporter <- R6::R6Class(
     ))
 }
 
-
+# [description] given an R6 method, parse its body and find all
+# dependencies that it calls, returning as a pkgnet edge data.table
+#' @importFrom data.table data.table
 .determine_R6_dependencies <- function(method_name
                                        , method_type
                                        , class_name
@@ -457,6 +472,11 @@ FunctionReporter <- R6::R6Class(
     return(edgeDT)
 }
 
+
+# [description] given a symbol name that is an R6 internal reference 
+# (self$x or private$x), match to a provided data.table of known R6 methods.
+# Searches up inheritance tree.
+#' @importFrom asserthat assert_that
 .match_R6_class_methods <- function(symbol_name, class_name, methodsDT, inheritanceDT) {
     # Check if symbol matches method in this class
     splitSymbol <- unlist(strsplit(symbol_name, split = "$", fixed = TRUE))
@@ -492,13 +512,23 @@ FunctionReporter <- R6::R6Class(
         )
     }
     
+    # We should only have at most one match
+    assertthat::assert_that(
+        assertthat::is.string(out)
+    ) 
+    
     return(out)
 }
 
-# super$method_name calls don't specify public, private, or active
-# We have to search all three for a parent class before moving up
+
+# [description] given a symbol name that is an internal reference to a superclass
+# method (super$<method_name>), match to a provided data.table of known R6 methods
+# by checking searching ancestor classes. We need this as a separate function because
+# super$method_name calls don't specify public, private, or active. 
+# So we have to search all three for a parent class before moving up
 # to the next parent class. Luckily, within one class definition you're not allowed
-# to name things the same. 
+# to name things the same so we should only have one result. 
+#' @importFrom asserthat assert_that is.string
 .match_R6_super_methods <- function(method_name, parent_name, methodsDT, inheritanceDT) {
 
     out <- methodsDT[CLASS_NAME == parent_name 
@@ -523,13 +553,21 @@ FunctionReporter <- R6::R6Class(
         )
     }
     
+    # We should only have at most one match
+    assertthat::assert_that(
+        assertthat::is.string(out)
+    ) 
+
     return(out)
 }
 
+
+# [description] parses R6 expressions into a character vector of symbols and atomic
+# values. Will not break up expressions of form self$foo, private$foo, or super$foo
 .parse_R6_expression <- function(x) {
     
     # If expression x is not an atomic type or symbol (i.e., name of object)
-    # then we can break x up into components
+    # then we can break x up into list of components
     
     listable <- (!is.atomic(x) && !is.symbol(x))
     
@@ -550,8 +588,14 @@ FunctionReporter <- R6::R6Class(
     }
     
     if (listable){
+        # Filter out atomic values because we don't care about them
+        x <- Filter(f = Negate(is.atomic), x = x)
+        
+        # Parse each listed expression recursively until
+        # they can't be listed anymore
         out <- unlist(lapply(x, .parse_R6_expression), use.names = FALSE)
     } else {
+        # If not listable, deparse into a character string
         out <- paste(deparse(x), collapse = "\n")
     }
     return(out)
