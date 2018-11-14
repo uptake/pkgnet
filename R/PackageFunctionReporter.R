@@ -23,7 +23,7 @@
 #'     }
 #' }
 #' @importFrom covr package_coverage
-#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder
+#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder rbindlist
 #' @importFrom DT datatable formatRound
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
@@ -130,14 +130,14 @@ FunctionReporter <- R6::R6Class(
         extract_network = function(){
             # Reset cache, because any cached stuff will be outdated with a new network
             private$reset_cache()
-
-            log_info(sprintf('Extracting edges from %s...', self$pkg_name))
-            private$cache$edges <- private$extract_edges()
-            log_info('Done extracting edges.')
-
+            
             log_info(sprintf('Extracting nodes from %s...', self$pkg_name))
             private$cache$nodes <- private$extract_nodes()
             log_info('Done extracting nodes.')
+            
+            log_info(sprintf('Extracting edges from %s...', self$pkg_name))
+            private$cache$edges <- private$extract_edges()
+            log_info('Done extracting edges.')
 
             # TODO (james.lamb@uptake.com):
             # Make this handoff with coverage cleaner
@@ -152,12 +152,30 @@ FunctionReporter <- R6::R6Class(
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
-            nodes <- data.table::data.table(node = as.character(
-                unlist(
-                    utils::lsf.str(pos = asNamespace(self$pkg_name))
-                    )
-                )
+            
+            # create a custom environment w/ this package's contents
+            pkg_env <- loadNamespace(self$pkg_name)
+            
+            # Filter objects to just functions
+            # This will now be a character vector full of function names
+            funs <- Filter(
+                f = function(x, p = pkg_env){is.function(get(x, p))}
+                , x = names(pkg_env)
             )
+            
+            # Create nodes data.table
+            nodes <- data.table::data.table(node = funs)
+            
+            # Figure out which functions are exported
+            # We need the package to be loaded first
+            suppressPackageStartupMessages({
+                require(self$pkg_name
+                        , lib.loc = .libPaths()[1]
+                        , character.only = TRUE)
+            })
+            exported_obj_names <- ls(sprintf("package:%s", self$pkg_name))
+            nodes[, isExported := node %in% exported_obj_names]
+
             return(nodes)
         },
 
@@ -166,25 +184,34 @@ FunctionReporter <- R6::R6Class(
                 log_fatal('Must set_package() before extracting edges.')
             }
 
-            log_info(sprintf('Loading %s...', self$pkg_name))
-            suppressPackageStartupMessages({
-                require(self$pkg_name
-                        , lib.loc = .libPaths()[1]
-                        , character.only = TRUE)
-            })
-            log_info(sprintf('Done loading %s', self$pkg_name))
-
-            # Avoid mvbutils::foodweb bug on one function packages
-            numFuncs <- as.character(unlist(utils::lsf.str(asNamespace(self$pkg_name)))) # list of functions within Package
-            if (length(numFuncs) == 1) {
-                log_info("Only one function. Edge list is empty")
-                return(data.table::data.table(SOURCE = character(), TARGET = character()))
-            }
-
             log_info(sprintf('Constructing network representation...'))
-
+            
+            # create a custom environment w/ this package's contents
+            pkg_env <- loadNamespace(self$pkg_name)
+            
             # Get table of edges between functions
-            edgeDT <- .get_function_graph_edges(pkg_name = self$pkg_name)
+            # for each function, check if anything else in the package
+            # was called by it
+            funs <- self$nodes[, node]
+            edgeDT <- data.table::rbindlist(
+                lapply(
+                    X = funs
+                    , FUN = .called_by
+                    , all_functions = funs
+                    , pkg_env = pkg_env
+                )
+                , fill = TRUE
+            )
+            
+            # If there are no edges, we still want to return a length-zero 
+            # data.table with correct columns
+            if (nrow(edgeDT) == 0) {
+                log_info("Edge list is empty.")
+                edgeDT <- data.table::data.table(
+                                SOURCE = character()
+                                , TARGET = character()
+                            )
+            }
 
             log_info("Done constructing network representation")
 
@@ -192,36 +219,6 @@ FunctionReporter <- R6::R6Class(
         }
     )
 )
-
-#' @importFrom data.table rbindlist
-.get_function_graph_edges <- function(pkg_name){
-
-    # find all functions in this package
-    obj_names <- ls(sprintf("package:%s", pkg_name))
-
-    # create a custom environment w/ this package's contents
-    pkg_env <- loadNamespace(pkg_name)
-
-    # Filter to just function objects. This will now be a character
-    # vector full of function names
-    funs <- Filter(
-        f = function(x, p = pkg_env){is.function(get(x, p))}
-        , x = obj_names
-    )
-
-    # for each function, check if anything else in the package
-    # was called by it
-    edgeDT <- data.table::rbindlist(
-        lapply(
-            X = funs
-            , FUN = .called_by
-            , all_functions = funs
-            , pkg_env = pkg_env
-        )
-        , fill = TRUE
-    )
-}
-
 
 # [description] given a function name, return edgelist of
 #               all other functions it calls
@@ -252,10 +249,14 @@ FunctionReporter <- R6::R6Class(
     if (length(matches) == 0){
         return(invisible(NULL))
     }
-
+    
+    # Convention: If B depends on A, then B is the TARGET 
+    # and A is the SOURCE so that it looks like A -> B
+    # fname calls <matches>. So fname depends on <matches>.
+    # So fname is TARGET and <matches> are SOURCEs
     edgeDT <- data.table::data.table(
-        SOURCE = fname
-        , TARGET = unique(all_functions[matches])
+        SOURCE = unique(all_functions[matches])
+        , TARGET = fname
     )
 
     return(edgeDT)
