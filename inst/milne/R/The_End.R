@@ -5,7 +5,7 @@
 #' @importFrom R6 R6Class
 #' @export
 One <- R6::R6Class(
-    "One",
+    classname = "One",
     public = list(
         initialize = function() {
             cat("The End, by A. A. Milne")
@@ -29,7 +29,7 @@ One <- R6::R6Class(
 #' @importFrom R6 R6Class
 #' @export
 Two <- R6::R6Class(
-    "Two",
+    classname = "Two",
     inherit = One,
     public = list(
         print_poem = function() {
@@ -48,7 +48,8 @@ Two <- R6::R6Class(
 #' @importFrom R6 R6Class
 #' @export
 Three <- R6::R6Class(
-    "Three",
+    # R6 classes don't need classname to match generator name
+    classname = "HardlyThree",
     inherit = Two,
     public = list(
         print_poem = function() {
@@ -67,7 +68,8 @@ Three <- R6::R6Class(
 #' @importFrom R6 R6Class
 #' @export
 Four <- R6::R6Class(
-    "Four",
+    # R6 classes don't need classname at all
+    classname = NULL,
     inherit = Three,
     public = list(
         print_poem = function() {
@@ -86,7 +88,7 @@ Four <- R6::R6Class(
 #' @importFrom R6 R6Class
 #' @export
 Five <- R6::R6Class(
-    "Five",
+    classname = "Five",
     inherit = Four,
     public = list(
         print_poem = function() {
@@ -107,7 +109,7 @@ Five <- R6::R6Class(
 #' @importFrom R6 R6Class
 #' @export
 Six <- R6::R6Class(
-    "Six",
+    classname = "Six",
     inherit = Five,
     public = list(
         print_poem = function() {

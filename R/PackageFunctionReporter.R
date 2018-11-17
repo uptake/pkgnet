@@ -5,6 +5,14 @@
 #'              its other functions, determining useful information such as which function is most
 #'              central to the package. Combined with testing information it can be used as a powerful tool
 #'              to plan testing efforts.
+#'              
+#' R6 classes are supported, with methods treated as functions by the Reporter. 
+#' R6 methods will be named like \code{<classname>$<methodtype>$<methodname>}
+#' , e.g., \code{FunctionReporter$private_methods$extract_nodes}. Note that the
+#' class name used will be the \emph{name of the generator object in the package's namespace},
+#' and \emph{not} the \code{classname} attribute of the class, which is not required to be defined
+#' or to be the same as the generator object name.
+#' 
 #' @section Public Methods:
 #' \describe{
 #'     \item{\code{set_package(pkg_name, pkg_path)}}{
@@ -92,7 +100,7 @@ FunctionReporter <- R6::R6Class(
                 private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
                     X = self$pkg_R6_classes
                     , FUN = function(x, p = private$get_pkg_env()) {
-                        .get_R6_class_methods(get(x,p))
+                        .get_R6_class_methods(x, get(x,p))
                     }
                 ))
             }
@@ -370,9 +378,10 @@ FunctionReporter <- R6::R6Class(
 # enumerating all of its public, active binding, and private methods
 #' @importFrom assertthat assert_that
 #' @importFrom R6 is.R6Class
-.get_R6_class_methods <- function(thisClass) {
+.get_R6_class_methods <- function(className, classGenerator) {
     assertthat::assert_that(
-        R6::is.R6Class(thisClass)
+        assertthat::is.string(className)
+        , R6::is.R6Class(classGenerator)
     )
     
     method_types <- c('public_methods', 'active', 'private_methods')
@@ -380,12 +389,12 @@ FunctionReporter <- R6::R6Class(
     methodsDT <- data.table::rbindlist(do.call(
         c, 
         lapply(method_types, function(mtype) {
-            lapply(names(thisClass[[mtype]]), function(mname) {
+            lapply(names(classGenerator[[mtype]]), function(mname) {
                 list(METHOD_TYPE = mtype, METHOD_NAME = mname)
             })
         })
     ))
-    methodsDT[, CLASS_NAME := thisClass$classname]
+    methodsDT[, CLASS_NAME := className]
     
     return(methodsDT)
 }
@@ -397,11 +406,16 @@ FunctionReporter <- R6::R6Class(
     inheritanceDT <- data.table::rbindlist(lapply(
         X = class_names
         , FUN = function(x, p = pkg_env) {
-            parentClass <- get(x, p)$get_inherit()
+            parentClassName <- deparse(get(x, p)$inherit)
+            parentClassGenerator <- get(x, p)$get_inherit()
             return(list(
                 CLASS_NAME = x
-                , PARENT_NAME = if (!is.null(parentClass)) parentClass$classname else NA_character_
-                , PARENT_IN_PKG = (pkg_name == environmentName(parentClass$parent_env))
+                , PARENT_NAME = if (!is.null(parentClassGenerator)) {
+                        parentClassName
+                    } else {
+                        NA_character_
+                    }
+                , PARENT_IN_PKG = (pkg_name == environmentName(parentClassGenerator$parent_env))
             ))
         }
     ))
