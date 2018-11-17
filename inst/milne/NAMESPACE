@@ -2,5 +2,8 @@
 
 export(Five)
 export(Four)
+export(One)
 export(Six)
+export(Three)
+export(Two)
 importFrom(R6,R6Class)

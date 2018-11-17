@@ -60,7 +60,7 @@ if (Sys.getenv('PKGNET_REBUILD')){
     # Uninstall Fake Packages From Test Library if Not Already Uninstalled
     try(
         utils::remove.packages(
-            pkgs = c('baseballstats', 'sartre', 'pkgnet')
+            pkgs = c('baseballstats', 'sartre', 'milne', 'pkgnet')
             , lib = Sys.getenv('PKGNET_TEST_LIB')
         )
     )
