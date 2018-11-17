@@ -40,7 +40,8 @@ Defines a concrete implementation of \link{AbstractPackageReporter}
 
 \seealso{
 Other PackageReporters: \code{\link{DependencyReporter}},
-  \code{\link{FunctionReporter}}
+  \code{\link{FunctionReporter}},
+  \code{\link{InheritanceReporter}}
 }
 \concept{PackageReporters}
 \keyword{datasets}

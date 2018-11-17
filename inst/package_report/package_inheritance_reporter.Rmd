@@ -1,0 +1,24 @@
+---
+title: "Package Class Inheritance Report"
+output: html_document
+---
+
+## Class Inheritance
+
+Here's an overview of the classes defined in **`r reporter$pkg_name`**.
+
+### Visualization
+
+```{r echo=FALSE}
+if (nrow(reporter$nodes) > 0) {
+    reporter$graph_viz
+} else {
+    "This package has no classes defined."
+}
+```
+
+### Table
+
+```{r}
+reporter$get_summary_view()
+```
