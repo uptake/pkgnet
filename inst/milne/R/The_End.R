@@ -8,7 +8,7 @@ One <- R6::R6Class(
     classname = "One",
     public = list(
         initialize = function() {
-            cat("The End, by A. A. Milne")
+            cat("The End, by A. A. Milne \n")
         },
         print_poem = function() {
             cat("When I was One, \n", 
@@ -55,7 +55,7 @@ Three <- R6::R6Class(
         print_poem = function() {
             super$print_poem()
             cat("When I was Three, \n", 
-                "I was hardly me. \n"
+                "I was hardly Me. \n"
             )
         }
     )
@@ -114,7 +114,7 @@ Six <- R6::R6Class(
     public = list(
         print_poem = function() {
             super$print_poem()
-            cat("When I was Six, \n", 
+            cat("But now I am Six,", 
                 "I'm as clever as clever. \n"
             )
             private$print_ending()
@@ -122,8 +122,8 @@ Six <- R6::R6Class(
     ),
     private = list(
         print_ending = function() {
-            cat("So I think I'll be Six now, \n",
-                "Forever and ever."
+            cat("So I think I'll be six now",
+                "for ever and ever."
             )
         }
     )
