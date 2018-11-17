@@ -1,6 +1,45 @@
 #' @title Package Class Inheritance Reporter Class
 #' @name InheritanceReporter
 #' @family PackageReporters
+#' @description This reporter takes a package and traces the class inheritance structure. 
+#' Currently the following object-oriented systems are supported: 
+#' \itemize{
+#'     \item{Reference Classes (sometimes informally called "R5")}
+#'     \item{R6 Classes}
+#' }
+#' 
+#' Note the following details about class naming:
+#' \itemize{
+#'     \item{Reference Classes : The name passed as \code{Class} in 
+#'     \code{\link[methods:ReferenceClasses]{setRefClass}} is used. 
+#'     This is the class name that is used when specifying inheritance.}
+#'     \item{R6 Classes : The name of the generator object in the package namespace is used. 
+#'     The name passed \code{classname} to \code{\link[R6:R6Class]{R6::R6Class}} can be NULL 
+#'     and may not match the generator name, but the generator object is what is used 
+#'     when specifying inheritance.}
+#' }
+#' 
+#' @section Public Methods:
+#' \describe{
+#'     \item{\code{set_package(pkg_name, pkg_path)}}{
+#'         \itemize{
+#'             \item{Set properties of this reporter. If pkg_name overrides a
+#'                 previously-set package name, any cached data will be removed.}
+#'             \item{\bold{Args:}}{
+#'                 \itemize{
+#'                 \item{\bold{\code{pkg_name}}: String with the name of the package.}
+#'                 \item{\bold{\code{pkg_path}}: Optional directory path to source
+#'                   code of the package. It is used for calculating test coverage.
+#'                   It can be an absolute or relative path.}
+#'                }
+#'             }
+#'         }
+#'     }
+#' }
+#' @importFrom R6 R6Class is.R6Class
+#' @importFrom DT datatable formatRound
+#' @importFrom data.table data.table rbindlist
+#' @importFrom methods is
 #' @export
 InheritanceReporter <- R6::R6Class(
     "InheritanceReporter",
@@ -46,7 +85,7 @@ InheritanceReporter <- R6::R6Class(
                     
                     # Reference classes
                     # Specified class name is the important name
-                    if (is(get(item, pkg_env), "refObjectGenerator")) {
+                    if (methods::is(get(item, pkg_env), "refObjectGenerator")) {
                         nodeList <- c(nodeList, list(data.table::data.table(
                             node = get(item, pkg_env)$className
                             , classType = "Reference"
@@ -64,6 +103,13 @@ InheritanceReporter <- R6::R6Class(
                 }
                 
                 nodeDT <- data.table::rbindlist(nodeList)
+                if (nrow(nodeDT) == 0) {
+                    msg <- sprintf(
+                        'No Reference Class or R6 Class definitions found in package %s'
+                        , self$pkg_name
+                    )
+                    log_warn(msg)
+                }
                 private$cache$nodes <- nodeDT
             }
             return(private$cache$nodes)

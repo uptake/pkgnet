@@ -9,8 +9,44 @@
 InheritanceReporter
 }
 \description{
-Package Class Inheritance Reporter Class
+This reporter takes a package and traces the class inheritance structure. 
+Currently the following object-oriented systems are supported: 
+\itemize{
+    \item{Reference Classes (sometimes informally called "R5")}
+    \item{R6 Classes}
 }
+
+Note the following details about class naming:
+\itemize{
+    \item{Reference Classes : The name passed as \code{Class} in 
+    \code{\link[methods:ReferenceClasses]{setRefClass}} is used. 
+    This is the class name that is used when specifying inheritance.}
+    \item{R6 Classes : The name of the generator object in the package namespace is used. 
+    The name passed \code{classname} to \code{\link[R6:R6Class]{R6::R6Class}} can be NULL 
+    and may not match the generator name, but the generator object is what is used 
+    when specifying inheritance.}
+}
+}
+\section{Public Methods}{
+
+\describe{
+    \item{\code{set_package(pkg_name, pkg_path)}}{
+        \itemize{
+            \item{Set properties of this reporter. If pkg_name overrides a
+                previously-set package name, any cached data will be removed.}
+            \item{\bold{Args:}}{
+                \itemize{
+                \item{\bold{\code{pkg_name}}: String with the name of the package.}
+                \item{\bold{\code{pkg_path}}: Optional directory path to source
+                  code of the package. It is used for calculating test coverage.
+                  It can be an absolute or relative path.}
+               }
+            }
+        }
+    }
+}
+}
+
 \seealso{
 Other PackageReporters: \code{\link{DependencyReporter}},
   \code{\link{FunctionReporter}},
