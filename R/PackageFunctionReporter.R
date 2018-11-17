@@ -477,7 +477,7 @@ FunctionReporter <- R6::R6Class(
 # [description] given a symbol name that is an R6 internal reference 
 # (self$x or private$x), match to a provided data.table of known R6 methods.
 # Searches up inheritance tree.
-#' @importFrom asserthat assert_that
+#' @importFrom assertthat assert_that
 .match_R6_class_methods <- function(symbol_name, class_name, methodsDT, inheritanceDT) {
     # Check if symbol matches method in this class
     splitSymbol <- unlist(strsplit(symbol_name, split = "$", fixed = TRUE))
@@ -529,7 +529,7 @@ FunctionReporter <- R6::R6Class(
 # So we have to search all three for a parent class before moving up
 # to the next parent class. Luckily, within one class definition you're not allowed
 # to name things the same so we should only have one result. 
-#' @importFrom asserthat assert_that is.string
+#' @importFrom assertthat assert_that is.string
 .match_R6_super_methods <- function(method_name, parent_name, methodsDT, inheritanceDT) {
 
     out <- methodsDT[CLASS_NAME == parent_name 
