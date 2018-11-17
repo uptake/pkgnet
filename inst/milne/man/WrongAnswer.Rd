@@ -9,7 +9,7 @@ Incorrect Answer to a Question
 }
 
 \seealso{
-Other TheFriend: \code{\link{MyAnswer}},
-  \code{\link{PoohAnswer}}, \code{\link{RightAnswer}}
+Other TheFriend: \code{\link{PoohAnswer}},
+  \code{\link{RightAnswer}}
 }
 \concept{TheFriend}

@@ -45,6 +45,7 @@ InheritanceReporter <- R6::R6Class(
                 for (item in names(pkg_env)) {
                     
                     # Reference classes
+                    # Specified class name is the important name
                     if (is(get(item, pkg_env), "refObjectGenerator")) {
                         nodeList <- c(nodeList, list(data.table::data.table(
                             node = get(item, pkg_env)$className
@@ -52,9 +53,10 @@ InheritanceReporter <- R6::R6Class(
                         )))
                         
                     # R6 classes
+                    # Generator object name is the important name
                     } else if (R6::is.R6Class(get(item, pkg_env))) {
                         nodeList <- c(nodeList, list(data.table::data.table(
-                            node = get(item, pkg_env)$classname
+                            node = item
                             , classType = "R6"
                         )))
                     }
@@ -83,7 +85,7 @@ InheritanceReporter <- R6::R6Class(
                         classDef <- getClass(thisNode, where = pkg_env)
                         parents <- setdiff(
                             selectSuperClasses(classDef, direct = TRUE, namesOnly = TRUE)
-                            , "envRefClass"
+                            , "envRefClass" # Base class defined by R that all reference classes inherit
                         )
                         if (length(parents) > 0) {
                             edgeList <- c(
@@ -98,12 +100,12 @@ InheritanceReporter <- R6::R6Class(
                     # R6 Class
                     } else if (nodeDT[node == thisNode, classType == "R6"]) {
                         classDef <- get(thisNode, pkg_env)
-                        parent <- classDef$get_inherit()$classname
+                        parent <- classDef$inherit
                         if (!is.null(parent)) {
                             edgeList <- c(
                                 edgeList
                                 , list(data.table::data.table(
-                                    SOURCE = parent
+                                    SOURCE = deparse(parent)
                                     , TARGET = thisNode
                                 ))
                             )

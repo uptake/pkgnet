@@ -4,23 +4,32 @@
 #' @name PoohAnswer
 #' @family TheFriend
 #' @description Pooh's Answer to a Question
-#' @export
-PoohAnswer <- setRefClass("PoohAnswer")
+#' @export PoohAnsuh
+#' @exportClass PoohAnswer
+# Generator name doesn't need to match class name
+PoohAnsuh <- setRefClass(
+    Class = "PoohAnswer",
+    methods = list(
+        get_answer = function() {"sixpence"}
+    )
+)
 
-#' @title My Answer
-#' @name MyAnswer
-#' @family TheFriend
-#' @description My Answer to a Question
-#' @export
-MyAnswer <- setRefClass("MyAnswer")
+# @title My Answer
+# @name MyAnswer
+# @family TheFriend
+# @description My Answer to a Question
+MyAnswer <- setRefClass(
+    Class = "MyAnswer"
+)
 
 #' @title Right Answer
 #' @name RightAnswer
 #' @family TheFriend
 #' @description Correct Answer to a Question
-#' @export
+#' @export RightAnswer
+#' @exportClass RightAnswer
 RightAnswer <- setRefClass(
-    "RightAnswer", 
+    Class = "RightAnswer", 
     contains = c("PoohAnswer", "MyAnswer")
 )
 
@@ -28,9 +37,10 @@ RightAnswer <- setRefClass(
 #' @name WrongAnswer
 #' @family TheFriend
 #' @description Incorrect Answer to a Question
-#' @export
+#' @export WrongAnswer
+#' @exportClass WrongAnswer
 WrongAnswer <- setRefClass(
-    "WrongAnswer", 
+    Class = "WrongAnswer", 
     contains = "PoohAnswer"
 )
 

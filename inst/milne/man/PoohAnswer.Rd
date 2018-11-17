@@ -3,13 +3,14 @@
 \docType{class}
 \name{PoohAnswer}
 \alias{PoohAnswer}
+\alias{PoohAnsuh}
 \title{Pooh's Answer}
 \description{
 Pooh's Answer to a Question
 }
 
 \seealso{
-Other TheFriend: \code{\link{MyAnswer}},
-  \code{\link{RightAnswer}}, \code{\link{WrongAnswer}}
+Other TheFriend: \code{\link{RightAnswer}},
+  \code{\link{WrongAnswer}}
 }
 \concept{TheFriend}
