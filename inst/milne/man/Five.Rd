@@ -12,7 +12,8 @@ Five
 Age Five
 }
 \seealso{
-Other TheEnd: \code{\link{Four}}, \code{\link{Six}}
+Other TheEnd: \code{\link{Four}}, \code{\link{One}},
+  \code{\link{Six}}, \code{\link{Three}}, \code{\link{Two}}
 }
 \concept{TheEnd}
 \keyword{datasets}

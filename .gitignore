@@ -5,11 +5,6 @@
 tests/testthat/Rplots.pdf
 **/.DS_Store
 
-# data files
-**/*.rds
-**/*.rda
-**/*.csv
-
 # build artifacts
 **/*.tar.gz
 pkgnet.Rcheck/*

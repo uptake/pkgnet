@@ -1,3 +1,65 @@
+#' @title Age One
+#' @name One
+#' @family TheEnd
+#' @description Age One
+#' @importFrom R6 R6Class
+#' @export
+One <- R6::R6Class(
+    "One",
+    public = list(
+        initialize = function() {
+            cat("The End, by A. A. Milne")
+        },
+        print_poem = function() {
+            cat("When I was One, \n", 
+                "I had just begun. \n"
+                )
+        },
+        how_old_am_i = function() {private$get_age()}
+    ),
+    private = list(
+        get_age = function() {.classname(self)}
+    )
+)
+
+#' @title Age Two
+#' @name Two
+#' @family TheEnd
+#' @description Age Two
+#' @importFrom R6 R6Class
+#' @export
+Two <- R6::R6Class(
+    "Two",
+    inherit = One,
+    public = list(
+        print_poem = function() {
+            super$print_poem()
+            cat("When I was Two, \n", 
+                "I was nearly new. \n"
+            )
+        }
+    )
+)
+
+#' @title Age Three
+#' @name Three
+#' @family TheEnd
+#' @description Age Three
+#' @importFrom R6 R6Class
+#' @export
+Three <- R6::R6Class(
+    "Three",
+    inherit = Two,
+    public = list(
+        print_poem = function() {
+            super$print_poem()
+            cat("When I was Three, \n", 
+                "I was hardly me. \n"
+            )
+        }
+    )
+)
+
 #' @title Age Four
 #' @name Four
 #' @family TheEnd
@@ -6,11 +68,14 @@
 #' @export
 Four <- R6::R6Class(
     "Four",
+    inherit = Three,
     public = list(
-        when_i_was_four = function() {"I was not much more"}
-    ),
-    private = list(
-        more_level = function() {"not much"}
+        print_poem = function() {
+            super$print_poem()
+            cat("When I was Four, \n", 
+                "I was not much more. \n"
+            )
+        }
     )
 )
 
@@ -24,7 +89,12 @@ Five <- R6::R6Class(
     "Five",
     inherit = Four,
     public = list(
-        when_i_was_five = function() {"I was just alive"}
+        print_poem = function() {
+            super$print_poem()
+            cat("When I was Five, \n", 
+                "I was just alive. \n"
+            )
+        }
     ),
     private = list(
     )
@@ -40,19 +110,26 @@ Six <- R6::R6Class(
     "Six",
     inherit = Five,
     public = list(
-        now_i_am_six = function() {
-            sprintf("I'm as %s as clever", .clever())
-        }, 
-        last_time = function() {self$when_i_was_five()}
+        print_poem = function() {
+            super$print_poem()
+            cat("When I was Six, \n", 
+                "I'm as clever as clever. \n"
+            )
+            private$print_ending()
+        }
     ),
     private = list(
-        more_level = function() {
-            gsub("not ", "", super$more_level())
+        print_ending = function() {
+            cat("So I think I'll be Six now, \n",
+                "Forever and ever."
+            )
         }
     )
 )
 
 # [description] internal function
-.clever <- function() {
-    "clever"
+.classname <- function(obj) {
+    class(obj)[1]
 }
+
+

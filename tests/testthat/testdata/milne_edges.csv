@@ -1,0 +1,9 @@
+SOURCE,TARGET
+One$public_methods$print_poem,Two$public_methods$print_poem
+Two$public_methods$print_poem,Three$public_methods$print_poem
+Three$public_methods$print_poem,Four$public_methods$print_poem
+Four$public_methods$print_poem,Five$public_methods$print_poem
+One$private_methods$get_age,One$public_methods$how_old_am_i
+.classname,One$private_methods$get_age
+Five$public_methods$print_poem,Six$public_methods$print_poem
+Six$private_methods$print_ending,Six$public_methods$print_poem
