@@ -18,7 +18,9 @@ PoohAnsuh <- setRefClass(
 # @name MyAnswer
 # @family TheFriend
 # @description My Answer to a Question
-MyAnswer <- setRefClass(
+# Generators don't have to be bound to an object
+# Can use the function `new` to generate new object
+setRefClass(
     Class = "MyAnswer"
 )
 
@@ -33,12 +35,10 @@ RightAnswer <- setRefClass(
     contains = c("PoohAnswer", "MyAnswer")
 )
 
-#' @title Wrong Answer
-#' @name WrongAnswer
-#' @family TheFriend
-#' @description Incorrect Answer to a Question
-#' @export WrongAnswer
-#' @exportClass WrongAnswer
+# @title Wrong Answer
+# @name WrongAnswer
+# @family TheFriend
+# @description Incorrect Answer to a Question
 WrongAnswer <- setRefClass(
     Class = "WrongAnswer", 
     contains = "PoohAnswer"

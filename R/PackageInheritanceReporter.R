@@ -85,9 +85,13 @@ InheritanceReporter <- R6::R6Class(
                     
                     # Reference classes
                     # Specified class name is the important name
-                    if (methods::is(get(item, pkg_env), "refObjectGenerator")) {
+                    if (grepl("^\\.__C__", item) 
+                        & methods::is(get(item, pkg_env), "refClassRepresentation")) {
+                        
+                        classGenerator <- getRefClass(get(item, pkg_env), where = pkg_env)
+                        
                         nodeList <- c(nodeList, list(data.table::data.table(
-                            node = get(item, pkg_env)$className
+                            node = classGenerator$className
                             , classType = "Reference"
                         )))
                         

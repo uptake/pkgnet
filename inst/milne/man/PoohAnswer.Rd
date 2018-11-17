@@ -10,7 +10,6 @@ Pooh's Answer to a Question
 }
 
 \seealso{
-Other TheFriend: \code{\link{RightAnswer}},
-  \code{\link{WrongAnswer}}
+Other TheFriend: \code{\link{RightAnswer}}
 }
 \concept{TheFriend}
