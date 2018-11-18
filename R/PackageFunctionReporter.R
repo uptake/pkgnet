@@ -155,7 +155,7 @@ FunctionReporter <- R6::R6Class(
             # Set Graph to Color By Coverage
             private$set_plot_node_color_scheme(
                 field = "coverageRatio"
-                , pallete = c("red", "green")
+                , palette = c("red", "green")
             )
 
             # Calculate network measures since we need outBetweeness

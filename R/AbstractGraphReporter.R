@@ -108,7 +108,7 @@ AbstractGraphReporter <- R6::R6Class(
     private = list(
         plotNodeColorScheme = list(
             field = NULL
-            , pallete = '#97C2FC'
+            , palette = '#97C2FC'
         ),
 
         # Create a "cache" to be used when evaluating active bindings
@@ -252,7 +252,7 @@ AbstractGraphReporter <- R6::R6Class(
 
         # Variables for the plot
         set_plot_node_color_scheme = function(field
-                                              , pallete){
+                                              , palette){
 
             # Check field is length 1 string vector
             if (typeof(field) != "character" || length(field) != 1) {
@@ -260,7 +260,7 @@ AbstractGraphReporter <- R6::R6Class(
                                  , "Coloring by multiple fields not supported."))
             }
 
-            # Confirm All Colors in pallete are Colors
+            # Confirm All Colors in palette are Colors
             areColors <- function(x) {
                 sapply(x, function(X) {
                     tryCatch({
@@ -271,7 +271,7 @@ AbstractGraphReporter <- R6::R6Class(
                 })
             }
 
-            if (!all(areColors(pallete))) {
+            if (!all(areColors(palette))) {
                 notColors <- names(areColors)[areColors == FALSE]
                 notColorsTXT <- paste(notColors, collapse = ", ")
                 log_fatal(sprintf("The following are invalid colors: %s"
@@ -280,12 +280,12 @@ AbstractGraphReporter <- R6::R6Class(
 
             private$plotNodeColorScheme <- list(
                 field = field
-                , pallete = pallete
+                , palette = palette
             )
 
-            log_info(sprintf("Node color scheme updated: field [%s], pallete [%s]."
+            log_info(sprintf("Node color scheme updated: field [%s], palette [%s]."
                              , private$plotNodeColorScheme[['field']]
-                             , paste(private$plotNodeColorScheme[['pallete']], collapse = ",")
+                             , paste(private$plotNodeColorScheme[['palette']], collapse = ",")
             ))
 
             return(invisible(NULL))
@@ -341,7 +341,7 @@ AbstractGraphReporter <- R6::R6Class(
             if (is.null(private$plotNodeColorScheme[['field']])) {
 
                 # Default Color for all Nodes
-                plotDTnodes[, color := private$plotNodeColorScheme[['pallete']]]
+                plotDTnodes[, color := private$plotNodeColorScheme[['palette']]]
 
             } else {
 
@@ -356,7 +356,7 @@ AbstractGraphReporter <- R6::R6Class(
                     )
                 }
 
-                colorFieldPallete <- private$plotNodeColorScheme[['pallete']]
+                colorFieldPalette <- private$plotNodeColorScheme[['palette']]
                 colorFieldValues <- plotDTnodes[[colorFieldName]]
                 log_info(sprintf("Coloring plot nodes by %s..."
                                  , colorFieldName))
@@ -364,25 +364,25 @@ AbstractGraphReporter <- R6::R6Class(
                 # If colorFieldValues are character
                 if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
 
-                    # Create pallete by unique values
+                    # Create palette by unique values
                     valCount <- data.table::uniqueN(colorFieldValues)
-                    newPallete <- grDevices::colorRampPalette(colors = colorFieldPallete)(valCount)
+                    newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
 
                     # For each character value, update all nodes with that value
-                    plotDTnodes[, color := newPallete[.GRP]
+                    plotDTnodes[, color := newPalette[.GRP]
                                 , by = list(get(colorFieldName))]
 
                 } else if (is.numeric(colorFieldValues)) {
                     # If colorFieldValues are numeric, assume continuous
 
-                    # Create Continuous Color Pallete
-                    newPallete <- grDevices::colorRamp(colors = colorFieldPallete)
+                    # Create Continuous Color Palette
+                    newPalette <- grDevices::colorRamp(colors = colorFieldPalette)
 
                     # Scale Values to be with range 0 - 1
                     plotDTnodes[!is.na(get(colorFieldName)), scaledColorValues := get(colorFieldName) / max(get(colorFieldName))]
 
-                    # Assign Color Values From Pallete
-                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPallete(scaledColorValues), maxColorValue = 255)]
+                    # Assign Color Values From Palette
+                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPalette(scaledColorValues), maxColorValue = 255)]
 
                     # NA Values get gray color
                     plotDTnodes[is.na(scaledColorValues), color := "gray"]
