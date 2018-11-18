@@ -81,27 +81,34 @@ InheritanceReporter <- R6::R6Class(
                     node = character(0), classType = character(0)
                 ))
                 
-                for (item in names(pkg_env)) {
+                for (thisObjName in names(pkg_env)) {
                     
-                    # Reference classes
+                    thisObj <- get(thisObjName, pkg_env)
+                    
+                    # S4 classes and References classes
                     # Specified class name is the important name
-                    if (grepl("^\\.__C__", item) 
-                        & methods::is(get(item, pkg_env), "refClassRepresentation")) {
+                    if (grepl("^\\.__C__", thisObjName) & isS4(thisObj)) {
                         
-                        classGenerator <- getRefClass(get(item, pkg_env), where = pkg_env)
+                        if (methods::is(thisObj, "refClassRepresentation")) {
+                            thisObjClassType <- "Reference"
+                        } else {
+                            thisObjClassType <- "S4"
+                        }
                         
                         nodeList <- c(nodeList, list(data.table::data.table(
-                            node = classGenerator$className
-                            , classType = "Reference"
+                            node = thisObj@className
+                            , classType = thisObjClassType
                         )))
                         
                     # R6 classes
                     # Generator object name is the important name
-                    } else if (R6::is.R6Class(get(item, pkg_env))) {
+                    } else if (R6::is.R6Class(thisObj)) {
+                        
                         nodeList <- c(nodeList, list(data.table::data.table(
-                            node = item
+                            node = thisObjName
                             , classType = "R6"
                         )))
+                        
                     }
                     
                 }
@@ -130,8 +137,8 @@ InheritanceReporter <- R6::R6Class(
                 ))
                 for (thisNode in nodeDT[, node]) {
                     
-                    # Reference Class
-                    if (nodeDT[node == thisNode, classType == "Reference"]) {
+                    # S4 or Reference Class
+                    if (nodeDT[node == thisNode, classType %in% c("S4" ,"Reference")]) {
                         classDef <- getClass(thisNode, where = pkg_env)
                         parents <- setdiff(
                             selectSuperClasses(classDef, direct = TRUE, namesOnly = TRUE)
@@ -147,7 +154,7 @@ InheritanceReporter <- R6::R6Class(
                             )
                         }
                         
-                    # R6 Class
+                        # R6 Class
                     } else if (nodeDT[node == thisNode, classType == "R6"]) {
                         classDef <- get(thisNode, pkg_env)
                         parent <- classDef$inherit

@@ -1,9 +1,12 @@
 SOURCE,TARGET
 One,Two
-PoohAnswer,RightAnswer
-MyAnswer,RightAnswer
 Two,Three
 Three,Four
-Four,Five
 PoohAnswer,WrongAnswer
+Four,Five
+PoohAnswer,RightAnswer
+MyAnswer,RightAnswer
 Five,Six
+KingOfTheEarth,KingOfTheSky
+KingOfTheTown,KingOfTheEarth
+KingOfTheFields,KingOfTheEarth
