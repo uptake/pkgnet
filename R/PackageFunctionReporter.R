@@ -266,7 +266,7 @@ FunctionReporter <- R6::R6Class(
 #               vector separating the individual symbols
 .parse_function <- function (x) {
 
-    listable <- (!is.atomic(x) && !is.symbol(x))
+    listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
 
     if (!is.list(x) && listable) {
         x <- as.list(x)
