@@ -130,11 +130,11 @@ FunctionReporter <- R6::R6Class(
         extract_network = function(){
             # Reset cache, because any cached stuff will be outdated with a new network
             private$reset_cache()
-            
+
             log_info(sprintf('Extracting nodes from %s...', self$pkg_name))
             private$cache$nodes <- private$extract_nodes()
             log_info('Done extracting nodes.')
-            
+
             log_info(sprintf('Extracting edges from %s...', self$pkg_name))
             private$cache$edges <- private$extract_edges()
             log_info('Done extracting edges.')
@@ -152,20 +152,20 @@ FunctionReporter <- R6::R6Class(
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
-            
+
             # create a custom environment w/ this package's contents
             pkg_env <- loadNamespace(self$pkg_name)
-            
+
             # Filter objects to just functions
             # This will now be a character vector full of function names
             funs <- Filter(
                 f = function(x, p = pkg_env){is.function(get(x, p))}
                 , x = names(pkg_env)
             )
-            
+
             # Create nodes data.table
             nodes <- data.table::data.table(node = funs)
-            
+
             # Figure out which functions are exported
             # We need the package to be loaded first
             suppressPackageStartupMessages({
@@ -185,10 +185,10 @@ FunctionReporter <- R6::R6Class(
             }
 
             log_info(sprintf('Constructing network representation...'))
-            
+
             # create a custom environment w/ this package's contents
             pkg_env <- loadNamespace(self$pkg_name)
-            
+
             # Get table of edges between functions
             # for each function, check if anything else in the package
             # was called by it
@@ -202,8 +202,8 @@ FunctionReporter <- R6::R6Class(
                 )
                 , fill = TRUE
             )
-            
-            # If there are no edges, we still want to return a length-zero 
+
+            # If there are no edges, we still want to return a length-zero
             # data.table with correct columns
             if (nrow(edgeDT) == 0) {
                 log_info("Edge list is empty.")
@@ -232,8 +232,10 @@ FunctionReporter <- R6::R6Class(
         , assertthat::is.string(fname)
     )
 
-    # get the body of the function
-    f <- get(fname, envir = pkg_env)
+    # Get only the body of the function
+    # We will potentially miss calls if they are in attributes of the closure,
+    # e.g., the way the decorators package implements decorators
+    f <- body(get(fname, envir = pkg_env))
 
     # get the literal code of the function
     f_vec <- .parse_function(f)
@@ -249,8 +251,8 @@ FunctionReporter <- R6::R6Class(
     if (length(matches) == 0){
         return(invisible(NULL))
     }
-    
-    # Convention: If B depends on A, then B is the TARGET 
+
+    # Convention: If B depends on A, then B is the TARGET
     # and A is the SOURCE so that it looks like A -> B
     # fname calls <matches>. So fname depends on <matches>.
     # So fname is TARGET and <matches> are SOURCEs
