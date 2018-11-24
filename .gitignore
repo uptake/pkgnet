@@ -4,10 +4,13 @@
 tests/testthat/Rplots.pdf
 **/.DS_Store
 
-# data files    
-/*.rds
-/*.rda
-/*.csv
+# data files
+**/*.rds
+**/*.rda
+**/*.csv
+
+# Keep data files in testdata
+!/tests/testthat/testdata/*.csv
 
 # build artifacts
 **/*.tar.gz
