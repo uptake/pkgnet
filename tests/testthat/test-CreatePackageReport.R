@@ -29,6 +29,28 @@ test_that("Test that CreatePackageReport Runs", {
     file.remove(testReportPath)
 })
 
+test_that("CreatePackageReports generates the expected tables", {
+
+    testReportPath <- tempfile(
+        pattern = "baseball"
+        , fileext = ".html"
+    )
+
+    reporters <- CreatePackageReport(
+        pkg_name = "baseballstats"
+        , report_path = testReportPath
+    )
+
+    report_html <- readLines(testReportPath)
+
+    num_tables <-  sum(grepl('datatables html-widget', report_html))
+
+    # One table per reporter
+    expect_true(num_tables == length(DefaultReporters()))
+
+    file.remove(testReportPath)
+})
+
 test_that("CreatePackageReport rejects bad inputs to reporters", {
 
     expect_error({
