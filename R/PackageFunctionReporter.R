@@ -435,7 +435,7 @@ FunctionReporter <- R6::R6Class(
                                        , pkg_functions
 ) {
     # Get body of method
-    mbody <- get(class_name, envir = pkg_env)[[method_type]][[method_name]]
+    mbody <- body(get(class_name, envir = pkg_env)[[method_type]][[method_name]])
 
     # Parse into symbols
     mbodyDT <- data.table::data.table(
@@ -582,10 +582,9 @@ FunctionReporter <- R6::R6Class(
 # values. Will not break up expressions of form self$foo, private$foo, or super$foo
 .parse_R6_expression <- function(x) {
 
-    # If expression x is not an atomic type or symbol (i.e., name of object)
-    # then we can break x up into list of components
-
-    listable <- (!is.atomic(x) && !is.symbol(x))
+    # If expression x is not an atomic value or symbol (i.e., name of object) or
+    # an environment pointer then we can break x up into list of components
+    listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
 
     if (!is.list(x) && listable) {
         xList <- as.list(x)
