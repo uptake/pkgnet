@@ -7,7 +7,7 @@ R CMD BUILD .
 # Work outside of the source directory to avoid false
 # positives (i.e. test the tarball in isolation)
 mkdir -p ~/pkgnet_test_dir
-cp *.tar.gz ~/Desktop
+cp *.tar.gz ~/pkgnet_test_dir
 
 pushd ~/pkgnet_test_dir
     R CMD CHECK *.tar.gz --as-cran
