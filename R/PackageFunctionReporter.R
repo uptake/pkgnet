@@ -319,8 +319,10 @@ FunctionReporter <- R6::R6Class(
         , assertthat::is.string(fname)
     )
 
-    # get the body of the function
-    f <- get(fname, envir = pkg_env)
+    # Get only the body of the function
+    # We will potentially miss calls if they are in attributes of the closure,
+    # e.g., the way the decorators package implements decorators
+    f <- body(get(fname, envir = pkg_env))
 
     # get the literal code of the function
     f_vec <- .parse_function(f)
