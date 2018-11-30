@@ -420,9 +420,14 @@ AbstractGraphReporter <- R6::R6Class(
                 visNetwork::visHierarchicalLayout(sortMethod = "directed"
                                                   , direction = "UD") %>%
                 visNetwork::visEdges(arrows = 'to') %>%
-                visNetwork::visOptions(highlightNearest = list(enabled = TRUE
-                                                               , degree = nrow(plotDTnodes) # guarantee full path
-                                                               , algorithm = "hierarchical"))
+                visNetwork::visOptions(
+                    highlightNearest = list(
+                        enabled = TRUE
+                        , degree = nrow(plotDTnodes) # guarantee full path
+                        , algorithm = "hierarchical"
+                    )
+                    , nodesIdSelection = TRUE
+                )
 
             # Add orphan node clustering
             if (numOrphanNodes > numOrphanThreshold) {
@@ -450,7 +455,7 @@ AbstractGraphReporter <- R6::R6Class(
                 self$nodes[, node]
                 , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
             )
-            
+
             # If there are none, then will be character(0)
             return(orphan_nodes)
         },
