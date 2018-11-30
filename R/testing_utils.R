@@ -28,6 +28,7 @@
     pkgList <- c(
         baseballstats = file.path(pkgnetSourcePath, "inst", "baseballstats")
         , sartre = file.path(pkgnetSourcePath, "inst", "sartre")
+        , milne = file.path(pkgnetSourcePath, "inst", "milne")
         , pkgnet = pkgnetSourcePath
     )
 

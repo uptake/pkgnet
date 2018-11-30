@@ -5,6 +5,14 @@
 #'              its other functions, determining useful information such as which function is most
 #'              central to the package. Combined with testing information it can be used as a powerful tool
 #'              to plan testing efforts.
+#'
+#' R6 classes are supported, with methods treated as functions by the Reporter.
+#' R6 methods will be named like \code{<classname>$<methodtype>$<methodname>}
+#' , e.g., \code{FunctionReporter$private_methods$extract_nodes}. Note that the
+#' class name used will be the \emph{name of the generator object in the package's namespace},
+#' and \emph{not} the \code{classname} attribute of the class, which is not required to be defined
+#' or to be the same as the generator object name.
+#'
 #' @section Public Methods:
 #' \describe{
 #'     \item{\code{set_package(pkg_name, pkg_path)}}{
@@ -74,10 +82,51 @@ FunctionReporter <- R6::R6Class(
         },
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_function_reporter.Rmd"), package = "pkgnet")
+        },
+        pkg_R6_classes = function() {
+            if (is.null(private$cache$pkg_R6_classes)) {
+                pkg_env <- private$get_pkg_env()
+                private$cache$pkg_R6_classes <- Filter(
+                    f = function(x, p = pkg_env){
+                            R6::is.R6Class(get(x, p))
+                        }
+                    , x = names(pkg_env)
+                )
+            }
+            return(private$cache$pkg_R6_classes)
+        },
+        pkg_R6_methods = function() {
+            if (is.null(private$cache$pkg_R6_methods)){
+                private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
+                    X = self$pkg_R6_classes
+                    , FUN = function(x, p = private$get_pkg_env()) {
+                        .get_R6_class_methods(x, get(x,p))
+                    }
+                ))
+            }
+            return(private$cache$pkg_R6_methods)
+        },
+        pkg_R6_inheritance = function() {
+            if (is.null(private$cache$pkg_R6_inheritance)) {
+                private$cache$pkg_R6_inheritance <- .get_R6_class_inheritance(
+                    self$pkg_R6_classes
+                    , self$pkg_name
+                    , private$get_pkg_env()
+                )
+            }
+            return(private$cache$pkg_R6_inheritance)
         }
     ),
 
     private = list(
+
+        get_pkg_env = function() {
+            if (is.null(private$cache$pkg_env)) {
+                # create a custom environment w/ this package's contents
+                private$cache$pkg_env <- loadNamespace(self$pkg_name)
+            }
+            return(private$cache$pkg_env)
+        },
 
         # add coverage to nodes table
         calculate_test_coverage = function(){
@@ -148,15 +197,16 @@ FunctionReporter <- R6::R6Class(
             return(invisible(NULL))
         },
 
-        extract_nodes = function(){
+        extract_nodes = function() {
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
 
-            # create a custom environment w/ this package's contents
-            pkg_env <- loadNamespace(self$pkg_name)
+            pkg_env <- private$get_pkg_env()
 
-            # Filter objects to just functions
+            ## FUNCTIONS ##
+
+            # Filter objects in package environment to just functions
             # This will now be a character vector full of function names
             funs <- Filter(
                 f = function(x, p = pkg_env){is.function(get(x, p))}
@@ -164,7 +214,10 @@ FunctionReporter <- R6::R6Class(
             )
 
             # Create nodes data.table
-            nodes <- data.table::data.table(node = funs)
+            nodes <- data.table::data.table(
+                node = funs
+                , type = "function"
+            )
 
             # Figure out which functions are exported
             # We need the package to be loaded first
@@ -175,6 +228,17 @@ FunctionReporter <- R6::R6Class(
             })
             exported_obj_names <- ls(sprintf("package:%s", self$pkg_name))
             nodes[, isExported := node %in% exported_obj_names]
+
+            # Check if we have R6 functions
+            if (length(self$pkg_R6_classes) > 0) {
+                r6DT <- self$pkg_R6_methods[, .(
+                    node = paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
+                    , type = "R6 method"
+                    , isExported = CLASS_NAME %in% exported_obj_names
+                )]
+
+                nodes <- data.table::rbindlist(list(nodes, r6DT))
+            }
 
             return(nodes)
         },
@@ -187,12 +251,14 @@ FunctionReporter <- R6::R6Class(
             log_info(sprintf('Constructing network representation...'))
 
             # create a custom environment w/ this package's contents
-            pkg_env <- loadNamespace(self$pkg_name)
+            pkg_env <- private$get_pkg_env()
+
+            ### FUNCTIONS ###
 
             # Get table of edges between functions
             # for each function, check if anything else in the package
             # was called by it
-            funs <- self$nodes[, node]
+            funs <- self$nodes[type == "function", node]
             edgeDT <- data.table::rbindlist(
                 lapply(
                     X = funs
@@ -202,6 +268,27 @@ FunctionReporter <- R6::R6Class(
                 )
                 , fill = TRUE
             )
+
+            ### R6 METHODS ###
+            if (length(self$pkg_R6_classes) > 0) {
+                edgeDT <- data.table::rbindlist(c(
+                    list(edgeDT)
+                    , mapply(
+                        FUN = .determine_R6_dependencies
+                        , method_name = self$pkg_R6_methods[, METHOD_NAME]
+                        , method_type = self$pkg_R6_methods[, METHOD_TYPE]
+                        , class_name = self$pkg_R6_methods[, CLASS_NAME]
+                        , MoreArgs = list(
+                            methodsDT = self$pkg_R6_methods
+                            , inheritanceDT = self$pkg_R6_inheritance
+                            , pkg_env = private$get_pkg_env()
+                            , pkg_functions = funs
+                            )
+                        )
+                    )
+                    , fill = TRUE
+                )
+            }
 
             # If there are no edges, we still want to return a length-zero
             # data.table with correct columns
@@ -267,17 +354,265 @@ FunctionReporter <- R6::R6Class(
 # [description] parse out a function's body into a character
 #               vector separating the individual symbols
 .parse_function <- function (x) {
-
+    # If expression x is not an atomic value or symbol (i.e., name of object) or
+    # an environment pointer then we can break x up into list of components
     listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
-
     if (!is.list(x) && listable) {
         x <- as.list(x)
     }
 
     if (listable){
+        # Filter out atomic values because we don't care about them
+        x <- Filter(f = Negate(is.atomic), x = x)
+
+        # Parse each listed expression recursively until
+        # they can't be listed anymore
         out <- unlist(lapply(x, .parse_function), use.names = FALSE)
     } else {
+
+        # If not listable, deparse into a character string
         out <- paste(deparse(x), collapse = "\n")
     }
     return(out)
 }
+
+# [description] given an R6 class, returns a data.table
+# enumerating all of its public, active binding, and private methods
+#' @importFrom assertthat assert_that
+#' @importFrom R6 is.R6Class
+.get_R6_class_methods <- function(className, classGenerator) {
+    assertthat::assert_that(
+        assertthat::is.string(className)
+        , R6::is.R6Class(classGenerator)
+    )
+
+    method_types <- c('public_methods', 'active', 'private_methods')
+
+    methodsDT <- data.table::rbindlist(do.call(
+        c,
+        lapply(method_types, function(mtype) {
+            lapply(names(classGenerator[[mtype]]), function(mname) {
+                list(METHOD_TYPE = mtype, METHOD_NAME = mname)
+            })
+        })
+    ))
+    methodsDT[, CLASS_NAME := className]
+
+    return(methodsDT)
+}
+
+# [description] given a list of R6 class names and the associated package
+# environment, return a data.table of their parent classes
+#' @importFrom data.table rbindlist
+.get_R6_class_inheritance <- function(class_names, pkg_name, pkg_env) {
+    inheritanceDT <- data.table::rbindlist(lapply(
+        X = class_names
+        , FUN = function(x, p = pkg_env) {
+            parentClassName <- deparse(get(x, p)$inherit)
+            parentClassGenerator <- get(x, p)$get_inherit()
+            return(list(
+                CLASS_NAME = x
+                , PARENT_NAME = if (!is.null(parentClassGenerator)) {
+                        parentClassName
+                    } else {
+                        NA_character_
+                    }
+                , PARENT_IN_PKG = (pkg_name == environmentName(parentClassGenerator$parent_env))
+            ))
+        }
+    ))
+}
+
+# [description] given an R6 method, parse its body and find all
+# dependencies that it calls, returning as a pkgnet edge data.table
+#' @importFrom data.table data.table
+.determine_R6_dependencies <- function(method_name
+                                       , method_type
+                                       , class_name
+                                       , methodsDT
+                                       , inheritanceDT
+                                       , pkg_env
+                                       , pkg_functions
+) {
+    # Get body of method
+    mbody <- body(get(class_name, envir = pkg_env)[[method_type]][[method_name]])
+
+    # Parse into symbols
+    mbodyDT <- data.table::data.table(
+        SYMBOL = unique(.parse_R6_expression(mbody))
+    )
+
+    # Match to R6 methods
+    mbodyDT[grepl('(^self\\$|^private\\$)', SYMBOL)
+            , MATCH := vapply(X = SYMBOL
+                              , FUN = .match_R6_class_methods
+                              , FUN.VALUE = character(1)
+                              , class_name = class_name
+                              , methodsDT = methodsDT
+                              , inheritanceDT = inheritanceDT
+            )]
+
+    # Match to R6 superclass methods. This has a different recursion strategy
+    mbodyDT[grepl('(^super\\$)', SYMBOL)
+            , MATCH := vapply(X = unlist(strsplit(
+                                        SYMBOL, split = "$", fixed = TRUE
+                                    ))[[2]]
+                              , FUN = .match_R6_super_methods
+                              , FUN.VALUE = character(1)
+                              , parent_name = inheritanceDT[CLASS_NAME == class_name
+                                                                , PARENT_NAME]
+                              , methodsDT = methodsDT
+                              , inheritanceDT = inheritanceDT
+            )]
+
+    # Match to functions in package
+    mbodyDT[!grepl('(^self\\$|^private\\$)', SYMBOL)
+            & is.na(MATCH)
+            & SYMBOL %in% pkg_functions
+            , MATCH := SYMBOL
+            ]
+
+    if (nrow(mbodyDT[!is.na(MATCH)]) == 0) {
+        return(NULL)
+    }
+
+    # Convention: If B depends on A, then B is the TARGET
+    # and A is the SOURCE so that it looks like A -> B
+    # fname calls <matches>. So fname depends on <matches>.
+    # So fname is TARGET and <matches> are SOURCEs
+    edgeDT <- data.table::data.table(
+        SOURCE = unique(mbodyDT[!is.na(MATCH), MATCH])
+        , TARGET = paste(class_name, method_type, method_name, sep = "$")
+    )
+
+    return(edgeDT)
+}
+
+
+# [description] given a symbol name that is an R6 internal reference
+# (self$x or private$x), match to a provided data.table of known R6 methods.
+# Searches up inheritance tree.
+#' @importFrom assertthat assert_that
+.match_R6_class_methods <- function(symbol_name, class_name, methodsDT, inheritanceDT) {
+    # Check if symbol matches method in this class
+    splitSymbol <- unlist(strsplit(symbol_name, split = "$", fixed = TRUE))
+    assertthat::assert_that(splitSymbol[1] %in% c('self', 'private'))
+    if (splitSymbol[1] == "self") {
+        out <- methodsDT[CLASS_NAME == class_name
+                         & METHOD_TYPE %in% c("public_methods", "active")
+                         & splitSymbol[2] == METHOD_NAME
+                         , paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
+                         ]
+    } else if (splitSymbol[1] == "private") {
+        out <- methodsDT[CLASS_NAME == class_name
+                         & METHOD_TYPE == "private_methods"
+                         & splitSymbol[2] == METHOD_NAME
+                         , paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
+                         ]
+    }
+
+    # Above returns character(0) if not matched. Convert to NA_character
+    if (identical(out, character(0))) {
+        out <- NA_character_
+    }
+
+    # Not not matched, try parent if there is one and it is in package
+    if (is.na(out)
+        && inheritanceDT[CLASS_NAME == class_name
+                         , !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
+        out <- .match_R6_class_methods(
+            symbol_name
+            , inheritanceDT[CLASS_NAME == class_name, PARENT_NAME]
+            , methodsDT
+            , inheritanceDT
+        )
+    }
+
+    # We should only have at most one match
+    assertthat::assert_that(
+        assertthat::is.string(out)
+    )
+
+    return(out)
+}
+
+
+# [description] given a symbol name that is an internal reference to a superclass
+# method (super$<method_name>), match to a provided data.table of known R6 methods
+# by checking searching ancestor classes. We need this as a separate function because
+# super$method_name calls don't specify public, private, or active.
+# So we have to search all three for a parent class before moving up
+# to the next parent class. Luckily, within one class definition you're not allowed
+# to name things the same so we should only have one result.
+#' @importFrom assertthat assert_that is.string
+.match_R6_super_methods <- function(method_name, parent_name, methodsDT, inheritanceDT) {
+
+    out <- methodsDT[CLASS_NAME == parent_name
+                     & method_name == METHOD_NAME
+                     , paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
+                     ]
+
+    # Above returns character(0) if not matched. Convert to NA_character
+    if (identical(out, character(0))) {
+        out <- NA_character_
+    }
+
+    # If not matched, try parent if there is one and it is in package
+    if (is.na(out)
+        && inheritanceDT[CLASS_NAME == parent_name
+                         , !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
+        out <- .match_R6_super_methods(
+            method_name
+            , inheritanceDT[CLASS_NAME == parent_name, PARENT_NAME]
+            , methodsDT
+            , inheritanceDT
+        )
+    }
+
+    # We should only have at most one match
+    assertthat::assert_that(
+        assertthat::is.string(out)
+    )
+
+    return(out)
+}
+
+
+# [description] parses R6 expressions into a character vector of symbols and atomic
+# values. Will not break up expressions of form self$foo, private$foo, or super$foo
+.parse_R6_expression <- function(x) {
+
+    # If expression x is not an atomic value or symbol (i.e., name of object) or
+    # an environment pointer then we can break x up into list of components
+    listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
+
+    if (!is.list(x) && listable) {
+        xList <- as.list(x)
+
+        # Check if expression x is of form self$foo, private$foo, or super$foo
+        if (identical(xList[[1]], quote(`$`))
+            && (identical(xList[[2]], quote(self))
+                || identical(xList[[2]], quote(private))
+                || identical(xList[[2]], quote(super))
+                )
+        ) {
+            listable <- FALSE
+        } else {
+            x <- xList
+        }
+    }
+
+    if (listable){
+        # Filter out atomic values because we don't care about them
+        x <- Filter(f = Negate(is.atomic), x = x)
+
+        # Parse each listed expression recursively until
+        # they can't be listed anymore
+        out <- unlist(lapply(x, .parse_R6_expression), use.names = FALSE)
+    } else {
+        # If not listable, deparse into a character string
+        out <- paste(deparse(x), collapse = "\n")
+    }
+    return(out)
+}
+

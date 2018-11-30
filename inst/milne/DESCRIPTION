@@ -1,0 +1,18 @@
+Package: milne
+Type: Package
+Title: Now We Are Six
+Version: 6.0
+Author: Uptake Data Science
+Authors@R: c(
+    person("Jay", "Qi", email = "jay.qi@uptake.com", role = c("aut", "cre"))
+    )
+Maintainer: Jay Qi <jay.qi@uptake.com>
+Description: This package is used to test object-oriented class functionality for the reporters in `pkgnet`. So I think I'll be six now for ever and ever.
+Imports:
+    R6
+Suggests:
+    covr,
+    testthat
+License: file LICENSE
+LazyData: TRUE
+RoxygenNote: 6.1.1
