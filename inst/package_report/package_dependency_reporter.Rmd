@@ -22,4 +22,5 @@ result <- tryCatch({
 }, error = function(e){
     return(sprintf("DependencyReporter failed with error %s", e$message))
 })
+result
 ```

@@ -9,6 +9,9 @@ tests/testthat/Rplots.pdf
 /*.rda
 /*.csv
 
+# Keep data files in testdata
+!/tests/testthat/testdata/*.csv
+
 # build artifacts
 **/*.tar.gz
 pkgnet.Rcheck/*

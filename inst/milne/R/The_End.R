@@ -13,7 +13,7 @@ One <- R6::R6Class(
             cat("The End, by A. A. Milne \n")
         },
         print_poem = function() {
-            cat("When I was One, \n", 
+            cat("When I was One, \n",
                 "I had just begun. \n"
                 )
         },
@@ -36,7 +36,7 @@ Two <- R6::R6Class(
     public = list(
         print_poem = function() {
             super$print_poem()
-            cat("When I was Two, \n", 
+            cat("When I was Two, \n",
                 "I was nearly new. \n"
             )
         }
@@ -56,7 +56,7 @@ Three <- R6::R6Class(
     public = list(
         print_poem = function() {
             super$print_poem()
-            cat("When I was Three, \n", 
+            cat("When I was Three, \n",
                 "I was hardly Me. \n"
             )
         }
@@ -76,7 +76,7 @@ Four <- R6::R6Class(
     public = list(
         print_poem = function() {
             super$print_poem()
-            cat("When I was Four, \n", 
+            cat("When I was Four, \n",
                 "I was not much more. \n"
             )
         }
@@ -95,7 +95,7 @@ Five <- R6::R6Class(
     public = list(
         print_poem = function() {
             super$print_poem()
-            cat("When I was Five, \n", 
+            cat("When I was Five, \n",
                 "I was just alive. \n"
             )
         }
@@ -116,7 +116,7 @@ Six <- R6::R6Class(
     public = list(
         print_poem = function() {
             super$print_poem()
-            cat("But now I am Six,", 
+            cat("But now I am Six,",
                 "I'm as clever as clever. \n"
             )
             private$print_ending()

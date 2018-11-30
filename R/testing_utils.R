@@ -41,11 +41,14 @@
     #       work the same way and causes that error. Just trust me on this.
     #
     # NOTE: "Sys.which()" would be the correct, portable way to do this but it
-    # doesn't support matching ALL matches, so for now we'll make it work
-    # on unix-alike operating systems and deal with Windows later
+    # doesn't support matching ALL matches.
     #
-    R_LOC <- system("which -a R", intern = TRUE)
-    R_LOC <- R_LOC[!grepl("R_check_bin", R_LOC)][1]
+    if (.Platform$OS.type == 'windows'){
+        R_LOCS <- system("where R", intern = TRUE)
+    } else {
+        R_LOCS <- system("which -a R", intern = TRUE)
+    }
+    R_LOC <- R_LOCS[!grepl("R_check_bin", R_LOCS)][1]
 
     # force install of SOURCE (not binary) in temporary directory for tests
     cmdstr <- sprintf(
