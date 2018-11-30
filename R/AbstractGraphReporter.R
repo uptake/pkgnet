@@ -18,11 +18,8 @@
 #'    \item{\code{pkg_graph}}{Returns the graph object}
 #'    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
 #'    \item{\code{graph_viz}}{Returns the graph visualization object}
-#'    \item{\code{orphan_nodes}}{Returns the list of orphan nodes}
 #'    \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.
 #'        If a valid layout type is given, this function will update the layout_type field.}
-#'    \item{\code{orphan_node_clustering_threshold}}{If no value given, the current orphan node clustering threshold is returned.
-#'        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
 #' }
 #' @importFrom data.table data.table copy uniqueN
 #' @importFrom R6 R6Class
@@ -63,12 +60,6 @@ AbstractGraphReporter <- R6::R6Class(
             }
             return(private$cache$graph_viz)
         },
-        orphan_nodes = function() {
-            if (is.null(private$cache$orphan_nodes)) {
-                private$cache$orphan_nodes <- private$identify_orphan_nodes()
-            }
-            return(private$cache$orphan_nodes)
-        },
         layout_type = function(value) {
 
             # If the person isn't using <- assignment, return the cached value
@@ -82,26 +73,6 @@ AbstractGraphReporter <- R6::R6Class(
                 private$private_layout_type <- value
             }
             return(private$private_layout_type)
-        },
-        orphan_node_clustering_threshold = function(value) {
-
-            # If the person isn't using <- assignment, return the cached value
-            if (!missing(value)) {
-                if (class(value) != 'numeric') {
-                    log_fatal("orphan_node_clustering_threshold must be numeric.")
-                }
-
-                if (value < 1) {
-                    log_fatal("orphan_node_clustering_threshold must at least 1.")
-                }
-
-                # Set new value and reset graph viz
-                if (!is.null(private$cache$graph_viz)) {
-                    private$reset_graph_viz()
-                }
-                private$private_orphan_node_clustering_threshold <- value
-            }
-            return(private$private_orphan_node_clustering_threshold)
         }
     ),
 
@@ -118,11 +89,9 @@ AbstractGraphReporter <- R6::R6Class(
             edges = NULL,
             pkg_graph = NULL,
             network_measures = NULL,
-            graph_viz = NULL,
-            orphan_nodes = NULL
+            graph_viz = NULL
         ),
 
-        private_orphan_node_clustering_threshold = 10,
         private_layout_type = "tree",
 
         # Calculate graph-related measures for pkg_graph
@@ -316,7 +285,6 @@ AbstractGraphReporter <- R6::R6Class(
             # TODO:
             # Open these up to users or remove all the active binding code
             self$layout_type <- "tree"
-            self$orphan_node_clustering_threshold <- 10
 
             # format for plot
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
@@ -400,20 +368,6 @@ AbstractGraphReporter <- R6::R6Class(
 
             } # end color field creation
 
-            # If threshold to group orphan nodes, then assign group
-            numOrphanNodes <- length(self$orphanNodes)
-            numOrphanThreshold <- self$orphan_node_clustering_threshold
-            if (numOrphanNodes > numOrphanThreshold) {
-                log_info(paste(sprintf("Number of orphan nodes %s exceeds orphanNodeClusteringThreshold %s."
-                                       , numOrphanNodes
-                                       , numOrphanThreshold
-                )
-                , "Clustering orphan nodes..."
-                ))
-                plotDTnodes[, group := NA_character_]
-                plotDTnodes[node %in% self$orphan_nodes, group := "orphan"]
-            }
-
             # Create Plot
             g <- visNetwork::visNetwork(nodes = plotDTnodes
                                         , edges = plotDTedges) %>%
@@ -429,11 +383,6 @@ AbstractGraphReporter <- R6::R6Class(
                     , nodesIdSelection = TRUE
                 )
 
-            # Add orphan node clustering
-            if (numOrphanNodes > numOrphanThreshold) {
-                g <- g %>% visNetwork::visClusteringByGroup(groups = c("orphan"))
-            }
-
             log_info("Done creating plot.")
 
             # Save plot in the cache
@@ -447,17 +396,6 @@ AbstractGraphReporter <- R6::R6Class(
             log_info('Resetting cached graph_viz...')
             private$cache$graph_viz <- NULL
             return(invisible(NULL))
-        },
-
-        # Identify orphan nodes
-        identify_orphan_nodes = function() {
-            orphan_nodes <- base::setdiff(
-                self$nodes[, node]
-                , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
-            )
-
-            # If there are none, then will be character(0)
-            return(orphan_nodes)
         },
 
         graph_layout_functions = list(
