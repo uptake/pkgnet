@@ -135,5 +135,3 @@ Six <- R6::R6Class(
 .classname <- function(obj) {
     class(obj)[1]
 }
-
-

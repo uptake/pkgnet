@@ -31,7 +31,7 @@ setRefClass(
 #' @export RightAnswer
 #' @exportClass RightAnswer
 RightAnswer <- setRefClass(
-    Class = "RightAnswer", 
+    Class = "RightAnswer",
     contains = c("PoohAnswer", "MyAnswer")
 )
 
@@ -40,7 +40,6 @@ RightAnswer <- setRefClass(
 # @family TheFriend
 # @description Incorrect Answer to a Question
 WrongAnswer <- setRefClass(
-    Class = "WrongAnswer", 
+    Class = "WrongAnswer",
     contains = "PoohAnswer"
 )
-

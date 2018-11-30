@@ -78,8 +78,11 @@ InheritanceReporter <- R6::R6Class(
             )
             # Round the double columns to three digits for formatting reasons
             numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-            tableObj <- DT::formatRound(columns = numCols, table = tableObj
-                                        , digits=3)
+            tableObj <- DT::formatRound(
+                columns = numCols
+                , table = tableObj
+                , digits=3
+            )
             return(tableObj)
         }
     ),
@@ -91,6 +94,7 @@ InheritanceReporter <- R6::R6Class(
 
                 pkg_env <- private$get_pkg_env()
 
+                # Start with empty node data.table
                 nodeList <- list(data.table::data.table(
                     node = character(0), classType = character(0)
                 ))
@@ -103,10 +107,9 @@ InheritanceReporter <- R6::R6Class(
                     # Specified class name is the important name
                     if (grepl("^\\.__C__", thisObjName) & isS4(thisObj)) {
 
+                        thisObjClassType <- "S4"
                         if (methods::is(thisObj, "refClassRepresentation")) {
                             thisObjClassType <- "Reference"
-                        } else {
-                            thisObjClassType <- "S4"
                         }
 
                         nodeList <- c(nodeList, list(data.table::data.table(
@@ -125,9 +128,12 @@ InheritanceReporter <- R6::R6Class(
 
                     }
 
+                    # If not any of the class types, do nothing
                 }
 
+                # Bind all rows together into one data.table
                 nodeDT <- data.table::rbindlist(nodeList)
+
                 if (nrow(nodeDT) == 0) {
                     msg <- sprintf(
                         'No Reference Class or R6 Class definitions found in package %s'
@@ -135,6 +141,7 @@ InheritanceReporter <- R6::R6Class(
                     )
                     log_warn(msg)
                 }
+
                 private$cache$nodes <- nodeDT
             }
             return(private$cache$nodes)

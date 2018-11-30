@@ -4,7 +4,7 @@
 tests/testthat/Rplots.pdf
 **/.DS_Store
 
-# data files    
+# data files
 **/*.rds
 **/*.rda
 **/*.csv
