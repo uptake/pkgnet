@@ -60,17 +60,23 @@ AbstractGraphReporter <- R6::R6Class(
             }
             return(private$cache$graph_viz)
         },
-        layout_type = function(value) {
-
+        layout_type = function(layout) {
             # If the person isn't using <- assignment, return the cached value
-            if (!missing(value)) {
-                if (!value %in% names(private$graph_layout_functions)) {
-                    log_fatal(paste("Unsupported layout_type:", value))
-                }
+            if (!missing(layout)) {
+                # Input validation
+                assertthat::assert_that(
+                    layout %in% igraphAvailableLayouts()
+                    , msg = sprintf(
+                        "%s is not a supported layout by igraph. See igraphAvailableLayouts()."
+                        , layout
+                    )
+                )
+                # Reset graph viz if it already exists
                 if (!is.null(private$cache$graph_viz)) {
                     private$reset_graph_viz()
                 }
-                private$private_layout_type <- value
+
+                private$private_layout_type <- layout
             }
             return(private$private_layout_type)
         }
@@ -282,19 +288,12 @@ AbstractGraphReporter <- R6::R6Class(
 
             log_info("Creating plot...")
 
-            # TODO:
-            # Open these up to users or remove all the active binding code
-            self$layout_type <- "tree"
+            log_info(paste("Using igraph layout:", self$layout_type))
 
             # format for plot
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
-
-            log_info(paste("Plotting with layout:", self$layout_type))
-            plotDTnodes <- private$calculate_graph_layout(
-                plotDT = plotDTnodes
-            )
 
             if (length(self$edges) > 0) {
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
@@ -369,19 +368,24 @@ AbstractGraphReporter <- R6::R6Class(
             } # end color field creation
 
             # Create Plot
-            g <- visNetwork::visNetwork(nodes = plotDTnodes
-                                        , edges = plotDTedges) %>%
-                visNetwork::visHierarchicalLayout(sortMethod = "directed"
-                                                  , direction = "UD") %>%
-                visNetwork::visEdges(arrows = 'to') %>%
-                visNetwork::visOptions(
-                    highlightNearest = list(
-                        enabled = TRUE
-                        , degree = nrow(plotDTnodes) # guarantee full path
-                        , algorithm = "hierarchical"
-                    )
+            g <- (visNetwork::visNetwork(nodes = plotDTnodes
+                                        , edges = plotDTedges)
+                %>% visNetwork::visIgraphLayout(layout = self$layout_type)
+                %>% visNetwork::visEdges(arrows = 'to')
+
+                # Default options
+                %>% visNetwork::visHierarchicalLayout(
+                        sortMethod = "directed"
+                        , direction = "UD")
+                %>% visNetwork::visOptions(
+                        highlightNearest = list(
+                            enabled = TRUE
+                            , degree = nrow(plotDTnodes) # guarantee full path
+                            , algorithm = "hierarchical"
+                        )
                     , nodesIdSelection = TRUE
                 )
+            )
 
             log_info("Done creating plot.")
 
@@ -401,33 +405,12 @@ AbstractGraphReporter <- R6::R6Class(
         graph_layout_functions = list(
             "tree" = function(pkg_graph) {igraph::layout_as_tree(pkg_graph)},
             "circle" = function(pkg_graph) {igraph::layout_in_circle(pkg_graph)}
-        ),
+        )
 
-        calculate_graph_layout = function(plotDT) {
-
-            log_info(paste("Calculating graph layout for type:", self$layout_type))
-
-            # Calculate positions for specified layout_type
-            graph_func <- private$graph_layout_functions[[self$layout_type]]
-            plotMat <- graph_func(self$pkg_graph)
-
-            # It might be important to get the nodes from pkg_graph so that they
-            # are in the same order as in plotMat?
-            coordsDT <- data.table::data.table(
-                node = names(igraph::V(self$pkg_graph))
-                , level = plotMat[, 2]
-                , horizontal = plotMat[, 1]
-            )
-
-            # Merge coordinates with plotDT
-            plotDT <- merge(
-                x = plotDT
-                , y = coordsDT
-                , by = 'node'
-                , all.x = TRUE
-            )
-
-            return(plotDT)
-        }
     )
 )
+
+
+igraphAvailableLayouts <- function() {
+    return(grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE))
+}
