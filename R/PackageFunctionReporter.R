@@ -155,7 +155,7 @@ FunctionReporter <- R6::R6Class(
             # Set Graph to Color By Coverage
             private$set_plot_node_color_scheme(
                 field = "coverageRatio"
-                # colorbrewer2.org PiYG Palatte
+                # colorbrewer2.org PiYG - Colorblind Safe Palatte
                 , palette = c("#e9a3c9"         # Shocking - low values
                               , "#f7f7f7"       # White Smoke - mid range values
                               , "#a1d76a"       # Feijoa - high values
