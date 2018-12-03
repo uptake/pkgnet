@@ -1,3 +1,5 @@
+# R6 Class Definitions for testing
+
 #' @title Age One
 #' @name One
 #' @family TheEnd
@@ -133,5 +135,3 @@ Six <- R6::R6Class(
 .classname <- function(obj) {
     class(obj)[1]
 }
-
-

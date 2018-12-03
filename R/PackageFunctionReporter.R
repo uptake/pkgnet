@@ -35,6 +35,7 @@
 #' @importFrom DT datatable formatRound
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
+#' @importFrom methods is
 #' @export
 FunctionReporter <- R6::R6Class(
     "FunctionReporter",
@@ -154,7 +155,7 @@ FunctionReporter <- R6::R6Class(
             # Set Graph to Color By Coverage
             private$set_plot_node_color_scheme(
                 field = "coverageRatio"
-                , pallete = c("red", "green")
+                , palette = c("red", "green")
             )
 
             # Calculate network measures since we need outBetweeness
@@ -209,7 +210,12 @@ FunctionReporter <- R6::R6Class(
             # Filter objects in package environment to just functions
             # This will now be a character vector full of function names
             funs <- Filter(
-                f = function(x, p = pkg_env){is.function(get(x, p))}
+                f = function(x, p = pkg_env){
+                    (is.function(get(x, p))
+                        # Exclude Reference Class object generators for now
+                        & !methods::is(get(x, p), "refObjectGenerator")
+                    )
+                }
                 , x = names(pkg_env)
             )
 

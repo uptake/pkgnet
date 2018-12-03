@@ -43,6 +43,7 @@ or to be the same as the generator object name.
 
 \seealso{
 Other PackageReporters: \code{\link{DependencyReporter}},
+  \code{\link{InheritanceReporter}},
   \code{\link{SummaryReporter}}
 }
 \concept{PackageReporters}

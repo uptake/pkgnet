@@ -84,7 +84,7 @@ test_that('FunctionReporter works with R6 classes', {
     # Test nodes
     expect_equivalent(
         object = reporter$nodes
-        , expected = data.table::fread(file.path('testdata', 'milne_nodes.csv'))
+        , expected = data.table::fread(file.path('testdata', 'milne_function_nodes.csv'))
         , ignore.col.order = TRUE
         , ignore.row.order = TRUE
         )
@@ -92,7 +92,7 @@ test_that('FunctionReporter works with R6 classes', {
     # Test edges
     expect_equivalent(
         object = reporter$edges
-        , expected = data.table::fread(file.path('testdata', 'milne_edges.csv'))
+        , expected = data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
         , ignore.col.order = TRUE
         , ignore.row.order = TRUE
     )

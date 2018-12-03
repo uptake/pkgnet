@@ -1,0 +1,43 @@
+---
+title: "Package Class Inheritance Report"
+output: html_document
+---
+
+## Class Inheritance
+
+Here's an overview of the classes defined in **`r reporter$pkg_name`**. The following class types are supported:
+
+* S4 Classes
+* Reference Classes (sometimes informally called "R5")
+* R6 Classes
+
+S3 classes are not supported. For more information about object-oriented programming in R, see the section at the bottom.
+
+### Visualization
+
+```{r echo=FALSE}
+if (nrow(reporter$nodes) > 0) {
+    reporter$graph_viz
+} else {
+    "This package has no classes defined."
+}
+```
+
+### Table
+
+```{r}
+reporter$get_summary_view()
+```
+
+### About Classes, Inheritance, and R's Object-Oriented Systems
+
+In object-oriented programming, code is oriented around "objects". "Classes" are definitions of types of objects that share the same attributes and functionality. For more information, see the [Wikipedia article](https://en.wikipedia.org/wiki/Object-oriented_programming). 
+
+In the concept of inheritance, children classes are extensions of their parent class in that they—generally speaking—are a superset of their parent class. Children classes "inherit" attributes and functionality from their parent classes. This reporter graphs the inheritance between the classes of a package, with inheritance as a directed edge from a child class to its parent class. 
+
+R has four main object-oriented systems: S3, S4, and Reference Classes are part of base R; the R6 package provides another commonly used system. 
+
+This reporter supports the S4, Reference Class, and R6 systems. S3 classes are not supported because their inheritance is defined on an ad hoc per-object 
+basis, rather than formally by class definitions.
+
+For more info about R's built-in object-oriented systems, check out the relevant chapter in [Hadley Wickham's *Advanced R*](http://adv-r.had.co.nz/OO-essentials.html). For more info about R6, check out their [documentation website](https://r6.r-lib.org/index.html) or the chapter in [*Advanced R*'s second edition](https://adv-r.hadley.nz/r6.html).

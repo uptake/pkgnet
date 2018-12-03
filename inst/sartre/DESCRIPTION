@@ -11,4 +11,4 @@ Maintainer: Brian Burns <Brian.Burns@uptake.com>
 Description: This package is used to test the functions in `pkgnet`.  It's a "nothing" network. Get it?
 License: file LICENSE
 LazyData: TRUE
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
