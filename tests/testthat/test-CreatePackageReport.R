@@ -110,7 +110,7 @@ test_that("CreatePackageReport respects report_path when explicitly given", {
     testing_file <- tempfile(pattern = "output", fileext = ".html")
 
     CreatePackageReport(
-        pkg_name = "base"
+        pkg_name = "baseballstats"
         , report_path = testing_file
     )
 
@@ -119,8 +119,8 @@ test_that("CreatePackageReport respects report_path when explicitly given", {
 
     # file should have pkgnet stuff in it (would catch bug where file is created but never written to)
     raw_html <- readLines(testing_file)
-    expec_true(sum(nchar(raw_html)) > 0)
-    expect_true(any(grepl("Dependency Network", readLines(testing_files))))
+    expect_true(sum(nchar(raw_html)) > 0)
+    expect_true(any(grepl("Dependency Network", readLines(testing_file))))
 })
 
 ##### TEST TEAR DOWN #####
