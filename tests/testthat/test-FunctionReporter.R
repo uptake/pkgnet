@@ -18,7 +18,7 @@ futile.logger::flog.threshold(0)
 ## Structure Available ##
 
 test_that('FunctionReporter structure is as expected', {
-    
+
     expect_named(object = FunctionReporter$public_methods
                  , expected = c(
                      "get_summary_view",
@@ -28,21 +28,21 @@ test_that('FunctionReporter structure is as expected', {
                  , ignore.order = TRUE
                  , ignore.case = FALSE
     )
-    
+
     expect_named(object = FunctionReporter$public_fields
                  , expected = NULL
                  , info = "Available public fields for FunctionReporter not as expected."
                  , ignore.order = TRUE
                  , ignore.case = FALSE
     )
-    
+
 })
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS
 
 test_that('FunctionReporter Methods Work', {
     testObj <- FunctionReporter$new()
-    
+
     # inherited set_package
     expect_silent({
         testObj$set_package(
@@ -55,33 +55,33 @@ test_that('FunctionReporter Methods Work', {
             )
         )
     })
-    
+
     # inherited get_package
     expect_equal(object = testObj$pkg_name
                  , expected = "baseballstats"
                  , info = "get_package did not return expected package name")
-    
+
     # "extract_network"
     testObj$.__enclos_env__$private$extract_network()
-    
+
     expect_named(object = testObj$edges
                  , expected = c("SOURCE", "TARGET")
                  , info = "more than SOURCE and TARGET fields created by extract_network"
     )
-    
+
     expect_true({
         all_funs <- testObj$edges[, unique(SOURCE, TARGET)]
         all(all_funs %in% c("at_bats", "batting_avg", "slugging_avg", "OPS"))
     }, info = "unexpected function dependencies derived for baseballstats")
-    
+
     # Test that all expected edges were derived and in the correct directions
-    # Convention: If B depends on A, then B is the TARGET 
-    # and A is the SOURCE so that it looks like A -> B
+    # Convention: If A depends on B, then A is SOURCE and B is TARGET
+    # So that it looks like A -> B. This is UML convention.
     baseballstatsExpectedEdges <- data.table::rbindlist(list(
-        list(TARGET = 'batting_avg', SOURCE = 'at_bats')
-        , list(TARGET = 'slugging_avg', SOURCE = 'at_bats')
-        , list(TARGET = 'OPS', SOURCE = 'batting_avg')
-        , list(TARGET = 'OPS', SOURCE = 'slugging_avg')
+        list(SOURCE = 'batting_avg', TARGET = 'at_bats')
+        , list(SOURCE = 'slugging_avg', TARGET = 'at_bats')
+        , list(SOURCE = 'OPS', TARGET = 'batting_avg')
+        , list(SOURCE = 'OPS', TARGET = 'slugging_avg')
     ))
     expect_equal(object = testObj$edges
                  , expected = baseballstatsExpectedEdges
@@ -89,26 +89,26 @@ test_that('FunctionReporter Methods Work', {
                  , ignore.row.order = TRUE
                  , info = "derived edges do not match expected edges"
                  )
-    
+
     # TODO: Need to test that nodes were properly extracted
     testNodeDT <- testObj$nodes
-    
+
     # inherited make_graph_object
     expect_silent(object = testPkgGraph <- testObj$pkg_graph)
-    
+
     expect_true(object = igraph::is_igraph(testPkgGraph)
                 , info = "Graph object not and igraph formatted object")
-    
+
     expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
                 , info = "Graph nodes not as expected")
-    
+
     # Nodes table with coverage and metrics too
     # TODO: Test that calculate_all_measures and other calculates attach metadata correctly
     # expect_identical(object = sort(testObj$get_raw_data()$nodes$node)
     #                  , expected = sort(testNodeDT$node)
     #                  , info = "Different nodes than expected")
-    
-    
+
+
     # network measures
     expect_true({
         suppressWarnings({
@@ -127,7 +127,7 @@ test_that('FunctionReporter Methods Work', {
                                 "inDegree") %in% names(testObj$nodes))
                 , info = "Not all expected network measures are in nodes data.table"
     )
-    
+
     # coverage
     expect_true(object = all( c("coverageRatio"
                                 , "meanCoveragePerLine"
@@ -137,10 +137,10 @@ test_that('FunctionReporter Methods Work', {
     )
     , info = "Not all expected function coverage measures are in nodes table"
     )
-    
+
     expect_true(object = all(igraph::get.vertex.attribute(testObj$pkg_graph)[[1]] %in% igraph::get.vertex.attribute(testPkgGraph)[[1]])
                 , info = "pkgGraph field nodes not as expected")
-    
+
     expect_identical(object = igraph::get.edgelist(testObj$pkg_graph)
                      , expected = igraph::get.edgelist(testPkgGraph)
                      , info = "pkgGraph field edges not as expected")
