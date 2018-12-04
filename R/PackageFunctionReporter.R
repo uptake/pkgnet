@@ -121,6 +121,9 @@ FunctionReporter <- R6::R6Class(
 
     private = list(
 
+        # Default graph viz layout
+        private_layout_type = "layout_with_graphopt",
+
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
                 # create a custom environment w/ this package's contents
@@ -313,6 +316,15 @@ FunctionReporter <- R6::R6Class(
             log_info("Done constructing network representation")
 
             return(edgeDT)
+        }
+
+        , plot_network = function() {
+            g <- super$plot_network()
+
+            g <- (g
+                %>% visNetwork::visHierarchicalLayout(enabled = FALSE)
+            )
+            return(g)
         }
     )
 )

@@ -207,12 +207,31 @@ InheritanceReporter <- R6::R6Class(
     ),
 
     private = list(
+        # Default graph viz layout
+        private_layout_type = "layout_as_tree",
+
+        plotNodeColorScheme = list(
+            field = "classType"
+            , palette = c('#a6cee3', '#1f78b4', '#b2df8a')
+        ),
+
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
                 # create a custom environment w/ this package's contents
                 private$cache$pkg_env <- loadNamespace(self$pkg_name)
             }
             return(private$cache$pkg_env)
+        },
+
+        plot_network = function() {
+            g <- super$plot_network()
+
+            g <- (g
+                  %>% visNetwork::visHierarchicalLayout(
+                      sortMethod = "directed"
+                      , direction = "DU")
+            )
+            return(g)
         }
     )
 

@@ -98,7 +98,8 @@ AbstractGraphReporter <- R6::R6Class(
             graph_viz = NULL
         ),
 
-        private_layout_type = "tree",
+        # Default graph viz layout
+        private_layout_type = "layout_nicely",
 
         # Calculate graph-related measures for pkg_graph
         calculate_network_measures = function(){
@@ -290,26 +291,25 @@ AbstractGraphReporter <- R6::R6Class(
 
             log_info(paste("Using igraph layout:", self$layout_type))
 
+            ## FORMAT NODES ##
+
             # format for plot
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
 
-            if (length(self$edges) > 0) {
-                plotDTedges <- data.table::copy(self$edges) # Don't modify original
-                plotDTedges[, from := SOURCE]
-                plotDTedges[, to := TARGET]
-                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
-            } else {
-                plotDTedges <- NULL
-            }
+            ## Color Nodes
 
-            # Color By Field
+            # Flag for us to do stuff later
+            colorByGroup <- FALSE
+
+            # If no field specified, use uniform color for all nodes
             if (is.null(private$plotNodeColorScheme[['field']])) {
 
                 # Default Color for all Nodes
                 plotDTnodes[, color := private$plotNodeColorScheme[['palette']]]
 
+            # Otherwise use specified field to color node
             } else {
 
                 # Fetch Color Scheme Values
@@ -325,10 +325,10 @@ AbstractGraphReporter <- R6::R6Class(
 
                 colorFieldPalette <- private$plotNodeColorScheme[['palette']]
                 colorFieldValues <- plotDTnodes[[colorFieldName]]
-                log_info(sprintf("Coloring plot nodes by %s..."
-                                 , colorFieldName))
+                log_info(sprintf("Coloring plot nodes by %s...", colorFieldName))
 
-                # If colorFieldValues are character
+                # If colorFieldValues are character or factor
+                # then we are coloring by group
                 if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
 
                     # Create palette by unique values
@@ -336,11 +336,18 @@ AbstractGraphReporter <- R6::R6Class(
                     newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
 
                     # For each character value, update all nodes with that value
-                    plotDTnodes[, color := newPalette[.GRP]
-                                , by = list(get(colorFieldName))]
+                    plotDTnodes[, color := newPalette[.GRP], by = get(colorFieldName)]
 
+                    # Set the group column to the field
+                    plotDTnodes[, group := get(colorFieldName)]
+
+                    # Set flag for us to build a legend in the graph viz later
+                    colorByGroup <- TRUE
+
+                # If colorFieldValues are numeric, assume continuous variable
+                # Then we want to create a continuous palette
                 } else if (is.numeric(colorFieldValues)) {
-                    # If colorFieldValues are numeric, assume continuous
+
 
                     # Create Continuous Color Palette
                     newPalette <- grDevices::colorRamp(colors = colorFieldPalette)
@@ -354,18 +361,34 @@ AbstractGraphReporter <- R6::R6Class(
                     # NA Values get gray color
                     plotDTnodes[is.na(scaledColorValues), color := "gray"]
 
+                # If none of the above, something is wrong
                 } else {
                     # Error Out
-                    log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
-                                             , "Field %s is of type %s.")
-                                      , colorFieldName
-                                      , typeof(colorFieldValues)
+                    log_fatal(
+                        sprintf(
+                            paste0("A character, factor, or numeric field can be used to color nodes. "
+                                , "Field %s is of type %s.")
+                            , colorFieldName
+                            , typeof(colorFieldValues)
+                        )
                     )
-                    )
-
                 } # end non-default color field
+            } # end color setting
 
-            } # end color field creation
+            ## END FORMAT NODES##
+
+            ## FORMAT EDGES ##
+
+            if (length(self$edges) > 0) {
+                plotDTedges <- data.table::copy(self$edges) # Don't modify original
+                plotDTedges[, from := SOURCE]
+                plotDTedges[, to := TARGET]
+                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+            } else {
+                plotDTedges <- NULL
+            }
+
+            ## END FORMAT EDGES ##
 
             # Create Plot
             g <- (visNetwork::visNetwork(nodes = plotDTnodes
@@ -374,9 +397,6 @@ AbstractGraphReporter <- R6::R6Class(
                 %>% visNetwork::visEdges(arrows = 'to')
 
                 # Default options
-                %>% visNetwork::visHierarchicalLayout(
-                        sortMethod = "directed"
-                        , direction = "UD")
                 %>% visNetwork::visOptions(
                         highlightNearest = list(
                             enabled = TRUE
@@ -386,6 +406,33 @@ AbstractGraphReporter <- R6::R6Class(
                     , nodesIdSelection = TRUE
                 )
             )
+
+            log_info(colorByGroup)
+            if (colorByGroup) {
+                # Add group definitions
+                for (groupVal in colorFieldValues) {
+                    thisGroupColor <- plotDTnodes[
+                            get(colorFieldName) == groupVal
+                            , color
+                        ][1]
+                    g <- visNetwork::visGroups(
+                        graph = g
+                        , groupname = groupVal
+                        , color = thisGroupColor
+                    )
+                }
+
+                # Add legend
+                g <- visLegend(
+                    graph = g
+                    , position = "right"
+                    , main = list(
+                        text = colorFieldName
+                        , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'
+                    )
+                )
+            }
+
 
             log_info("Done creating plot.")
 
@@ -400,12 +447,7 @@ AbstractGraphReporter <- R6::R6Class(
             log_info('Resetting cached graph_viz...')
             private$cache$graph_viz <- NULL
             return(invisible(NULL))
-        },
-
-        graph_layout_functions = list(
-            "tree" = function(pkg_graph) {igraph::layout_as_tree(pkg_graph)},
-            "circle" = function(pkg_graph) {igraph::layout_in_circle(pkg_graph)}
-        )
+        }
 
     )
 )

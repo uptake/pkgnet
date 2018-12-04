@@ -90,6 +90,8 @@ DependencyReporter <- R6::R6Class(
     ),
 
     private = list(
+        # Default graph viz layout
+        private_layout_type = "layout_as_tree",
 
         dep_types = NULL,
         ignore_packages = NULL,
@@ -236,5 +238,16 @@ DependencyReporter <- R6::R6Class(
             }
             return(outPackages)
         }
-    )
+
+        , plot_network = function() {
+            g <- super$plot_network()
+
+            g <- (g
+                  %>% visNetwork::visHierarchicalLayout(
+                      sortMethod = "directed"
+                      , direction = "UD")
+            )
+            return(g)
+        }
+    ) # /private
 )
