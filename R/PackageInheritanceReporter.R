@@ -194,7 +194,12 @@ InheritanceReporter <- R6::R6Class(
                     }
                 }
 
+                # Combine all edges together
                 edgeDT <- data.table::rbindlist(edgeList)
+
+                # Filter out any parents that are external to the package
+                edgeDT <- edgeDT[TARGET %in% nodeDT[, node]]
+
                 private$cache$edges <- edgeDT
 
             }
