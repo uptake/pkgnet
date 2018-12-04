@@ -212,7 +212,7 @@ InheritanceReporter <- R6::R6Class(
 
         plotNodeColorScheme = list(
             field = "classType"
-            , palette = c('#a6cee3', '#1f78b4', '#b2df8a')
+            , palette = c('#f0f9e8', '#bae4bc', '#7bccc4')
         ),
 
         get_pkg_env = function() {
