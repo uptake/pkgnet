@@ -82,7 +82,6 @@ test_that("CreatePackageReport rejects bad pkg_path arguments", {
 
 test_that("CreatePackageReport rejects bad report_path arguments", {
 
-
     expect_error({
         CreatePackageReport(
             pkg_name = "base"
@@ -105,6 +104,24 @@ test_that("CreatePackageReport rejects bad report_path arguments", {
     }, regexp = "report_path is not a string")
 })
 
+
+test_that("CreatePackageReport respects report_path when explicitly given", {
+
+    testing_file <- tempfile(pattern = "output", fileext = ".html")
+
+    CreatePackageReport(
+        pkg_name = "baseballstats"
+        , report_path = testing_file
+    )
+
+    # file should exist (would catch bug that prevents writing or writes to wrong loc)
+    expect_true(file.exists(testing_file))
+
+    # file should have pkgnet stuff in it (would catch bug where file is created but never written to)
+    raw_html <- readLines(testing_file)
+    expect_true(sum(nchar(raw_html)) > 0)
+    expect_true(any(grepl("Dependency Network", readLines(testing_file))))
+})
 
 ##### TEST TEAR DOWN #####
 
