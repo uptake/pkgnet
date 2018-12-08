@@ -1,3 +1,5 @@
+# Check if the setup in testthat.R was already run
+# [DEBUG] write("setup_setTestEnv.R triggered", file = "~/thing.txt", append = TRUE)
 
 # record original libpaths in order to reset later.
 # This should be unnecessary since tests are conducted within a seperate enviornment.
@@ -18,3 +20,7 @@ Sys.setenv(PKGNET_TEST_LIB = tempdir())
 pkgnet:::.BuildTestLib(
     targetLibPath = Sys.getenv('PKGNET_TEST_LIB')
 )
+
+# [DEBUG] write(paste0("PKGNET_TEST_LIB: ", Sys.getenv('PKGNET_TEST_LIB')), file = "~/thing.txt", append = TRUE)
+# [DEBUG] write(list.files(Sys.getenv('PKGNET_TEST_LIB'), recursive = TRUE), file = "~/thing.txt", append = TRUE)
+

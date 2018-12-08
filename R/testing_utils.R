@@ -12,6 +12,7 @@
     #       from the repo root if something goes wrong
 
     # [DEBUG] write("=========", file = "~/thing.txt", append = TRUE)
+    # [DEBUG] write(paste0("target lib path: ", targetLibPath), file = "~/thing.txt", append = TRUE)
     # [DEBUG] write(list.files(getwd(), recursive = TRUE), file = "~/thing.txt", append = TRUE)
     # [DEBUG] write(paste0("working dir: ", getwd()), file = "~/thing.txt", append = TRUE)
 
@@ -20,17 +21,31 @@
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet/vignettes$', replacement = '/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('pkgnet/tests/testthat', replacement = 'pkgnet', x = pkgnetSourcePath)
+    pkgnetSourcePath <- gsub('/pkgnet/pkgnet-tests/testthat', replacement = '/pkgnet', x = pkgnetSourcePath) # covr
+    pkgnetSourcePath <- gsub('/pkgnet/pkgnet-tests', replacement = '/pkgnet', x = pkgnetSourcePath) # covr
 
     # [DEBUG] write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/thing.txt", append = TRUE)
-    # [DEBUG] write("=========", file = "~/thing.txt", append = TRUE)
+    # [DEBUG] write(list.files(pkgnetSourcePath, recursive = TRUE), file = "~/thing.txt", append = TRUE)
+
+    # Check if there is an inst directory in pkgnetSource.
+    # If there is an inst directory (because of raw package copy) then look in there
+    # for the test packages.
+    # Otherwise if not, it means that it's an installed package copy and the test
+    # packages are in the package root directory.
+    testPkgSourceDir <- ""
+    if ("inst" %in% list.files(pkgnetSourcePath)) {
+        testPkgSourceDir <- "inst"
+    }
 
     ### packages to be built
     pkgList <- c(
-        baseballstats = file.path(pkgnetSourcePath, "inst", "baseballstats")
-        , sartre = file.path(pkgnetSourcePath, "inst", "sartre")
-        , milne = file.path(pkgnetSourcePath, "inst", "milne")
+        baseballstats = file.path(pkgnetSourcePath, testPkgSourceDir, "baseballstats")
+        , sartre = file.path(pkgnetSourcePath, testPkgSourceDir, "sartre")
+        , milne = file.path(pkgnetSourcePath, testPkgSourceDir, "milne")
         , pkgnet = pkgnetSourcePath
     )
+
+    # [DEBUG] write(paste0("Installing: ", paste(pkgList)), file = "~/thing.txt", append = TRUE)
 
     ### Install
 
@@ -70,6 +85,8 @@
             , paste0(output, collapse = " ... ")
         ))
     }
+
+    # [DEBUG] write("=========", file = "~/thing.txt", append = TRUE)
 
     return(invisible(TRUE))
 }

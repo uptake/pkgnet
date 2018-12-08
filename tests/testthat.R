@@ -19,6 +19,8 @@ if (Sys.getenv('PKGNET_REBUILD')){
     ## travis checks.
     ## ******************************************************************************************
 
+    # [DEBUG] write("PKGNET_REBUILD triggered", file = "~/thing.txt", append = TRUE)
+
     # record original libpaths in order to reset later.
     # This should be unnecessary since tests are conducted within a seperate enviornment.
     # It's done out of an abundance of caution.
@@ -39,6 +41,10 @@ if (Sys.getenv('PKGNET_REBUILD')){
         targetLibPath = Sys.getenv('PKGNET_TEST_LIB')
     )
 
+    # [DEBUG] write(paste0("PKGNET_TEST_LIB: ", Sys.getenv('PKGNET_TEST_LIB')), file = "~/thing.txt", append = TRUE)
+    # [DEBUG] write(list.files(Sys.getenv('PKGNET_TEST_LIB'), recursive = TRUE), file = "~/thing.txt", append = TRUE)
+
+
 }
 
 # This withr statement should be redundant.
@@ -56,6 +62,8 @@ if (Sys.getenv('PKGNET_REBUILD')){
     ## THIS IS THIS SAME CONTENT as teardown_setTestEnv.R but neccessary to paste here due to
     ## travis checks.
     ## ******************************************************************************************
+
+    # [DEBUG] write("PKGNET_REBUILD tear-down triggered", file = "~/thing.txt", append = TRUE)
 
     # Uninstall Fake Packages From Test Library if Not Already Uninstalled
     try(
