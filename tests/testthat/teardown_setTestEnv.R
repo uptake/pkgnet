@@ -1,10 +1,10 @@
-
+# [DEBUG] write("teardown_setTestEnv.R triggered", file = "~/thing.txt", append = TRUE)
 
 # Uninstall Fake Packages From Test Library if Not Already Uninstalled
 try(
     utils::remove.packages(
         pkgs = c('baseballstats', 'sartre', 'milne', 'pkgnet')
-       , lib = Sys.getenv('PKGNET_TEST_LIB')
+        , lib = Sys.getenv('PKGNET_TEST_LIB')
     )
 )
 
