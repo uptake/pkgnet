@@ -16,3 +16,6 @@ tests/testthat/Rplots.pdf
 **/*.tar.gz
 pkgnet.Rcheck/*
 .Rproj.user
+
+# Compiled vignette
+inst/doc/*

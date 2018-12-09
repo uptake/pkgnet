@@ -9,32 +9,32 @@
 InheritanceReporter
 }
 \description{
-This reporter takes a package and traces the class inheritance 
-  structure. Currently the following object-oriented systems are supported: 
-  \itemize{ 
-      \item{S4 Classes} 
-      \item{Reference Classes (sometimes informally called "R5")} 
-      \item{R6 Classes} 
-  } 
-  S3 classes are not supported, as their inheritance is defined on an ad hoc 
+This reporter takes a package and traces the class inheritance
+  structure. Currently the following object-oriented systems are supported:
+  \itemize{
+      \item{S4 Classes}
+      \item{Reference Classes (sometimes informally called "R5")}
+      \item{R6 Classes}
+  }
+  S3 classes are not supported, as their inheritance is defined on an ad hoc
   basis per object and not formally by class definitions.
-  
-  Note the following details about class naming: 
-  \itemize{ 
-      \item{Reference Classes : The name passed as \code{Class} in 
-      \code{\link[methods:ReferenceClasses]{setRefClass}} is used as the node 
-      name by this reporter. This is the class name that is used when 
-      specifying inheritance. The generator object returned by 
+
+  Note the following details about class naming:
+  \itemize{
+      \item{Reference Classes : The name passed as \code{Class} in
+      \code{\link[methods:ReferenceClasses]{setRefClass}} is used as the node
+      name by this reporter. This is the class name that is used when
+      specifying inheritance. The generator object returned by
       \code{\link[methods:ReferenceClasses]{setRefClass}} does not have to be
-      assigned and can have a different name.} 
-      \item{R6 Classes : The name of the generator object in the package 
-      namespace is used as the node name by this reporter. The generator 
-      object returned by \code{\link[R6:R6Class]{R6::R6Class}} is what is 
-      used when specifying inheritance. The name passed as \code{classname} 
+      assigned and can have a different name.}
+      \item{R6 Classes : The name of the generator object in the package
+      namespace is used as the node name by this reporter. The generator
+      object returned by \code{\link[R6:R6Class]{R6::R6Class}} is what is
+      used when specifying inheritance. The name passed as \code{classname}
       passed to \code{\link[R6:R6Class]{R6::R6Class}} can be a different name
       or even NULL.}
  }
-  
+
   For more info about R's built-in object-oriented systems, check out the
   relevant chapter in \href{http://adv-r.had.co.nz/OO-essentials.html}{Hadley
   Wickham's \emph{Advanced R}}. For more info about R6, check out their

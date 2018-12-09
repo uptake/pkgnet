@@ -6,7 +6,7 @@ Authors@R: c(
     person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "james.lamb@uptake.com", role = c("aut")),
     person("Patrick", "Boueri", email = "patrick.boueri@uptake.com", role = c("ctb")),
-    person("Jay", "Qi", email = "jay.qi@uptake.com", role = c("ctb"))
+    person("Jay", "Qi", email = "jay.qi@uptake.com", role = c("aut"))
     )
 Maintainer: Brian Burns <brian.burns@uptake.com>
 Description: Tools from the domain of graph theory can be used to quantify the complexity

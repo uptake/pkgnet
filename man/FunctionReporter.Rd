@@ -13,8 +13,8 @@ This Reporter takes a package and uncovers the structure from
              its other functions, determining useful information such as which function is most
              central to the package. Combined with testing information it can be used as a powerful tool
              to plan testing efforts.
-             
-R6 classes are supported, with methods treated as functions by the Reporter. 
+
+R6 classes are supported, with methods treated as functions by the Reporter.
 R6 methods will be named like \code{<classname>$<methodtype>$<methodname>}
 , e.g., \code{FunctionReporter$private_methods$extract_nodes}. Note that the
 class name used will be the \emph{name of the generator object in the package's namespace},
