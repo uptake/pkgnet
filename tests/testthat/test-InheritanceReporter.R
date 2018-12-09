@@ -145,7 +145,7 @@ test_that("InheritanceReporter should give warning for packages with no classes"
         reporter <- InheritanceReporter$new()
         reporter$set_package("baseballstats")
         reporter$edges
-    }, regexp = "No Reference Class or R6 Class definitions found")
+    }, regexp = "No S4, Reference, or R6 class definitions found")
 })
 
 ##### TEST TEAR DOWN #####

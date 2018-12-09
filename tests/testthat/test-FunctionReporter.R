@@ -121,7 +121,8 @@ test_that('FunctionReporter Methods Work', {
     expect_true(object = all( c("outDegree",
                                 "outBetweeness",
                                 "outCloseness",
-                                "numDescendants",
+                                "inSubgraphSize",
+                                "outSubgraphSize",
                                 "hubScore",
                                 "pageRank",
                                 "inDegree") %in% names(testObj$nodes))

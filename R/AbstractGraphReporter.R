@@ -19,9 +19,10 @@
 #'    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
 #'    \item{\code{graph_viz}}{Returns the graph visualization object}
 #'    \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.
-#'        If a valid layout type is given, this function will update the layout_type field.}
+#'        If a valid layout type is given, this function will update the layout_type field.
+#'        You can use \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)} to see valid options.}
 #' }
-#' @importFrom data.table data.table copy uniqueN
+#' @importFrom data.table data.table copy uniqueN setkeyv
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree graph_from_edgelist graph.edgelist centralization.betweenness
 #' @importFrom igraph centralization.closeness centralization.degree hub_score
@@ -65,9 +66,9 @@ AbstractGraphReporter <- R6::R6Class(
             if (!missing(layout)) {
                 # Input validation
                 assertthat::assert_that(
-                    layout %in% igraphAvailableLayouts()
+                    layout %in% .igraphAvailableLayouts()
                     , msg = sprintf(
-                        "%s is not a supported layout by igraph. See igraphAvailableLayouts()."
+                        "%s is not a supported layout by igraph. See documentation."
                         , layout
                     )
                 )
@@ -154,16 +155,30 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------------------------------------------------------#
 
             #--------------#
-            # Number of Decendants - a.k.a neightborhood or ego
+            # Size of Out-Subgraph - meaning the rooted graph out from a node
+            # computed using out-neighborhood with order of longest possible path
             #--------------#
-            neighborHoodSizeResult <- igraph::neighborhood.size(
+            numOutNodes <- igraph::neighborhood.size(
                 graph = pkg_graph
                 , order = vcount(pkg_graph)
                 , mode = "out"
             )
 
             # update data.tables
-            outNodeDT[, numDescendants := neighborHoodSizeResult] # nodes
+            outNodeDT[, outSubgraphSize := numOutNodes] # nodes
+
+            #--------------#
+            # Size of In-Subgraph - meaning the rooted graph into a node
+            # computed using in-neighborhood with order of longest possible path
+            #--------------#
+            numInNodes <- igraph::neighborhood.size(
+                graph = pkg_graph
+                , order = vcount(pkg_graph)
+                , mode = "in"
+            )
+
+            # update data.tables
+            outNodeDT[, inSubgraphSize := numInNodes] # nodes
 
             #--------------#
             # Hub Score
@@ -324,7 +339,7 @@ AbstractGraphReporter <- R6::R6Class(
                 }
 
                 colorFieldPalette <- private$plotNodeColorScheme[['palette']]
-                colorFieldValues <- plotDTnodes[[colorFieldName]]
+                colorFieldValues <- plotDTnodes[, unique(get(colorFieldName))]
                 log_info(sprintf("Coloring plot nodes by %s...", colorFieldName))
 
                 # If colorFieldValues are character or factor
@@ -332,7 +347,7 @@ AbstractGraphReporter <- R6::R6Class(
                 if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
 
                     # Create palette by unique values
-                    valCount <- data.table::uniqueN(colorFieldValues)
+                    valCount <- length(colorFieldValues)
                     newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
 
                     # For each character value, update all nodes with that value
@@ -375,6 +390,9 @@ AbstractGraphReporter <- R6::R6Class(
                 } # end non-default color field
             } # end color setting
 
+            # Order nodes alphabetically to make them easier to find in dropdown
+            data.table::setkeyv(plotDTnodes, 'id')
+
             ## END FORMAT NODES##
 
             ## FORMAT EDGES ##
@@ -407,9 +425,10 @@ AbstractGraphReporter <- R6::R6Class(
                 )
             )
 
-            log_info(colorByGroup)
+
             if (colorByGroup) {
                 # Add group definitions
+                log_info(paste(colorFieldValues))
                 for (groupVal in colorFieldValues) {
                     thisGroupColor <- plotDTnodes[
                             get(colorFieldName) == groupVal
@@ -423,14 +442,20 @@ AbstractGraphReporter <- R6::R6Class(
                 }
 
                 # Add legend
-                g <- visLegend(
-                    graph = g
-                    , position = "right"
-                    , main = list(
-                        text = colorFieldName
-                        , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'
+                # but it is broken if there is only one level
+                # so hard-code for now to skip if there is only one level
+                # TODO: remove if statement when the following issue is resolved:
+                # https://github.com/datastorm-open/visNetwork/issues/290
+                if (length(colorFieldValues) > 1) {
+                    g <- visNetwork::visLegend(
+                        graph = g
+                        , position = "right"
+                        , main = list(
+                            text = colorFieldName
+                            , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'
+                        )
                     )
-                )
+                }
             }
 
 
@@ -452,7 +477,14 @@ AbstractGraphReporter <- R6::R6Class(
     )
 )
 
-
-igraphAvailableLayouts <- function() {
+# [title] Available Graph Layout Functions from igraph
+# [name] .igraphAvailableLayouts
+# [description] Returns available \link[igraph:layout_]{igraph layout function}
+# names. These names can be passed to
+# \code{\link[visNetwork:visIgraphLayout]{visNetwork::visIgraphLayout}} or set
+# as the \code{layout_type} for any reporters that inherit from
+# \code{\link{AbstractGraphReporter}}.
+# [return] a character vector of igraph layout function names
+.igraphAvailableLayouts <- function() {
     return(grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE))
 }

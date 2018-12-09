@@ -136,7 +136,7 @@ InheritanceReporter <- R6::R6Class(
 
                 if (nrow(nodeDT) == 0) {
                     msg <- sprintf(
-                        'No Reference Class or R6 Class definitions found in package %s'
+                        'No S4, Reference, or R6 class definitions found in package %s'
                         , self$pkg_name
                     )
                     log_warn(msg)
