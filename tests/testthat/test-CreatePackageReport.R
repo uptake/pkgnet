@@ -9,6 +9,9 @@ if (!identical(loggerOptions, list())){
 }
 futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
 
+# Set flag to suppress browser opening
+Sys.setenv(PKGNET_SUPPRESS_BROWSER = TRUE)
+
 test_that("Test that CreatePackageReport Runs", {
 
     testReportPath <- tempfile(
@@ -124,6 +127,8 @@ test_that("CreatePackageReport respects report_path when explicitly given", {
 })
 
 ##### TEST TEAR DOWN #####
+
+Sys.unsetenv("PKGNET_SUPPRESS_BROWSER")
 
 futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())

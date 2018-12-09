@@ -59,7 +59,10 @@ CreatePackageReport <- function(pkg_name
       , pkg_name = pkg_name
     )
 
-    utils::browseURL(report_path)
+    # If suppress flag is unset, then env variable will be emptry string ""
+    if (identical(Sys.getenv("PKGNET_SUPPRESS_BROWSER"), "")) {
+        utils::browseURL(report_path)
+    }
 
     return(invisible(builtReporters))
 }
