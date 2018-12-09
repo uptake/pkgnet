@@ -41,6 +41,23 @@ or to be the same as the generator object name.
 }
 }
 
+\section{Known Limitations}{
+
+\itemize{
+    \item{Using non-standard evaluation to refer to things (e.g, dataframe column names)
+    that have the same name as a function will trick \code{FunctionReporter} into thinking
+    the function was called. This can be avoided if you don't use reuse function names
+    for other purposes.}
+    \item{Functions stored as list items and not assigned to the package namespace
+    will be invisible to \code{FunctionReporter}.}
+    \item{Calls to methods of instantiated R6 or reference objects will not be recognized.
+    We don't have a reliable way of identifying instantiated objects, or identifying
+    their class.}
+    \item{Reference class methods are not yet supported. They will not be idenified
+    as nodes by \code{FunctionReporter}.}
+}
+}
+
 \seealso{
 Other PackageReporters: \code{\link{DependencyReporter}},
   \code{\link{InheritanceReporter}},
