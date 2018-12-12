@@ -136,7 +136,7 @@ InheritanceReporter <- R6::R6Class(
 
                 if (nrow(nodeDT) == 0) {
                     msg <- sprintf(
-                        'No Reference Class or R6 Class definitions found in package %s'
+                        'No S4, Reference, or R6 class definitions found in package %s'
                         , self$pkg_name
                     )
                     log_warn(msg)
@@ -194,7 +194,12 @@ InheritanceReporter <- R6::R6Class(
                     }
                 }
 
+                # Combine all edges together
                 edgeDT <- data.table::rbindlist(edgeList)
+
+                # Filter out any parents that are external to the package
+                edgeDT <- edgeDT[TARGET %in% nodeDT[, node]]
+
                 private$cache$edges <- edgeDT
 
             }
@@ -207,12 +212,31 @@ InheritanceReporter <- R6::R6Class(
     ),
 
     private = list(
+        # Default graph viz layout
+        private_layout_type = "layout_as_tree",
+
+        plotNodeColorScheme = list(
+            field = "classType"
+            , palette = c('#f0f9e8', '#bae4bc', '#7bccc4')
+        ),
+
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
                 # create a custom environment w/ this package's contents
                 private$cache$pkg_env <- loadNamespace(self$pkg_name)
             }
             return(private$cache$pkg_env)
+        },
+
+        plot_network = function() {
+            g <- super$plot_network()
+
+            g <- (g
+                  %>% visNetwork::visHierarchicalLayout(
+                      sortMethod = "directed"
+                      , direction = "DU")
+            )
+            return(g)
         }
     )
 

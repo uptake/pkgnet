@@ -17,7 +17,7 @@ futile.logger::flog.threshold(0)
 ## Structure Available ##
 
 test_that('AbstractGraphReporter structure is as expected', {
-    
+
     expect_named(
         object = AbstractGraphReporter$public_methods
         , expected = c("clone")
@@ -25,7 +25,7 @@ test_that('AbstractGraphReporter structure is as expected', {
         , ignore.order = TRUE
         , ignore.case = FALSE
     )
-    
+
     expect_named(
         object = AbstractGraphReporter$public_fields
         , expected = NULL
@@ -36,6 +36,13 @@ test_that('AbstractGraphReporter structure is as expected', {
 })
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS TO BE TESTED BY CHILD OBJECTS
+
+test_that(".igraphAvailableLayouts returns layouts correctly", {
+    expect_true({
+        length(pkgnet:::.igraphAvailableLayouts()) > 0
+    })
+})
+
 
 ##### TEST TEAR DOWN #####
 

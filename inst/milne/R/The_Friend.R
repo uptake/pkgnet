@@ -41,5 +41,5 @@ RightAnswer <- setRefClass(
 # @description Incorrect Answer to a Question
 WrongAnswer <- setRefClass(
     Class = "WrongAnswer",
-    contains = "PoohAnswer"
+    contains = c("PoohAnswer", "numeric")
 )

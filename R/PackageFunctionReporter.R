@@ -121,6 +121,9 @@ FunctionReporter <- R6::R6Class(
 
     private = list(
 
+        # Default graph viz layout
+        private_layout_type = "layout_with_graphopt",
+
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
                 # create a custom environment w/ this package's contents
@@ -314,6 +317,15 @@ FunctionReporter <- R6::R6Class(
 
             return(edgeDT)
         }
+
+        , plot_network = function() {
+            g <- super$plot_network()
+
+            g <- (g
+                %>% visNetwork::visHierarchicalLayout(enabled = FALSE)
+            )
+            return(g)
+        }
     )
 )
 
@@ -349,13 +361,14 @@ FunctionReporter <- R6::R6Class(
         return(invisible(NULL))
     }
 
-    # Convention: If B depends on A, then B is the TARGET
-    # and A is the SOURCE so that it looks like A -> B
+    # Convention: If A depends on B, then A is the SOURCE
+    # and B is the TARGET so that it looks like A -> B
+    # This is consistent with the UML dependency convention
     # fname calls <matches>. So fname depends on <matches>.
-    # So fname is TARGET and <matches> are SOURCEs
+    # So fname is SOURCE and <matches> are TARGETs
     edgeDT <- data.table::data.table(
-        SOURCE = unique(all_functions[matches])
-        , TARGET = fname
+        SOURCE = fname
+        , TARGET = unique(all_functions[matches])
     )
 
     return(edgeDT)
@@ -486,13 +499,14 @@ FunctionReporter <- R6::R6Class(
         return(NULL)
     }
 
-    # Convention: If B depends on A, then B is the TARGET
-    # and A is the SOURCE so that it looks like A -> B
-    # fname calls <matches>. So fname depends on <matches>.
-    # So fname is TARGET and <matches> are SOURCEs
+    # Convention: If A depends on B, then A is the SOURCE
+    # and B is the TARGET so that it looks like A -> B
+    # This is consistent with the UML dependency convention.
+    # The method calls the MATCHes, so method is SOURCE and
+    # the MATCHes are the TARGETs
     edgeDT <- data.table::data.table(
-        SOURCE = unique(mbodyDT[!is.na(MATCH), MATCH])
-        , TARGET = paste(class_name, method_type, method_name, sep = "$")
+        SOURCE = paste(class_name, method_type, method_name, sep = "$")
+        , TARGET = unique(mbodyDT[!is.na(MATCH), MATCH])
     )
 
     return(edgeDT)

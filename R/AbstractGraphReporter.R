@@ -18,13 +18,11 @@
 #'    \item{\code{pkg_graph}}{Returns the graph object}
 #'    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
 #'    \item{\code{graph_viz}}{Returns the graph visualization object}
-#'    \item{\code{orphan_nodes}}{Returns the list of orphan nodes}
 #'    \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.
-#'        If a valid layout type is given, this function will update the layout_type field.}
-#'    \item{\code{orphan_node_clustering_threshold}}{If no value given, the current orphan node clustering threshold is returned.
-#'        If a valid orphan node clustering threshold is given, this function will update the orphan node clustering threshold.}
+#'        If a valid layout type is given, this function will update the layout_type field.
+#'        You can use \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)} to see valid options.}
 #' }
-#' @importFrom data.table data.table copy uniqueN
+#' @importFrom data.table data.table copy uniqueN setkeyv
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree graph_from_edgelist graph.edgelist centralization.betweenness
 #' @importFrom igraph centralization.closeness centralization.degree hub_score
@@ -63,45 +61,25 @@ AbstractGraphReporter <- R6::R6Class(
             }
             return(private$cache$graph_viz)
         },
-        orphan_nodes = function() {
-            if (is.null(private$cache$orphan_nodes)) {
-                private$cache$orphan_nodes <- private$identify_orphan_nodes()
-            }
-            return(private$cache$orphan_nodes)
-        },
-        layout_type = function(value) {
-
+        layout_type = function(layout) {
             # If the person isn't using <- assignment, return the cached value
-            if (!missing(value)) {
-                if (!value %in% names(private$graph_layout_functions)) {
-                    log_fatal(paste("Unsupported layout_type:", value))
-                }
+            if (!missing(layout)) {
+                # Input validation
+                assertthat::assert_that(
+                    layout %in% .igraphAvailableLayouts()
+                    , msg = sprintf(
+                        "%s is not a supported layout by igraph. See documentation."
+                        , layout
+                    )
+                )
+                # Reset graph viz if it already exists
                 if (!is.null(private$cache$graph_viz)) {
                     private$reset_graph_viz()
                 }
-                private$private_layout_type <- value
+
+                private$private_layout_type <- layout
             }
             return(private$private_layout_type)
-        },
-        orphan_node_clustering_threshold = function(value) {
-
-            # If the person isn't using <- assignment, return the cached value
-            if (!missing(value)) {
-                if (class(value) != 'numeric') {
-                    log_fatal("orphan_node_clustering_threshold must be numeric.")
-                }
-
-                if (value < 1) {
-                    log_fatal("orphan_node_clustering_threshold must at least 1.")
-                }
-
-                # Set new value and reset graph viz
-                if (!is.null(private$cache$graph_viz)) {
-                    private$reset_graph_viz()
-                }
-                private$private_orphan_node_clustering_threshold <- value
-            }
-            return(private$private_orphan_node_clustering_threshold)
         }
     ),
 
@@ -118,12 +96,11 @@ AbstractGraphReporter <- R6::R6Class(
             edges = NULL,
             pkg_graph = NULL,
             network_measures = NULL,
-            graph_viz = NULL,
-            orphan_nodes = NULL
+            graph_viz = NULL
         ),
 
-        private_orphan_node_clustering_threshold = 10,
-        private_layout_type = "tree",
+        # Default graph viz layout
+        private_layout_type = "layout_nicely",
 
         # Calculate graph-related measures for pkg_graph
         calculate_network_measures = function(){
@@ -178,16 +155,30 @@ AbstractGraphReporter <- R6::R6Class(
             #--------------------------------------------------------------#
 
             #--------------#
-            # Number of Decendants - a.k.a neightborhood or ego
+            # Size of Out-Subgraph - meaning the rooted graph out from a node
+            # computed using out-neighborhood with order of longest possible path
             #--------------#
-            neighborHoodSizeResult <- igraph::neighborhood.size(
+            numOutNodes <- igraph::neighborhood.size(
                 graph = pkg_graph
                 , order = vcount(pkg_graph)
                 , mode = "out"
             )
 
             # update data.tables
-            outNodeDT[, numDescendants := neighborHoodSizeResult] # nodes
+            outNodeDT[, outSubgraphSize := numOutNodes] # nodes
+
+            #--------------#
+            # Size of In-Subgraph - meaning the rooted graph into a node
+            # computed using in-neighborhood with order of longest possible path
+            #--------------#
+            numInNodes <- igraph::neighborhood.size(
+                graph = pkg_graph
+                , order = vcount(pkg_graph)
+                , mode = "in"
+            )
+
+            # update data.tables
+            outNodeDT[, inSubgraphSize := numInNodes] # nodes
 
             #--------------#
             # Hub Score
@@ -313,36 +304,27 @@ AbstractGraphReporter <- R6::R6Class(
 
             log_info("Creating plot...")
 
-            # TODO:
-            # Open these up to users or remove all the active binding code
-            self$layout_type <- "tree"
-            self$orphan_node_clustering_threshold <- 10
+            log_info(paste("Using igraph layout:", self$layout_type))
+
+            ## FORMAT NODES ##
 
             # format for plot
             plotDTnodes <- data.table::copy(self$nodes) # Don't modify original
             plotDTnodes[, id := node]
             plotDTnodes[, label := id]
 
-            log_info(paste("Plotting with layout:", self$layout_type))
-            plotDTnodes <- private$calculate_graph_layout(
-                plotDT = plotDTnodes
-            )
+            ## Color Nodes
 
-            if (length(self$edges) > 0) {
-                plotDTedges <- data.table::copy(self$edges) # Don't modify original
-                plotDTedges[, from := SOURCE]
-                plotDTedges[, to := TARGET]
-                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
-            } else {
-                plotDTedges <- NULL
-            }
+            # Flag for us to do stuff later
+            colorByGroup <- FALSE
 
-            # Color By Field
+            # If no field specified, use uniform color for all nodes
             if (is.null(private$plotNodeColorScheme[['field']])) {
 
                 # Default Color for all Nodes
                 plotDTnodes[, color := private$plotNodeColorScheme[['palette']]]
 
+            # Otherwise use specified field to color node
             } else {
 
                 # Fetch Color Scheme Values
@@ -357,23 +339,30 @@ AbstractGraphReporter <- R6::R6Class(
                 }
 
                 colorFieldPalette <- private$plotNodeColorScheme[['palette']]
-                colorFieldValues <- plotDTnodes[[colorFieldName]]
-                log_info(sprintf("Coloring plot nodes by %s..."
-                                 , colorFieldName))
+                colorFieldValues <- plotDTnodes[, unique(get(colorFieldName))]
+                log_info(sprintf("Coloring plot nodes by %s...", colorFieldName))
 
-                # If colorFieldValues are character
+                # If colorFieldValues are character or factor
+                # then we are coloring by group
                 if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
 
                     # Create palette by unique values
-                    valCount <- data.table::uniqueN(colorFieldValues)
+                    valCount <- length(colorFieldValues)
                     newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
 
                     # For each character value, update all nodes with that value
-                    plotDTnodes[, color := newPalette[.GRP]
-                                , by = list(get(colorFieldName))]
+                    plotDTnodes[, color := newPalette[.GRP], by = get(colorFieldName)]
 
+                    # Set the group column to the field
+                    plotDTnodes[, group := get(colorFieldName)]
+
+                    # Set flag for us to build a legend in the graph viz later
+                    colorByGroup <- TRUE
+
+                # If colorFieldValues are numeric, assume continuous variable
+                # Then we want to create a continuous palette
                 } else if (is.numeric(colorFieldValues)) {
-                    # If colorFieldValues are numeric, assume continuous
+
 
                     # Create Continuous Color Palette
                     newPalette <- grDevices::colorRamp(colors = colorFieldPalette)
@@ -387,47 +376,88 @@ AbstractGraphReporter <- R6::R6Class(
                     # NA Values get gray color
                     plotDTnodes[is.na(scaledColorValues), color := "gray"]
 
+                # If none of the above, something is wrong
                 } else {
                     # Error Out
-                    log_fatal(sprintf(paste0("A character, factor, or numeric field can be used to color nodes. "
-                                             , "Field %s is of type %s.")
-                                      , colorFieldName
-                                      , typeof(colorFieldValues)
+                    log_fatal(
+                        sprintf(
+                            paste0("A character, factor, or numeric field can be used to color nodes. "
+                                , "Field %s is of type %s.")
+                            , colorFieldName
+                            , typeof(colorFieldValues)
+                        )
                     )
-                    )
-
                 } # end non-default color field
+            } # end color setting
 
-            } # end color field creation
+            # Order nodes alphabetically to make them easier to find in dropdown
+            data.table::setkeyv(plotDTnodes, 'id')
 
-            # If threshold to group orphan nodes, then assign group
-            numOrphanNodes <- length(self$orphanNodes)
-            numOrphanThreshold <- self$orphan_node_clustering_threshold
-            if (numOrphanNodes > numOrphanThreshold) {
-                log_info(paste(sprintf("Number of orphan nodes %s exceeds orphanNodeClusteringThreshold %s."
-                                       , numOrphanNodes
-                                       , numOrphanThreshold
-                )
-                , "Clustering orphan nodes..."
-                ))
-                plotDTnodes[, group := NA_character_]
-                plotDTnodes[node %in% self$orphan_nodes, group := "orphan"]
+            ## END FORMAT NODES##
+
+            ## FORMAT EDGES ##
+
+            if (length(self$edges) > 0) {
+                plotDTedges <- data.table::copy(self$edges) # Don't modify original
+                plotDTedges[, from := SOURCE]
+                plotDTedges[, to := TARGET]
+                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+            } else {
+                plotDTedges <- NULL
             }
+
+            ## END FORMAT EDGES ##
 
             # Create Plot
-            g <- visNetwork::visNetwork(nodes = plotDTnodes
-                                        , edges = plotDTedges) %>%
-                visNetwork::visHierarchicalLayout(sortMethod = "directed"
-                                                  , direction = "UD") %>%
-                visNetwork::visEdges(arrows = 'to') %>%
-                visNetwork::visOptions(highlightNearest = list(enabled = TRUE
-                                                               , degree = nrow(plotDTnodes) # guarantee full path
-                                                               , algorithm = "hierarchical"))
+            g <- (visNetwork::visNetwork(nodes = plotDTnodes
+                                        , edges = plotDTedges)
+                %>% visNetwork::visIgraphLayout(layout = self$layout_type)
+                %>% visNetwork::visEdges(arrows = 'to')
 
-            # Add orphan node clustering
-            if (numOrphanNodes > numOrphanThreshold) {
-                g <- g %>% visNetwork::visClusteringByGroup(groups = c("orphan"))
+                # Default options
+                %>% visNetwork::visOptions(
+                        highlightNearest = list(
+                            enabled = TRUE
+                            , degree = nrow(plotDTnodes) # guarantee full path
+                            , algorithm = "hierarchical"
+                        )
+                    , nodesIdSelection = TRUE
+                )
+            )
+
+
+            if (colorByGroup) {
+                # Add group definitions
+                log_info(paste(colorFieldValues))
+                for (groupVal in colorFieldValues) {
+                    thisGroupColor <- plotDTnodes[
+                            get(colorFieldName) == groupVal
+                            , color
+                        ][1]
+                    g <- visNetwork::visGroups(
+                        graph = g
+                        , groupname = groupVal
+                        , color = thisGroupColor
+                    )
+                }
+
+                # Add legend
+                # but it is broken if there is only one level
+                # so hard-code for now to skip if there is only one level
+                # TODO: remove if statement when the following issue is resolved:
+                # https://github.com/datastorm-open/visNetwork/issues/290
+                if (length(colorFieldValues) > 1) {
+                    g <- visNetwork::visLegend(
+                        graph = g
+                        , position = "right"
+                        , main = list(
+                            text = colorFieldName
+                            , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'
+                        )
+                    )
+                }
             }
+
 
             log_info("Done creating plot.")
 
@@ -442,49 +472,19 @@ AbstractGraphReporter <- R6::R6Class(
             log_info('Resetting cached graph_viz...')
             private$cache$graph_viz <- NULL
             return(invisible(NULL))
-        },
-
-        # Identify orphan nodes
-        identify_orphan_nodes = function() {
-            orphan_nodes <- base::setdiff(
-                self$nodes[, node]
-                , unique(c(self$edges[, SOURCE], self$edges[, TARGET]))
-            )
-            
-            # If there are none, then will be character(0)
-            return(orphan_nodes)
-        },
-
-        graph_layout_functions = list(
-            "tree" = function(pkg_graph) {igraph::layout_as_tree(pkg_graph)},
-            "circle" = function(pkg_graph) {igraph::layout_in_circle(pkg_graph)}
-        ),
-
-        calculate_graph_layout = function(plotDT) {
-
-            log_info(paste("Calculating graph layout for type:", self$layout_type))
-
-            # Calculate positions for specified layout_type
-            graph_func <- private$graph_layout_functions[[self$layout_type]]
-            plotMat <- graph_func(self$pkg_graph)
-
-            # It might be important to get the nodes from pkg_graph so that they
-            # are in the same order as in plotMat?
-            coordsDT <- data.table::data.table(
-                node = names(igraph::V(self$pkg_graph))
-                , level = plotMat[, 2]
-                , horizontal = plotMat[, 1]
-            )
-
-            # Merge coordinates with plotDT
-            plotDT <- merge(
-                x = plotDT
-                , y = coordsDT
-                , by = 'node'
-                , all.x = TRUE
-            )
-
-            return(plotDT)
         }
+
     )
 )
+
+# [title] Available Graph Layout Functions from igraph
+# [name] .igraphAvailableLayouts
+# [description] Returns available \link[igraph:layout_]{igraph layout function}
+# names. These names can be passed to
+# \code{\link[visNetwork:visIgraphLayout]{visNetwork::visIgraphLayout}} or set
+# as the \code{layout_type} for any reporters that inherit from
+# \code{\link{AbstractGraphReporter}}.
+# [return] a character vector of igraph layout function names
+.igraphAvailableLayouts <- function() {
+    return(grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE))
+}

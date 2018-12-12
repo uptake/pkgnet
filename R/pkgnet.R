@@ -24,6 +24,13 @@ globalVariables(c('.'
                   ,'xend'
                   ,'y'
                   ,'yend'
+                  , 'CLASS_NAME'
+                  , 'MATCH'
+                  , 'METHOD_NAME'
+                  , 'METHOD_TYPE'
+                  , 'PARENT_IN_PKG'
+                  , 'PARENT_NAME'
+                  , 'SYMBOL'
                   ))
 
 # NULL object for common parameter documentation

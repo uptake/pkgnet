@@ -12,8 +12,18 @@ params:
    pkg_name: params$pkg_name
 ---
 
+<style>
+    body .main-container {
+        max-width: 80%;
+    }
+</style>
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
+knitr::opts_chunk$set(
+    echo = FALSE
+    , warning=FALSE
+    , out.width='100%'
+)
 pkgnet:::silence_logger()
 ```
 

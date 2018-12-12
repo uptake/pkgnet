@@ -90,6 +90,8 @@ DependencyReporter <- R6::R6Class(
     ),
 
     private = list(
+        # Default graph viz layout
+        private_layout_type = "layout_as_tree",
 
         dep_types = NULL,
         ignore_packages = NULL,
@@ -173,12 +175,15 @@ DependencyReporter <- R6::R6Class(
                 log_fatal(sprintf(msg, self$pkg_name, paste(private$dep_types, collapse = ", ")))
             }
 
+            # If pkg A depends on pkg B, then A -> B
+            # A is the SOURCE and B is the TARGET
+            # This is UML dependency convention
             edges <- data.table::rbindlist(lapply(
                 names(dependencyList),
                 function(pkgN){
                     data.table::data.table(
-                        SOURCE = dependencyList[[pkgN]]
-                        , TARGET = rep(pkgN,length(dependencyList[[pkgN]]))
+                        SOURCE = rep(pkgN, length(dependencyList[[pkgN]]))
+                        , TARGET = dependencyList[[pkgN]]
                     )
                 }
             ))
@@ -236,5 +241,16 @@ DependencyReporter <- R6::R6Class(
             }
             return(outPackages)
         }
-    )
+
+        , plot_network = function() {
+            g <- super$plot_network()
+
+            g <- (g
+                  %>% visNetwork::visHierarchicalLayout(
+                      sortMethod = "directed"
+                      , direction = "UD")
+            )
+            return(g)
+        }
+    ) # /private
 )
