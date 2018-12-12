@@ -157,6 +157,57 @@ test_that("FunctionReporter rejects bad packages with an informative error", {
     }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
 })
 
+### NETWORK EXTRACTION HELPER FUNCTIONS
+
+test_that(".parse_function correctly parses expressions for symbols", {
+    # Correctly parses body of function and finds all function symbols
+    expect_true({
+        myfunc <- function() {
+            x <- innerfunc1()
+            y <- innerfunc2()
+            z <- innerfunc3(innerfunc4())
+            2+2
+        }
+        result <- pkgnet:::.parse_function(body(myfunc))
+        all(c("innerfunc1", "innerfunc2", "innerfunc3", "innerfunc4") %in% result)
+    })
+})
+
+test_that(".parse_function correctly ignores right side of list extraction", {
+    # Correctly keeps left side of $ but drops right side of $
+    expect_true({
+        result <- pkgnet:::.parse_function(quote(myfunc()$listitem))
+        "myfunc" %in% result & !("listitem" %in% result)
+    })
+})
+
+test_that(".parse_R6_expression correctly parses expressions for symbols", {
+    # Correctly parses body of function and finds all function symbols
+    expect_true({
+        myr6method <- function() {
+            x <- regularfunc1()
+            z <- regularfunc2(regularfunc3())
+            self$public_method()
+            self$active_binding <- "new_value"
+            private$private_method
+            2+2
+        }
+        result <- pkgnet:::.parse_R6_expression(body(myr6method))
+        all(c("regularfunc1", "regularfunc2", "regularfunc3", "self$public_method"
+            , "self$active_binding", "private$private_method"
+        ) %in% result)
+    })
+})
+
+test_that(".parse_R6_expression correctly ignores right side of list extraction", {
+    # Correctly keeps left side of $ but drops right side of $ for non-keywords
+    expect_true({
+        result <- pkgnet:::.parse_function(quote(myfunc()$listitem))
+        "myfunc" %in% result & !("listitem" %in% result)
+    })
+})
+
+
 ##### TEST TEAR DOWN #####
 
 futile.logger::flog.threshold(origLogThreshold)

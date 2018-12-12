@@ -30,6 +30,20 @@
 #'         }
 #'     }
 #' }
+#' @section Known Limitations:
+#' \itemize{
+#'     \item{Using non-standard evaluation to refer to things (e.g, dataframe column names)
+#'     that have the same name as a function will trick \code{FunctionReporter} into thinking
+#'     the function was called. This can be avoided if you don't use reuse function names
+#'     for other purposes.}
+#'     \item{Functions stored as list items and not assigned to the package namespace
+#'     will be invisible to \code{FunctionReporter}.}
+#'     \item{Calls to methods of instantiated R6 or reference objects will not be recognized.
+#'     We don't have a reliable way of identifying instantiated objects, or identifying
+#'     their class.}
+#'     \item{Reference class methods are not yet supported. They will not be idenified
+#'     as nodes by \code{FunctionReporter}.}
+#' }
 #' @importFrom covr package_coverage
 #' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder rbindlist
 #' @importFrom DT datatable formatRound
@@ -382,7 +396,17 @@ FunctionReporter <- R6::R6Class(
     listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
     if (!is.list(x) && listable) {
         x <- as.list(x)
+
+        # Check for expression of the form foo$bar
+        # We still want to split it up because foo might be a function
+        # but we want to get rid of bar, because it's a symbol in foo's namespace
+        # and not a symbol that could be reliably matched to the package namespace
+        if (identical(x[[1]], quote(`$`))) {
+            x <- x[1:2]
+        }
     }
+
+
 
     if (listable){
         # Filter out atomic values because we don't care about them
@@ -613,14 +637,27 @@ FunctionReporter <- R6::R6Class(
     if (!is.list(x) && listable) {
         xList <- as.list(x)
 
-        # Check if expression x is of form self$foo, private$foo, or super$foo
-        if (identical(xList[[1]], quote(`$`))
-            && (identical(xList[[2]], quote(self))
+        # Check if expression x is from _$_
+        if (identical(xList[[1]], quote(`$`))) {
+
+            # Check if expression x is of form self$foo, private$foo, or super$foo
+            # We want to keep those together because they could refer to the class'
+            # methods. So expression is not listable
+            if (identical(xList[[2]], quote(self))
                 || identical(xList[[2]], quote(private))
-                || identical(xList[[2]], quote(super))
-                )
-        ) {
-            listable <- FALSE
+                || identical(xList[[2]], quote(super))) {
+                listable <- FALSE
+
+            # If expression lefthand side is not keyword, we still want to split
+            # it up because left might be a function
+            # but we want to get rid of right, because it's a symbol in left's namespace
+            # and not a symbol that could be reliably matched to the package namespace
+            } else {
+                x <- xList
+                x <- x[1:2]
+            }
+
+        # Otherwise list as usual
         } else {
             x <- xList
         }
