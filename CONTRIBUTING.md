@@ -69,7 +69,7 @@ The code in this project should follow a standard set of conventions for style i
 
 We use [roxygen2](https://github.com/klutometis/roxygen) to auto-generate our dependency lists in the package's `NAMESPACE` file. If you use a function from any package other than this package and `base`, you need to add `#' @importFrom package_name function_name` in the roxygen documentation of the function you are adding this call to.
 
-All function non-base funciton calls should be namespaced with `::`. For example:
+All function non-base function calls should be namespaced with `::`. For example:
 
 ```{r}
 #' @importFrom data.table data.table
@@ -97,7 +97,7 @@ some_vector <- c(TRUE, FALSE, FALSE)
 Longer calls should use indentation of the following form:
 
 ```{r}
-sample_ist <- list(
+sample_list <- list(
     norm_sample = rnorm(100)
     , unif_sample = runif(100)
     , t_sample = rt(100, df = 100)
@@ -140,7 +140,7 @@ For example, the code below would be an acceptable submission for a function tha
 ```{r}
 #' @title Plot Random Numbers
 #' @name plot_random_numbers
-#' @description Given a positive integer, generate two random drawns from the standard normal distribution and plot them against each other
+#' @description Given a positive integer, generate two random draws from the standard normal distribution and plot them against each other
 #' @param num_samples A positive integer indicating the number of samples. Default is 100.
 #' @importFrom data.table data.table
 #' @importFrom graphics plot
@@ -173,7 +173,7 @@ For example:
 ```{r}
 #' @title Plot Random Numbers
 #' @name RandomNumberPlotter
-#' @description Given a positive integer, generate two random drawns from 
+#' @description Given a positive integer, generate two random draws from 
 #'              the standard normal distribution and plot them against each other
 #' @section Class Constructor:
 #' \describe{
@@ -249,19 +249,24 @@ However, these options can lengthen your testing cycle and make the process of c
 
 ## Releasing to CRAN <a name="cran"></a>
 
-Once substantial time has passed or significant changes have been made to `pkgnet`, a new release should be pushed to [CRAN](https://cran.r-project.org). This is a manual proces, with the following steps.
+Once substantial time has passed or significant changes have been made to `pkgnet`, a new release should be pushed to [CRAN](https://cran.r-project.org). 
+
+This is the exclusively the responsibility of the package maintainer, but is documented here for our own reference and to reflect the consensus reached between the maintainer and other contributors.
+
+This is a manual process, with the following steps.
 
 ### Open a PR 
 
 Open a PR with a branch name `release/v0.0.0` (replacing 0.0.0 with the actual version number).
 
-Add a section for this release to `cran-comments.md`. This file holds details of CRAN's responses to our feedback.
+Add a section for this release to `cran-comments.md`. This file holds details of CRAN's responses to our submission.
 
 Change the `Version:` field in `DESCRIPTION` to the official version you want on CRAN (should not have a trailing `.9000`).
 
 Rebuild the documentation by running:
 
 ```
+Rscript -e "devtools::document()"
 Rscript -e "install.packages('pkgdown', repos = 'cran.rstudio.com')"
 Rscript -e "pkgdown::build_site()"
 ```
@@ -290,9 +295,9 @@ If the submission is not accepted, do whatever CRAN asked you to do. Update `cra
 
 Once the submission is accepted, great! Update `cran-comments.md` and merge the PR.
 
-### Create a Release on Github
+### Create a Release on GitHub
 
-We use [the releases section](https://github.com/UptakeOpenSource/pkgnet/releases) in the repo to categorize certain important commits as release checkpoints. This makes it easier for developers to associate chagnes in the source code with the release history on CRAN, and enables features like `devtools::install_github()` for old versions.
+We use [the releases section](https://github.com/UptakeOpenSource/pkgnet/releases) in the repo to categorize certain important commits as release checkpoints. This makes it easier for developers to associate changes in the source code with the release history on CRAN, and enables features like `devtools::install_github()` for old versions.
 
 Navigate to https://github.com/UptakeOpenSource/pkgnet/releases/new. Click the dropdown in the "target" section, then click "recent commits". Choose the latest commit for the release PR you just merged. This will automatically create a [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) on that commit and tell Github which revision to build when people ask for a given release.
 
