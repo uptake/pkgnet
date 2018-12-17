@@ -247,7 +247,7 @@ However, these options can lengthen your testing cycle and make the process of c
 ./test.sh
 ```
 
-## Releasing to CRAN <a name="cran"></a>
+## Releasing to CRAN (for maintainer) <a name="cran"></a>
 
 Once substantial time has passed or significant changes have been made to `pkgnet`, a new release should be pushed to [CRAN](https://cran.r-project.org). 
 
