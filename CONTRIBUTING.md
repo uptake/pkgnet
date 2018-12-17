@@ -259,7 +259,9 @@ This is a manual process, with the following steps.
 
 Open a PR with a branch name `release/v0.0.0` (replacing 0.0.0 with the actual version number).
 
-Add a section for this release to `cran-comments.md`. This file holds details of CRAN's responses to our submission.
+Add a section for this release to `NEWS.md`.  This file details the new features, changes, and bug fixes that occured since the last version.  
+
+Add a section for this release to `cran-comments.md`. This file holds details of our submission comments to CRAN and their responses to our submissions.  
 
 Change the `Version:` field in `DESCRIPTION` to the official version you want on CRAN (should not have a trailing `.9000`).
 
