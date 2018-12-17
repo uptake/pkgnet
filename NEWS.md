@@ -1,7 +1,7 @@
 # Version 0.3.0
 
 ## NEW FEATURES
-* `InheritanceReporter`, a reporter to surface the R6 or S4 relationships within a package.  
+* InheritanceReporter, a reporter for R6, Reference, and S4 class inheritance relationships within a package.
 * Dropdown menu in graph visualizations for node selection.
 
 ## CHANGES
