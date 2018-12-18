@@ -1,4 +1,4 @@
-# Version 0.3.0
+# pkgnet 0.3.0
 
 ## NEW FEATURES
 * `InheritanceReporter`, a reporter for R6, Reference, and S4 class inheritance relationships within a package. ([#14](https://github.com/UptakeOpenSource/pkgnet/issues/14), [#129](https://github.com/UptakeOpenSource/pkgnet/pull/129))
