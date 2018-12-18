@@ -7,7 +7,7 @@ The goal of this guide is to help you contribute to `pkgnet` as quickly and as e
 2. [Submitting a Pull Request](#prs)
 3. [Code Style](#style)
 4. [Running Tests Locally](#testing)
-5. [Releasing to CRAN](#cran)
+5. [Releasing to CRAN (for maintainer)](#cran)
 
 ## Creating an Issue <a name="issues"></a>
 
