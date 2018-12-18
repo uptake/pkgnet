@@ -19,3 +19,6 @@ pkgnet.Rcheck/*
 
 # Compiled vignette
 inst/doc/*
+
+# aspell stuff
+**/*.bak
