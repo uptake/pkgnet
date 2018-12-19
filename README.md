@@ -11,7 +11,7 @@
 - examining the recursive dependencies you are taking on by using a given package
 - exploring the structure of a new package provided by a coworker or downloaded from the internet
 
-![](/man/figures/demo.gif)
+![](https://raw.githubusercontent.com/UptakeOpenSource/pkgnet/master/readme_figures/demo.gif)
 
 # Table of contents
 1. [How it Works](#howitworks)
