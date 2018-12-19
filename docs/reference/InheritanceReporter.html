@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Abstract Package Reporter Class — AbstractPackageReporter • pkgnet</title>
+<title>Package Class Inheritance Reporter Class — InheritanceReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,35 @@
 
 
 
-<meta property="og:title" content="Abstract Package Reporter Class — AbstractPackageReporter" />
+<meta property="og:title" content="Package Class Inheritance Reporter Class — InheritanceReporter" />
 
-<meta property="og:description" content="Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality." />
+<meta property="og:description" content="This reporter takes a package and traces the class inheritance
+  structure. Currently the following object-oriented systems are supported:
+S4 Classes
+Reference Classes (sometimes informally called &quot;R5&quot;)
+R6 Classes
+S3 classes are not supported, as their inheritance is defined on an ad hoc
+  basis per object and not formally by class definitions.
+Note the following details about class naming:
+Reference Classes : The name passed as Class in
+      setRefClass is used as the node
+      name by this reporter. This is the class name that is used when
+      specifying inheritance. The generator object returned by
+      setRefClass does not have to be
+      assigned and can have a different name.
+R6 Classes : The name of the generator object in the package
+      namespace is used as the node name by this reporter. The generator
+      object returned by R6::R6Class is what is
+      used when specifying inheritance. The name passed as classname
+      passed to R6::R6Class can be a different name
+      or even NULL.
+" />
+
+<meta property="og:description" content="For more info about R's built-in object-oriented systems, check out the
+  relevant chapter in Hadley
+  Wickham's Advanced R. For more info about R6, check out their
+  docs website or the chapter in
+  Advanced R's second edition." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,20 +128,44 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Abstract Package Reporter Class</h1>
-    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/AbstractPackageReporter.R'><code>R/AbstractPackageReporter.R</code></a></small>
-    <div class="hidden name"><code>AbstractPackageReporter.Rd</code></div>
+    <h1>Package Class Inheritance Reporter Class</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/PackageInheritanceReporter.R'><code>R/PackageInheritanceReporter.R</code></a></small>
+    <div class="hidden name"><code>InheritanceReporter.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Defines the Abstract Class for all PackageReporters defined in pkgnet.
-             The class is not meant to be instantiated, but inherited from and its methods
-             overloaded such that each Metric implements certain functionality.</p>
+    <p>This reporter takes a package and traces the class inheritance
+  structure. Currently the following object-oriented systems are supported:</p><ul>
+<li><p>S4 Classes</p></li>
+<li><p>Reference Classes (sometimes informally called "R5")</p></li>
+<li><p>R6 Classes</p></li>
+</ul><p>S3 classes are not supported, as their inheritance is defined on an ad hoc
+  basis per object and not formally by class definitions.</p>
+<p>Note the following details about class naming:</p><ul>
+<li><p>Reference Classes : The name passed as <code>Class</code> in
+      <code><a href='https://www.rdocumentation.org/packages/methods/topics/refClass'>setRefClass</a></code> is used as the node
+      name by this reporter. This is the class name that is used when
+      specifying inheritance. The generator object returned by
+      <code><a href='https://www.rdocumentation.org/packages/methods/topics/refClass'>setRefClass</a></code> does not have to be
+      assigned and can have a different name.</p></li>
+<li><p>R6 Classes : The name of the generator object in the package
+      namespace is used as the node name by this reporter. The generator
+      object returned by <code><a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a></code> is what is
+      used when specifying inheritance. The name passed as <code>classname</code>
+      passed to <code><a href='https://www.rdocumentation.org/packages/R6/topics/R6Class'>R6::R6Class</a></code> can be a different name
+      or even NULL.</p></li>
+</ul>
+
+    <p>For more info about R's built-in object-oriented systems, check out the
+  relevant chapter in <a href='http://adv-r.had.co.nz/OO-essentials.html'>Hadley
+  Wickham's <em>Advanced R</em></a>. For more info about R6, check out their
+  <a href='https://r6.r-lib.org/index.html'>docs website</a> or the chapter in
+  <a href='https://adv-r.hadley.nz/r6.html'><em>Advanced R</em>'s second edition</a>.</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>AbstractPackageReporter</span></pre>
+    <pre class="usage"><span class='no'>InheritanceReporter</span></pre>
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
@@ -127,25 +175,24 @@
 
     
     <dl class='dl-horizontal'>
-    <dt><code>set_package(pkg_name, pkg_path = NULL)</code></dt><dd><p><ul>
-<li><p>Set the package that all operations in the object are done for.</p></li>
+    <dt><code>set_package(pkg_name, pkg_path)</code></dt><dd><p><ul>
+<li><p>Set properties of this reporter. If pkg_name overrides a
+                previously-set package name, any cached data will be removed.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>pkg_name</code></b>: A string with the name of the package you are
-                  analyzing.</p></li>
+<li><p><b><code>pkg_name</code></b>: String with the name of the package.</p></li>
 <li><p><b><code>pkg_path</code></b>: Optional directory path to source
                   code of the package. It is used for calculating test coverage.
                   It can be an absolute or relative path.</p></li>
 </ul></p></li>
 </ul></p></dd>
-    <dt><code>get_summary_view()</code></dt><dd><p><ul>
-<li><p>Returns a particular reporters summary report on the package for use in a high level view</p></li>
-</ul></p></dd>
 </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other AbstractReporters: <code><a href='AbstractGraphReporter.html'>AbstractGraphReporter</a></code></p></div>
+    <div class='dont-index'><p>Other PackageReporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
+  <code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
+  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
     
 
   </div>
