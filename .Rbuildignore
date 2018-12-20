@@ -52,6 +52,7 @@ vignettes/*\.pdf
 
 # Readme files
 ^readme_figures/.*
+^readme_figures
 
 # Stuff
 .Rbuildignore
