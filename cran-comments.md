@@ -5,8 +5,12 @@
 ### Upcoming submission [ETA December 19th, 2018]
 
 #### Message
-This is a major release with several improvements to R package diagnostics, report layout, and testing strategy.  New features and changes are now being tracked in NEWS.md.
+R package diagnostics, report layout, and testing 
+  strategy.  New features and changes are now being 
+  tracked in NEWS.md.  
 
+This NEWS.md file and all 
+  source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
 
 ---
 
