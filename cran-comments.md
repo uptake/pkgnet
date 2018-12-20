@@ -2,15 +2,31 @@
 
 ## v 0.3.0  
 
-### Upcoming submission [ETA December 19th, 2018]
+### Submission on December 19th, 2018
+> This is a major release with several improvements to 
+> R package diagnostics, report layout, and testing 
+> strategy.  New features and changes are now being 
+> tracked in NEWS.md.  
+>
+> This NEWS.md file and all 
+> source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+  
+### CRAN Response on December 20th, 2018 (Paraphrased)
 
-#### Message
-R package diagnostics, report layout, and testing 
-  strategy.  New features and changes are now being 
-  tracked in NEWS.md.  
+> Dear maintainer,
+>
+> package pkgnet_0.3.0.tar.gz does not pass the incoming checks automatically, please see the following pre-tests: Windows (2 ERRORs) & Debian (1 ERROR)
+>
+> ...
+>
+> Please fix all problems and resubmit a fixed version via the webform.
+>
+> ...
+>
+> Best regards,
+> CRAN teams' auto-check service
 
-This NEWS.md file and all 
-  source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+See [#154](https://github.com/UptakeOpenSource/pkgnet/pull/154) for the issue description and fix. 
 
 ---
 
@@ -18,9 +34,9 @@ This NEWS.md file and all
 
 ### Submission on November 1st, 2018
 
-This is a minor release to address a bug with the `report_path` parameter of `CreatePackageReport`.  Prior to this fix, reports would continue to be saved to a default location rather than the file path supplied by the user.  
+>This is a minor release to address a bug with the `report_path` parameter of `CreatePackageReport`.  Prior to this fix, reports would continue to be saved to a default location rather than the file path supplied by the user.  
 
-Other items in this release are typo corrections, some additional parameter checks, and more verbose error and info messages. 
+>Other items in this release are typo corrections, some additional parameter checks, and more verbose error and info messages. 
 
 ---
 
