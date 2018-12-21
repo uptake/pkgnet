@@ -7,7 +7,12 @@
 # [return]  boolean TRUE
 .BuildTestLib <- function(targetLibPath){
 
-    ### find PKGNET source dir within devtools::test(), R CMD CHECK, and vignette building
+    ### Find pkgnet and test package source directory ###
+
+    # Within devtools::test(), R CMD CHECK, and vignette building. Depending on
+    # what is running the test, the directory structure is different so we need
+    # to figure out which case we have and navigate to the right place
+
     # NOTE: this can be fragile. Uncomment the lines with "# [DEBUG]" and run test.sh
     #       from the repo root if something goes wrong
 
@@ -16,16 +21,28 @@
     # [DEBUG] write(list.files(getwd(), recursive = TRUE), file = "~/thing.txt", append = TRUE)
     # [DEBUG] write(paste0("working dir: ", getwd()), file = "~/thing.txt", append = TRUE)
 
-    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = getwd())
+    pkgnetSourcePath <- getwd()
+
+    # For R CMD check
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
+
+    # For R CMD check on some Windows that explicitly install 64 bit
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests_x64/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests_x64$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
+
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet/vignettes$', replacement = '/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('pkgnet/tests/testthat', replacement = 'pkgnet', x = pkgnetSourcePath)
-    pkgnetSourcePath <- gsub('/pkgnet/pkgnet-tests/testthat', replacement = '/pkgnet', x = pkgnetSourcePath) # covr
-    pkgnetSourcePath <- gsub('/pkgnet/pkgnet-tests', replacement = '/pkgnet', x = pkgnetSourcePath) # covr
+
+    # For covr
+    pkgnetSourcePath <- gsub('/pkgnet/pkgnet-tests/testthat', replacement = '/pkgnet', x = pkgnetSourcePath)
+    pkgnetSourcePath <- gsub('/pkgnet/pkgnet-tests', replacement = '/pkgnet', x = pkgnetSourcePath)
 
     # [DEBUG] write(paste0("pkgnet path: ", pkgnetSourcePath), file = "~/thing.txt", append = TRUE)
     # [DEBUG] write(list.files(pkgnetSourcePath, recursive = TRUE), file = "~/thing.txt", append = TRUE)
+
+    ######
 
     # Check if there is an inst directory in pkgnetSource.
     # If there is an inst directory (because of raw package copy) then look in there
@@ -49,21 +66,11 @@
 
     ### Install
 
-    # Figure out where R is to avoid those weird warnings about
-    # 'R' should not be used without a path -- see par. 1.6 of the manual.
-    #
-    # NOTE: R CMD CHECK comes with its own bundled "R" binary which doesn't
-    #       work the same way and causes that error. Just trust me on this.
-    #
-    # NOTE: "Sys.which()" would be the correct, portable way to do this but it
-    # doesn't support matching ALL matches.
-    #
-    if (.Platform$OS.type == 'windows'){
-        R_LOCS <- system("where R", intern = TRUE)
-    } else {
-        R_LOCS <- system("which -a R", intern = TRUE)
-    }
-    R_LOC <- R_LOCS[!grepl("R_check_bin", R_LOCS)][1]
+    # Figure out where R is to use the current R binary to install the packages
+    # This guarantees you're using the right R binary, e.g., in case someone
+    # from CRAN is running RD CMD CHECK instead of R CMD CHECK
+    # https://stackoverflow.com/questions/33798115/command-to-see-r-path-that-rstudio-is-using
+    R_LOC <- file.path(R.home("bin"), "R")
 
     # force install of SOURCE (not binary) in temporary directory for tests
     cmdstr <- sprintf(
