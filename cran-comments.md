@@ -28,6 +28,11 @@
 
 See [#154](https://github.com/UptakeOpenSource/pkgnet/pull/154) for the issue description and fix. 
 
+### Resubmission on December 20th, 2018
+> The attached package addresses issues found earlier today in the CRAN teams' auto-check service.  It has been checked (via R CMD check --as-cran) on both R-core and R-devel versions today. 
+
+> This NEWS.md file and all source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+
 ---
 
 ## v 0.2.1
