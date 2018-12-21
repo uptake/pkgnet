@@ -33,6 +33,37 @@ See [#154](https://github.com/UptakeOpenSource/pkgnet/pull/154) for the issue de
 
 > This NEWS.md file and all source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
 
+### CRAN response on December 21st (Paraphrased)
+Dear maintainer,
+
+package pkgnet_0.3.0.tar.gz does not pass the incoming checks automatically, please see the following pre-tests:
+Windows: ...
+Status: 1 ERROR
+...
+Warning: invalid package 'd:/RCompile/CRANincoming/R-devel/pkgnet.Rcheck/tests_i386'
+...
+Best regards,
+CRAN teams' auto-check service
+Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
+
+### [Future] Resubmission on XXXX
+Apologies.  I believe we have remedied the functionality that did not pass i386 tests.  However, I cannot confirm as the last submission passed R CMD check on R-devel without issue.  Is there a seperate docker container I can use to check i386 compatibility.   
+
+This submission passes R CMD check tests on r-devel with two warnings regarding URLs that fail within the container but have been confirmed valid and pass on R CMD check on R-core outside the container. 
+
+Here is the version info: 
+```
+> RD CMD check --as-cran pkgnet_0.3.0.tar.gz
+* using log directory ‘/RPackage/pkgnet.Rcheck’
+* using R Under development (unstable) (2018-12-21 r75875)
+* using platform: x86_64-pc-linux-gnu (64-bit)
+...
+```
+
+The exact procedure I followed is outlined here: https://alexandereckert.com/post/testing-r-packages-with-latest-r-devel/
+
+All source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+
 ---
 
 ## v 0.2.1
