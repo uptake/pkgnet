@@ -66,21 +66,11 @@
 
     ### Install
 
-    # Figure out where R is to avoid those weird warnings about
-    # 'R' should not be used without a path -- see par. 1.6 of the manual.
-    #
-    # NOTE: R CMD CHECK comes with its own bundled "R" binary which doesn't
-    #       work the same way and causes that error. Just trust me on this.
-    #
-    # NOTE: "Sys.which()" would be the correct, portable way to do this but it
-    # doesn't support matching ALL matches.
-    #
-    if (.Platform$OS.type == 'windows'){
-        R_LOCS <- system("where R", intern = TRUE)
-    } else {
-        R_LOCS <- system("which -a R", intern = TRUE)
-    }
-    R_LOC <- R_LOCS[!grepl("R_check_bin", R_LOCS)][1]
+    # Figure out where R is to use the current R binary to install the packages
+    # This guarantees you're using the right R binary, e.g., in case someone
+    # from CRAN is running RD CMD CHECK instead of R CMD CHECK
+    # https://stackoverflow.com/questions/33798115/command-to-see-r-path-that-rstudio-is-using
+    R_LOC <- file.path(R.home("bin"), "R")
 
     # force install of SOURCE (not binary) in temporary directory for tests
     cmdstr <- sprintf(
