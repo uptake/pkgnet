@@ -30,13 +30,13 @@ See [#154](https://github.com/UptakeOpenSource/pkgnet/pull/154) for the issue de
 
 ### Resubmission on December 20th, 2018
 > The attached package addresses issues found earlier today in the CRAN teams' auto-check service.  It has been checked (via R CMD check --as-cran) on both R-core and R-devel versions today. 
-
+>
 > This NEWS.md file and all source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
 
 ### CRAN response on December 21st (Paraphrased)
-Dear maintainer,
-
-package pkgnet_0.3.0.tar.gz does not pass the incoming checks automatically, please see the following pre-tests:
+>Dear maintainer,
+>
+>package pkgnet_0.3.0.tar.gz does not pass the incoming checks automatically, please see the following pre-tests:
 Windows: ...
 Status: 1 ERROR
 ...
@@ -46,12 +46,16 @@ Best regards,
 CRAN teams' auto-check service
 Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 
-### [Future] Resubmission on XXXX
-Apologies.  I believe we have remedied the functionality that did not pass i386 tests.  However, I cannot confirm as the last submission passed R CMD check on R-devel without issue.  Is there a seperate docker container I can use to check i386 compatibility.   
-
-This submission passes R CMD check tests on r-devel with two warnings regarding URLs that fail within the container but have been confirmed valid and pass on R CMD check on R-core outside the container. 
-
-Here is the version info: 
+### Resubmission on January 2nd, 2019
+>Hello, 
+>
+>I hope you had a refreshing holiday break. 
+>
+>Apologies for the past issues with this build.  I believe we have remedied the functionality that did not pass i386 tests.  However, I cannot confirm this as the last submission alsopassed R CMD check on R-devel without issue.  Is there a separate docker container I can use to check i386 compatibility?   
+>
+>This submission passes R CMD check tests on r-devel with two warnings regarding URLs that fail within the container but have been confirmed valid and pass on R CMD check on R-core outside the container. 
+>
+>Here is the version info: 
 ```
 > RD CMD check --as-cran pkgnet_0.3.0.tar.gz
 * using log directory ‘/RPackage/pkgnet.Rcheck’
@@ -59,10 +63,14 @@ Here is the version info:
 * using platform: x86_64-pc-linux-gnu (64-bit)
 ...
 ```
-
-The exact procedure I followed is outlined here: https://alexandereckert.com/post/testing-r-packages-with-latest-r-devel/
-
-All source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+>
+>The exact procedure I followed is outlined here: https://alexandereckert.com/post/testing-r-packages-with-latest-r-devel/
+>
+>All source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+>
+>Sincerely, 
+>
+>Brian Burns (current pkgnet maintainer)
 
 ---
 
