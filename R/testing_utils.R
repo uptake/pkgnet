@@ -31,6 +31,11 @@
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests_x64/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests_x64$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
 
+    # For R CMD check on some Linux machines that explicitly install i386 
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests_i386/testthat$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
+    pkgnetSourcePath <- gsub('/pkgnet.Rcheck/tests_i386$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
+    
+    
     pkgnetSourcePath <- gsub('/pkgnet.Rcheck/vign_test/pkgnet$', replacement = '/pkgnet.Rcheck/00_pkg_src/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('/pkgnet/vignettes$', replacement = '/pkgnet', x = pkgnetSourcePath)
     pkgnetSourcePath <- gsub('pkgnet/tests/testthat', replacement = 'pkgnet', x = pkgnetSourcePath)

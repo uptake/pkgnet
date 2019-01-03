@@ -50,6 +50,11 @@ vignettes/*\.pdf
 ^lib$
 ^coverage.html$
 
+# Readme files
+^readme_figures/.*
+^readme_figures
+
 # Stuff
 .Rbuildignore
 .*\.gitkeep
+
