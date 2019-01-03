@@ -26,7 +26,7 @@ The core functionality of this package is the `CreatePackageReport` function.
 
 ## Installation <a name="installation"></a>
 
-This package is now available from [CRAN](https://cran.r-project.org/)!
+This package is now available from [CRAN](https://cran.r-project.org/package=pkgnet)!
 
 ```
 install.packages('pkgnet')
