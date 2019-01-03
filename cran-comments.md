@@ -72,6 +72,12 @@ Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 >
 >Brian Burns (current pkgnet maintainer)
 
+### Response on January 2nd, 2019
+
+>Dear maintainer,
+>
+>thanks, package pkgnet_0.3.0.tar.gz is on its way to CRAN.
+
 ---
 
 ## v 0.2.1
