@@ -77,6 +77,12 @@ Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 >Dear maintainer,
 >
 >thanks, package pkgnet_0.3.0.tar.gz is on its way to CRAN.
+>
+>Best regards,
+CRAN teams' auto-check service
+Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
+Check: CRAN incoming feasibility, Result: Note_to_CRAN_maintainers
+  Maintainer: 'Brian Burns <brian.burns@uptake.com>'
 
 ---
 
