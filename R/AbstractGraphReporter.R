@@ -351,7 +351,7 @@ AbstractGraphReporter <- R6::R6Class(
                     newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
 
                     # For each character value, update all nodes with that value
-                    plotDTnodes[, color := newPalette[.GRP], by = get(colorFieldName)]
+                    plotDTnodes[, color := newPalette[.GRP], by = .(get(colorFieldName))]
 
                     # Set the group column to the field
                     plotDTnodes[, group := get(colorFieldName)]
