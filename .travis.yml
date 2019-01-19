@@ -11,4 +11,5 @@ before_install:
 - Rscript -e "install.packages('devtools', repos = 'http://cran.rstudio.org')"
 
 after_success:
+    - cat "${RCHECK_DIR}/tests/testthat.Rout"
     - Rscript -e 'install.packages("covr"); covr::codecov()'

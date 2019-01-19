@@ -13,7 +13,7 @@ Sys.setenv("R_TESTS" = "")
 # and local testing will remain the main test processes for pkgnet. 
 # See https://github.com/UptakeOpenSource/pkgnet/issues/160 for details on this decision.
 
-
+print(Sys.getenv("NOT_CRAN"))
 if(identical(Sys.getenv("NOT_CRAN"), "true")){
     ######## TRAVIS and LOCAL TEST PROCEDURE #############
     

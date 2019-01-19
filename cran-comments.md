@@ -10,9 +10,11 @@
 >Please correct before 2019-01-20 to safely retain your package on CRAN.
 
 ### Submission on January 19th, 2019
->The following change should correct the errors incurred on CRAN's testing infrastructure.  These errors stem from the inherit need of this package to test itself on toy packages of a known structure. The authors have gone to great lengths to remain in compliance with all CRAN policies and conduct testing within a temporary directory.  However, despite no issues locally or via the automated TRAVIS checks of pull requests, the creation and later referencing of temporary directories on CRAN's testing infrastructure remains troublesome. 
+>The following change should correct the errors incurred on CRAN's testing infrastructure.  These errors stem from the inherent need of this package to test itself on toy packages of a known structure. The authors have gone to great lengths to remain in compliance with all CRAN policies and conduct testing within a temporary directory.  However, despite no issues locally or via the automated TRAVIS checks of pull requests, the creation and later referencing of temporary directories on CRAN's testing infrastructure remains troublesome. 
 
 >As unit testing is at the discretion of the package authors, we choose to have TRAVIS remain the main vehicle for automated unit testing for this package.  Of course, all other tests of package integrity on CRAN will continue, just not custom unit testing. 
+
+>As always, tests and source code are maintained at https://github.com/UptakeOpenSource/pkgnet
 
 >Sincerely, 
 
