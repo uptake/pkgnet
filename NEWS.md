@@ -1,3 +1,14 @@
+# pkgnet 0.3.1
+
+## NEW FEATURES
+None
+
+## CHANGES
+* Unit testing strategy on CRAN vs Travis and local. See [#160](https://github.com/UptakeOpenSource/pkgnet/issues/160) for details. 
+
+## BUG FIXES
+None
+
 # pkgnet 0.3.0
 
 ## NEW FEATURES
