@@ -1,4 +1,4 @@
-context("Network Measures on Baseballstats")
+context("Correctness of Network Measures")
 
 ##### TEST SET UP #####
 
@@ -30,7 +30,7 @@ t2 <- CreatePackageReport("milne"
                           )
 inheritenceNodes <- t2$InheritanceReporter$nodes
 
-expectedNetworkMeasures <- c("outDegree"
+expectedNodeLevelMeasures <- c("outDegree"
                              , "outBetweeness"
                              , "outCloseness"
                              , "outSubgraphSize"
@@ -39,21 +39,48 @@ expectedNetworkMeasures <- c("outDegree"
                              , "pageRank"
                              , "inDegree")
 
+extDepNetwork <- t$DependencyReporter$network_measures
+intFuncNetwork <- t$FunctionReporter$network_measures
+inheritenceNetwork <- t2$InheritanceReporter$network_measures
+
+expectedNetworkLevelMeasures <- c("centralization.OutDegree"
+                                  , "centralization.betweenness"
+                                  , "centralization.closeness"
+                                  )
+
 # note, does not test order
-test_that('All expected Network Measures are calculated', {
+test_that('All expected Node Level Network Measures are calculated', {
     
     # External Package Dependencies
-    expect_true(object = all(expectedNetworkMeasures %in% names(extDepNodes))
+    expect_true(object = all(expectedNodeLevelMeasures %in% names(extDepNodes))
                 , info = 'Network Measures for external package dependencies'
                 )
     
     # Internal Function Dependencies
-    expect_true(object = all(expectedNetworkMeasures %in% names(intFuncNodes))
+    expect_true(object = all(expectedNodeLevelMeasures %in% names(intFuncNodes))
                 , info = 'Network Measures for internal function dependencies'
     )
     
     # Object Inheritance Network
-    expect_true(object = all(expectedNetworkMeasures %in% names(inheritenceNodes))
+    expect_true(object = all(expectedNodeLevelMeasures %in% names(inheritenceNodes))
+                , info = 'Network Measures for internal function dependencies'
+    )
+})
+
+test_that('All expected Network Level Network Measures are calculated', {
+    
+    # External Package Dependencies
+    expect_true(object = all(expectedNetworkLevelMeasures %in% names(extDepNetwork))
+                , info = 'Network Measures for external package dependencies'
+    )
+    
+    # Internal Function Dependencies
+    expect_true(object = all(expectedNetworkLevelMeasures %in% names(intFuncNetwork))
+                , info = 'Network Measures for internal function dependencies'
+    )
+    
+    # Object Inheritance Network
+    expect_true(object = all(expectedNetworkLevelMeasures %in% names(inheritenceNetwork))
                 , info = 'Network Measures for internal function dependencies'
     )
 })
@@ -155,6 +182,64 @@ test_that('Object Inheritance Network Measures (stat package)', {
     
 })
 
+
+
+
+##################################
+##### Network Level Measures ##### 
+##################################
+
+test_that('External Package Dependencies Network Level Measures', {
+    
+    # centralization.OutDegree
+    expect_equal(object = round(extDepNetwork[['centralization.OutDegree']], 7)
+                 , 0.2857143)
+    
+    # centralization.betweenness
+    expect_equal(object = round(extDepNetwork[['centralization.betweenness']], 7)
+                 , 0.1166667)
+    
+    # outCloseness
+    expect_equal(object = round(extDepNetwork[['centralization.closeness']], 7)
+                 , 0.4136785)
+    
+})
+
+####  Internal Function Dependencies ####
+
+test_that('Internal Function Dependencies Network Level Measures', {
+    
+    # centralization.OutDegree
+    expect_equal(object = round(intFuncNetwork[['centralization.OutDegree']], 7)
+                 , 0.3)
+    
+    # centralization.betweenness
+    expect_equal(object = round(intFuncNetwork[['centralization.betweenness']], 7)
+                 , 0.03125)
+    
+    # outCloseness
+    expect_equal(object = round(intFuncNetwork[['centralization.closeness']], 7)
+                 , 0.2743056)
+    
+})
+
+#### Object Inheritance Network ####
+
+test_that('Object Inheritance Network Level Measures', {
+    
+    # centralization.OutDegree
+    expect_equal(object = round(inheritenceNetwork[['centralization.OutDegree']], 7)
+                 , 0.0934066)
+    
+    # centralization.betweenness
+    expect_equal(object = round(inheritenceNetwork[['centralization.betweenness']], 7)
+                 , 0.0305720)
+    
+    # outCloseness
+    expect_equal(object = round(inheritenceNetwork[['centralization.closeness']], 7)
+                 , 0.0245179)
+    
+})
 
 ##### TEST TEAR DOWN #####
 
