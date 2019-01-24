@@ -11,6 +11,7 @@
 #' @importFrom methods is
 #' @importFrom tools file_ext
 #' @importFrom utils browseURL
+#' @importFrom knitr opts_chunk
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
 CreatePackageReport <- function(pkg_name

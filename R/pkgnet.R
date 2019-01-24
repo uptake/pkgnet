@@ -43,3 +43,4 @@ globalVariables(c('.'
 #' @description This is a NULL object with documentation so that later functions can call
 #' inheritParams
 NULL
+
