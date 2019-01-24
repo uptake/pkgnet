@@ -44,6 +44,3 @@ globalVariables(c('.'
 #' inheritParams
 NULL
 
-# This is used in the vigette where there is no opportunity to declare this dependency. 
-# Added here so warning messages stop.
-#' @importFrom knitr opts_chunk
