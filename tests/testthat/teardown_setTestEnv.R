@@ -18,4 +18,3 @@ if(identical(Sys.getenv("NOT_CRAN"), "true")){
     Sys.unsetenv('PKGNET_TEST_LIB')
 }
 
-
