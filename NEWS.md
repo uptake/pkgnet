@@ -1,3 +1,14 @@
+# pkgnet 0.3.1.9999 (dev)
+
+## NEW FEATURES
+None
+
+## CHANGES
+* Added unit tests for network measure calculations ([#166](https://github.com/UptakeOpenSource/pkgnet/pull/166)).
+
+## BUG FIXES
+* Corrected node statisitcs table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))
+
 # pkgnet 0.3.1
 
 ## NEW FEATURES

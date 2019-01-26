@@ -26,7 +26,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree graph_from_edgelist graph.edgelist centralization.betweenness
 #' @importFrom igraph centralization.closeness centralization.degree hub_score
-#' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex
+#' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex vertex.attributes
 #' @importFrom magrittr %>%
 #' @importFrom methods hasArg formalArgs
 #' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
@@ -108,10 +108,6 @@ AbstractGraphReporter <- R6::R6Class(
             # Use igraph object
             pkg_graph <- self$pkg_graph
 
-            # Pointer to cached nodes data.table
-            # Note that this is a reference, so changes will update cached table
-            outNodeDT <- self$nodes
-
             #--------------#
             # out degree
             #--------------#
@@ -119,9 +115,14 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkg_graph
                 , mode = "out"
             )
+            
+            outDegreeResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                        , outDegree = outDegreeResult[['res']]
+                                                        )
 
             # update data.tables
-            outNodeDT[, outDegree := outDegreeResult[['res']]] # nodes
+            private$update_nodes(outDegreeResultDT)
+            
             private$cache$network_measures[['centralization.OutDegree']] <- outDegreeResult$centralization
 
             #--------------#
@@ -131,9 +132,14 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkg_graph
                 , directed = TRUE
             )
-
+            
+            outBetweenessResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                        , outBetweeness = outBetweenessResult[['res']]
+            )
+            
             # update data.tables
-            outNodeDT[, outBetweeness := outBetweenessResult$res] # nodes
+            private$update_nodes(outBetweenessResultDT)
+
             private$cache$network_measures[['centralization.betweenness']] <- outBetweenessResult$centralization
 
             #--------------#
@@ -146,8 +152,13 @@ AbstractGraphReporter <- R6::R6Class(
                 )
             })
 
+            outClosenessResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                            , outCloseness = outClosenessResult[['res']]
+            )
+            
             # update data.tables
-            outNodeDT[, outCloseness := outClosenessResult$res] # nodes
+            private$update_nodes(metadataDT = outClosenessResultDT)
+            
             private$cache$network_measures[['centralization.closeness']] <- outClosenessResult$centralization
 
             #--------------------------------------------------------------#
@@ -163,9 +174,14 @@ AbstractGraphReporter <- R6::R6Class(
                 , order = vcount(pkg_graph)
                 , mode = "out"
             )
-
+            
+            numOutNodesDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                           , outSubgraphSize = numOutNodes
+            )
+            
             # update data.tables
-            outNodeDT[, outSubgraphSize := numOutNodes] # nodes
+            private$update_nodes(numOutNodesDT)
+
 
             #--------------#
             # Size of In-Subgraph - meaning the rooted graph into a node
@@ -176,9 +192,13 @@ AbstractGraphReporter <- R6::R6Class(
                 , order = vcount(pkg_graph)
                 , mode = "in"
             )
-
+            
+            numInNodesDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                    , inSubgraphSize = numInNodes
+            )
+            
             # update data.tables
-            outNodeDT[, inSubgraphSize := numInNodes] # nodes
+            private$update_nodes(numInNodesDT)
 
             #--------------#
             # Hub Score
@@ -187,19 +207,38 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkg_graph
                 , scale = TRUE
             )
-            outNodeDT[, hubScore := hubScoreResult$vector] # nodes
+            
+            hubScoreResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                   , hubScore = hubScoreResult$vector
+            )
+            
+            # update data.tables
+            private$update_nodes(hubScoreResultDT)
 
             #--------------#
             # PageRank
             #--------------#
             pageRankResult <- igraph::page_rank(graph = pkg_graph, directed = TRUE)
-            outNodeDT[, pageRank := pageRankResult$vector] # nodes
+            
+            pageRankResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                       , pageRank = pageRankResult$vector
+            )
+            
+            # update data.tables
+            private$update_nodes(pageRankResultDT)
 
             #--------------#
             # in degree
             #--------------#
             inDegreeResult <- igraph::degree(pkg_graph, mode = "in")
-            outNodeDT[, inDegree := inDegreeResult] # nodes
+            
+            inDegreeResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
+                                                       , inDegree = inDegreeResult
+            )
+            
+            # update data.tables
+            private$update_nodes(inDegreeResultDT)
+
 
             #--------------------------------------------------------------#
             # NETWORK ONLY METRICS
@@ -207,6 +246,7 @@ AbstractGraphReporter <- R6::R6Class(
 
             #motifs?
             #knn/assortivity?
+            
 
             return(invisible(NULL))
         },
