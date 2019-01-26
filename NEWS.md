@@ -1,13 +1,15 @@
-# pkgnet 0.3.1.9999 (dev)
+# pkgnet 0.3.2
 
 ## NEW FEATURES
 None
 
 ## CHANGES
 * Added unit tests for network measure calculations ([#166](https://github.com/UptakeOpenSource/pkgnet/pull/166)).
+* Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing ([#167](https://github.com/UptakeOpenSource/pkgnet/pull/167))
 
 ## BUG FIXES
 * Corrected node statisitcs table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))
+* Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks ([#168](https://github.com/UptakeOpenSource/pkgnet/pull/168))
 
 # pkgnet 0.3.1
 
