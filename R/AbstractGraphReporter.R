@@ -26,7 +26,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree graph_from_edgelist graph.edgelist centralization.betweenness
 #' @importFrom igraph centralization.closeness centralization.degree hub_score
-#' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex
+#' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex vertex.attributes
 #' @importFrom magrittr %>%
 #' @importFrom methods hasArg formalArgs
 #' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
