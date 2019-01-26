@@ -1,5 +1,21 @@
 # CRAN Submission History
 
+## v 0.3.2 
+
+### Submission on January 25th, 2019
+Discovery and correction of a critical bug in the creation of table data in the package report necessitates this minor version upgrade.  As always, source code and issue tracking is available at https://github.com/UptakeOpenSource/pkgnet.
+
+Specifically, here are the changes:  
+
+CHANGES  
+* Added unit tests for network measure calculations ([#166](https://github.com/UptakeOpenSource/pkgnet/pull/166)).   
+* Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing ([#167](https://github.com/UptakeOpenSource/pkgnet/pull/167))   
+
+BUG FIXES  
+* Corrected node statisitcs table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))   
+* Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks ([#168](https://github.com/UptakeOpenSource/pkgnet/pull/168))   
+
+
 ## v 0.3.1
 
 ### CRAN Notiifcation on January 6th, 2019
