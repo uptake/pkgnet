@@ -1,3 +1,14 @@
+# pkgnet 0.3.2.9999 (current dev)
+
+## NEW FEATURES
+None
+
+## CHANGES
+None
+
+## BUG FIXES
+None
+
 # pkgnet 0.3.2
 
 ## NEW FEATURES
