@@ -115,14 +115,14 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkg_graph
                 , mode = "out"
             )
-            
+
             outDegreeResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                         , outDegree = outDegreeResult[['res']]
                                                         )
 
             # update data.tables
             private$update_nodes(outDegreeResultDT)
-            
+
             private$cache$network_measures[['centralization.OutDegree']] <- outDegreeResult$centralization
 
             #--------------#
@@ -132,11 +132,11 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkg_graph
                 , directed = TRUE
             )
-            
+
             outBetweenessResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                         , outBetweeness = outBetweenessResult[['res']]
             )
-            
+
             # update data.tables
             private$update_nodes(outBetweenessResultDT)
 
@@ -155,10 +155,10 @@ AbstractGraphReporter <- R6::R6Class(
             outClosenessResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                             , outCloseness = outClosenessResult[['res']]
             )
-            
+
             # update data.tables
             private$update_nodes(metadataDT = outClosenessResultDT)
-            
+
             private$cache$network_measures[['centralization.closeness']] <- outClosenessResult$centralization
 
             #--------------------------------------------------------------#
@@ -174,11 +174,11 @@ AbstractGraphReporter <- R6::R6Class(
                 , order = vcount(pkg_graph)
                 , mode = "out"
             )
-            
+
             numOutNodesDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                            , outSubgraphSize = numOutNodes
             )
-            
+
             # update data.tables
             private$update_nodes(numOutNodesDT)
 
@@ -192,11 +192,11 @@ AbstractGraphReporter <- R6::R6Class(
                 , order = vcount(pkg_graph)
                 , mode = "in"
             )
-            
+
             numInNodesDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                     , inSubgraphSize = numInNodes
             )
-            
+
             # update data.tables
             private$update_nodes(numInNodesDT)
 
@@ -207,11 +207,11 @@ AbstractGraphReporter <- R6::R6Class(
                 graph = pkg_graph
                 , scale = TRUE
             )
-            
+
             hubScoreResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                    , hubScore = hubScoreResult$vector
             )
-            
+
             # update data.tables
             private$update_nodes(hubScoreResultDT)
 
@@ -219,11 +219,11 @@ AbstractGraphReporter <- R6::R6Class(
             # PageRank
             #--------------#
             pageRankResult <- igraph::page_rank(graph = pkg_graph, directed = TRUE)
-            
+
             pageRankResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                        , pageRank = pageRankResult$vector
             )
-            
+
             # update data.tables
             private$update_nodes(pageRankResultDT)
 
@@ -231,11 +231,11 @@ AbstractGraphReporter <- R6::R6Class(
             # in degree
             #--------------#
             inDegreeResult <- igraph::degree(pkg_graph, mode = "in")
-            
+
             inDegreeResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
                                                        , inDegree = inDegreeResult
             )
-            
+
             # update data.tables
             private$update_nodes(inDegreeResultDT)
 
@@ -246,7 +246,7 @@ AbstractGraphReporter <- R6::R6Class(
 
             #motifs?
             #knn/assortivity?
-            
+
 
             return(invisible(NULL))
         },
@@ -441,7 +441,7 @@ AbstractGraphReporter <- R6::R6Class(
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
-                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+                plotDTedges[, color := '#848484']
             } else {
                 plotDTedges <- NULL
             }
@@ -482,10 +482,6 @@ AbstractGraphReporter <- R6::R6Class(
                 }
 
                 # Add legend
-                # but it is broken if there is only one level
-                # so hard-code for now to skip if there is only one level
-                # TODO: remove if statement when the following issue is resolved:
-                # https://github.com/datastorm-open/visNetwork/issues/290
                 if (length(colorFieldValues) > 1) {
                     g <- visNetwork::visLegend(
                         graph = g

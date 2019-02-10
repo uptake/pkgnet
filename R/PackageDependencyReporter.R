@@ -26,9 +26,6 @@ DependencyReporter <- R6::R6Class(
     "DependencyReporter",
     inherit = AbstractGraphReporter,
 
-    #TODO [patrick.boueri@uptake.com]: Add more robust error checks and logging
-    #TODO [patrick.boueri@uptake.com]: Add version information to dependency structure
-
     public = list(
 
         initialize = function(dep_types = c("Imports", "Depends"), installed = TRUE){

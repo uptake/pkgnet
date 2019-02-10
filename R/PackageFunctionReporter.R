@@ -210,8 +210,6 @@ FunctionReporter <- R6::R6Class(
             private$cache$edges <- private$extract_edges()
             log_info('Done extracting edges.')
 
-            # TODO (james.lamb@uptake.com):
-            # Make this handoff with coverage cleaner
             if (!is.null(private$pkg_path)){
                 private$calculate_test_coverage()
             }
