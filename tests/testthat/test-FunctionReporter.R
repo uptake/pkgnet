@@ -90,7 +90,6 @@ test_that('FunctionReporter Methods Work', {
                  , info = "derived edges do not match expected edges"
                  )
 
-    # TODO: Need to test that nodes were properly extracted
     testNodeDT <- testObj$nodes
 
     # inherited make_graph_object
@@ -101,13 +100,6 @@ test_that('FunctionReporter Methods Work', {
 
     expect_true(object = all(igraph::get.vertex.attribute(testPkgGraph)[[1]] %in% testNodeDT$node)
                 , info = "Graph nodes not as expected")
-
-    # Nodes table with coverage and metrics too
-    # TODO: Test that calculate_all_measures and other calculates attach metadata correctly
-    # expect_identical(object = sort(testObj$get_raw_data()$nodes$node)
-    #                  , expected = sort(testNodeDT$node)
-    #                  , info = "Different nodes than expected")
-
 
     # network measures
     expect_true({
