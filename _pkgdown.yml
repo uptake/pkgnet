@@ -2,6 +2,8 @@ template:
   params:
     bootswatch: flatly
 
+url: https://uptakeopensource.github.io/pkgnet/
+
 navbar:
   title: "pkgnet"
   type: inverse
@@ -23,4 +25,3 @@ reference:
 - title: All Functions
   contents:
   - -matches("doc_shared") 
-
