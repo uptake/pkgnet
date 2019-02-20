@@ -1,6 +1,11 @@
 template:
   params:
     bootswatch: flatly
+    docsearch:
+      api_key: 8c4486b693a542e8493b7944f39ab632 # intended API inclusion.  Not private.
+      index_name: pkgnet # See https://pkgdown.r-lib.org/articles/pkgdown.html#docsearch-configuration
+
+url: https://uptakeopensource.github.io/pkgnet/
 
 navbar:
   title: "pkgnet"
@@ -23,4 +28,3 @@ reference:
 - title: All Functions
   contents:
   - -matches("doc_shared") 
-

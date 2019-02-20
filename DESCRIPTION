@@ -32,7 +32,7 @@ Suggests:
     testthat, 
     withr
 License: BSD_3_clause + file LICENSE
-URL: https://github.com/UptakeOpenSource/pkgnet
+URL: https://github.com/UptakeOpenSource/pkgnet, https://uptakeopensource.github.io/pkgnet/
 BugReports: https://github.com/UptakeOpenSource/pkgnet/issues
 LazyData: TRUE
 RoxygenNote: 6.1.1
