@@ -56,48 +56,26 @@ FunctionReporter <- R6::R6Class(
     inherit = AbstractGraphReporter,
 
     public = list(
-        get_summary_view = function(){
 
-            # Calculate network measures if not already done
-            # since we want the node measures in summary
-            invisible(self$network_measures)
+        calculate_default_measures = function() {
+            # Calculate test coverage if pkg_path is set and source code available
+            if (!is.null(private$pkg_path)){
+                private$calculate_test_coverage()
+            }
 
-            # Create DT for display
-            tableObj <- DT::datatable(
-                data = self$nodes
-                , rownames = FALSE
-                , options = list(
-                    searching = FALSE
-                    , pageLength = 50
-                    , lengthChange = FALSE
-                )
-            )
-            # Round the double columns to three digits for formatting reasons
-            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-            tableObj <- DT::formatRound(columns = numCols, table = tableObj
-                                        , digits=3)
-            return(tableObj)
+            super$calculate_default_measures()
+
+            return(invisible(self))
         }
-    ),
 
-    active = list(
-        edges = function(){
-            if (is.null(private$cache$edges)){
-                log_info("Calling extract_network() to extract nodes and edges...")
-                private$extract_network()
-            }
-            return(private$cache$edges)
-        },
-        nodes = function(){
-            if (is.null(private$cache$nodes)){
-                log_info("Calling extract_network() to extract nodes and edges...")
-                private$extract_network()
-            }
-            return(private$cache$nodes)
-        },
+    ) # / public
+
+    , active = list(
+
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_function_reporter.Rmd"), package = "pkgnet")
         },
+
         pkg_R6_classes = function() {
             if (is.null(private$cache$pkg_R6_classes)) {
                 pkg_env <- private$get_pkg_env()
@@ -110,6 +88,7 @@ FunctionReporter <- R6::R6Class(
             }
             return(private$cache$pkg_R6_classes)
         },
+
         pkg_R6_methods = function() {
             if (is.null(private$cache$pkg_R6_methods)){
                 private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
@@ -121,6 +100,7 @@ FunctionReporter <- R6::R6Class(
             }
             return(private$cache$pkg_R6_methods)
         },
+
         pkg_R6_inheritance = function() {
             if (is.null(private$cache$pkg_R6_inheritance)) {
                 private$cache$pkg_R6_inheritance <- .get_R6_class_inheritance(
@@ -131,12 +111,16 @@ FunctionReporter <- R6::R6Class(
             }
             return(private$cache$pkg_R6_inheritance)
         }
-    ),
+    ) # / active
 
-    private = list(
+    , private = list(
 
         # Default graph viz layout
         private_layout_type = "layout_with_graphopt",
+
+        # Class of graph to initialize
+        # Should be constructor
+        graph_class = DirectedGraph,
 
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
@@ -151,23 +135,22 @@ FunctionReporter <- R6::R6Class(
 
             log_info(msg = "Calculating package coverage...")
 
-            pkgCov <- covr::package_coverage(
+            pkgCovDT <- data.table::as.data.table(covr::package_coverage(
                 path = private$pkg_path
                 , type = "tests"
                 , combine_types = FALSE
-            )
+            ))
 
-            pkgCov <- data.table::as.data.table(pkgCov)
-            pkgCov <- pkgCov[, list(coveredLines = sum(value > 0)
+            pkgCovDT <- pkgCovDT[, .(coveredLines = sum(value > 0)
                                     , totalLines = .N
                                     , coverageRatio = sum(value > 0)/.N
                                     , meanCoveragePerLine = sum(value)/.N
                                     , filename = filename[1]
             )
-            , by = list(node = functions)]
+            , by = .(node = functions)]
 
             # Update Node with Coverage Info
-            private$update_nodes(metadataDT = pkgCov)
+            private$update_nodes(pkgCovDT)
 
             # Set Graph to Color By Coverage
             private$set_plot_node_color_scheme(
@@ -179,41 +162,25 @@ FunctionReporter <- R6::R6Class(
                               )
             )
 
-            # Calculate network measures since we need outBetweeness
-            invisible(self$network_measures)
-
-            meanCoverage <-  pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
+            meanCoverage <-  pkgCovDT[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
             private$cache$network_measures[['packageTestCoverage.mean']] <- meanCoverage
 
-            weightVector <- self$nodes$outBetweeness / sum(self$nodes$outBetweeness, na.rm = TRUE)
+            betweennessDT <- self$pkg_graph$node_measures('betweenness')
 
-            betweenness_mean <- weighted.mean(
-                x = self$nodes$coverageRatio
-                , w = weightVector
-                , na.rm = TRUE
-            )
+            weightedCoverageDT <- merge(x = pkgCovDT
+                                        , y = betweennessDT
+                                        , by = 'node')
+            weightedCoverageDT[, weight := betweenness / sum(betweenness, na.rm = TRUE)]
+
+            betweenness_mean <- weightedCoverageDT[,
+                weighted.mean(
+                    x = coverageRatio
+                    , w = weight
+                    , na.rm = TRUE
+            )]
             private$cache$network_measures[['packageTestCoverage.betweenessWeightedMean']] <- betweenness_mean
 
-            log_info(msg = "Done calculating package coverage")
-            return(invisible(NULL))
-        },
-
-        extract_network = function(){
-            # Reset cache, because any cached stuff will be outdated with a new network
-            private$reset_cache()
-
-            log_info(sprintf('Extracting nodes from %s...', self$pkg_name))
-            private$cache$nodes <- private$extract_nodes()
-            log_info('Done extracting nodes.')
-
-            log_info(sprintf('Extracting edges from %s...', self$pkg_name))
-            private$cache$edges <- private$extract_edges()
-            log_info('Done extracting edges.')
-
-            if (!is.null(private$pkg_path)){
-                private$calculate_test_coverage()
-            }
-
+            log_info(msg = "...done calculating package coverage")
             return(invisible(NULL))
         },
 
@@ -221,6 +188,9 @@ FunctionReporter <- R6::R6Class(
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
+
+            log_info(sprintf('Extracting functions from %s as graph nodes...'
+                             , self$pkg_name))
 
             pkg_env <- private$get_pkg_env()
 
@@ -265,7 +235,9 @@ FunctionReporter <- R6::R6Class(
                 nodes <- data.table::rbindlist(list(nodes, r6DT))
             }
 
-            return(nodes)
+            private$cache$nodes <- nodes
+
+            return(invisible(nodes))
         },
 
         extract_edges = function(){
@@ -327,13 +299,14 @@ FunctionReporter <- R6::R6Class(
 
             log_info("Done constructing network representation")
 
-            return(edgeDT)
+            private$cache$edges <- edgeDT
+
+            return(invisible(edgeDT))
         }
 
         , plot_network = function() {
-            g <- super$plot_network()
-
-            g <- (g
+            g <- (
+                super$plot_network()
                 %>% visNetwork::visHierarchicalLayout(enabled = FALSE)
             )
             return(g)
