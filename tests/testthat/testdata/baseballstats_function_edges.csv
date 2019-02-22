@@ -1,0 +1,5 @@
+SOURCE,TARGET
+OPS,slugging_avg
+OPS,batting_avg
+slugging_avg,at_bats
+batting_avg,at_bats
