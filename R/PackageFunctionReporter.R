@@ -133,7 +133,7 @@ FunctionReporter <- R6::R6Class(
         # add coverage to nodes table
         calculate_test_coverage = function(){
 
-            log_info(msg = "Calculating package coverage...")
+            log_info(sprintf("Calculating test coverage for %s...", self$pkg_name))
 
             pkgCovDT <- data.table::as.data.table(covr::package_coverage(
                 path = private$pkg_path
@@ -180,7 +180,7 @@ FunctionReporter <- R6::R6Class(
             )]
             private$cache$network_measures[['packageTestCoverage.betweenessWeightedMean']] <- betweenness_mean
 
-            log_info(msg = "...done calculating package coverage")
+            log_info(msg = "...done calculating test coverage.")
             return(invisible(NULL))
         },
 
@@ -237,6 +237,9 @@ FunctionReporter <- R6::R6Class(
 
             private$cache$nodes <- nodes
 
+            log_info(sprintf('... done extracting functions as nodes.'
+                             , self$pkg_name))
+
             return(invisible(nodes))
         },
 
@@ -245,7 +248,10 @@ FunctionReporter <- R6::R6Class(
                 log_fatal('Must set_package() before extracting edges.')
             }
 
-            log_info(sprintf('Constructing network representation...'))
+            log_info(paste(
+                sprintf('Extracting dependencies between functions in %s', self$pkg_name)
+                , "as graph edges..."
+            ))
 
             # create a custom environment w/ this package's contents
             pkg_env <- private$get_pkg_env()
@@ -297,7 +303,7 @@ FunctionReporter <- R6::R6Class(
                             )
             }
 
-            log_info("Done constructing network representation")
+            log_info("...done extracting function dependencies as edges.")
 
             private$cache$edges <- edgeDT
 

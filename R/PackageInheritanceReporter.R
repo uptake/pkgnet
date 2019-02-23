@@ -80,7 +80,7 @@ InheritanceReporter <- R6::R6Class(
         )
 
         , extract_nodes = function() {
-            log_info("Extracting classes as nodes...")
+            log_info(sprintf("Extracting classes in %s as nodes...", self$pkg_name))
 
             pkg_env <- private$get_pkg_env()
 
@@ -132,6 +132,8 @@ InheritanceReporter <- R6::R6Class(
                 log_warn(msg)
             }
 
+            log_info("...done extracting classes as nodes.")
+
             private$cache$nodes <- nodeDT
             return(invisible(NULL))
         }
@@ -142,7 +144,9 @@ InheritanceReporter <- R6::R6Class(
 
             nodeDT <- self$nodes
 
-            log_info("Extracting class inheritance as edges...")
+            log_info(sprintf(
+                "Extracting class inheritance within %s as edges...", self$pkg_name
+            ))
 
             pkg_env <- private$get_pkg_env()
             edgeList <- list(data.table::data.table(
@@ -189,6 +193,8 @@ InheritanceReporter <- R6::R6Class(
 
             # Filter out any parents that are external to the package
             edgeDT <- edgeDT[TARGET %in% nodeDT[, node]]
+
+            log_info("...done extracting class inheritance as edges.")
 
             private$cache$edges <- edgeDT
             return(invisible(NULL))

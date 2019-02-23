@@ -87,9 +87,10 @@ AbstractGraphReporter <- R6::R6Class(
                 if (is.null(private$graph_class)) {
                     log_fatal("Reporter must set valid graph class.")
                 }
-                log_info("Creating graph object...")
+                log_info("Creating graph model for network...")
                 pkg_graph <- private$graph_class$new(self$nodes, self$edges)
                 private$cache$pkg_graph <- pkg_graph
+                log_info("...graph model stored as pkg_graph.")
             }
             return(private$cache$pkg_graph)
         },
@@ -370,6 +371,8 @@ AbstractGraphReporter <- R6::R6Class(
                     )
                 }
             }
+
+            log_info("...done plotting visualization.")
 
             # Save plot in the cache
             private$cache$graph_viz <- g

@@ -69,7 +69,7 @@ DependencyReporter <- R6::R6Class(
                 log_fatal('Must set_package() before extracting dependency network.')
             }
 
-            log_info(sprintf('Constructing reverse dependency graph for %s', self$pkg_name))
+            log_info(sprintf('Constructing dependency network for %s', self$pkg_name))
 
             # Consider only installed packages when building dependency network
             if (private$installed){
@@ -163,6 +163,8 @@ DependencyReporter <- R6::R6Class(
                 )
             )
             private$cache$nodes <- nodes
+
+            log_info('...done constructing dependency network.')
 
             return(invisible(NULL))
         },
