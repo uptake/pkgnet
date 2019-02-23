@@ -1,3 +1,161 @@
+#' @title Graph Classes for Network Modeling
+#' @name GraphClasses
+#' @rdname GraphClasses
+#' @description pkgnet uses R6 classes to define and encapsulate the graph
+#' models for representing package networks. These classes implement different
+#' types of graphs and functionality to calculate their respective graph theory
+#' measures.
+#'
+#' Currently the only implemented type of graph is \link{DirectedGraph}
+#'
+#' @section Class Constructor:
+#' \describe{
+#'     \item{\code{new(nodes, edges)}}{
+#'         \itemize{
+#'             \item{Instantiate}
+#'             \item{\bold{Args:}}{
+#'                 \itemize{
+#'                     \item{\bold{\code{nodes}}: a data.table containing nodes}
+#'                     \item{\bold{\code{edges}}: a data.table containing edges}
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Object of the class}
+#'                 }
+#'             }
+#'         }
+#'     }
+#' }
+#'
+#' @section Public Methods:
+#' \describe{
+#'     \item{\code{node_measures(measures = NULL)}}{
+#'         \itemize{
+#'             \item{Return specified node-level measures, calculating if necessary.
+#'             See Node Measures section below for details about each measure.}
+#'             \item{\bold{Args:}}{
+#'                 \itemize{
+#'                     \item{\bold{\code{measures}}: character vector of measure
+#'                     names. Default NULL will return those that are already
+#'                     calculated.}
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{data.table with specified node meaures as columns}
+#'                 }
+#'             }
+#'         }
+#'     }
+#'     \item{\code{graph_measures(measures = NULL)}}{
+#'         \itemize{
+#'             \item{Return specified graph-level measures, calculating if necessary.
+#'             See Graph Measures section below for details about each measure.}
+#'             \item{\bold{Args:}}{
+#'                 \itemize{
+#'                     \item{\bold{\code{measures}}: character vector of measure
+#'                     names. Default NULL will return those that are already
+#'                     calculated.}
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{list with specified graph measures}
+#'                 }
+#'             }
+#'         }
+#'     }
+#'     \item{\code{available_node_measures()}}{
+#'         \itemize{
+#'             \item{Return names of all supported node measures.
+#'             See Node Measures section below for details about each measure.}
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{character vector}
+#'                 }
+#'             }
+#'         }
+#'     }
+#'     \item{\code{available_graph_measures()}}{
+#'         \itemize{
+#'             \item{Return names of all supported graph measures.
+#'             See Graph Measures section below for details about each measure.}
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{character vector}
+#'                 }
+#'             }
+#'         }
+#'     }
+#'     \item{\code{default_node_measures()}}{
+#'         \itemize{
+#'             \item{Return names of default node measures for respective class.
+#'             See Node Measures section below for details about each measure.}
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{character vector}
+#'                 }
+#'             }
+#'         }
+#'     }
+#'     \item{\code{default_graph_measures()}}{
+#'         \itemize{
+#'             \item{Return names of default graph measures for respective class.
+#'             See Graph Measures section below for details about each measure.}
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{character vector}
+#'                 }
+#'             }
+#'         }
+#'     }
+#' }
+#'
+#' @section Public Fields:
+#' \describe{
+#'     \item{\bold{\code{nodes}}}{: node data.table, read-only}
+#'     \item{\bold{\code{edges}}}{: edge data.table, read-only}
+#'     \item{\bold{\code{igraph}}}{: igraph object, read-only}
+#' }
+#'
+#'
+#' @section Special Methods:
+#' \describe{
+#'     \item{\code{clone(deep = FALSE)}}{
+#'         \itemize{
+#'             \item{Method for copying an object. See \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}} for the intricacies of R6 reference semantics.}
+#'             \item{\bold{Args:}}{
+#'                 \itemize{
+#'                     \item{\bold{\code{deep}}: logical. Whether to recursively clone nested R6 objects.}
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Cloned object of this class.}
+#'                 }
+#'             }
+#'         }
+#'     }
+#'     \item{\code{print()}}{
+#'         \itemize{
+#'             \item{Print igraph object.}
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Self}
+#'                 }
+#'             }
+#'         }
+#'     }
+#' }
+#' @keywords internal
+NULL
+
+## Base class for Graphs
+#' @importFrom R6 R6Class
+#' @importFrom igraph graph.edgelist make_empty_graph vertex
+#' @importFrom data.table data.table
+#' @importFrom assertthat assert_that
 AbstractGraph <- R6::R6Class(
     classname = "AbstractGraph"
     , public = list(
@@ -42,10 +200,6 @@ AbstractGraph <- R6::R6Class(
             return(self$nodes[, .SD, .SDcols = c('node', measures)])
         }
 
-        , available_node_measures = function(){
-            names(private$node_measure_functions)
-        }
-
         , graph_measures = function(measures = NULL){
 
             # If not specifying, return full list
@@ -72,8 +226,20 @@ AbstractGraph <- R6::R6Class(
             return(private$protected$graph_measures[measures])
         }
 
+        , available_node_measures = function(){
+            names(private$node_measure_functions)
+        }
+
         , available_graph_measures = function(){
             names(private$graph_measure_functions)
+        }
+
+        , default_node_measures = function() {
+            log_fatal('Default node measures not implemented.')
+        }
+
+        , default_graph_measures = function() {
+            log_fatal('Default graph measures not implemented.')
         }
 
         , print = function(){
@@ -136,7 +302,7 @@ AbstractGraph <- R6::R6Class(
             log_info("...done constructing igraph object.")
 
             return(invisible(NULL))
-        }
+        } # /initialize_igraph
 
         # Functions for node measures
         # All functions should return a named vector of node measure values
@@ -149,7 +315,26 @@ AbstractGraph <- R6::R6Class(
     )  # /private
 )
 
-#' @export
+#' @title Directed Graph Network Model
+#' @name DirectedGraph
+#' @description R6 class defining a directed graph model for representing a
+#' network, including methods to calculate various measures from graph theory.
+#' The \link[igraph:igraph-package]{igraph} package is used as a backend for
+#' calculations.
+#' @format An \code{\link[R6]{R6Class}} generator object
+#' @usage DirectedGraph$new(nodes, edges)
+#' @inheritSection GraphClasses Class Constructor
+#' @inheritSection GraphClasses Public Methods
+#' @inheritSection GraphClasses Public Fields
+#' @inheritSection GraphClasses Special Methods
+#' @inheritSection DirectedGraphMeasures Node Measures
+#' @inheritSection DirectedGraphMeasures Graph Measures
+#' @importFrom R6 R6Class
+#' @importFrom igraph degree closeness betweenness
+#' @importFrom igraph page_rank hub_score authority_score
+#' @importFrom igraph neighborhood.size vcount V
+#' @importFrom igraph centralize centr_degree_tmax
+#' @importFrom igraph centr_clo_tmax centr_betw_tmax
 DirectedGraph <- R6::R6Class(
     classname = "DirectedGraph"
     , inherit = AbstractGraph
@@ -358,3 +543,79 @@ DirectedGraph <- R6::R6Class(
         ) # /graph_measures_functions
     ) # /private
 )
+
+#' @title Measures for Directed Graph Class
+#' @name DirectedGraphMeasures
+#' @rdname DirectedGraphMeasures
+#' @keywords internal
+#' @section Node Measures:
+#' \describe{
+#'     \item{\bold{\code{outDegree}}}{: outdegree, the number of outward edges (tail ends).
+#'     Calculated by \code{\link[igraph:degree]{igraph::degree}}.
+#'     [\href{https://en.wikipedia.org/wiki/Directed_graph#Indegree_and_outdegree}{Wikipedia}]}
+#'     \item{\bold{\code{inDegree}}}{: indegree, number of inward edges (head ends).
+#'     Calculated by \code{\link[igraph:degree]{igraph::degree}}.
+#'     [\href{https://en.wikipedia.org/wiki/Directed_graph#Indegree_and_outdegree}{Wikipedia}]}
+#'     \item{\bold{\code{outCloseness}}}{: closeness centrality (out), a measure of
+#'     path lengths to other nodes along edge directions.
+#'     Calculated by \code{\link[igraph:closeness]{igraph::closeness}}.
+#'     [\href{https://en.wikipedia.org/wiki/Closeness_centrality}{Wikipedia}]}
+#'     \item{\bold{\code{inCloseness}}}{: closeness centrality (in), a measure of
+#'     path lengths to other nodes in reverse of edge directions.
+#'     Calculated by \code{\link[igraph:closeness]{igraph::closeness}}.
+#'     [\href{https://en.wikipedia.org/wiki/Closeness_centrality}{Wikipedia}]}
+#'     \item{\bold{\code{outSubgraphSize}}}{: number of other nodes in the rooted
+#'     subgraph out from this node, i.e., all nodes reachable by following edges
+#'     out from this node.
+#'     Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
+#'     [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
+#'     \item{\bold{\code{inSubgraphSize}}}{: number of other nodes in the rooted
+#'     subgraph into this node, i.e., all nodes reachable by following edges
+#'     into this node in reverse direction.
+#'     Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
+#'     [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
+#'     \item{\bold{\code{betweenness}}}{: betweenness centrality, a measure of
+#'     the number of shortest paths in graph passing through this node
+#'     Calculated by \code{\link[igraph:betweenness]{igraph::betweenness}}.
+#'     [\href{https://en.wikipedia.org/wiki/Betweenness_centrality}{Wikipedia}]}
+#'     \item{\bold{\code{pageRank}}}{: Google PageRank.
+#'     Calculated by \code{\link[igraph:page_rank]{igraph::page_rank}}.
+#'     [\href{https://en.wikipedia.org/wiki/PageRank}{Wikipedia}]}
+#'     \item{\bold{\code{hubScore}}}{: hub score from Hyperlink-Induced Topic
+#'     Search (HITS) algorithm.
+#'     Calculated by \code{\link[igraph:hub_score]{igraph::hub_score}}.
+#'     [\href{https://en.wikipedia.org/wiki/HITS_algorithm}{Wikipedia}]}
+#'     \item{\bold{\code{authorityScore}}}{: authority score from
+#'     Hyperlink-Induced Topic Search (HITS) algorithm.
+#'     Calculated by \code{\link[igraph:authority_score]{igraph::authority_score}}.
+#'     [\href{https://en.wikipedia.org/wiki/HITS_algorithm}{Wikipedia}]}
+#' }
+#' @section Graph Measures:
+#' \describe{
+#'     \item{\bold{\code{graphOutDegree}}}{: graph freeman centralization for
+#'     outdegree. A measure of the most central node by outdegree in relation to
+#'     all other nodes.
+#'     Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
+#'     [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
+#'     \item{\bold{\code{graphInDegree}}}{: graph Freeman centralization for
+#'     indegree. A measure of the most central node by indegree in relation to
+#'     all other nodes.
+#'     Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
+#'     [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
+#'     \item{\bold{\code{graphOutClosness}}}{: graph Freeman centralization for
+#'     out-closeness. A measure of the most central node by out-closeness in relation to
+#'     all other nodes.
+#'     Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
+#'     [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
+#'     \item{\bold{\code{graphInCloseness}}}{: graph Freeman centralization for
+#'     outdegree. A measure of the most central node by outdegree in relation to
+#'     all other nodes.
+#'     Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
+#'     [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
+#'     \item{\bold{\code{graphBetweennness}}}{: graph Freeman centralization for
+#'     betweenness A measure of the most central node by betweenness in relation to
+#'     all other nodes.
+#'     Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
+#'     [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
+#' }
+NULL

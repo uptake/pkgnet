@@ -32,7 +32,7 @@ test_that('DirectedGraph public interface is as expected', {
         , "igraph"
     )
 
-    graphObj <- pkgnet::DirectedGraph$new(
+    graphObj <- pkgnet:::DirectedGraph$new(
         nodes = data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
         , edges = data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
     )
@@ -48,7 +48,7 @@ test_that('DirectedGraph public methods are properly defined and run end-to-end'
     nodeDT <- data.table::fread(file.path('testdata', 'milne_function_nodes.csv'))
     edgeDT <- data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
 
-    testObj <- DirectedGraph$new(nodes = nodeDT, edges = edgeDT)
+    testObj <- pkgnet:::DirectedGraph$new(nodes = nodeDT, edges = edgeDT)
 
     # $node_measures() returns node table
     expect_true({data.table::is.data.table(testObj$node_measures())})
@@ -77,6 +77,12 @@ test_that('DirectedGraph public methods are properly defined and run end-to-end'
     expect_true({
         all(testObj$default_graph_measures() %in% testObj$available_graph_measures())
     })
+
+    # $print() runs without error
+    expect_true({
+        testObj$print
+        TRUE
+    })
 })
 
 ### VALUES OF MEASURE FUNCTIONS ARE EXPECTED ###
@@ -101,6 +107,7 @@ for (thisTest in testList) {
         reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
 
         for (nodeMeas in reporter$pkg_graph$available_node_measures()) {
+
             expect_equivalent(
                 object = reporter$pkg_graph$node_measures(nodeMeas)
                 , expected = expectedNodeMeasuresDT[, .SD, .SDcols = c('node', nodeMeas)]
