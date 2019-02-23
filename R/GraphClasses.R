@@ -298,7 +298,6 @@ AbstractGraph <- R6::R6Class(
 #' The \link[igraph:igraph-package]{igraph} package is used as a backend for
 #' calculations.
 #' @format An \code{\link[R6]{R6Class}} generator object
-#' @usage DirectedGraph$new(nodes, edges)
 #' @inheritSection GraphClasses Class Constructor
 #' @inheritSection GraphClasses Public Methods
 #' @inheritSection GraphClasses Public Fields

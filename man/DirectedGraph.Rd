@@ -6,7 +6,7 @@
 \title{Directed Graph Network Model}
 \format{An \code{\link[R6]{R6Class}} generator object}
 \usage{
-DirectedGraph$new(nodes, edges)
+DirectedGraph
 }
 \description{
 R6 class defining a directed graph model for representing a
