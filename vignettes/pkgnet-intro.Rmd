@@ -114,7 +114,7 @@ g
 
 ## Dependency
 
-Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point from the dependent node to the independent node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_(UML)) framework, a widely used standard for software system modeling.] 
+Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point from the dependent node to the independent node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_\(UML\)) framework, a widely used standard for software system modeling.] 
 
 In the example dependency graph above:
 
@@ -123,7 +123,7 @@ In the example dependency graph above:
 * **D** is indirectly dependent upon **A** through **C** via the transitive property.
 * **B** is independent of **A** as there is no path from **A** to **B** by following the edges.
 
-Following the direction of the edges allows you to figure out the **dependencies** of a node—the nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **dependents** of a node—the nodes that depend on it.
+Following the direction of the edges allows you to figure out the **dependencies** of a node---the nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **dependents** of a node---the nodes that depend on it.
 
 ***
 # Running pkgnet
