@@ -105,11 +105,11 @@ test_that('FunctionReporter works end-to-end for typical use', {
     })
     # Default node measures were generated
     expect_true({
-        all(testObj$pkg_graph$default_node_measures() %in% names(testObj$nodes))
+        all(testObj$pkg_graph$default_node_measures %in% names(testObj$nodes))
     })
     # Default graph measures were generated
     expect_true({
-        all(testObj$pkg_graph$default_graph_measures() %in% names(testObj$network_measures))
+        all(testObj$pkg_graph$default_graph_measures %in% names(testObj$network_measures))
     })
 
     # Coverage measures were generated

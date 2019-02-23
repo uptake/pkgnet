@@ -34,8 +34,8 @@ AbstractGraphReporter <- R6::R6Class(
 
     , public = list(
         calculate_default_measures = function() {
-            self$pkg_graph$node_measures(self$pkg_graph$default_node_measures())
-            self$pkg_graph$graph_measures(self$pkg_graph$default_graph_measures())
+            self$pkg_graph$node_measures(self$pkg_graph$default_node_measures)
+            self$pkg_graph$graph_measures(self$pkg_graph$default_graph_measures)
             return(invisible(self))
         }
 

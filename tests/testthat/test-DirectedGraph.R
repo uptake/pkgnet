@@ -3,7 +3,8 @@ rm(list = ls())
 
 ##### TEST SET UP #####
 
-
+milneNodes <- data.table::fread(file.path('testdata', 'milne_function_nodes.csv'))
+milneEdges <- data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
 
 ##### TESTS #####
 
@@ -33,8 +34,8 @@ test_that('DirectedGraph public interface is as expected', {
     )
 
     graphObj <- pkgnet:::DirectedGraph$new(
-        nodes = data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
-        , edges = data.table::fread(file.path('testdata', 'milne_function_edges.csv'))
+        nodes = milneNodes
+        , edges = milneEdges
     )
     expect_setequal(object = names(graphObj)
                     , expected = publicInterfaceExpected)
@@ -53,29 +54,29 @@ test_that('DirectedGraph public methods are properly defined and run end-to-end'
     # $node_measures() returns node table
     expect_true({data.table::is.data.table(testObj$node_measures())})
 
-    # $available_node_measures() returns values
-    expect_true({is.character(testObj$available_node_measures())})
-    expect_true({length(testObj$default_node_measures()) > 0})
+    # $available_node_measures returns values
+    expect_true({is.character(testObj$available_node_measures)})
+    expect_true({length(testObj$default_node_measures) > 0})
 
-    # $default_node_measures() returns values
-    expect_true({is.character(testObj$default_node_measures())})
-    expect_true({length(testObj$default_node_measures()) > 0})
+    # $default_node_measures returns values
+    expect_true({is.character(testObj$default_node_measures)})
+    expect_true({length(testObj$default_node_measures) > 0})
     expect_true({
-        all(testObj$default_node_measures() %in% testObj$available_node_measures())
+        all(testObj$default_node_measures %in% testObj$available_node_measures)
     })
 
     # $graph_measures() returns list
     expect_true({is.list(testObj$graph_measures())})
 
-    # $available_graph_measures() returns values
-    expect_true({is.character(testObj$available_graph_measures())})
-    expect_true({length(testObj$default_graph_measures()) > 0})
+    # $available_graph_measures returns values
+    expect_true({is.character(testObj$available_graph_measures)})
+    expect_true({length(testObj$default_graph_measures) > 0})
 
-    # $default_graph_measures() returns values
-    expect_true({is.character(testObj$default_graph_measures())})
-    expect_true({length(testObj$default_graph_measures()) > 0})
+    # $default_graph_measures returns values
+    expect_true({is.character(testObj$default_graph_measures)})
+    expect_true({length(testObj$default_graph_measures) > 0})
     expect_true({
-        all(testObj$default_graph_measures() %in% testObj$available_graph_measures())
+        all(testObj$default_graph_measures %in% testObj$available_graph_measures)
     })
 
     # $print() runs without error
@@ -106,7 +107,7 @@ for (thisTest in testList) {
 
         reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
 
-        for (nodeMeas in reporter$pkg_graph$available_node_measures()) {
+        for (nodeMeas in reporter$pkg_graph$available_node_measures) {
 
             expect_equivalent(
                 object = reporter$pkg_graph$node_measures(nodeMeas)
@@ -135,7 +136,7 @@ for (thisTest in testList) {
 
         reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
 
-        for (graphMeas in reporter$pkg_graph$available_graph_measures()) {
+        for (graphMeas in reporter$pkg_graph$available_graph_measures) {
             expect_equivalent(
                 object = reporter$pkg_graph$graph_measures(graphMeas)
                 , expected = expectedGraphMeasuresDT[measure == graphMeas, value]
@@ -149,3 +150,58 @@ for (thisTest in testList) {
         } # /for graphMeas
         }) # /test_that
 } # /for thisTest
+
+
+### EXPECTED ERRORS ###
+
+test_that('DirectedGraph constructor errors on bad inputs', {
+
+    # Inputs are data.tables
+    expect_error(
+        object = pkgnet:::DirectedGraph$new(
+            nodes = 'not_a_data.table'
+            , edges = milneEdges
+        )
+        , regexp = "data.table::is.data.table(x = nodes) is not TRUE"
+        , fixed = TRUE
+    )
+    expect_error(
+        object = pkgnet:::DirectedGraph$new(
+            nodes = milneNodes
+            , edges = 'note_a_data.table'
+        )
+        , regexp = "data.table::is.data.table(x = edges) is not TRUE"
+        , fixed = TRUE
+    )
+
+    # Inputs have expected columns
+    expect_error(
+        object = pkgnet:::DirectedGraph$new(
+            nodes = data.table::copy(milneNodes)[, id := node][, node := NULL]
+            , edges = milneEdges
+        )
+        , regexp = '`%in%`(x = "node", table = names(nodes))'
+        , fixed = TRUE
+    )
+    expect_error(
+        object = pkgnet:::DirectedGraph$new(
+            nodes = milneNodes
+            , edges = data.table::copy(milneEdges)[, from := SOURCE][, SOURCE := NULL]
+        )
+        , regexp = 'c("SOURCE", "TARGET") %in% names(edges)'
+        , fixed = TRUE
+    )
+    expect_error(
+        object = pkgnet:::DirectedGraph$new(
+            nodes = milneNodes
+            , edges = data.table::copy(milneEdges)[, to := TARGET][, TARGET := NULL]
+        )
+        , regexp = 'c("SOURCE", "TARGET") %in% names(edges)'
+        , fixed = TRUE
+    )
+})
+
+##### TEST TEAR DOWN #####
+
+rm(list = ls())
+closeAllConnections()

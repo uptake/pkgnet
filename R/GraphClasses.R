@@ -12,7 +12,7 @@
 #' \describe{
 #'     \item{\code{new(nodes, edges)}}{
 #'         \itemize{
-#'             \item{Instantiate}
+#'             \item{Instantiate new object of the class.}
 #'             \item{\bold{Args:}}{
 #'                 \itemize{
 #'                     \item{\bold{\code{nodes}}: a data.table containing nodes}
@@ -66,50 +66,6 @@
 #'             }
 #'         }
 #'     }
-#'     \item{\code{available_node_measures()}}{
-#'         \itemize{
-#'             \item{Return names of all supported node measures.
-#'             See Node Measures section below for details about each measure.}
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{character vector}
-#'                 }
-#'             }
-#'         }
-#'     }
-#'     \item{\code{available_graph_measures()}}{
-#'         \itemize{
-#'             \item{Return names of all supported graph measures.
-#'             See Graph Measures section below for details about each measure.}
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{character vector}
-#'                 }
-#'             }
-#'         }
-#'     }
-#'     \item{\code{default_node_measures()}}{
-#'         \itemize{
-#'             \item{Return names of default node measures for respective class.
-#'             See Node Measures section below for details about each measure.}
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{character vector}
-#'                 }
-#'             }
-#'         }
-#'     }
-#'     \item{\code{default_graph_measures()}}{
-#'         \itemize{
-#'             \item{Return names of default graph measures for respective class.
-#'             See Graph Measures section below for details about each measure.}
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{character vector}
-#'                 }
-#'             }
-#'         }
-#'     }
 #' }
 #'
 #' @section Public Fields:
@@ -117,6 +73,18 @@
 #'     \item{\bold{\code{nodes}}}{: node data.table, read-only}
 #'     \item{\bold{\code{edges}}}{: edge data.table, read-only}
 #'     \item{\bold{\code{igraph}}}{: igraph object, read-only}
+#'     \item{\bold{\code{available_node_measures}}}{: character vector of all
+#'     supported node measures. See Node Measures section below for detailed
+#'     descriptions. Read-only.}
+#'     \item{\bold{\code{available_graph_measures}}}{: character vector of all
+#'     supported graph measures. See Graph Measures section below for detailed
+#'     descriptions. Read-only.}
+#'     \item{\bold{\code{default_node_measures}}}{: character vector of default
+#'     node measures. See Node Measures section below for detailed descriptions.
+#'     Read-only.}
+#'     \item{\bold{\code{default_graph_measures}}}{: character vector of default
+#'     graph measures. See Graph Measures section below for detailed descriptions.
+#'     Read-only.}
 #' }
 #'
 #'
@@ -161,6 +129,14 @@ AbstractGraph <- R6::R6Class(
     , public = list(
         initialize = function(nodes, edges) {
 
+            # Input validation
+            assertthat::assert_that(
+                data.table::is.data.table(nodes)
+                , 'node' %in% names(nodes)
+                , data.table::is.data.table(edges)
+                , all(c('SOURCE', 'TARGET') %in% names(edges))
+            )
+
             # Store pointers to node and edge data.tables
             private$protected$nodes <- nodes
             private$protected$edges <- edges
@@ -180,7 +156,7 @@ AbstractGraph <- R6::R6Class(
             for (m in measures) {
                 # Input validation
                 assertthat::assert_that(
-                    all(m %in% self$available_node_measures())
+                    all(m %in% self$available_node_measures)
                     , msg = sprintf('%s not in $available_node_measures()', m)
                 )
 
@@ -212,7 +188,7 @@ AbstractGraph <- R6::R6Class(
             for (m in measures) {
                 # Input validation
                 assertthat::assert_that(
-                    m %in% self$available_graph_measures()
+                    m %in% self$available_graph_measures
                     , msg = sprintf('%s not in $available_graph_measures()', m)
                 )
 
@@ -224,22 +200,6 @@ AbstractGraph <- R6::R6Class(
                 }
             }
             return(private$protected$graph_measures[measures])
-        }
-
-        , available_node_measures = function(){
-            names(private$node_measure_functions)
-        }
-
-        , available_graph_measures = function(){
-            names(private$graph_measure_functions)
-        }
-
-        , default_node_measures = function() {
-            log_fatal('Default node measures not implemented.')
-        }
-
-        , default_graph_measures = function() {
-            log_fatal('Default graph measures not implemented.')
         }
 
         , print = function(){
@@ -260,6 +220,22 @@ AbstractGraph <- R6::R6Class(
                 private$initialize_igraph()
             }
             return(private$protected$igraph)
+        }
+
+        , available_node_measures = function(){
+            return(names(private$node_measure_functions))
+        }
+
+        , available_graph_measures = function(){
+            return(names(private$graph_measure_functions))
+        }
+
+        , default_node_measures = function(){
+            log_fatal('Default node measures not implemented.')
+        }
+
+        , default_graph_measures = function(){
+            log_fatal('Default graph measures not implemented.')
         }
     ) # /active
 
@@ -339,6 +315,8 @@ DirectedGraph <- R6::R6Class(
     classname = "DirectedGraph"
     , inherit = AbstractGraph
     , public = list(
+    ) # / public
+    , active = list(
         default_node_measures = function() {
             return(c(
                 "outDegree"
@@ -357,7 +335,7 @@ DirectedGraph <- R6::R6Class(
                 , "graphBetweenness"
             ))
         }
-    ) # / public
+    )
     , private = list(
 
         # Initialize igraph object
