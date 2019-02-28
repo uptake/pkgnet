@@ -320,8 +320,8 @@ DirectedGraph <- R6::R6Class(
             return(c(
                 "outDegree"
                 , "inDegree"
-                , "outSubgraphSize"
-                , "inSubgraphSize"
+                , "recursiveDeps"
+                , "recursiveRevDeps"
                 , "betweenness"
                 , "pageRank"
             ))
@@ -390,8 +390,8 @@ DirectedGraph <- R6::R6Class(
                 ))
             }
 
-            # Out-Subgraph Size -- Rooted subgraph out from node
-            , outSubgraphSize = function(self){
+            # Number of Recursive Dependencies
+            , recursiveDeps = function(self){
                 # Calculate using out-neighborhood size with order of longest
                 # possible path
                 result <- igraph::neighborhood.size(
@@ -405,8 +405,8 @@ DirectedGraph <- R6::R6Class(
                 return(result)
             }
 
-            # In-Subgraph Size -- Rooted subgraph into node
-            , inSubgraphSize = function(self){
+            # Number of Recursive Reverse Dependencies
+            , recursiveRevDeps = function(self){
                 # Calculate using in-neighborhood size with order of longest
                 # possible path
                 result <- igraph::neighborhood.size(
@@ -541,13 +541,11 @@ DirectedGraph <- R6::R6Class(
 #'     path lengths to other nodes in reverse of edge directions.
 #'     Calculated by \code{\link[igraph:closeness]{igraph::closeness}}.
 #'     [\href{https://en.wikipedia.org/wiki/Closeness_centrality}{Wikipedia}]}
-#'     \item{\bold{\code{outSubgraphSize}}}{: number of other nodes in the rooted
-#'     subgraph out from this node, i.e., count of all nodes reachable by following edges
+#'     \item{\bold{\code{recursiveDeps}}}{: number recursive dependencies, i.e., count of all nodes reachable by following edges
 #'     out from this node.
 #'     Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
 #'     [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
-#'     \item{\bold{\code{inSubgraphSize}}}{: number of other nodes in the rooted
-#'     subgraph into this node, i.e., count all nodes reachable by following edges
+#'     \item{\bold{\code{recursiveRevDeps}}}{: number of recursive reverse dependencies (dependents), i.e., count all nodes reachable by following edges
 #'     into this node in reverse direction.
 #'     Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
 #'     [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}

@@ -114,16 +114,16 @@ g
 
 ## Dependency
 
-Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point from the dependent node to the independent node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_\(UML\)) framework, a widely used standard for software system modeling.] 
+Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point in the direction of dependency---the tail node depends on the head node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_\(UML\)) framework, a widely used standard for software system modeling.] 
 
 In the example dependency graph above:
 
-* **C** is dependent upon both **A** and **B**.
-* **D** is dependent upon both **C** and **B**.
-* **D** is indirectly dependent upon **A** through **C** via the transitive property.
-* **B** is independent of **A** as there is no path from **A** to **B** by following the edges.
+* **C** depends on both **A** and **B**.
+* **D** depends both **C** and **B**.
+* **D** indirectly depends upon **A** through **C** via the transitive property.
+* **B** does not depend on **A** as there is no path from **A** to **B** by following the edges.
 
-Following the direction of the edges allows you to figure out the **dependencies** of a node---the nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **dependents** of a node---the nodes that depend on it.
+Following the direction of the edges allows you to figure out the **dependencies** of a node---the other nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **reverse dependencies** (i.e., dependents) of a node---the other nodes that depend on it.
 
 ***
 # Running pkgnet
@@ -312,23 +312,23 @@ report2 <- CreatePackageReport(
 funcNodes <- report2$FunctionReporter$nodes
 
 # List Coverage For Most Depended-on Functions
-mostRef <- funcNodes[order(inSubgraphSize, decreasing = TRUE),
-                     .(node, inSubgraphSize, coverageRatio, totalLines)
+mostRef <- funcNodes[order(recursiveRevDeps, decreasing = TRUE),
+                     .(node, recursiveRevDeps, coverageRatio, totalLines)
                      ][1:10]
 ```
 
 ```{r fakeDetail1Results, eval=FALSE}
-#>             node inSubgraphSize coverageRatio totalLines
-#>  1:        month             81             1          1
-#>  2:           tz             79             1          1
-#>  3: reclass_date             68             1          1
-#>  4:         date             67             1          1
-#>  5:      is.Date             60             1          1
-#>  6:    is.POSIXt             57             1          1
-#>  7:         wday             56             1          1
-#>  8:   is.POSIXct             55             1          1
-#>  9:  .deprecated             55             0         10
-#> 10:      as_date             52             1          1
+#>             node recursiveRevDeps coverageRatio totalLines
+#>  1:        month               81             1          1
+#>  2:           tz               79             1          1
+#>  3: reclass_date               68             1          1
+#>  4:         date               67             1          1
+#>  5:      is.Date               60             1          1
+#>  6:    is.POSIXt               57             1          1
+#>  7:         wday               56             1          1
+#>  8:   is.POSIXct               55             1          1
+#>  9:  .deprecated               55             0         10
+#> 10:      as_date               52             1          1
 ```
 
 Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.  

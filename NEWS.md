@@ -1,6 +1,7 @@
 # pkgnet 0.3.2.9999 (current dev)
 
 ## NEW FEATURES
+
 * Objects of new `DirectedGraph` class now slot into the `pkg_graph` field of network reporters. These objects encapsulate the graph modeling of networks and have a more expressive set of methods for analysis. Check out the full documentation with `?DirectedGraph`.  ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
     * Use `pkg_graph$node_measures` and `pkg_graph$graph_measures` to respectively calculate node-level and graph-level measures. 
     * Use `pkg_graph$default_node_measures` and `pkg_graph$default_graph_measures` to see the measures calculated by default. 
@@ -8,12 +9,14 @@
     * The igraph object is now instead available at `pkg_graph$igraph`.
 
 ## CHANGES
-* Reporters' `pkg_graph` field now contain an object of new `DirectedGraph` class. Previously it held an igraph object. This igraph object is now instead available at `pkg_graph$igraph`. See NEW FEATURES section for other details about the new `pkg_graph` object. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+
+* Standardizing on the language "dependency" and "reverse dependency" to describe the directed graph relationships in the package. This completes the change introduced in v0.3.0 where edge direction convention was set to point in the direction of dependency. So this means that "depend on" follows the edge arrow direction, and "reverse depends on" is reverse edge arrow direction. ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* `outSubgraphSize` and `inSubgraphSize` have been replaced with `recursiveDeps` and `recursiveRevDeps`, which are the former minus one (by not counting the node itself). ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* Per the new `DirectedGraph` feature, reporters' `pkg_graph` field now contain an object of new `DirectedGraph` class. Previously it held an igraph object. This igraph object is now instead available at `pkg_graph$igraph`. See NEW FEATURES section for other details about the new `pkg_graph` object. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 * Default measures now exist for each reporter. These can be calculated with the
 new method `calculate_default_measures` on reporters. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
     * The report from `CreatePackageReport` will now only show default measures.
 * Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. ([#106](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
-* `outSubgraphSize` and `inSubgraphSize` calculations have been updated to decrement by 1. This means the node itself is no longer included in the count. ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/191), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 * The report from `CreatePackageReport` now prints the version of pkgnet used at the bottom. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 
 ## BUG FIXES
