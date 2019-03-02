@@ -51,7 +51,6 @@
 #'     }
 #' }
 #' @importFrom R6 R6Class is.R6Class
-#' @importFrom DT datatable formatRound
 #' @importFrom data.table data.table rbindlist
 #' @importFrom methods is
 #' @export

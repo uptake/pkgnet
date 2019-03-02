@@ -24,6 +24,7 @@
 #' }
 #' @importFrom data.table data.table copy uniqueN setkeyv
 #' @importFrom R6 R6Class
+#' @importFrom DT datatable formatRound
 #' @importFrom magrittr %>%
 #' @importFrom methods hasArg formalArgs
 #' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions

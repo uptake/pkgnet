@@ -5,7 +5,6 @@
 #'              its other package dependencies, determining which package it relies on is most central,
 #'              allowing for a developer to determine how to vet its dependency tree
 #' @importFrom data.table data.table setnames rbindlist
-#' @importFrom DT datatable formatRound
 #' @importFrom R6 R6Class
 #' @importFrom utils installed.packages
 #' @importFrom tools package_dependencies
