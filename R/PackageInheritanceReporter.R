@@ -51,7 +51,7 @@
 #'     }
 #' }
 #' @importFrom R6 R6Class is.R6Class
-#' @importFrom data.table data.table rbindlist
+#' @importFrom data.table data.table rbindlist setkeyv
 #' @importFrom methods is
 #' @export
 InheritanceReporter <- R6::R6Class(
@@ -131,6 +131,8 @@ InheritanceReporter <- R6::R6Class(
                 log_warn(msg)
             }
 
+            data.table::setkeyv(nodeDT, 'node')
+
             log_info("...done extracting classes as nodes.")
 
             private$cache$nodes <- nodeDT
@@ -192,6 +194,8 @@ InheritanceReporter <- R6::R6Class(
 
             # Filter out any parents that are external to the package
             edgeDT <- edgeDT[TARGET %in% nodeDT[, node]]
+
+            data.table::setkeyv(edgeDT, c('SOURCE', 'TARGET'))
 
             log_info("...done extracting class inheritance as edges.")
 

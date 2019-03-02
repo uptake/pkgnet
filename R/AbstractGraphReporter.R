@@ -35,8 +35,12 @@ AbstractGraphReporter <- R6::R6Class(
 
     , public = list(
         calculate_default_measures = function() {
-            self$pkg_graph$node_measures(self$pkg_graph$default_node_measures)
-            self$pkg_graph$graph_measures(self$pkg_graph$default_graph_measures)
+            self$pkg_graph$node_measures(
+                measures = self$pkg_graph$default_node_measures
+            )
+            self$pkg_graph$graph_measures(
+                measures = self$pkg_graph$default_graph_measures
+            )
             return(invisible(self))
         }
 
@@ -44,7 +48,7 @@ AbstractGraphReporter <- R6::R6Class(
 
             # Create DT for display of the nodes data.table
             tableObj <- DT::datatable(
-                data = self$nodes
+                data = self$nodes[order(node)]
                 , rownames = FALSE
                 , options = list(
                     searching = FALSE
@@ -55,8 +59,11 @@ AbstractGraphReporter <- R6::R6Class(
 
             # Round the double columns to three digits for formatting reasons
             numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-            tableObj <- DT::formatRound(columns = numCols, table = tableObj
-                                        , digits=3)
+            tableObj <- DT::formatRound(
+                columns = numCols
+                , table = tableObj
+                , digits=3
+            )
             return(tableObj)
         }
 

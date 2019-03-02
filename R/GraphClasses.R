@@ -313,8 +313,7 @@ AbstractGraph <- R6::R6Class(
 DirectedGraph <- R6::R6Class(
     classname = "DirectedGraph"
     , inherit = AbstractGraph
-    , public = list(
-    ) # / public
+    , public = list()
     , active = list(
         default_node_measures = function() {
             return(c(

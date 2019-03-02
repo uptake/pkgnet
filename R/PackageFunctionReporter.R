@@ -45,7 +45,8 @@
 #'     as nodes by \code{FunctionReporter}.}
 #' }
 #' @importFrom covr package_coverage
-#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder rbindlist
+#' @importFrom data.table data.table melt as.data.table data.table setnames
+#' setcolorder rbindlist setkeyv
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
 #' @importFrom methods is
@@ -235,6 +236,8 @@ FunctionReporter <- R6::R6Class(
                 nodes <- data.table::rbindlist(list(nodes, r6DT))
             }
 
+            data.table::setkeyv(nodes, 'node')
+
             private$cache$nodes <- nodes
 
             log_info(sprintf('... done extracting functions as nodes.'
@@ -302,6 +305,8 @@ FunctionReporter <- R6::R6Class(
                                 , TARGET = character()
                             )
             }
+
+            data.table::setkeyv(edgeDT, c('SOURCE', 'TARGET'))
 
             log_info("...done extracting function dependencies as edges.")
 

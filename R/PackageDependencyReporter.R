@@ -8,6 +8,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom utils installed.packages
 #' @importFrom tools package_dependencies
+#' @importFrom data.table data.table rbindlist setkeyv
 #' @export
 #' @examples
 #' \donttest{
@@ -149,7 +150,7 @@ DependencyReporter <- R6::R6Class(
                     )
                 }
             ))
-
+            data.table::setkeyv(edges, c('SOURCE', 'TARGET'))
             private$cache$edges <- edges
 
             # Get and save nodes
@@ -161,6 +162,7 @@ DependencyReporter <- R6::R6Class(
                      )
                 )
             )
+            data.table::setkeyv(nodes, 'node')
             private$cache$nodes <- nodes
 
             log_info('...done constructing dependency network.')
