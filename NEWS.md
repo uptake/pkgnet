@@ -11,7 +11,7 @@
 ## CHANGES
 
 * Standardizing on the language "dependency" and "reverse dependency" to describe the directed graph relationships in the package. This completes the change introduced in v0.3.0 where edge direction convention was set to point in the direction of dependency. So this means that "depend on" follows the edge arrow direction, and "reverse depends on" is reverse edge arrow direction. ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
-* `outSubgraphSize` and `inSubgraphSize` have been replaced with `recursiveDeps` and `recursiveRevDeps`, which are the former minus one (by not counting the node itself). ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* `outSubgraphSize` and `inSubgraphSize` have been replaced with `numRecursiveDeps` and `numRecursiveRevDeps`, which are the former minus one (by not counting the node itself). ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 * Per the new `DirectedGraph` feature, reporters' `pkg_graph` field now contain an object of new `DirectedGraph` class. Previously it held an igraph object. This igraph object is now instead available at `pkg_graph$igraph`. See NEW FEATURES section for other details about the new `pkg_graph` object. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 * Default measures now exist for each reporter. These can be calculated with the
 new method `calculate_default_measures` on reporters. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
