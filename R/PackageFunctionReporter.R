@@ -46,7 +46,6 @@
 #' }
 #' @importFrom covr package_coverage
 #' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder rbindlist
-#' @importFrom DT datatable formatRound
 #' @importFrom R6 R6Class
 #' @importFrom utils lsf.str
 #' @importFrom methods is
@@ -68,50 +67,15 @@ FunctionReporter <- R6::R6Class(
             return(invisible(self))
         }
 
-    ) # / public
+    )
 
     , active = list(
 
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_function_reporter.Rmd"), package = "pkgnet")
-        },
-
-        pkg_R6_classes = function() {
-            if (is.null(private$cache$pkg_R6_classes)) {
-                pkg_env <- private$get_pkg_env()
-                private$cache$pkg_R6_classes <- Filter(
-                    f = function(x, p = pkg_env){
-                            R6::is.R6Class(get(x, p))
-                        }
-                    , x = names(pkg_env)
-                )
-            }
-            return(private$cache$pkg_R6_classes)
-        },
-
-        pkg_R6_methods = function() {
-            if (is.null(private$cache$pkg_R6_methods)){
-                private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
-                    X = self$pkg_R6_classes
-                    , FUN = function(x, p = private$get_pkg_env()) {
-                        .get_R6_class_methods(x, get(x,p))
-                    }
-                ))
-            }
-            return(private$cache$pkg_R6_methods)
-        },
-
-        pkg_R6_inheritance = function() {
-            if (is.null(private$cache$pkg_R6_inheritance)) {
-                private$cache$pkg_R6_inheritance <- .get_R6_class_inheritance(
-                    self$pkg_R6_classes
-                    , self$pkg_name
-                    , private$get_pkg_env()
-                )
-            }
-            return(private$cache$pkg_R6_inheritance)
         }
-    ) # / active
+
+    )
 
     , private = list(
 
@@ -128,6 +92,42 @@ FunctionReporter <- R6::R6Class(
                 private$cache$pkg_env <- loadNamespace(self$pkg_name)
             }
             return(private$cache$pkg_env)
+        },
+
+        get_pkg_R6_classes = function() {
+            if (is.null(private$cache$pkg_R6_classes)) {
+                pkg_env <- private$get_pkg_env()
+                private$cache$pkg_R6_classes <- Filter(
+                    f = function(x, p = pkg_env){
+                        R6::is.R6Class(get(x, p))
+                    }
+                    , x = names(pkg_env)
+                )
+            }
+            return(private$cache$pkg_R6_classes)
+        },
+
+        get_pkg_R6_methods = function() {
+            if (is.null(private$cache$pkg_R6_methods)){
+                private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
+                    X = private$get_pkg_R6_classes()
+                    , FUN = function(x, p = private$get_pkg_env()) {
+                        .get_R6_class_methods(x, get(x,p))
+                    }
+                ))
+            }
+            return(private$cache$pkg_R6_methods)
+        },
+
+        get_pkg_R6_inheritance = function() {
+            if (is.null(private$cache$pkg_R6_inheritance)) {
+                private$cache$pkg_R6_inheritance <- .get_R6_class_inheritance(
+                    private$get_pkg_R6_classes()
+                    , self$pkg_name
+                    , private$get_pkg_env()
+                )
+            }
+            return(private$cache$pkg_R6_inheritance)
         },
 
         # add coverage to nodes table
@@ -225,8 +225,8 @@ FunctionReporter <- R6::R6Class(
             nodes[, isExported := node %in% exported_obj_names]
 
             # Check if we have R6 functions
-            if (length(self$pkg_R6_classes) > 0) {
-                r6DT <- self$pkg_R6_methods[, .(
+            if (length(private$get_pkg_R6_classes()) > 0) {
+                r6DT <- private$get_pkg_R6_methods()[, .(
                     node = paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
                     , type = "R6 method"
                     , isExported = CLASS_NAME %in% exported_obj_names
@@ -273,17 +273,17 @@ FunctionReporter <- R6::R6Class(
             )
 
             ### R6 METHODS ###
-            if (length(self$pkg_R6_classes) > 0) {
+            if (length(private$get_pkg_R6_classes()) > 0) {
                 edgeDT <- data.table::rbindlist(c(
                     list(edgeDT)
                     , mapply(
                         FUN = .determine_R6_dependencies
-                        , method_name = self$pkg_R6_methods[, METHOD_NAME]
-                        , method_type = self$pkg_R6_methods[, METHOD_TYPE]
-                        , class_name = self$pkg_R6_methods[, CLASS_NAME]
+                        , method_name = private$get_pkg_R6_methods()[, METHOD_NAME]
+                        , method_type = private$get_pkg_R6_methods()[, METHOD_TYPE]
+                        , class_name = private$get_pkg_R6_methods()[, CLASS_NAME]
                         , MoreArgs = list(
-                            methodsDT = self$pkg_R6_methods
-                            , inheritanceDT = self$pkg_R6_inheritance
+                            methodsDT = private$get_pkg_R6_methods()
+                            , inheritanceDT = private$get_pkg_R6_inheritance()
                             , pkg_env = private$get_pkg_env()
                             , pkg_functions = funs
                             )

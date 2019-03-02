@@ -28,9 +28,7 @@ test_that('FunctionReporter public interface is as expected', {
         , "report_markdown_path"
 
         # FunctionReporter-specific
-        , "pkg_R6_methods"
-        , "pkg_R6_classes"
-        , "pkg_R6_inheritance"
+        # none
     )
 
     reporter <- pkgnet::FunctionReporter$new()
