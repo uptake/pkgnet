@@ -1,4 +1,4 @@
-node,classType,outDegree,inDegree,outCloseness,inCloseness,recursiveDeps,recursiveRevDeps,betweenness,pageRank,hubScore,authorityScore
+node,classType,outDegree,inDegree,outCloseness,inCloseness,numRecursiveDeps,numRecursiveRevDeps,betweenness,pageRank,hubScore,authorityScore
 Two,R6,1,1,0.0769230769230769,0.0769230769230769,1,4,4,0.12970601422263,0,0
 Three,R6,1,1,0.0828025477707006,0.0828025477707006,2,3,6,0.111449319091023,0,0
 MyAnswer,Reference,0,1,0.0714285714285714,0.0714285714285714,0,1,0,0.0498380825182466,0,0.618033988749895
