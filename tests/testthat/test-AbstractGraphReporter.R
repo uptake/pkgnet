@@ -28,7 +28,7 @@ test_that('AbstractGraphReporter public interface is as expected', {
         , "report_markdown_path"
     )
 
-    reporter <- pkgnet::AbstractGraphReporter$new()
+    reporter <- pkgnet:::AbstractGraphReporter$new()
     expect_setequal(object = names(reporter)
                     , expected = publicInterfaceExpected)
 })
@@ -36,31 +36,31 @@ test_that('AbstractGraphReporter public interface is as expected', {
 test_that("AbstractGraphReporter layout type setting works", {
     expect_equal(
         object = {
-            x <- AbstractGraphReporter$new()
+            x <- pkgnet:::AbstractGraphReporter$new()
             x$layout_type <- pkgnet:::.igraphAvailableLayouts()[[1]]
             x$layout_type
         }
         , expected = pkgnet:::.igraphAvailableLayouts()[[1]]
     )
     expect_error({
-        x <- AbstractGraphReporter$new()
+        x <- pkgnet:::AbstractGraphReporter$new()
         x$layout_type <- 'layout_as_newspaper'
     }, regexp = "layout_as_newspaper is not a supported layout by igraph")
 })
 
 test_that("AbstractGraphReporter errors on unimplemented methods", {
     expect_error({
-        x <- AbstractGraphReporter$new()
+        x <- pkgnet:::AbstractGraphReporter$new()
         x$nodes
     }, regexp = "Node extraction not implemented for this reporter")
 
     expect_error({
-        x <- AbstractGraphReporter$new()
+        x <- pkgnet:::AbstractGraphReporter$new()
         x$edges
     }, regexp = "Edge extraction not implemented for this reporter")
 
     expect_error({
-        x <- AbstractGraphReporter$new()
+        x <- pkgnet:::AbstractGraphReporter$new()
         x$pkg_graph
     }, regexp = "Reporter must set valid graph class")
 })

@@ -19,7 +19,7 @@ test_that('AbstractPackageReporter public interface is as expected', {
         , "report_markdown_path"
     )
 
-    reporter <- pkgnet::AbstractPackageReporter$new()
+    reporter <- pkgnet:::AbstractPackageReporter$new()
     expect_setequal(object = names(reporter)
                     , expected = publicInterfaceExpected)
 })
@@ -27,7 +27,7 @@ test_that('AbstractPackageReporter public interface is as expected', {
 
 test_that("AbstractPackageReporter does not let you set_package twice", {
     expect_error({
-        x <- AbstractPackageReporter$new()
+        x <- pkgnet:::AbstractPackageReporter$new()
         x$set_package("baseballstats")
         x$set_package("baseballstats")
     }, regexp = "A package has already been set for this reporter")
@@ -35,26 +35,26 @@ test_that("AbstractPackageReporter does not let you set_package twice", {
 
 test_that("AbstractPackageReporter rejects bad packages with an informative error", {
     expect_error({
-        x <- AbstractPackageReporter$new()
+        x <- pkgnet:::AbstractPackageReporter$new()
         x$set_package("w0uldNEverB33aPackageName")
     }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
 })
 
 test_that("AbstractPackageReporter rejects bad pkg_path with an informative error", {
     expect_error({
-        x <- AbstractPackageReporter$new()
+        x <- pkgnet:::AbstractPackageReporter$new()
         x$set_package(pkg_name = "baseballstats", pkg_path = "hopefully/not/a/real/path")
     }, regexp = "Package directory does not exist: hopefully/not/a/real/path")
 })
 
 test_that("AbstractPackageReporter errors on unimplemented methods", {
     expect_error({
-        x <- AbstractPackageReporter$new()
+        x <- pkgnet:::AbstractPackageReporter$new()
         x$get_summary_view()
     }, regexp = "get_summary_view has not been implemented")
 
     expect_error({
-        x <- AbstractPackageReporter$new()
+        x <- pkgnet:::AbstractPackageReporter$new()
         x$report_markdown_path
     }, regexp = "this reporter does not have a report markdown path")
 })
@@ -63,6 +63,5 @@ test_that("AbstractPackageReporter errors on unimplemented methods", {
 
 ##### TEST TEAR DOWN #####
 
-futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())
 closeAllConnections()
