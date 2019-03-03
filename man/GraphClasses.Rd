@@ -5,11 +5,12 @@
 \title{Graph Classes for Network Modeling}
 \description{
 pkgnet uses R6 classes to define and encapsulate the graph
-models for representing package networks. These classes implement different
-types of graphs and functionality to calculate their respective graph theory
-measures.
+    models for representing package networks. These classes implement
+    different types of graphs and functionality to calculate their respective
+    graph theory measures. The base class \code{AbstractGraph} defines the
+    standard interfaces and functionality.
 
-Currently the only implemented type of graph is \link{DirectedGraph}
+    Currently the only implemented type of graph is \link{DirectedGraph}.
 }
 \section{Class Constructor}{
 

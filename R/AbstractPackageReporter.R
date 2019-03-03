@@ -1,35 +1,111 @@
-#' @title Abstract Package Reporter Class
-#' @name AbstractPackageReporter
-#' @family AbstractReporters
-#' @description Defines the Abstract Class for all PackageReporters defined in pkgnet.
-#'              The class is not meant to be instantiated, but inherited from and its methods
-#'              overloaded such that each Metric implements certain functionality.
-#' @importFrom R6 R6Class
-#' @importFrom tools file_path_as_absolute
-#' @importFrom utils installed.packages
+#' @title Package Reporters
+#' @name PackageReporters
+#' @keywords internal
+#' @description pkgnet defines several package reporter R6 classes that analyze
+#'     some particular aspect of a package. These reporters share common
+#'     functionality and interfaces defined by a base reporter class
+#'     \code{AbstractPackageReporter}.
+#' @section Class Constructor:
+#' \describe{
+#'     \item{\code{}}{
+#'         \itemize{
+#'             \item{Initialize an instance of the reporter.}
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Instantiated reporter object. Note that this
+#'                        reporter object isn't useful yet until you use the
+#'                        \code{set_package} method to set a package.
+#'                     }
+#'                 }
+#'             }
+#'         }
+#'     }
+#' }
+#'
 #' @section Public Methods:
 #' \describe{
 #'     \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
 #'         \itemize{
-#'             \item{Set the package that all operations in the object are done for.}
+#'             \item{Set the package that the reporter will analyze. This can
+#'                 only be done once for a given instance of a reporter.
+#'                 Instantiate a new copy of the reporter if you need to analyze
+#'                 a different package.
+#'             }
 #'             \item{\bold{Args:}}{
 #'                 \itemize{
-#'                 \item{\bold{\code{pkg_name}}: A string with the name of the package you are
-#'                   analyzing.}
-#'                 \item{\bold{\code{pkg_path}}: Optional directory path to source
-#'                   code of the package. It is used for calculating test coverage.
-#'                   It can be an absolute or relative path.}
+#'                     \item{\bold{\code{pkg_name}}: character string, name of
+#'                      package
 #'                  }
-#'              }
-#'          }
+#'                     \item{\bold{\code{pkg_path}}: character string, optional
+#'                     directory path to source code of the package. It is used
+#'                     for calculating test coverage. It can be an absolute or
+#'                     relative path.
+#'                  }
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Self, invisibly.}
+#'                 }
+#'             }
+#'         }
 #'     }
 #'     \item{\code{get_summary_view()}}{
 #'         \itemize{
-#'             \item{Returns a particular reporters summary report on the package for use in a high level view}
-#'       }
+#'             \item{Returns an htmlwidget object that summarizes the analysis
+#'                 of the reporter. Used when creating a
+#'                 \link[=CreatePackageReport]{package report}.
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{\link[htmlwidgets:htmlwidgets-package]{htmlwidget}
+#'                         object
+#'                     }
+#'                 }
+#'             }
+#'         }
 #'     }
 #' }
-#' @export
+#'
+#' @section Public Fields:
+#' \describe{
+#'     \item{\bold{\code{pkg_name}}}{: character string, name of set package.
+#'         Read-only.
+#'     }
+#'     \item{\bold{\code{report_markdown_path}}}{: character string, path to
+#'         R Markdown template for this reporter. Read-only.
+#'     }
+#' }
+#'
+#' @section Special Methods:
+#' \describe{
+#'     \item{\code{clone(deep = FALSE)}}{
+#'         \itemize{
+#'             \item{Method for copying an object. See
+#'                 \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}}
+#'                 for the intricacies of R6 reference semantics.
+#'             }
+#'             \item{\bold{Args:}}{
+#'                 \itemize{
+#'                     \item{\bold{\code{deep}}: logical. Whether to recursively
+#'                     clone nested R6 objects.
+#'                  }
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Cloned object of this class.}
+#'                 }
+#'             }
+#'         }
+#'     }
+#' }
+NULL
+
+#' @importFrom R6 R6Class
+#' @importFrom assertthat assert_that is.string
+#' @importFrom tools file_path_as_absolute
+#' @importFrom utils installed.packages
 AbstractPackageReporter <- R6::R6Class(
     classname = "AbstractPackageReporter",
 

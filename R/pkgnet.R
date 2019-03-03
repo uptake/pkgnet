@@ -33,14 +33,66 @@ globalVariables(c('.'
                   , 'SYMBOL'
                   ))
 
-# NULL object for common parameter documentation
-#' @param pkg_name (string) name of a package
-#' @param pkg_path (string) The path to the package repository. If given, coverage
-#'                 will be calculated for each function. \code{pkg_path} can be an
-#'                 absolute or relative path.
-#' @name doc_shared
-#' @title NULL Object For Common Documentation
-#' @description This is a NULL object with documentation so that later functions can call
-#' inheritParams
-NULL
 
+#' @title pkgnet : Network Analysis of R Packages
+#' @keywords internal
+#' @description R packages can be complex bodies of code and functionality with
+#'    hard-to-intuit underlying structure. \pkg{pkgnet} provides tools to analyze and
+#'    understand that structure through the lens of
+#'    \href{https://en.wikipedia.org/wiki/Network_theory}{network theory}.
+#'
+#' @section Package Report:
+#'    The simplest way of using pkgnet is through the function
+#'    \code{\link{CreatePackageReport}}, e.g.,
+#'
+#'    \preformatted{    CreatePackageReport("lubridate")}
+#'
+#'    This will create a standalone HTML report containing analyses of various
+#'    aspects of the specified subject package.
+#'
+#'    For more info, check out our introductory vignette with
+#'
+#'    \preformatted{    vignette("pkgnet-intro")}
+#'
+#' @section Individual Reporters:
+#'   Reporters are the basic modules of functionality within pkgnet. Each
+#'   type of reporter is used to analyze a particular aspect of the subject
+#'   package. The currently available reporters are:
+#'
+#'   \describe{
+#'     \item{\bold{\code{\link{DependencyReporter}}}}{: analyze the recursive
+#'        network of packages that the subject package depends on.
+#'     }
+#'     \item{\bold{\code{\link{FunctionReporter}}}}{: analyze the network of
+#'        interdependencies of the functions defined in the subject package
+#'     }
+#'     \item{\bold{\code{\link{InheritanceReporter}}}}{: analyze the class
+#'        inheritance trees for subject packages that use object-oriented
+#'        programming.
+#'     }
+#'     \item{\bold{\code{\link{SummaryReporter}}}}{: get an overview of the
+#'        subject package through its DESCRIPTION file.
+#'     }
+#'   }
+#'
+#'   \code{\link{CreatePackageReport}} uses a \link[=DefaultReporters]{standard
+#'   set of reporters} by default. You can customize the reporters you want by
+#'   passing in your own list of instantiated reporters, e.g.
+#'
+#'   \preformatted{
+#'       CreatePackageReport(
+#'           "lubridate",
+#'           pkg_reporters = list(FunctionReporter$new(), InheritanceReporter$new())
+#'       )
+#'   }
+#'
+#'   You can also use reporters interactively. Once you have a reporter
+#'   instantiated, check our that reporter's documentation to see what you can
+#'   do.
+#'
+#'   \preformatted{
+#'       reporter <- DependencyReporter$new()
+#'       reporter$set_package("lubridate")
+#'   }
+#'
+"_PACKAGE"

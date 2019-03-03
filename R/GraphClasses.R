@@ -1,12 +1,12 @@
 #' @title Graph Classes for Network Modeling
 #' @name GraphClasses
-#' @rdname GraphClasses
 #' @description pkgnet uses R6 classes to define and encapsulate the graph
-#' models for representing package networks. These classes implement different
-#' types of graphs and functionality to calculate their respective graph theory
-#' measures.
+#'     models for representing package networks. These classes implement
+#'     different types of graphs and functionality to calculate their respective
+#'     graph theory measures. The base class \code{AbstractGraph} defines the
+#'     standard interfaces and functionality.
 #'
-#' Currently the only implemented type of graph is \link{DirectedGraph}
+#'     Currently the only implemented type of graph is \link{DirectedGraph}.
 #'
 #' @section Class Constructor:
 #' \describe{
@@ -294,16 +294,24 @@ AbstractGraph <- R6::R6Class(
 #' @title Directed Graph Network Model
 #' @name DirectedGraph
 #' @description R6 class defining a directed graph model for representing a
-#' network, including methods to calculate various measures from graph theory.
-#' The \link[igraph:igraph-package]{igraph} package is used as a backend for
-#' calculations.
-#' @format An \code{\link[R6]{R6Class}} generator object
-#' @inheritSection GraphClasses Class Constructor
+#'    network, including methods to calculate various measures from graph
+#'    theory. The \link[igraph:igraph-package]{igraph} package is used as a
+#'    backend for calculations.
+#'
+#'    This class isn't intended to be initialized directly; instead,
+#'    \link[=NetworkReporters]{network reporter objects} will initialize it as
+#'    its \code{pkg_graph} field. If you have a network reporter named
+#'    \code{reporter}, then you access this object's public
+#'    interface through \code{pkg_graph}---for example,
+#'
+#'    \preformatted{    reporter$pkg_graph$node_measures('hubScore')}
+#'
 #' @inheritSection GraphClasses Public Methods
 #' @inheritSection GraphClasses Public Fields
-#' @inheritSection GraphClasses Special Methods
 #' @inheritSection DirectedGraphMeasures Node Measures
 #' @inheritSection DirectedGraphMeasures Graph Measures
+NULL
+
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree closeness betweenness
 #' @importFrom igraph page_rank hub_score authority_score
@@ -522,8 +530,9 @@ DirectedGraph <- R6::R6Class(
 
 #' @title Measures for Directed Graph Class
 #' @name DirectedGraphMeasures
-#' @rdname DirectedGraphMeasures
 #' @keywords internal
+#' @description Descriptions for all available node and graph measures for
+#'    networks modeled by \link{DirectedGraph}.
 #' @section Node Measures:
 #' \describe{
 #'     \item{\bold{\code{outDegree}}}{: outdegree, the number of outward edges (tail ends).

@@ -1,15 +1,19 @@
-#' @title Package Dependency Reporter Class
+#' @title Recursive Package Dependency Reporter
 #' @name DependencyReporter
-#' @family PackageReporters
-#' @description This Reporter takes a package and uncovers the structure from
-#'              its other package dependencies, determining which package it relies on is most central,
-#'              allowing for a developer to determine how to vet its dependency tree
-#' @importFrom data.table data.table setnames rbindlist
-#' @importFrom R6 R6Class
-#' @importFrom utils installed.packages
-#' @importFrom tools package_dependencies
-#' @importFrom data.table data.table rbindlist setkeyv
-#' @export
+#' @family Network Reporters
+#' @family Package Reporters
+#' @description This reporter looks at the recursive network of its dependencies
+#'    on other packages. This allows a developer to understand how individual
+#'    dependencies might lead to a much larger set of dependencies, potentially
+#'    informing decisions on including or removing them.
+#' @section Class Constructor:
+#' \preformatted{DependencyReporter$new()}
+#' @inheritSection PackageReporters Class Constructor
+#' @inheritSection PackageReporters Public Methods
+#' @inheritSection NetworkReporters Public Methods
+#' @inheritSection PackageReporters Public Fields
+#' @inheritSection NetworkReporters Public Fields
+#' @inheritSection PackageReporters Special Methods
 #' @examples
 #' \donttest{
 #'
@@ -22,6 +26,15 @@
 #' # plot it up
 #' reporter$plot_network()
 #' }
+NULL
+
+#' @importFrom R6 R6Class
+#' @importFrom assertthat assert_that is.flag
+#' @importFrom utils installed.packages
+#' @importFrom tools package_dependencies
+#' @importFrom data.table data.table rbindlist setkeyv
+#' @importFrom visNetwork visHierarchicalLayout
+#' @export
 DependencyReporter <- R6::R6Class(
     "DependencyReporter",
     inherit = AbstractGraphReporter,

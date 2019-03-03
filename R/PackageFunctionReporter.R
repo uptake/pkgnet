@@ -1,55 +1,69 @@
-#' @title Package Function Reporter Class
+#' @title Function Interdependency Reporter
 #' @name FunctionReporter
-#' @family PackageReporters
-#' @description This Reporter takes a package and uncovers the structure from
-#'              its other functions, determining useful information such as which function is most
-#'              central to the package. Combined with testing information it can be used as a powerful tool
-#'              to plan testing efforts.
+#' @family Network Reporters
+#' @family Package Reporters
+#' @description This reporter looks at the network of interdependencies of its
+#'    defined functions. Measures of centrality from graph theory can indicate
+#'    which function is most important to a package. Combined with unit test
+#'    coverage information---also provided by this reporter--- it can be used
+#'    as a powerful tool to prioritize test writing.
+#' @section Class Constructor:
+#' \preformatted{FunctionReporter$new()}
+#' @inheritSection PackageReporters Class Constructor
+#' @inheritSection PackageReporters Public Methods
+#' @inheritSection NetworkReporters Public Methods
+#' @inheritSection PackageReporters Public Fields
+#' @inheritSection NetworkReporters Public Fields
+#' @inheritSection PackageReporters Special Methods
+#' @details
+#' \subsection{R6 Method Support:}{
+#'     R6 classes are supported, with their methods treated as functions by the
+#'     reporter.
 #'
-#' R6 classes are supported, with methods treated as functions by the Reporter.
-#' R6 methods will be named like \code{<classname>$<methodtype>$<methodname>}
-#' , e.g., \code{FunctionReporter$private_methods$extract_nodes}. Note that the
-#' class name used will be the \emph{name of the generator object in the package's namespace},
-#' and \emph{not} the \code{classname} attribute of the class, which is not required to be defined
-#' or to be the same as the generator object name.
-#'
-#' @section Public Methods:
-#' \describe{
-#'     \item{\code{set_package(pkg_name, pkg_path)}}{
-#'         \itemize{
-#'             \item{Set properties of this reporter. If pkg_name overrides a
-#'                 previously-set package name, any cached data will be removed.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                 \item{\bold{\code{pkg_name}}: String with the name of the package.}
-#'                 \item{\bold{\code{pkg_path}}: Optional directory path to source
-#'                   code of the package. It is used for calculating test coverage.
-#'                   It can be an absolute or relative path.}
-#'                }
-#'             }
-#'         }
-#'     }
+#'    \itemize{
+#'       \item{R6 methods will be named like
+#'          \code{<classname>$<methodtype>$<methodname>}, e.g.,
+#'          \code{FunctionReporter$private_methods$extract_nodes}.
+#'       }
+#'       \item{Note that the class name used will be the \strong{name of the
+#'          generator object in the package's namespace}.
+#'       }
+#'       \item{The \code{classname} attribute of the class is \strong{not} used.
+#'          In general, it is not required to be defined or the same as the
+#'          generator object name. This attribute is used primarily for
+#'          S3 dispatch.
+#'       }
+#'    }
 #' }
-#' @section Known Limitations:
-#' \itemize{
-#'     \item{Using non-standard evaluation to refer to things (e.g, dataframe column names)
-#'     that have the same name as a function will trick \code{FunctionReporter} into thinking
-#'     the function was called. This can be avoided if you don't use reuse function names
-#'     for other purposes.}
-#'     \item{Functions stored as list items and not assigned to the package namespace
-#'     will be invisible to \code{FunctionReporter}.}
-#'     \item{Calls to methods of instantiated R6 or reference objects will not be recognized.
-#'     We don't have a reliable way of identifying instantiated objects, or identifying
-#'     their class.}
-#'     \item{Reference class methods are not yet supported. They will not be idenified
-#'     as nodes by \code{FunctionReporter}.}
+#' \subsection{Known Limitations:}{
+#'    \itemize{
+#'        \item{Using non-standard evaluation to refer to things (e.g, dataframe
+#'           column names) that have the same name as a function will trick
+#'           \code{FunctionReporter} into thinking the function was called. This
+#'           can be avoided if you don't use reuse function names for other
+#'           purposes.
+#'        }
+#'        \item{Functions stored as list items and not assigned to the package
+#'           namespace will be invisible to \code{FunctionReporter}.
+#'        }
+#'        \item{Calls to methods of instantiated R6 or reference objects will
+#'           not be recognized. We don't have a reliable way of identifying
+#'           instantiated objects, or identifying their class.
+#'        }
+#'        \item{Reference class methods are not yet supported. They will not be
+#'           identified as nodes by \code{FunctionReporter}.
+#'        }
+#'    }
 #' }
+NULL
+
+
+#' @importFrom R6 R6Class is.R6Class
+#' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage
-#' @importFrom data.table data.table melt as.data.table data.table setnames
-#' setcolorder rbindlist setkeyv
-#' @importFrom R6 R6Class
-#' @importFrom utils lsf.str
+#' @importFrom data.table data.table as.data.table rbindlist setkeyv
 #' @importFrom methods is
+#' @importFrom visNetwork visHierarchicalLayout
 #' @export
 FunctionReporter <- R6::R6Class(
     "FunctionReporter",
