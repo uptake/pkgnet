@@ -3,9 +3,9 @@ title: "Package Class Inheritance Report"
 output: html_document
 ---
 
-## Class Inheritance
+## Class Inheritance Network
 
-Here's an overview of the classes defined in **`r reporter$pkg_name`**. The following class types are supported:
+This section analyzes the class inheritance relationships for classes defined in **`r reporter$pkg_name`**. The following class types are supported:
 
 * S4 Classes
 * Reference Classes (sometimes informally called "R5")
@@ -18,6 +18,8 @@ reporter$calculate_default_measures()
 ```
 
 ### Visualization
+
+Nodes are classes. Edges point from a child class to its parent class. 
 
 ```{r echo = FALSE, error = TRUE}
 if (nrow(reporter$nodes) > 0) {

@@ -1,13 +1,19 @@
+---
+title: "Package Dependency Report"
+output: html_document
+---
 
 ## Dependency Network
 
-Here's an overview of of the packages **`r reporter$pkg_name`** relies upon.
+This section analyzes the recursive package dependencies of **`r reporter$pkg_name`**. 
 
 ```{r echo = FALSE, error = TRUE}
 reporter$calculate_default_measures()
 ```
 
 ### Visualization
+
+Nodes are packages. Edges point in the direction of dependence.
 
 ```{r echo = FALSE, error = TRUE}
 reporter$graph_viz

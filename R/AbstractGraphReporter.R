@@ -89,6 +89,7 @@ AbstractGraphReporter <- R6::R6Class(
                     searching = FALSE
                     , pageLength = 50
                     , lengthChange = FALSE
+                    , scrollX = TRUE
                 )
             )
 

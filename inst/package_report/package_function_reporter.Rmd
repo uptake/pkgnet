@@ -5,13 +5,15 @@ output: html_document
 
 ## Function Network
 
-Here's an overview of the functions defined in **`r reporter$pkg_name`**.
+This section analyzes the dependency relationships between functions within **`r reporter$pkg_name`**. 
 
 ```{r echo = FALSE, error = TRUE}
 reporter$calculate_default_measures()
 ```
 
 ### Visualization
+
+Nodes are functions. Edges point in the direction of dependence.
 
 ```{r echo = FALSE, error = TRUE}
 reporter$graph_viz
