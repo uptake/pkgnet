@@ -69,6 +69,9 @@ CreatePackageReport <- function(pkg_name
     return(invisible(builtReporters))
 }
 
+### Imports from package_report.Rmd
+#' @importFrom knitr opts_chunk knit_child
+NULL
 
 # [title] Package Report Renderer
 # [name] RenderPackageReport
