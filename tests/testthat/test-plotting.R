@@ -3,15 +3,6 @@ context("Plotting Tests")
 ##### TEST SET UP #####
 
 rm(list = ls())
-# Configure logger (suppress all logs in testing)
-# expect_silents only work with this logger turned off; only alerts with warnings
-loggerOptions <- futile.logger::logger.options()
-if (!identical(loggerOptions, list())){
-    origLogThreshold <- loggerOptions[[1]][['threshold']]
-} else {
-    origLogThreshold <- futile.logger::INFO
-}
-futile.logger::flog.threshold(0)
 
 test_that('node coloring by discrete and continuous', {
     b <- FunctionReporter$new()
@@ -21,13 +12,16 @@ test_that('node coloring by discrete and continuous', {
                                            , lib.loc = Sys.getenv('PKGNET_TEST_LIB')
                   )
     )
+
+    b$calculate_default_measures()
+
     b$.__enclos_env__$private$set_plot_node_color_scheme(
         field = "coverageRatio"
         , palette = c("red", "green")
     )
-    
+
     expect_silent({
-        
+
         b$.__enclos_env__$private$set_plot_node_color_scheme(
             field = "filename"
             , palette = c(
@@ -43,7 +37,7 @@ test_that('node coloring by discrete and continuous', {
             )
         )
     })
-    
+
     viz <- b$graph_viz
     expect_is(viz, "visNetwork")
     expect_is(viz, "htmlwidget")
@@ -51,6 +45,5 @@ test_that('node coloring by discrete and continuous', {
 
 ##### TEST TEAR DOWN #####
 
-futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())
 closeAllConnections()

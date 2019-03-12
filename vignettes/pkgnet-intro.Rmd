@@ -114,16 +114,16 @@ g
 
 ## Dependency
 
-Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point from the dependent node to the independent node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_(UML)) framework, a widely used standard for software system modeling.] 
+Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point in the direction of dependency---the tail node depends on the head node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_\(UML\)) framework, a widely used standard for software system modeling.] 
 
 In the example dependency graph above:
 
-* **C** is dependent upon both **A** and **B**.
-* **D** is dependent upon both **C** and **B**.
-* **D** is indirectly dependent upon **A** through **C** via the transitive property.
-* **B** is independent of **A** as there is no path from **A** to **B** by following the edges.
+* **C** depends on both **A** and **B**.
+* **D** depends both **C** and **B**.
+* **D** indirectly depends upon **A** through **C** via the transitive property.
+* **B** does not depend on **A** as there is no path from **A** to **B** by following the edges.
 
-Following the direction of the edges allows you to figure out the **dependencies** of a node—the nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **dependents** of a node—the nodes that depend on it.
+Following the direction of the edges allows you to figure out the **dependencies** of a node---the other nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **reverse dependencies** (i.e., dependents) of a node---the other nodes that depend on it.
 
 ***
 # Running pkgnet
@@ -206,6 +206,7 @@ funcReporter2$set_package(
     pkg_name = "baseballstats"
     , pkg_path = system.file('baseballstats',package="pkgnet")
 )
+funcReporter2$calculate_default_measures()
 g <- visNetwork::visHierarchicalLayout(
     graph = funcReporter2$graph_viz
     , direction = "UD"
@@ -261,15 +262,20 @@ Both the `DependencyReporter` and the `FunctionReporter` contain graph-level mea
 report2$FunctionReporter$network_measures
 ```
 
-### Network Object
-Both the `DependencyReporter` and the `FunctionReporter` are available as [igraph](http://igraph.org/r/) objects named `pkg_graph`
+### Network Graph Model Object
+Both the `DependencyReporter` and the `FunctionReporter` have an object called `pkg_graph` that contains the graph model of their respective networks. This object has methods to calculate additional node-level and graph-level measures. It is powered by [igraph](http://igraph.org/r/), and the igraph object itself is directly accessible with `pkg_graph$igraph`. 
+
+```{r networkObjAddtlMeasures}
+report2$FunctionReporter$pkg_graph$node_measures(c('hubScore', 'authorityScore'))
+```
 
 ```{r networkObj}
-report2$FunctionReporter$pkg_graph
+report2$FunctionReporter$pkg_graph$igraph
 ```
 
 ***
 # A Deeper Look
+
 With the reports and objects produced by `pkgnet` by default, there is plenty to inform us on the inner workings of an R package.  However, we may want to know MORE! Since the [igraph](http://igraph.org/r/) objects are available, we can leverage those graphs for further analysis.  
      
 In this section, let's examine a larger R package, such as [lubridate](http://lubridate.tidyverse.org/).
@@ -306,26 +312,24 @@ report2 <- CreatePackageReport(
 funcNodes <- report2$FunctionReporter$nodes
 
 # List Coverage For Most Depended-on Functions
-mostRef <- funcNodes[order(inSubgraphSize, decreasing = TRUE)][1:10]
-mostRef[,list(`Function` = node
-              , `In-Subgraph Size` = inSubgraphSize
-              , `Coverage Ratio` = coverageRatio
-              , `Total Lines` = totalLines)]
-
+mostRef <- funcNodes[order(numRecursiveRevDeps, decreasing = TRUE),
+                     .(node, numRecursiveRevDeps, coverageRatio, totalLines)
+                     ][1:10]
 ```
 
-|Function                | In-Subgraph Size| Coverage Ratio| Total Lines|
-|:-----------------------|-----------------:|--------------:|-----------:|
-|divide_period_by_period |               39|              1|           2|
-|days                    |               22|              1|           1|
-|check_duration          |               15|              0|           1|
-|as.POSIXt               |               13|              0|           1|
-|eweeks                  |               13|              0|           2|
-|check_interval          |               12|              0|          11|
-|date<-                  |               12|             NA|          NA|
-|add_months              |               10|              1|           4|
-|ceil_multi_unit         |               10|              1|           1|
-|am                      |                6|              1|           1|
+```{r fakeDetail1Results, eval=FALSE}
+#>             node numRecursiveRevDeps coverageRatio totalLines
+#>  1:        month                  81             1          1
+#>  2:           tz                  79             1          1
+#>  3: reclass_date                  68             1          1
+#>  4:         date                  67             1          1
+#>  5:      is.Date                  60             1          1
+#>  6:    is.POSIXt                  57             1          1
+#>  7:         wday                  56             1          1
+#>  8:   is.POSIXct                  55             1          1
+#>  9:  .deprecated                  55             0         10
+#> 10:      as_date                  52             1          1
+```
 
 Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.  
 
@@ -362,20 +366,30 @@ for (i in seq_along(sameDeps)) {
 ```
   
 ```{r resultFromFake, echo=FALSE, results='markup'}
-cat("Group 1: stamp_time, stamp_date
-Group 2: ms, hm
-Group 3: new_interval, %--%, int_diff
-Group 4: floor_date, quarter, semester
-Group 5: picoseconds, microseconds, nanoseconds, milliseconds
-Group 6: weeks, days, years, seconds_to_period, seconds, new_period, minutes, hours
-Group 7: yq, dmy, ymd_hms, ymd_hm, ymd_h, ymd, ydm_hms, ydm_hm, ydm_h, ydm, pretty_dates, parse_date_time2, parse_date_time, myd, mdy_hms, mdy_hm, mdy_h, mdy, local_time, fast_strptime, dym, dmy_hms, dmy_hm, dmy_h
-"
+cat("Group 1: divisible_period, make_date
+Group 2: parse_date_time2, fast_strptime
+Group 3: .deprecated_fun, .deprecated_arg
+Group 4: stamp_date, stamp_time
+Group 5: epiweek, isoweek
+Group 6: ms, hm
+Group 7: quarter, semester
+Group 8: am, .roll_hms
+Group 9: modulo_interval_by_duration, modulo_interval_by_period
+Group 10: .difftime_from_pieces, .duration_from_units
+Group 11: divide_period_by_period, xtfrm.Period
+Group 12: int_diff, %--%
+Group 13: isoyear, epiyear
+Group 14: nanoseconds, microseconds, picoseconds, milliseconds
+Group 15: period_to_seconds, check_period, multiply_period_by_number, format.Period, divide_period_by_number, add_period_to_period
+Group 16: myd, dmy, yq, ymd, dym, mdy, ydm
+Group 17: hours, weeks, minutes, years, days, months.numeric, seconds, seconds_to_period
+Group 18: C_force_tz, hour.default, mday.default, c.POSIXct, .mklt, yday.default, year.default, minute.default, second.default
+Group 19: ehours, emilliseconds, eyears, eseconds, epicoseconds, enanoseconds, eminutes, olson_time_zones, edays, emicroseconds, eweeks
+Group 20: dmy_h, ydm_hms, ymd_hms, dmy_hm, ymd_h, ydm_hm, ydm_h, dmy_hms, ymd_hm, mdy_hms, mdy_hm, mdy_h"
 )
 ```
 
-Now, we have identified seven different groups of functions within [lubridate](http://lubridate.tidyverse.org/) that share the _exact same_ dependencies.  We could explore each group of functions for potential consolidation. 
-
-
+Now, we have identified twenty different groups of functions within [lubridate](http://lubridate.tidyverse.org/) that share the _exact same_ dependencies.  We could explore each group of functions for potential consolidation. 
 
 ```{r removeDemoPackage, include=FALSE}
 utils::remove.packages(

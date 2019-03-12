@@ -51,193 +51,175 @@
 #'     }
 #' }
 #' @importFrom R6 R6Class is.R6Class
-#' @importFrom DT datatable formatRound
-#' @importFrom data.table data.table rbindlist
+#' @importFrom data.table data.table rbindlist setkeyv
 #' @importFrom methods is
 #' @export
 InheritanceReporter <- R6::R6Class(
-    "InheritanceReporter",
-    inherit = AbstractGraphReporter,
+    "InheritanceReporter"
+    , inherit = AbstractGraphReporter
 
-    public = list(
-        get_summary_view = function(){
-
-            # Calculate network measures if not already done
-            # since we want the node measures in summary
-            invisible(self$network_measures)
-
-            # Create DT for display
-            tableObj <- DT::datatable(
-                data = self$nodes
-                , rownames = FALSE
-                , options = list(
-                    searching = FALSE
-                    , pageLength = 50
-                    , lengthChange = FALSE
-                )
-            )
-            # Round the double columns to three digits for formatting reasons
-            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-            tableObj <- DT::formatRound(
-                columns = numCols
-                , table = tableObj
-                , digits=3
-            )
-            return(tableObj)
-        }
-    ),
-
-    active = list(
-        nodes = function(){
-            if (is.null(private$cache$nodes)){
-                log_info("Extracting classes as nodes...")
-
-                pkg_env <- private$get_pkg_env()
-
-                # Start with empty node data.table
-                nodeList <- list(data.table::data.table(
-                    node = character(0), classType = character(0)
-                ))
-
-                for (thisObjName in names(pkg_env)) {
-
-                    thisObj <- get(thisObjName, pkg_env)
-
-                    # S4 classes and References classes
-                    # Specified class name is the important name
-                    if (grepl("^\\.__C__", thisObjName) & isS4(thisObj)) {
-
-                        thisObjClassType <- "S4"
-                        if (methods::is(thisObj, "refClassRepresentation")) {
-                            thisObjClassType <- "Reference"
-                        }
-
-                        nodeList <- c(nodeList, list(data.table::data.table(
-                            node = thisObj@className
-                            , classType = thisObjClassType
-                        )))
-
-                    # R6 classes
-                    # Generator object name is the important name
-                    } else if (R6::is.R6Class(thisObj)) {
-
-                        nodeList <- c(nodeList, list(data.table::data.table(
-                            node = thisObjName
-                            , classType = "R6"
-                        )))
-
-                    }
-
-                    # If not any of the class types, do nothing
-                }
-
-                # Bind all rows together into one data.table
-                nodeDT <- data.table::rbindlist(nodeList)
-
-                if (nrow(nodeDT) == 0) {
-                    msg <- sprintf(
-                        'No S4, Reference, or R6 class definitions found in package %s'
-                        , self$pkg_name
-                    )
-                    log_warn(msg)
-                }
-
-                private$cache$nodes <- nodeDT
-            }
-            return(private$cache$nodes)
-        },
-
-        # Edge direction convention is per UML class diagrams
-        # Child class is the SOURCE and Parent class is the TARGET
-        edges = function(){
-            if (is.null(private$cache$edges)){
-                log_info("Extracting class inheritance as edges...")
-
-                nodeDT <- self$nodes
-                pkg_env <- private$get_pkg_env()
-                edgeList <- list(data.table::data.table(
-                    SOURCE = character(0)
-                    , TARGET = character(0)
-                ))
-                for (thisNode in nodeDT[, node]) {
-
-                    # S4 or Reference Class
-                    if (nodeDT[node == thisNode, classType %in% c("S4" ,"Reference")]) {
-                        classDef <- getClass(thisNode, where = pkg_env)
-                        parents <- setdiff(
-                            selectSuperClasses(classDef, direct = TRUE, namesOnly = TRUE)
-                            , "envRefClass" # Base class defined by R that all reference classes inherit
-                        )
-                        if (length(parents) > 0) {
-                            edgeList <- c(
-                                edgeList
-                                , list(data.table::data.table(
-                                    SOURCE = thisNode
-                                    , TARGET = parents
-                                ))
-                            )
-                        }
-
-                        # R6 Class
-                    } else if (nodeDT[node == thisNode, classType == "R6"]) {
-                        classDef <- get(thisNode, pkg_env)
-                        parent <- classDef$inherit
-                        if (!is.null(parent)) {
-                            edgeList <- c(
-                                edgeList
-                                , list(data.table::data.table(
-                                    SOURCE = thisNode
-                                    , TARGET = deparse(parent)
-                                ))
-                            )
-                        }
-                    }
-                }
-
-                # Combine all edges together
-                edgeDT <- data.table::rbindlist(edgeList)
-
-                # Filter out any parents that are external to the package
-                edgeDT <- edgeDT[TARGET %in% nodeDT[, node]]
-
-                private$cache$edges <- edgeDT
-
-            }
-            return(private$cache$edges)
-        },
-
+    , active = list(
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_inheritance_reporter.Rmd"), package = "pkgnet")
         }
-    ),
+    ) # /active
 
-    private = list(
+    , private = list(
+        # Class of graph to initialize
+        # Should be constructor
+        graph_class = DirectedGraph
+
         # Default graph viz layout
-        private_layout_type = "layout_as_tree",
+        , private_layout_type = "layout_as_tree"
 
-        plotNodeColorScheme = list(
+        # Default color scheme for graph viz
+        , plotNodeColorScheme = list(
             field = "classType"
             , palette = c('#f0f9e8', '#bae4bc', '#7bccc4')
-        ),
+        )
 
-        get_pkg_env = function() {
+        , extract_nodes = function() {
+            log_info(sprintf("Extracting classes in %s as nodes...", self$pkg_name))
+
+            pkg_env <- private$get_pkg_env()
+
+            # Start with empty node data.table
+            nodeList <- list(data.table::data.table(
+                node = character(0), classType = character(0)
+            ))
+
+            for (thisObjName in names(pkg_env)) {
+
+                thisObj <- get(thisObjName, pkg_env)
+
+                # S4 classes and References classes
+                # Specified class name is the important name
+                if (grepl("^\\.__C__", thisObjName) & isS4(thisObj)) {
+
+                    thisObjClassType <- "S4"
+                    if (methods::is(thisObj, "refClassRepresentation")) {
+                        thisObjClassType <- "Reference"
+                    }
+
+                    nodeList <- c(nodeList, list(data.table::data.table(
+                        node = thisObj@className
+                        , classType = thisObjClassType
+                    )))
+
+                    # R6 classes
+                    # Generator object name is the important name
+                } else if (R6::is.R6Class(thisObj)) {
+
+                    nodeList <- c(nodeList, list(data.table::data.table(
+                        node = thisObjName
+                        , classType = "R6"
+                    )))
+
+                }
+
+                # If not any of the class types, do nothing
+            }
+
+            # Bind all rows together into one data.table
+            nodeDT <- data.table::rbindlist(nodeList)
+
+            if (nrow(nodeDT) == 0) {
+                msg <- sprintf(
+                    'No S4, Reference, or R6 class definitions found in package %s'
+                    , self$pkg_name
+                )
+                log_warn(msg)
+            }
+
+            data.table::setkeyv(nodeDT, 'node')
+
+            log_info("...done extracting classes as nodes.")
+
+            private$cache$nodes <- nodeDT
+            return(invisible(NULL))
+        }
+
+        # Edge direction convention is per UML class diagrams
+        # Child class is the SOURCE and Parent class is the TARGET
+        , extract_edges = function() {
+
+            nodeDT <- self$nodes
+
+            log_info(sprintf(
+                "Extracting class inheritance within %s as edges...", self$pkg_name
+            ))
+
+            pkg_env <- private$get_pkg_env()
+            edgeList <- list(data.table::data.table(
+                SOURCE = character(0)
+                , TARGET = character(0)
+            ))
+            for (thisNode in nodeDT[, node]) {
+
+                # S4 or Reference Class
+                if (nodeDT[node == thisNode, classType %in% c("S4" ,"Reference")]) {
+                    classDef <- getClass(thisNode, where = pkg_env)
+                    parents <- setdiff(
+                        selectSuperClasses(classDef, direct = TRUE, namesOnly = TRUE)
+                        , "envRefClass" # Base class defined by R that all reference classes inherit
+                    )
+                    if (length(parents) > 0) {
+                        edgeList <- c(
+                            edgeList
+                            , list(data.table::data.table(
+                                SOURCE = thisNode
+                                , TARGET = parents
+                            ))
+                        )
+                    }
+
+                    # R6 Class
+                } else if (nodeDT[node == thisNode, classType == "R6"]) {
+                    classDef <- get(thisNode, pkg_env)
+                    parent <- classDef$inherit
+                    if (!is.null(parent)) {
+                        edgeList <- c(
+                            edgeList
+                            , list(data.table::data.table(
+                                SOURCE = thisNode
+                                , TARGET = deparse(parent)
+                            ))
+                        )
+                    }
+                }
+            }
+
+            # Combine all edges together
+            edgeDT <- data.table::rbindlist(edgeList)
+
+            # Filter out any parents that are external to the package
+            edgeDT <- edgeDT[TARGET %in% nodeDT[, node]]
+
+            data.table::setkeyv(edgeDT, c('SOURCE', 'TARGET'))
+
+            log_info("...done extracting class inheritance as edges.")
+
+            private$cache$edges <- edgeDT
+            return(invisible(NULL))
+        } # /extract_edges
+
+        , get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
                 # create a custom environment w/ this package's contents
                 private$cache$pkg_env <- loadNamespace(self$pkg_name)
             }
             return(private$cache$pkg_env)
-        },
+        }
 
-        plot_network = function() {
-            g <- super$plot_network()
-
-            g <- (g
-                  %>% visNetwork::visHierarchicalLayout(
-                      sortMethod = "directed"
-                      , direction = "DU")
+        , plot_network = function() {
+            g <- (
+                super$plot_network()
+                %>% visNetwork::visHierarchicalLayout(
+                    sortMethod = "directed"
+                    , direction = "DU")
             )
             return(g)
         }
-    )
+    ) # /private
 
 )

@@ -1,0 +1,6 @@
+node,type,isExported
+on_base_pct,function,TRUE
+OPS,function,TRUE
+slugging_avg,function,TRUE
+at_bats,function,TRUE
+batting_avg,function,TRUE

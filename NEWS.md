@@ -1,13 +1,26 @@
 # pkgnet 0.3.2.9999 (current dev)
 
 ## NEW FEATURES
-None
+
+* Objects of new `DirectedGraph` class now slot into the `pkg_graph` field of network reporters. These objects encapsulate the graph modeling of networks and have a more expressive set of methods for analysis. Check out the full documentation with `?DirectedGraph`.  ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+    * Use `pkg_graph$node_measures` and `pkg_graph$graph_measures` to respectively calculate node-level and graph-level measures. 
+    * Use `pkg_graph$default_node_measures` and `pkg_graph$default_graph_measures` to see the measures calculated by default. 
+    * Use `pkg_graph$available_node_measures` and `pkg_graph$available_graph_measures` to see the all supported measures.
+    * The igraph object is now instead available at `pkg_graph$igraph`.
 
 ## CHANGES
-None
+
+* Standardizing on the language "dependency" and "reverse dependency" to describe the directed graph relationships in the package. This completes the change introduced in v0.3.0 where edge direction convention was set to point in the direction of dependency. So this means that "depend on" follows the edge arrow direction, and "reverse depends on" is reverse edge arrow direction. ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* `outSubgraphSize` and `inSubgraphSize` have been replaced with `numRecursiveDeps` and `numRecursiveRevDeps`, which are the former minus one (by not counting the node itself). ([#191](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* Per the new `DirectedGraph` feature, reporters' `pkg_graph` field now contain an object of new `DirectedGraph` class. Previously it held an igraph object. This igraph object is now instead available at `pkg_graph$igraph`. See NEW FEATURES section for other details about the new `pkg_graph` object. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* Default measures now exist for each reporter. These can be calculated with the
+new method `calculate_default_measures` on reporters. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+    * The report from `CreatePackageReport` will now only show default measures.
+* Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. ([#106](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* The report from `CreatePackageReport` now prints the version of pkgnet used at the bottom. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 
 ## BUG FIXES
-None
+* Static outputs shown in the vignette that were outdated have been updated. ([#189](https://github.com/UptakeOpenSource/pkgnet/issues/189), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 
 # pkgnet 0.3.2
 
@@ -19,7 +32,7 @@ None
 * Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing ([#167](https://github.com/UptakeOpenSource/pkgnet/pull/167))
 
 ## BUG FIXES
-* Corrected node statisitcs table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))
+* Corrected node statistics table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))
 * Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks ([#168](https://github.com/UptakeOpenSource/pkgnet/pull/168))
 
 # pkgnet 0.3.1
@@ -53,5 +66,3 @@ None
 
 ## BUG FIXES
 * Rendering of the table in Function Network tab. ([#136](https://github.com/UptakeOpenSource/pkgnet/issues/136), [#138](https://github.com/UptakeOpenSource/pkgnet/pull/138))
-
-<!--- Start of NEWS.md --->

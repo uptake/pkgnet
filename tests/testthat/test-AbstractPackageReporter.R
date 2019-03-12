@@ -1,49 +1,62 @@
-context("Abstract Package Reporter Tests")
-
-##### TEST SET UP #####
-
+context("AbstractPackageReporter Tests")
 rm(list = ls())
-# Configure logger (suppress all logs in testing)
-loggerOptions <- futile.logger::logger.options()
-if (!identical(loggerOptions, list())){
-  origLogThreshold <- loggerOptions[[1]][['threshold']]
-} else {
-  origLogThreshold <- futile.logger::INFO
-}
-futile.logger::flog.threshold(0)
 
 ##### TESTS #####
 
-## Structure Available ##
+test_that('AbstractPackageReporter public interface is as expected', {
 
-test_that('AbstractPackageReporter structure is as expected', {
-  
-  expect_named(object = AbstractPackageReporter$public_methods
-               , expected = c(
-                 "set_package",
-                 "get_summary_view",
-                 "clone"
-               )
-               , info = "Available public methods for AbstractPackageReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
-  expect_named(object = AbstractPackageReporter$public_fields
-               , expected = NULL
-               , info = "Available public fields for AbstractPackageReporter not as expected."
-               , ignore.order = TRUE
-               , ignore.case = FALSE
-  )
-  
+    publicInterfaceExpected <- c(
+        # R6 Special Methods
+        ".__enclos_env__"
+        , "clone"
+
+        # Package Reporter fields and active bindings
+        , "pkg_name"
+
+        # Package Reporter methods
+        , "set_package"
+        , "get_summary_view"
+        , "report_markdown_path"
+    )
+
+    reporter <- pkgnet::AbstractPackageReporter$new()
+    expect_setequal(object = names(reporter)
+                    , expected = publicInterfaceExpected)
 })
 
+
+test_that("AbstractPackageReporter does not let you set_package twice", {
+    expect_error({
+        x <- AbstractPackageReporter$new()
+        x$set_package("baseballstats")
+        x$set_package("baseballstats")
+    }, regexp = "A package has already been set for this reporter")
+})
 
 test_that("AbstractPackageReporter rejects bad packages with an informative error", {
     expect_error({
         x <- AbstractPackageReporter$new()
         x$set_package("w0uldNEverB33aPackageName")
     }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
+})
+
+test_that("AbstractPackageReporter rejects bad pkg_path with an informative error", {
+    expect_error({
+        x <- AbstractPackageReporter$new()
+        x$set_package(pkg_name = "baseballstats", pkg_path = "hopefully/not/a/real/path")
+    }, regexp = "Package directory does not exist: hopefully/not/a/real/path")
+})
+
+test_that("AbstractPackageReporter errors on unimplemented methods", {
+    expect_error({
+        x <- AbstractPackageReporter$new()
+        x$get_summary_view()
+    }, regexp = "get_summary_view has not been implemented")
+
+    expect_error({
+        x <- AbstractPackageReporter$new()
+        x$report_markdown_path
+    }, regexp = "this reporter does not have a report markdown path")
 })
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS TO BE TESTED BY CHILD OBJECTS

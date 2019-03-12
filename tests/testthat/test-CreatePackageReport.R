@@ -1,18 +1,14 @@
-context("CreatePackageReport")
+context("CreatePackageReport Tests")
+rm(list = ls())
 
-# Configure logger (suppress all logs in testing)
-loggerOptions <- futile.logger::logger.options()
-if (!identical(loggerOptions, list())){
-  origLogThreshold <- loggerOptions[[1]][['threshold']]
-} else {
-  origLogThreshold <- futile.logger::INFO
-}
-futile.logger::flog.threshold(0,name=futile.logger::flog.namespace())
+##### TEST SET UP #####
 
 # Set flag to suppress browser opening
 Sys.setenv(PKGNET_SUPPRESS_BROWSER = TRUE)
 
-test_that("Test that CreatePackageReport Runs", {
+##### TESTS #####
+
+test_that("Test that CreatePackageReport runs", {
 
     testReportPath <- tempfile(
         pattern = "baseball"
@@ -130,6 +126,5 @@ test_that("CreatePackageReport respects report_path when explicitly given", {
 
 Sys.unsetenv("PKGNET_SUPPRESS_BROWSER")
 
-futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())
 closeAllConnections()
