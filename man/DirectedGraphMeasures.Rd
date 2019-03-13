@@ -4,7 +4,8 @@
 \alias{DirectedGraphMeasures}
 \title{Measures for Directed Graph Class}
 \description{
-Measures for Directed Graph Class
+Descriptions for all available node and graph measures for
+   networks modeled by \link{DirectedGraph}.
 }
 \section{Node Measures}{
 

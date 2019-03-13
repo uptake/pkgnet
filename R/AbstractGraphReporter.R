@@ -1,34 +1,69 @@
-#' @title Abstract Graph Reporter Class
-#' @name AbstractGraphReporter
-#' @description Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
-#'              The class is not meant to be instantiated, but inherited from and its methods
-#'              overloaded such that each Metric implements certain functionality.
-#' @family AbstractReporters
-#' @section Public Members:
+#' @title Network Reporters for Packages
+#' @name NetworkReporters
+#' @keywords internal
+#' @description \pkg{pkgnet} defines several package reporter R6 classes that model
+#'     a particular network aspect of a package as a graph. These network
+#'     reporter classes are extended from \code{AbstractGraphReporter}, which
+#'     itself extends the \code{\link[=PackageReporters]{AbstractPackageReporter}}
+#'     with graph-modeling-related functionality.
+#'
+#'     This article describes the additional fields added by the
+#'     \code{AbstractGraphReporter} class definition.
+#'
+#' @section Public Methods:
 #' \describe{
-#'    \item{\code{edges}}{A data.table from SOURCE to TARGET nodes describing the connections}
-#'    \item{\code{nodes}}{A data.table with node as an identifier, and augmenting information about each node}
-#'    \item{\code{pkg_graph}}{An igraph object describing the package graph}
-#'    \item{\code{network_measures}}{A list of network measures calculated by \code{calculate_network_features}}
-#'    \item{\code{layout_type}}{Character string indicating currently active graph layout}
-#'    \item{\code{graph_viz}}{\code{visNetwork} object of package graph}
+#'     \item{\code{calculate_default_measures()}}{
+#'         \itemize{
+#'             \item{Calculates the default node and network measures for this
+#'                reporter.
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Self, invisibly.}
+#'                 }
+#'             }
+#'         }
+#'     }
 #' }
-#' @section Active Bindings:
+#' @section Public Fields:
 #' \describe{
-#'    \item{\code{pkg_graph}}{Returns the graph object}
-#'    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
-#'    \item{\code{graph_viz}}{Returns the graph visualization object}
-#'    \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.
-#'        If a valid layout type is given, this function will update the layout_type field.
-#'        You can use \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)} to see valid options.}
+#'     \item{\bold{\code{nodes}}}{: a data.table, containing information about
+#'        the nodes of the network the reporter is analyzing. The \code{node}
+#'        column acts the identifier. Read-only.
+#'     }
+#'     \item{\bold{\code{edges}}}{: a data.table, containing information about
+#'        the edge connections of the network the reporter is analyzing. Each
+#'        row is one edge, and the columns \code{SOURCE} and \code{TARGET}
+#'        specify the node identifiers. Read-only.
+#'     }
+#'     \item{\bold{\code{network_measures}}}{: a list, containing any measures
+#'        of the network calculated by the reporter. Read-only.
+#'     }
+#'     \item{\bold{\code{pkg_graph}}}{: a graph model object. See \link{DirectedGraph}
+#'        for additional documentation. Read-only.
+#'     }
+#'     \item{\bold{\code{graph_viz}}}{: a graph visualization object. A
+#'        \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
+#'        Read-only.
+#'     }
+#'     \item{\bold{\code{layout_type}}}{: a character string, the current layout
+#'        type for the graph visualization. Can be assigned a new valid layout
+#'        type value. Use use
+#'        \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)}
+#'        to see valid options.
+#'     }
 #' }
-#' @importFrom data.table data.table copy uniqueN setkeyv
+NULL
+
+
 #' @importFrom R6 R6Class
 #' @importFrom DT datatable formatRound
+#' @importFrom data.table data.table copy setkeyv
+#' @importFrom assertthat assert_that
+#' @importFrom grDevices colorRamp colorRampPalette rgb
 #' @importFrom magrittr %>%
-#' @importFrom methods hasArg formalArgs
-#' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
-#' @export
+#' @importFrom visNetwork visNetwork visIgraphLayout visEdges visOptions
+#' visGroups visLegend
 AbstractGraphReporter <- R6::R6Class(
     "AbstractGraphReporter"
     , inherit = AbstractPackageReporter

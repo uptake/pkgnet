@@ -1,12 +1,21 @@
-#' @title Package Summary Reporter Class
+#' @title Package Summary Reporter
 #' @name SummaryReporter
-#' @family PackageReporters
-#' @description Defines a concrete implementation of \link{AbstractPackageReporter}
-#'              for a high level overview of a particular package. It will summarize
-#'              things like lines of code, whether it's on CRAN, etc.
-#' @inheritSection AbstractPackageReporter Public Methods
-#' @importFrom DT datatable
+#' @family Package Reporters
+#' @description This reporter provides a high-level overview of a package via
+#'    its package DESCRIPTION file.
+#' @section Class Constructor:
+#' \preformatted{SummaryReporter$new()}
+#' @inheritSection PackageReporters Class Constructor
+#' @inheritSection PackageReporters Public Methods
+#' @inheritSection PackageReporters Public Fields
+#' @inheritSection PackageReporters Special Methods
+NULL
+
+
 #' @importFrom R6 R6Class
+#' @importFrom utils packageDescription
+#' @importFrom data.table data.table
+#' @importFrom DT datatable
 #' @export
 SummaryReporter <- R6::R6Class(
     classname = "SummaryReporter",
@@ -14,24 +23,24 @@ SummaryReporter <- R6::R6Class(
     public = list(
         get_summary_view = function(){
 
-          # Read DESCRIPTION file into a table
-          desc <- utils::packageDescription(self$pkg_name)
-          descDT <- data.table::data.table(
-              Field = names(desc)
-              , Values = unlist(desc)
-          )
-
-          # Render DT table
-          tableObj <- DT::datatable(
-            data = descDT
-            , rownames = FALSE
-            , options = list(
-              searching = FALSE
-              , pageLength = 50
-              , lengthChange = FALSE
+            # Read DESCRIPTION file into a table
+            desc <- utils::packageDescription(self$pkg_name)
+            descDT <- data.table::data.table(
+                Field = names(desc)
+                , Values = unlist(desc)
             )
-          )
-          return(tableObj)
+
+            # Render DT table
+            tableObj <- DT::datatable(
+                data = descDT
+                , rownames = FALSE
+                , options = list(
+                    searching = FALSE
+                    , pageLength = 50
+                    , lengthChange = FALSE
+                )
+            )
+            return(tableObj)
         }
     ),
 
