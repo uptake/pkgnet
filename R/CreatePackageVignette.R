@@ -50,7 +50,7 @@ CreatePackageVignette <- function(pkg_name
     )
     # Confirm directory exists
     if (!assertthat::is.dir(dirname(vignette_path))) {
-        log_fatal(sprintf("directory %s does not exist, please create first"))
+        log_fatal(sprintf("Directory %s does not exist, please create first"))
     }
 
     ## pkg_reporter input checks ##
@@ -59,8 +59,10 @@ CreatePackageVignette <- function(pkg_name
     )
     # Check if generators were passed in by accident
     if (any(vapply(pkg_reporters, FUN = R6::is.R6Class, FUN.VALUE = logical(1)))) {
-        log_fatal("At least one of pkg_reporters is an R6 class generator. This
-                  function expects initialized reporter objects.")
+        log_fatal(paste(
+            "At least one of pkg_reporters is an R6 class generator. This"
+            , "function expects initialized reporter objects."
+        ))
     }
     # Confirm that all reporters are actually valid initialized reporters
     assertthat::assert_that(
@@ -76,6 +78,45 @@ CreatePackageVignette <- function(pkg_name
     } else {
         pkg_path <- "NULL"
     }
+
+    # Check if vignette_path matches the right package
+    # if a vignettes directory is specified
+    vignetteDirAbsPath <- normalizePath(dirname(vignette_path))
+    # If path is a vignettes directory
+    if (grepl('/vignettes$', vignetteDirAbsPath)) {
+        # Get path for expected DESCRIPTION file for package
+        expectedDescriptionPath <- gsub(
+            pattern = "vignettes$"
+            , replacement = "DESCRIPTION"
+            , x = vignetteDirAbsPath
+            )
+
+        # If DESCRIPTION file exists check the name
+        if (file.exists(expectedDescriptionPath)) {
+            foundPkgName <- read.dcf(expectedDescriptionPath)[1,][["Package"]]
+
+            # If it doesn't match pkg_name, give warning
+            if (!identical(foundPkgName, pkg_name)) {
+                log_warn(glue::glue(
+                    "You are writing a report for {pkg_name} to the vignettes "
+                    , "directory for {foundPkgName}"
+                    , pkg_name = pkg_name
+                    , foundPkgName = foundPkgName))
+            }
+
+        # Otherwise, warn that we're writing to a vignettes folder inside
+        # a directory that is not a package root
+        } else {
+            log_warn(paste("You specified a path to a vignettes directory"
+                           , vignetteDirAbsPath
+                           , "that is not inside a package root directory."))
+        }
+    }
+
+    log_info(sprintf(
+        "Creating pkgnet package report as vignette for %s..."
+        , pkg_name
+    ))
 
     # Read pkgnet vignette template
     templatePath <- system.file(file.path("package_report"
@@ -97,5 +138,8 @@ CreatePackageVignette <- function(pkg_name
     on.exit(close(rmd_conn))
     writeLines(vignette_rmd, con = rmd_conn)
 
-    return(invisible(NULL))
+    log_info(sprintf("...successfully wrote vignette rmarkdown file to %s"
+                     , normalizePath(vignette_path)))
+
+    return(invisible(normalizePath(vignette_path)))
 }
