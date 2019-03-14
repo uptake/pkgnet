@@ -25,7 +25,7 @@ CreatePackageVignette <- function(pkg_name
                                       , FunctionReporter$new()
                                   )
                                   , vignette_path = file.path("vignettes"
-                                                              , "pkgnet_report.Rmd")
+                                                              , "pkgnet-report.Rmd")
                                  ) {
 
     # Capture pkg_reporters expression for later injection into Rmd

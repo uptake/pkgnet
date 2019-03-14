@@ -6,7 +6,7 @@
 \usage{
 CreatePackageVignette(pkg_name, pkg_path = NULL,
   pkg_reporters = list(DependencyReporter$new(), FunctionReporter$new()),
-  vignette_path = file.path("vignettes", "pkgnet_report.Rmd"))
+  vignette_path = file.path("vignettes", "pkgnet-report.Rmd"))
 }
 \arguments{
 \item{pkg_name}{(string) name of a package}
