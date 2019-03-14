@@ -66,7 +66,74 @@ test_that("Test that CreatePackageVignette with pkg_path runs end-to-end", {
     expect_true(file.info(outputPath)[["size"]] > 0)
 })
 
+test_that("Test that CreatePackageVignette errors for bad inputs", {
 
+    vignettePath <- tempfile(pattern = "vignette", fileext = ".Rmd")
+
+    # Non-existent vignette_path directory
+    expect_error(
+        CreatePackageVignette(
+            pkg_name = "baseballstats"
+            , vignette_path = file.path(
+                dirname(vignettePath)
+                , 'notarealdir'
+                , basename(vignettePath)
+            )
+        )
+        , regexp = sprintf("Directory %s does not exist, please create first"
+                           , file.path(dirname(vignettePath), 'notarealdir'))
+        , fixed = TRUE
+    )
+
+    # Generator passed into pkg_reporters
+    expect_error(
+        CreatePackageVignette(pkg_name = "baseballstats"
+                              , vignette_path = vignettePath
+                              , pkg_reporters = list(DependencyReporter$new()
+                                                     , FunctionReporter)
+        )
+        , regexp = paste("At least one of pkg_reporters is an R6 class"
+                         , "generator. This function expects initialized"
+                         , "reporter objects.")
+        , fixed = TRUE
+    )
+})
+
+test_that("CreatePackageVignette warns if vignette_path seems wrong", {
+    # In a vignettes directory that isn't in a package root
+    vignettesDir <- file.path(tempdir(), "vignettes")
+    dir.create(vignettesDir)
+    expect_warning(
+        CreatePackageVignette(pkg_name = "baseballstats"
+                              , vignette_path = file.path(vignettesDir
+                                                          , "pkgnet_report.Rmd")
+        )
+        , regexp = paste("not inside a package root directory")
+        , fixed = TRUE
+    )
+    # Clean up
+    unlink(file.path(tempdir(), "vignettes"), recursive = TRUE)
+
+    # If in root of a different package
+    suppressWarnings({
+        utils::package.skeleton(name = "basketballstats", path = tempdir())
+    })
+    dir.create(file.path(tempdir(), "basketballstats", "vignettes"))
+    expect_warning(
+        CreatePackageVignette(pkg_name = "baseballstats"
+                              , vignette_path = file.path(tempdir()
+                                                          , "basketballstats"
+                                                          , "vignettes"
+                                                          , "pkgnet_report.Rmd")
+        )
+        , regexp = paste("You are writing a report for baseballstats to the"
+                         , "vignettes directory for basketballstats")
+        , fixed = TRUE
+    )
+    # Clean up
+    unlink(file.path(tempdir(), "basketballstats"), recursive = TRUE)
+
+})
 
 ##### TEST TEAR DOWN #####
 

@@ -49,8 +49,9 @@ CreatePackageVignette <- function(pkg_name
         , identical(tolower(tools::file_ext(vignette_path)), "rmd")
     )
     # Confirm directory exists
-    if (!assertthat::is.dir(dirname(vignette_path))) {
-        log_fatal(sprintf("Directory %s does not exist, please create first"))
+    if (!file.exists(dirname(vignette_path))) {
+        log_fatal(sprintf("Directory %s does not exist, please create first"
+                  , dirname(vignette_path)))
     }
 
     ## pkg_reporter input checks ##
