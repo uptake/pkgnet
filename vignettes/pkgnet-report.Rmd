@@ -26,7 +26,7 @@ reporters <- list(DependencyReporter$new(), FunctionReporter$new(), InheritanceR
 reporters <- lapply(
           X = reporters
           , FUN = function(reporter){
-              reporter$set_package(pkg_name = "pkgnet", "~/repos/pkgnet" )
+              reporter$set_package(pkg_name = "pkgnet", "." )
               return(reporter)
           }
       )
