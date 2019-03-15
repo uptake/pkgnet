@@ -1,10 +1,15 @@
 #' @title pkgnet Report as Vignette
 #' @name CreatePackageVignette
-#' @description Create pkgnet package report as an Rmarkdown vignette. This
-#'    vignette is able to be rendered with the
-#'    \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
+#' @description Create pkgnet package report as an R Markdown vignette. This
+#'    vignette is able to be rendered into a standard HTML vignette with
+#'    the \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
 #'    into HTML vignettes upon package building. It is also compatible with
-#'    \code{\link[pkgdown:build_articles]{pkgdown}} sites.
+#'    \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
+#'    \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/publishing-reports.html}{
+#'    "Publishing Your pkgnet Package Report"} for details about how to use this
+#'    function, as well as
+#'    \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html}{
+#'    our example for pkgnet}.
 #' @param pkg_name (string) name of a package
 #' @param pkg_path (string) The path to the package repository. If given, coverage
 #'                 will be calculated for each function. \code{pkg_path} can be an
@@ -139,7 +144,7 @@ CreatePackageVignette <- function(pkg_name
     on.exit(close(rmd_conn))
     writeLines(vignette_rmd, con = rmd_conn)
 
-    log_info(sprintf("...successfully wrote vignette rmarkdown file to %s"
+    log_info(sprintf("...successfully wrote vignette R Markdown file to %s"
                      , normalizePath(vignette_path)))
 
     return(invisible(normalizePath(vignette_path)))

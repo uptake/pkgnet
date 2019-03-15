@@ -1,0 +1,73 @@
+---
+title: "Publishing Your pkgnet Package Report"
+output: 
+    rmarkdown::html_vignette:
+        toc: true
+vignette: >
+    %\VignetteIndexEntry{Publishing Your pkgnet Package Report}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+# Publishing Your pkgnet Package Report
+
+You've generated a **pkgnet Package Report** and used it to get a better understanding of your package. Now what? How about sharing the knowledge!
+
+Why share a pkgnet report? Developers who want to contribute to your package can use it to deep dive into your package's dependencies, function control flow, or class inheritance architecture, as discussed in our other vignettes. Or perhaps someone is looking to report a bug, and they could benefit from a little help navigating the structure of your package. Or maybe even a user of your package just wants a better appreciation of how your package ticks. There are many ways that other people benefit from having a pkgnet report available for your package. 
+
+This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the **pkgnet Gallery** website. These aren't mutally exclusive---feel free to do both!
+
+## Publish as a vignette in your package
+
+pkgnet provides an easy-to-use function `CreatePackageVignette` to create an R Markdown file that can be rendered as a standard HTML vignette using knitr. 
+
+Set your working directory to your package root and create a `vignettes` directory if you don't already have one. Then simply run:
+
+```{r, eval = FALSE}
+library(pkgnet)
+CreatePackageVignette("name-of-your-package-here")
+```
+
+For example, here is us creating a vignette for pkgnet itself:
+
+```{r, eval=FALSE}
+library(pkgnet)
+CreatePackageVignette("pkgnet")
+#> INFO [2019-03-13 23:37:36] Creating pkgnet package report as vignette for pkgnet...
+#> INFO [2019-03-13 23:37:36] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd
+```
+
+If this is your first R Markdown vignette for your package, you'll want to add `VignetteBuilder: knitr` to your DESCRIPTION file and both `knitr` and `rmarkdown` as `Suggests` dependencies. You'll also need to install the knitr and rmarkdown packages if you haven't already. 
+
+The R Markdown file generated in this way will be built when you use `R CMD build` to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with `devtools::build_vignettes`. If you use pkgdown, it will also be built into an article when you use `pkgdown::build_site()`. 
+
+You can check out our example for pkgnet to see what one looks like (it's actually slightly customized---we'll discuss this more in the next section). You can find the regular version on [CRAN](https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html) or the pkgdown version on [our website](https://uptakeopensource.github.io/pkgnet/articles/pkgnet-report.html). 
+
+### Customize your vignette
+
+`CreatePackageVignette` has a few parameters you can customize. Below is the command that actually produces the vignette that we publish for pkgnet.
+
+```{r, eval=FALSE}
+library(pkgnet)
+CreatePackageVignette(
+    pkg_name = "pkgnet", 
+    pkg_path = "~/repos/pkgnet", 
+    pkg_reporters = list(DependencyReporter$new(), 
+                         FunctionReporter$new(),
+                         InheritanceReporter$new()
+                        ), 
+    vignette_path = "~/repos/pkgnet/vignettes/pkgnet-report.Rmd"
+)
+#> INFO [2019-03-14 22:13:57] Creating pkgnet package report as vignette for pkgnet...
+#> INFO [2019-03-14 22:13:57] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd
+```
+
+The first thing to highlight is that you can provide `pkg_path` with the path (relative or absolute) to the source code of your package. This will allow `FunctionReporter` to report on your test coverage (courtesy of the [covr](https://covr.r-lib.org/) package). 
+
+The second thing to highlight is that you can choose which reporters to pass in to `pkg_reporters`. By default, we include `DependencyReporter` and `InheritanceReporter`, but you use any of pkgnet's package reporters that you'd like. Note that it should be a list of instantiated reporters. 
+
+## Add your package to the pkgnet Gallery
+
+We also welcome contributions to the pkgnet Gallery! ...
+
+**UNDER CONSTRUCTION**

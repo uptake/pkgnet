@@ -21,9 +21,14 @@ absolute or relative path.}
 file. The default assumes your working directory is the package root.}
 }
 \description{
-Create pkgnet package report as an Rmarkdown vignette. This
-   vignette is able to be rendered with the
-   \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
+Create pkgnet package report as an R Markdown vignette. This
+   vignette is able to be rendered into a standard HTML vignette with
+   the \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
    into HTML vignettes upon package building. It is also compatible with
-   \code{\link[pkgdown:build_articles]{pkgdown}} sites.
+   \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
+   \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/publishing-reports.html}{
+   "Publishing Your pkgnet Package Report"} for details about how to use this
+   function, as well as
+   \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html}{
+   our example for pkgnet}.
 }
