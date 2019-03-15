@@ -41,30 +41,7 @@ If this is your first R Markdown vignette for your package, you'll want to add `
 
 The R Markdown file generated in this way will be built when you use `R CMD build` to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with `devtools::build_vignettes`. If you use pkgdown, it will also be built into an article when you use `pkgdown::build_site()`. 
 
-You can check out our example for pkgnet to see what one looks like (it's actually slightly customized---we'll discuss this more in the next section). You can find the regular version on [CRAN](https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html) or the pkgdown version on [our website](https://uptakeopensource.github.io/pkgnet/articles/pkgnet-report.html). 
-
-### Customize your vignette
-
-`CreatePackageVignette` has a few parameters you can customize. Below is the command that actually produces the vignette that we publish for pkgnet.
-
-```{r, eval=FALSE}
-library(pkgnet)
-CreatePackageVignette(
-    pkg_name = "pkgnet", 
-    pkg_path = "~/repos/pkgnet", 
-    pkg_reporters = list(DependencyReporter$new(), 
-                         FunctionReporter$new(),
-                         InheritanceReporter$new()
-                        ), 
-    vignette_path = "~/repos/pkgnet/vignettes/pkgnet-report.Rmd"
-)
-#> INFO [2019-03-14 22:13:57] Creating pkgnet package report as vignette for pkgnet...
-#> INFO [2019-03-14 22:13:57] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd
-```
-
-The first thing to highlight is that you can provide `pkg_path` with the path (relative or absolute) to the source code of your package. This will allow `FunctionReporter` to report on your test coverage (courtesy of the [covr](https://covr.r-lib.org/) package). 
-
-The second thing to highlight is that you can choose which reporters to pass in to `pkg_reporters`. By default, we include `DependencyReporter` and `InheritanceReporter`, but you use any of pkgnet's package reporters that you'd like. Note that it should be a list of instantiated reporters. 
+You can check out our example for pkgnet to see what one looks like (it's actually slightly customized---we used the `pkg_reporters` parameter). You can find the regular version on [CRAN](https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html) or the pkgdown version on [our website](https://uptakeopensource.github.io/pkgnet/articles/pkgnet-report.html). 
 
 ## Add your package to the pkgnet Gallery
 

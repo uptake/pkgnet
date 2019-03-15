@@ -4,16 +4,12 @@
 \alias{CreatePackageVignette}
 \title{pkgnet Report as Vignette}
 \usage{
-CreatePackageVignette(pkg_name, pkg_path = NULL,
+CreatePackageVignette(pkg_name,
   pkg_reporters = list(DependencyReporter$new(), FunctionReporter$new()),
   vignette_path = file.path("vignettes", "pkgnet-report.Rmd"))
 }
 \arguments{
 \item{pkg_name}{(string) name of a package}
-
-\item{pkg_path}{(string) The path to the package repository. If given, coverage
-will be calculated for each function. \code{pkg_path} can be an
-absolute or relative path.}
 
 \item{pkg_reporters}{(list) a list of initialized package reporters}
 

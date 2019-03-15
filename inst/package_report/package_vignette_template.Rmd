@@ -26,7 +26,7 @@ reporters <- {{pkg_reporters}}
 reporters <- lapply(
           X = reporters
           , FUN = function(reporter){
-              reporter$set_package(pkg_name = "{{pkg_name}}", {{pkg_path}} )
+              reporter$set_package(pkg_name = "{{pkg_name}}")
               return(reporter)
           }
       )

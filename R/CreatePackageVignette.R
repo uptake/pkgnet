@@ -11,9 +11,6 @@
 #'    \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html}{
 #'    our example for pkgnet}.
 #' @param pkg_name (string) name of a package
-#' @param pkg_path (string) The path to the package repository. If given, coverage
-#'                 will be calculated for each function. \code{pkg_path} can be an
-#'                 absolute or relative path.
 #' @param pkg_reporters (list) a list of initialized package reporters
 #' @param vignette_path (string) The path and filename of the output vignette
 #'    file. The default assumes your working directory is the package root.
@@ -24,7 +21,6 @@
 #' @importFrom glue glue
 #' @export
 CreatePackageVignette <- function(pkg_name
-                                  , pkg_path = NULL
                                   , pkg_reporters = list(
                                       DependencyReporter$new()
                                       , FunctionReporter$new()
@@ -41,23 +37,6 @@ CreatePackageVignette <- function(pkg_name
         assertthat::is.string(pkg_name)
         , pkg_name != ""
     )
-
-    ## pkg_path input checks ##
-    assertthat::assert_that(
-        is.null(pkg_path) || assertthat::is.readable(pkg_path)
-    )
-
-    ## vignette_path input checks ##
-    assertthat::assert_that(
-        assertthat::is.string(vignette_path)
-        , vignette_path != ""
-        , identical(tolower(tools::file_ext(vignette_path)), "rmd")
-    )
-    # Confirm directory exists
-    if (!file.exists(dirname(vignette_path))) {
-        log_fatal(sprintf("Directory %s does not exist, please create first"
-                  , dirname(vignette_path)))
-    }
 
     ## pkg_reporter input checks ##
     assertthat::assert_that(
@@ -78,15 +57,21 @@ CreatePackageVignette <- function(pkg_name
             ))
     )
 
-    # If pkg_path supplied, add quotes, otherwise, set to NULL as a string
-    if (!is.null(pkg_path)) {
-        pkg_path <- paste0("\"", pkg_path, "\"")
-    } else {
-        pkg_path <- "NULL"
+    ## vignette_path input checks ##
+    assertthat::assert_that(
+        assertthat::is.string(vignette_path)
+        , vignette_path != ""
+        , identical(tolower(tools::file_ext(vignette_path)), "rmd")
+    )
+
+    # Confirm directory exists
+    if (!file.exists(dirname(vignette_path))) {
+        log_fatal(sprintf("Directory %s does not exist, please create first"
+                          , dirname(vignette_path)))
     }
 
     # Check if vignette_path matches the right package
-    # if a vignettes directory is specified
+    # if the path is to a file in a directory named vignettes
     vignetteDirAbsPath <- normalizePath(dirname(vignette_path))
     # If path is a vignettes directory
     if (grepl('/vignettes$', vignetteDirAbsPath)) {
@@ -133,7 +118,6 @@ CreatePackageVignette <- function(pkg_name
     vignette_rmd <- glue::glue(
         paste(readLines(templatePath), collapse = "\n")
         , pkg_name = pkg_name
-        , pkg_path = pkg_path
         , pkg_reporters = deparse(pkg_reporters_expr)
         , .open = "{{"
         , .close = "}}"
