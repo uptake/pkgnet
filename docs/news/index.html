@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -77,6 +77,9 @@
 </li>
 <li>
   <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
 </li>
       </ul>
       
@@ -103,9 +106,9 @@
       <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="pkgnet-031" class="section level1">
+    <div id="pkgnet-032" class="section level1">
 <h1 class="page-header">
-<a href="#pkgnet-031" class="anchor"></a>pkgnet 0.3.1<small> 2019-01-20 </small>
+<a href="#pkgnet-032" class="anchor"></a>pkgnet 0.3.2<small> 2019-01-26 </small>
 </h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
@@ -116,12 +119,38 @@
 <h2 class="hasAnchor">
 <a href="#changes" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Unit testing strategy on CRAN vs Travis and local. See <a href="https://github.com/UptakeOpenSource/pkgnet/issues/160"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/160'>#160</a></a> for details.</li>
+<li>Added unit tests for network measure calculations (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>).</li>
+<li>Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/167"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/167'>#167</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>Corrected node statisitcs table merging error (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/165"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/165'>#165</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>)</li>
+<li>Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/168"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/168'>#168</a></a>)</li>
+</ul>
+</div>
+</div>
+    <div id="pkgnet-031" class="section level1">
+<h1 class="page-header">
+<a href="#pkgnet-031" class="anchor"></a>pkgnet 0.3.1<small> 2019-01-20 </small>
+</h1>
+<div id="new-features-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<p>None</p>
+</div>
+<div id="changes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-1" class="anchor"></a>CHANGES</h2>
+<ul>
+<li>Unit testing strategy on CRAN vs Travis and local. See <a href="https://github.com/UptakeOpenSource/pkgnet/issues/160"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/160'>#160</a></a> for details.</li>
+</ul>
+</div>
+<div id="bug-fixes-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
 <p>None</p>
 </div>
 </div>
@@ -129,18 +158,18 @@
 <h1 class="page-header">
 <a href="#pkgnet-030" class="anchor"></a>pkgnet 0.3.0<small> 2019-01-02 </small>
 </h1>
-<div id="new-features-1" class="section level2">
+<div id="new-features-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-1" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>
 <code>InheritanceReporter</code>, a reporter for R6, Reference, and S4 class inheritance relationships within a package. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/14"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/14'>#14</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/129"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/129'>#129</a></a>)</li>
 <li>Dropdown menu in graph visualizations for selecting which node to highlight. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/132"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/132'>#132</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
 </ul>
 </div>
-<div id="changes-1" class="section level2">
+<div id="changes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-1" class="anchor"></a>CHANGES</h2>
+<a href="#changes-2" class="anchor"></a>CHANGES</h2>
 <ul>
 <li>Edge direction reversed to align with <a href="https://en.wikipedia.org/wiki/Dependency_(UML)">UML dependency diagram</a> convention. Now, if A depends on B, then A-&gt;B. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/131"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/131'>#131</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
 <li>Reporters now support all layouts available in igraph. Use <code><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code> to see valid options. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
@@ -156,9 +185,9 @@
 <li>Additional various improvements to UX for package reports. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
 </ul>
 </div>
-<div id="bug-fixes-1" class="section level2">
+<div id="bug-fixes-2" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Rendering of the table in Function Network tab. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/136"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/136'>#136</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/138"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/138'>#138</a></a>)</li>
 </ul>
@@ -171,6 +200,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#pkgnet-032">0.3.2</a></li>
         <li><a href="#pkgnet-031">0.3.1</a></li>
         <li><a href="#pkgnet-030">0.3.0</a></li>
       </ul>
