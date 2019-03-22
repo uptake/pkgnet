@@ -1,142 +1,105 @@
-#' @title Package Function Reporter Class
+#' @title Function Interdependency Reporter
 #' @name FunctionReporter
-#' @family PackageReporters
-#' @description This Reporter takes a package and uncovers the structure from
-#'              its other functions, determining useful information such as which function is most
-#'              central to the package. Combined with testing information it can be used as a powerful tool
-#'              to plan testing efforts.
+#' @family Network Reporters
+#' @family Package Reporters
+#' @description This reporter looks at the network of interdependencies of its
+#'    defined functions. Measures of centrality from graph theory can indicate
+#'    which function is most important to a package. Combined with unit test
+#'    coverage information---also provided by this reporter--- it can be used
+#'    as a powerful tool to prioritize test writing.
+#' @section Class Constructor:
+#' \preformatted{FunctionReporter$new()}
+#' @inheritSection PackageReporters Class Constructor
+#' @inheritSection PackageReporters Public Methods
+#' @inheritSection NetworkReporters Public Methods
+#' @inheritSection PackageReporters Public Fields
+#' @inheritSection NetworkReporters Public Fields
+#' @inheritSection PackageReporters Special Methods
+#' @details
+#' \subsection{R6 Method Support:}{
+#'     R6 classes are supported, with their methods treated as functions by the
+#'     reporter.
 #'
-#' R6 classes are supported, with methods treated as functions by the Reporter.
-#' R6 methods will be named like \code{<classname>$<methodtype>$<methodname>}
-#' , e.g., \code{FunctionReporter$private_methods$extract_nodes}. Note that the
-#' class name used will be the \emph{name of the generator object in the package's namespace},
-#' and \emph{not} the \code{classname} attribute of the class, which is not required to be defined
-#' or to be the same as the generator object name.
-#'
-#' @section Public Methods:
-#' \describe{
-#'     \item{\code{set_package(pkg_name, pkg_path)}}{
-#'         \itemize{
-#'             \item{Set properties of this reporter. If pkg_name overrides a
-#'                 previously-set package name, any cached data will be removed.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                 \item{\bold{\code{pkg_name}}: String with the name of the package.}
-#'                 \item{\bold{\code{pkg_path}}: Optional directory path to source
-#'                   code of the package. It is used for calculating test coverage.
-#'                   It can be an absolute or relative path.}
-#'                }
-#'             }
-#'         }
-#'     }
+#'    \itemize{
+#'       \item{R6 methods will be named like
+#'          \code{<classname>$<methodtype>$<methodname>}, e.g.,
+#'          \code{FunctionReporter$private_methods$extract_nodes}.
+#'       }
+#'       \item{Note that the class name used will be the \strong{name of the
+#'          generator object in the package's namespace}.
+#'       }
+#'       \item{The \code{classname} attribute of the class is \strong{not} used.
+#'          In general, it is not required to be defined or the same as the
+#'          generator object name. This attribute is used primarily for
+#'          S3 dispatch.
+#'       }
+#'    }
 #' }
-#' @section Known Limitations:
-#' \itemize{
-#'     \item{Using non-standard evaluation to refer to things (e.g, dataframe column names)
-#'     that have the same name as a function will trick \code{FunctionReporter} into thinking
-#'     the function was called. This can be avoided if you don't use reuse function names
-#'     for other purposes.}
-#'     \item{Functions stored as list items and not assigned to the package namespace
-#'     will be invisible to \code{FunctionReporter}.}
-#'     \item{Calls to methods of instantiated R6 or reference objects will not be recognized.
-#'     We don't have a reliable way of identifying instantiated objects, or identifying
-#'     their class.}
-#'     \item{Reference class methods are not yet supported. They will not be idenified
-#'     as nodes by \code{FunctionReporter}.}
+#' \subsection{Known Limitations:}{
+#'    \itemize{
+#'        \item{Using non-standard evaluation to refer to things (e.g, dataframe
+#'           column names) that have the same name as a function will trick
+#'           \code{FunctionReporter} into thinking the function was called. This
+#'           can be avoided if you don't use reuse function names for other
+#'           purposes.
+#'        }
+#'        \item{Functions stored as list items and not assigned to the package
+#'           namespace will be invisible to \code{FunctionReporter}.
+#'        }
+#'        \item{Calls to methods of instantiated R6 or reference objects will
+#'           not be recognized. We don't have a reliable way of identifying
+#'           instantiated objects, or identifying their class.
+#'        }
+#'        \item{Reference class methods are not yet supported. They will not be
+#'           identified as nodes by \code{FunctionReporter}.
+#'        }
+#'    }
 #' }
+NULL
+
+
+#' @importFrom R6 R6Class is.R6Class
+#' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage
-#' @importFrom data.table data.table melt as.data.table data.table setnames setcolorder rbindlist
-#' @importFrom DT datatable formatRound
-#' @importFrom R6 R6Class
-#' @importFrom utils lsf.str
+#' @importFrom data.table data.table as.data.table rbindlist setkeyv
 #' @importFrom methods is
+#' @importFrom visNetwork visHierarchicalLayout
 #' @export
 FunctionReporter <- R6::R6Class(
     "FunctionReporter",
     inherit = AbstractGraphReporter,
 
     public = list(
-        get_summary_view = function(){
 
-            # Calculate network measures if not already done
-            # since we want the node measures in summary
-            invisible(self$network_measures)
+        calculate_default_measures = function() {
+            # Calculate test coverage if pkg_path is set and source code available
+            if (!is.null(private$pkg_path)){
+                private$calculate_test_coverage()
+            }
 
-            # Create DT for display
-            tableObj <- DT::datatable(
-                data = self$nodes
-                , rownames = FALSE
-                , options = list(
-                    searching = FALSE
-                    , pageLength = 50
-                    , lengthChange = FALSE
-                )
-            )
-            # Round the double columns to three digits for formatting reasons
-            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-            tableObj <- DT::formatRound(columns = numCols, table = tableObj
-                                        , digits=3)
-            return(tableObj)
+            super$calculate_default_measures()
+
+            return(invisible(self))
         }
-    ),
 
-    active = list(
-        edges = function(){
-            if (is.null(private$cache$edges)){
-                log_info("Calling extract_network() to extract nodes and edges...")
-                private$extract_network()
-            }
-            return(private$cache$edges)
-        },
-        nodes = function(){
-            if (is.null(private$cache$nodes)){
-                log_info("Calling extract_network() to extract nodes and edges...")
-                private$extract_network()
-            }
-            return(private$cache$nodes)
-        },
+    )
+
+    , active = list(
+
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_function_reporter.Rmd"), package = "pkgnet")
-        },
-        pkg_R6_classes = function() {
-            if (is.null(private$cache$pkg_R6_classes)) {
-                pkg_env <- private$get_pkg_env()
-                private$cache$pkg_R6_classes <- Filter(
-                    f = function(x, p = pkg_env){
-                            R6::is.R6Class(get(x, p))
-                        }
-                    , x = names(pkg_env)
-                )
-            }
-            return(private$cache$pkg_R6_classes)
-        },
-        pkg_R6_methods = function() {
-            if (is.null(private$cache$pkg_R6_methods)){
-                private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
-                    X = self$pkg_R6_classes
-                    , FUN = function(x, p = private$get_pkg_env()) {
-                        .get_R6_class_methods(x, get(x,p))
-                    }
-                ))
-            }
-            return(private$cache$pkg_R6_methods)
-        },
-        pkg_R6_inheritance = function() {
-            if (is.null(private$cache$pkg_R6_inheritance)) {
-                private$cache$pkg_R6_inheritance <- .get_R6_class_inheritance(
-                    self$pkg_R6_classes
-                    , self$pkg_name
-                    , private$get_pkg_env()
-                )
-            }
-            return(private$cache$pkg_R6_inheritance)
         }
-    ),
 
-    private = list(
+    )
+
+    , private = list(
 
         # Default graph viz layout
         private_layout_type = "layout_with_graphopt",
+
+        # Class of graph to initialize
+        # Should be constructor
+        graph_class = DirectedGraph,
 
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
@@ -146,28 +109,63 @@ FunctionReporter <- R6::R6Class(
             return(private$cache$pkg_env)
         },
 
+        get_pkg_R6_classes = function() {
+            if (is.null(private$cache$pkg_R6_classes)) {
+                pkg_env <- private$get_pkg_env()
+                private$cache$pkg_R6_classes <- Filter(
+                    f = function(x, p = pkg_env){
+                        R6::is.R6Class(get(x, p))
+                    }
+                    , x = names(pkg_env)
+                )
+            }
+            return(private$cache$pkg_R6_classes)
+        },
+
+        get_pkg_R6_methods = function() {
+            if (is.null(private$cache$pkg_R6_methods)){
+                private$cache$pkg_R6_methods <- data.table::rbindlist(lapply(
+                    X = private$get_pkg_R6_classes()
+                    , FUN = function(x, p = private$get_pkg_env()) {
+                        .get_R6_class_methods(x, get(x,p))
+                    }
+                ))
+            }
+            return(private$cache$pkg_R6_methods)
+        },
+
+        get_pkg_R6_inheritance = function() {
+            if (is.null(private$cache$pkg_R6_inheritance)) {
+                private$cache$pkg_R6_inheritance <- .get_R6_class_inheritance(
+                    private$get_pkg_R6_classes()
+                    , self$pkg_name
+                    , private$get_pkg_env()
+                )
+            }
+            return(private$cache$pkg_R6_inheritance)
+        },
+
         # add coverage to nodes table
         calculate_test_coverage = function(){
 
-            log_info(msg = "Calculating package coverage...")
+            log_info(sprintf("Calculating test coverage for %s...", self$pkg_name))
 
-            pkgCov <- covr::package_coverage(
+            pkgCovDT <- data.table::as.data.table(covr::package_coverage(
                 path = private$pkg_path
                 , type = "tests"
                 , combine_types = FALSE
-            )
+            ))
 
-            pkgCov <- data.table::as.data.table(pkgCov)
-            pkgCov <- pkgCov[, list(coveredLines = sum(value > 0)
+            pkgCovDT <- pkgCovDT[, .(coveredLines = sum(value > 0)
                                     , totalLines = .N
                                     , coverageRatio = sum(value > 0)/.N
                                     , meanCoveragePerLine = sum(value)/.N
                                     , filename = filename[1]
             )
-            , by = list(node = functions)]
+            , by = .(node = functions)]
 
             # Update Node with Coverage Info
-            private$update_nodes(metadataDT = pkgCov)
+            private$update_nodes(pkgCovDT)
 
             # Set Graph to Color By Coverage
             private$set_plot_node_color_scheme(
@@ -179,43 +177,25 @@ FunctionReporter <- R6::R6Class(
                               )
             )
 
-            # Calculate network measures since we need outBetweeness
-            invisible(self$network_measures)
-
-            meanCoverage <-  pkgCov[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
+            meanCoverage <-  pkgCovDT[, sum(coveredLines, na.rm = TRUE) / sum(totalLines, na.rm = TRUE)]
             private$cache$network_measures[['packageTestCoverage.mean']] <- meanCoverage
 
-            weightVector <- self$nodes$outBetweeness / sum(self$nodes$outBetweeness, na.rm = TRUE)
+            betweennessDT <- self$pkg_graph$node_measures('betweenness')
 
-            betweenness_mean <- weighted.mean(
-                x = self$nodes$coverageRatio
-                , w = weightVector
-                , na.rm = TRUE
-            )
+            weightedCoverageDT <- merge(x = pkgCovDT
+                                        , y = betweennessDT
+                                        , by = 'node')
+            weightedCoverageDT[, weight := betweenness / sum(betweenness, na.rm = TRUE)]
+
+            betweenness_mean <- weightedCoverageDT[,
+                weighted.mean(
+                    x = coverageRatio
+                    , w = weight
+                    , na.rm = TRUE
+            )]
             private$cache$network_measures[['packageTestCoverage.betweenessWeightedMean']] <- betweenness_mean
 
-            log_info(msg = "Done calculating package coverage")
-            return(invisible(NULL))
-        },
-
-        extract_network = function(){
-            # Reset cache, because any cached stuff will be outdated with a new network
-            private$reset_cache()
-
-            log_info(sprintf('Extracting nodes from %s...', self$pkg_name))
-            private$cache$nodes <- private$extract_nodes()
-            log_info('Done extracting nodes.')
-
-            log_info(sprintf('Extracting edges from %s...', self$pkg_name))
-            private$cache$edges <- private$extract_edges()
-            log_info('Done extracting edges.')
-
-            # TODO (james.lamb@uptake.com):
-            # Make this handoff with coverage cleaner
-            if (!is.null(private$pkg_path)){
-                private$calculate_test_coverage()
-            }
-
+            log_info(msg = "...done calculating test coverage.")
             return(invisible(NULL))
         },
 
@@ -223,6 +203,9 @@ FunctionReporter <- R6::R6Class(
             if (is.null(self$pkg_name)) {
                 log_fatal('Must set_package() before extracting nodes.')
             }
+
+            log_info(sprintf('Extracting functions from %s as graph nodes...'
+                             , self$pkg_name))
 
             pkg_env <- private$get_pkg_env()
 
@@ -257,8 +240,8 @@ FunctionReporter <- R6::R6Class(
             nodes[, isExported := node %in% exported_obj_names]
 
             # Check if we have R6 functions
-            if (length(self$pkg_R6_classes) > 0) {
-                r6DT <- self$pkg_R6_methods[, .(
+            if (length(private$get_pkg_R6_classes()) > 0) {
+                r6DT <- private$get_pkg_R6_methods()[, .(
                     node = paste(CLASS_NAME, METHOD_TYPE, METHOD_NAME, sep = "$")
                     , type = "R6 method"
                     , isExported = CLASS_NAME %in% exported_obj_names
@@ -267,7 +250,14 @@ FunctionReporter <- R6::R6Class(
                 nodes <- data.table::rbindlist(list(nodes, r6DT))
             }
 
-            return(nodes)
+            data.table::setkeyv(nodes, 'node')
+
+            private$cache$nodes <- nodes
+
+            log_info(sprintf('... done extracting functions as nodes.'
+                             , self$pkg_name))
+
+            return(invisible(nodes))
         },
 
         extract_edges = function(){
@@ -275,7 +265,10 @@ FunctionReporter <- R6::R6Class(
                 log_fatal('Must set_package() before extracting edges.')
             }
 
-            log_info(sprintf('Constructing network representation...'))
+            log_info(paste(
+                sprintf('Extracting dependencies between functions in %s', self$pkg_name)
+                , "as graph edges..."
+            ))
 
             # create a custom environment w/ this package's contents
             pkg_env <- private$get_pkg_env()
@@ -297,17 +290,17 @@ FunctionReporter <- R6::R6Class(
             )
 
             ### R6 METHODS ###
-            if (length(self$pkg_R6_classes) > 0) {
+            if (length(private$get_pkg_R6_classes()) > 0) {
                 edgeDT <- data.table::rbindlist(c(
                     list(edgeDT)
                     , mapply(
                         FUN = .determine_R6_dependencies
-                        , method_name = self$pkg_R6_methods[, METHOD_NAME]
-                        , method_type = self$pkg_R6_methods[, METHOD_TYPE]
-                        , class_name = self$pkg_R6_methods[, CLASS_NAME]
+                        , method_name = private$get_pkg_R6_methods()[, METHOD_NAME]
+                        , method_type = private$get_pkg_R6_methods()[, METHOD_TYPE]
+                        , class_name = private$get_pkg_R6_methods()[, CLASS_NAME]
                         , MoreArgs = list(
-                            methodsDT = self$pkg_R6_methods
-                            , inheritanceDT = self$pkg_R6_inheritance
+                            methodsDT = private$get_pkg_R6_methods()
+                            , inheritanceDT = private$get_pkg_R6_inheritance()
                             , pkg_env = private$get_pkg_env()
                             , pkg_functions = funs
                             )
@@ -327,15 +320,18 @@ FunctionReporter <- R6::R6Class(
                             )
             }
 
-            log_info("Done constructing network representation")
+            data.table::setkeyv(edgeDT, c('SOURCE', 'TARGET'))
 
-            return(edgeDT)
+            log_info("...done extracting function dependencies as edges.")
+
+            private$cache$edges <- edgeDT
+
+            return(invisible(edgeDT))
         }
 
         , plot_network = function() {
-            g <- super$plot_network()
-
-            g <- (g
+            g <- (
+                super$plot_network()
                 %>% visNetwork::visHierarchicalLayout(enabled = FALSE)
             )
             return(g)

@@ -1,68 +1,152 @@
-#' @title Abstract Graph Reporter Class
-#' @name AbstractGraphReporter
-#' @description Defines the Abstract Class for all PackageGraphReporters defined in pkgnet.
-#'              The class is not meant to be instantiated, but inherited from and its methods
-#'              overloaded such that each Metric implements certain functionality.
-#' @family AbstractReporters
-#' @section Public Members:
+#' @title Network Reporters for Packages
+#' @name NetworkReporters
+#' @keywords internal
+#' @description \pkg{pkgnet} defines several package reporter R6 classes that model
+#'     a particular network aspect of a package as a graph. These network
+#'     reporter classes are extended from \code{AbstractGraphReporter}, which
+#'     itself extends the \code{\link[=PackageReporters]{AbstractPackageReporter}}
+#'     with graph-modeling-related functionality.
+#'
+#'     This article describes the additional fields added by the
+#'     \code{AbstractGraphReporter} class definition.
+#'
+#' @section Public Methods:
 #' \describe{
-#'    \item{\code{edges}}{A data.table from SOURCE to TARGET nodes describing the connections}
-#'    \item{\code{nodes}}{A data.table with node as an identifier, and augmenting information about each node}
-#'    \item{\code{pkg_graph}}{An igraph object describing the package graph}
-#'    \item{\code{network_measures}}{A list of network measures calculated by \code{calculate_network_features}}
-#'    \item{\code{layout_type}}{Character string indicating currently active graph layout}
-#'    \item{\code{graph_viz}}{\code{visNetwork} object of package graph}
+#'     \item{\code{calculate_default_measures()}}{
+#'         \itemize{
+#'             \item{Calculates the default node and network measures for this
+#'                reporter.
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Self, invisibly.}
+#'                 }
+#'             }
+#'         }
+#'     }
 #' }
-#' @section Active Bindings:
+#' @section Public Fields:
 #' \describe{
-#'    \item{\code{pkg_graph}}{Returns the graph object}
-#'    \item{\code{network_measures}}{Returns a table of network measures, one row per node}
-#'    \item{\code{graph_viz}}{Returns the graph visualization object}
-#'    \item{\code{layout_type}}{If no value given, the current layout type for the graph visualization is returned.
-#'        If a valid layout type is given, this function will update the layout_type field.
-#'        You can use \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)} to see valid options.}
+#'     \item{\bold{\code{nodes}}}{: a data.table, containing information about
+#'        the nodes of the network the reporter is analyzing. The \code{node}
+#'        column acts the identifier. Read-only.
+#'     }
+#'     \item{\bold{\code{edges}}}{: a data.table, containing information about
+#'        the edge connections of the network the reporter is analyzing. Each
+#'        row is one edge, and the columns \code{SOURCE} and \code{TARGET}
+#'        specify the node identifiers. Read-only.
+#'     }
+#'     \item{\bold{\code{network_measures}}}{: a list, containing any measures
+#'        of the network calculated by the reporter. Read-only.
+#'     }
+#'     \item{\bold{\code{pkg_graph}}}{: a graph model object. See \link{DirectedGraph}
+#'        for additional documentation. Read-only.
+#'     }
+#'     \item{\bold{\code{graph_viz}}}{: a graph visualization object. A
+#'        \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
+#'        Read-only.
+#'     }
+#'     \item{\bold{\code{layout_type}}}{: a character string, the current layout
+#'        type for the graph visualization. Can be assigned a new valid layout
+#'        type value. Use use
+#'        \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)}
+#'        to see valid options.
+#'     }
 #' }
-#' @importFrom data.table data.table copy uniqueN setkeyv
+NULL
+
+
 #' @importFrom R6 R6Class
-#' @importFrom igraph degree graph_from_edgelist graph.edgelist centralization.betweenness
-#' @importFrom igraph centralization.closeness centralization.degree hub_score
-#' @importFrom igraph layout_as_tree layout_in_circle neighborhood.size page_rank V vcount vertex vertex.attributes
+#' @importFrom DT datatable formatRound
+#' @importFrom data.table data.table copy setkeyv
+#' @importFrom assertthat assert_that
+#' @importFrom grDevices colorRamp colorRampPalette rgb
 #' @importFrom magrittr %>%
-#' @importFrom methods hasArg formalArgs
-#' @importFrom visNetwork visNetwork visHierarchicalLayout visEdges visOptions
-#' @export
+#' @importFrom visNetwork visNetwork visIgraphLayout visEdges visOptions
+#' visGroups visLegend
 AbstractGraphReporter <- R6::R6Class(
-    "AbstractGraphReporter",
-    inherit = AbstractPackageReporter,
-    active = list(
+    "AbstractGraphReporter"
+    , inherit = AbstractPackageReporter
+
+    , public = list(
+        calculate_default_measures = function() {
+            self$pkg_graph$node_measures(
+                measures = self$pkg_graph$default_node_measures
+            )
+            self$pkg_graph$graph_measures(
+                measures = self$pkg_graph$default_graph_measures
+            )
+            return(invisible(self))
+        }
+
+        , get_summary_view = function(){
+
+            # Create DT for display of the nodes data.table
+            tableObj <- DT::datatable(
+                data = self$nodes[order(node)]
+                , rownames = FALSE
+                , options = list(
+                    searching = FALSE
+                    , pageLength = 50
+                    , lengthChange = FALSE
+                )
+            )
+
+            # Round the double columns to three digits for formatting reasons
+            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+            tableObj <- DT::formatRound(
+                columns = numCols
+                , table = tableObj
+                , digits=3
+            )
+            return(tableObj)
+        }
+
+    ) # /public
+
+    , active = list(
+
+        nodes = function(){
+            if (is.null(private$cache$nodes)){
+                private$extract_nodes()
+            }
+            return(private$cache$nodes)
+        },
+
+        edges = function(){
+            if (is.null(private$cache$edges)) {
+                private$extract_edges()
+            }
+            return(private$cache$edges)
+        },
+
+        network_measures = function() {
+            return(c(private$cache$network_measures
+                     , private$cache$pkg_graph$graph_measures()))
+        },
+
         pkg_graph = function(){
             if (is.null(private$cache$pkg_graph)){
-                log_info("Creating graph object...")
-                private$make_graph_object()
-                log_info("Done creating graph object")
+                if (is.null(private$graph_class)) {
+                    log_fatal("Reporter must set valid graph class.")
+                }
+                log_info("Creating graph model for network...")
+                pkg_graph <- private$graph_class$new(self$nodes, self$edges)
+                private$cache$pkg_graph <- pkg_graph
+                log_info("...graph model stored as pkg_graph.")
             }
             return(private$cache$pkg_graph)
         },
-        network_measures = function(){
-            if (is.null(private$cache$network_measures)){
-                log_info("Calculating network measures...")
-                # Set from NULL to empty list
-                private$cache$network_measures <- list()
-                private$calculate_network_measures()
-                log_info("Done calculating network measures.")
-            }
-            return(private$cache$network_measures)
-        },
+
         graph_viz = function(){
             if (is.null(private$cache$graph_viz)) {
-                log_info('Creating graph visualization plot...')
                 private$cache$graph_viz <- private$plot_network()
-                log_info('Done creating graph visualization plot.')
             }
             return(private$cache$graph_viz)
         },
+
         layout_type = function(layout) {
-            # If the person isn't using <- assignment, return the cached value
+            # If user using <- assignment, set layout and reset viz
             if (!missing(layout)) {
                 # Input validation
                 assertthat::assert_that(
@@ -79,206 +163,39 @@ AbstractGraphReporter <- R6::R6Class(
 
                 private$private_layout_type <- layout
             }
+            # Otherwise, return the cached value
             return(private$private_layout_type)
         }
-    ),
+    ) # /active
 
-    private = list(
+    , private = list(
         plotNodeColorScheme = list(
             field = NULL
             , palette = '#97C2FC'
         ),
 
-        # Create a "cache" to be used when evaluating active bindings
-        # There is a default cache to reset to
+        # Default graph viz layout
+        private_layout_type = "layout_nicely",
+
+        # Class of graph to initialize
+        # Should be constructor
+        graph_class = NULL,
+
+        # Protected private variables
         cache = list(
             nodes = NULL,
             edges = NULL,
             pkg_graph = NULL,
-            network_measures = NULL,
+            network_measures = list(),
             graph_viz = NULL
         ),
 
-        # Default graph viz layout
-        private_layout_type = "layout_nicely",
-
-        # Calculate graph-related measures for pkg_graph
-        calculate_network_measures = function(){
-
-            # Use igraph object
-            pkg_graph <- self$pkg_graph
-
-            #--------------#
-            # out degree
-            #--------------#
-            outDegreeResult <- igraph::centralization.degree(
-                graph = pkg_graph
-                , mode = "out"
-            )
-            
-            outDegreeResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                        , outDegree = outDegreeResult[['res']]
-                                                        )
-
-            # update data.tables
-            private$update_nodes(outDegreeResultDT)
-            
-            private$cache$network_measures[['centralization.OutDegree']] <- outDegreeResult$centralization
-
-            #--------------#
-            # betweeness
-            #--------------#
-            outBetweenessResult <- igraph::centralization.betweenness(
-                graph = pkg_graph
-                , directed = TRUE
-            )
-            
-            outBetweenessResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                        , outBetweeness = outBetweenessResult[['res']]
-            )
-            
-            # update data.tables
-            private$update_nodes(outBetweenessResultDT)
-
-            private$cache$network_measures[['centralization.betweenness']] <- outBetweenessResult$centralization
-
-            #--------------#
-            # closeness
-            #--------------#
-            suppressWarnings({
-                outClosenessResult <- igraph::centralization.closeness(
-                    graph = pkg_graph
-                    , mode = "out"
-                )
-            })
-
-            outClosenessResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                            , outCloseness = outClosenessResult[['res']]
-            )
-            
-            # update data.tables
-            private$update_nodes(metadataDT = outClosenessResultDT)
-            
-            private$cache$network_measures[['centralization.closeness']] <- outClosenessResult$centralization
-
-            #--------------------------------------------------------------#
-            # NODE ONLY METRICS
-            #--------------------------------------------------------------#
-
-            #--------------#
-            # Size of Out-Subgraph - meaning the rooted graph out from a node
-            # computed using out-neighborhood with order of longest possible path
-            #--------------#
-            numOutNodes <- igraph::neighborhood.size(
-                graph = pkg_graph
-                , order = vcount(pkg_graph)
-                , mode = "out"
-            )
-            
-            numOutNodesDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                           , outSubgraphSize = numOutNodes
-            )
-            
-            # update data.tables
-            private$update_nodes(numOutNodesDT)
-
-
-            #--------------#
-            # Size of In-Subgraph - meaning the rooted graph into a node
-            # computed using in-neighborhood with order of longest possible path
-            #--------------#
-            numInNodes <- igraph::neighborhood.size(
-                graph = pkg_graph
-                , order = vcount(pkg_graph)
-                , mode = "in"
-            )
-            
-            numInNodesDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                    , inSubgraphSize = numInNodes
-            )
-            
-            # update data.tables
-            private$update_nodes(numInNodesDT)
-
-            #--------------#
-            # Hub Score
-            #--------------#
-            hubScoreResult <- igraph::hub_score(
-                graph = pkg_graph
-                , scale = TRUE
-            )
-            
-            hubScoreResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                   , hubScore = hubScoreResult$vector
-            )
-            
-            # update data.tables
-            private$update_nodes(hubScoreResultDT)
-
-            #--------------#
-            # PageRank
-            #--------------#
-            pageRankResult <- igraph::page_rank(graph = pkg_graph, directed = TRUE)
-            
-            pageRankResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                       , pageRank = pageRankResult$vector
-            )
-            
-            # update data.tables
-            private$update_nodes(pageRankResultDT)
-
-            #--------------#
-            # in degree
-            #--------------#
-            inDegreeResult <- igraph::degree(pkg_graph, mode = "in")
-            
-            inDegreeResultDT <- data.table::data.table(node = igraph::vertex.attributes(pkg_graph)[['name']]
-                                                       , inDegree = inDegreeResult
-            )
-            
-            # update data.tables
-            private$update_nodes(inDegreeResultDT)
-
-
-            #--------------------------------------------------------------#
-            # NETWORK ONLY METRICS
-            #--------------------------------------------------------------#
-
-            #motifs?
-            #knn/assortivity?
-            
-
-            return(invisible(NULL))
+        # Placeholder methods to extract ndoes and edges
+        extract_nodes = function() {
+            log_fatal('Node extraction not implemented for this reporter.')
         },
-
-        # Creates pkg_graph igraph object
-        # Requires edges and nodes
-        make_graph_object = function(){
-            edges <- self$edges
-            nodes <- self$nodes
-
-            if (nrow(edges) > 0) {
-
-                # A graph with edges
-                inGraph <- igraph::graph.edgelist(
-                    as.matrix(edges[,list(SOURCE,TARGET)])
-                    , directed = TRUE
-                )
-
-                # add isolated nodes
-                allNodes <- nodes$node
-                nonConnectedNodes <- base::setdiff(allNodes, names(igraph::V(inGraph)))
-
-                outGraph <- inGraph + igraph::vertex(nonConnectedNodes)
-            } else {
-                # An unconnected graph
-                allNodes <- nodes$node
-                outGraph <- igraph::make_empty_graph() + igraph::vertex(allNodes)
-            }
-
-            private$cache$pkg_graph <- outGraph
-
-            return(invisible(NULL))
+        extract_edges = function() {
+            log_fatal('Edge extraction not implemented for this reporter.')
         },
 
         # Variables for the plot
@@ -322,19 +239,24 @@ AbstractGraphReporter <- R6::R6Class(
             return(invisible(NULL))
         },
 
-        # Function to update nodes
-        # This function updates the cached nodes data.table, and if it exists, the pkg_graph object
-        update_nodes = function(metadataDT) {
+        # Function to update nodes data.table in-place
+        update_nodes = function(newColsDT) {
             log_info('Updating cached nodes data.table with metadata...')
 
-            # Merge new DT with cached DT, but overwrite any colliding columns
-            colsToKeep <- setdiff(names(self$nodes), names(metadataDT))
-            private$cache$nodes <- merge(
-                x = self$nodes[, .SD, .SDcols = c("node", colsToKeep)]
-                , y = metadataDT
-                , by = "node"
-                , all.x = TRUE
+            # Validate that input has node column
+            assertthat::assert_that(
+                "node" %in% names(newColsDT)
+                , anyDuplicated(newColsDT, by = 'node') == 0
             )
+
+            data.table::setkeyv(newColsDT, 'node')
+
+            # Iterate through each column and assign to nodes data.table inplace
+            colsToAdd <- setdiff(names(newColsDT), "node")
+            for (colName in colsToAdd) {
+                self$nodes[, eval(colName) := newColsDT[node, get(colName)]]
+            }
+
             return(invisible(NULL))
         },
 
@@ -342,7 +264,7 @@ AbstractGraphReporter <- R6::R6Class(
         # Uses pkg_graph active binding
         plot_network = function(){
 
-            log_info("Creating plot...")
+            log_info("Plotting graph visualization...")
 
             log_info(paste("Using igraph layout:", self$layout_type))
 
@@ -441,7 +363,7 @@ AbstractGraphReporter <- R6::R6Class(
                 plotDTedges <- data.table::copy(self$edges) # Don't modify original
                 plotDTedges[, from := SOURCE]
                 plotDTedges[, to := TARGET]
-                plotDTedges[, color := '#848484'] # TODO Make edge formatting flexible too
+                plotDTedges[, color := '#848484']
             } else {
                 plotDTedges <- NULL
             }
@@ -468,7 +390,6 @@ AbstractGraphReporter <- R6::R6Class(
 
             if (colorByGroup) {
                 # Add group definitions
-                log_info(paste(colorFieldValues))
                 for (groupVal in colorFieldValues) {
                     thisGroupColor <- plotDTnodes[
                             get(colorFieldName) == groupVal
@@ -482,10 +403,6 @@ AbstractGraphReporter <- R6::R6Class(
                 }
 
                 # Add legend
-                # but it is broken if there is only one level
-                # so hard-code for now to skip if there is only one level
-                # TODO: remove if statement when the following issue is resolved:
-                # https://github.com/datastorm-open/visNetwork/issues/290
                 if (length(colorFieldValues) > 1) {
                     g <- visNetwork::visLegend(
                         graph = g
@@ -498,8 +415,7 @@ AbstractGraphReporter <- R6::R6Class(
                 }
             }
 
-
-            log_info("Done creating plot.")
+            log_info("...done plotting visualization.")
 
             # Save plot in the cache
             private$cache$graph_viz <- g
@@ -514,7 +430,7 @@ AbstractGraphReporter <- R6::R6Class(
             return(invisible(NULL))
         }
 
-    )
+    ) # /private
 )
 
 # [title] Available Graph Layout Functions from igraph

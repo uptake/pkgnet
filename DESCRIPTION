@@ -1,7 +1,7 @@
 Package: pkgnet
 Type: Package
 Title: Get Network Representation of an R Package
-Version: 0.3.2
+Version: 0.3.2.9999
 Authors@R: c(
     person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "james.lamb@uptake.com", role = c("aut")),
@@ -32,7 +32,7 @@ Suggests:
     testthat, 
     withr
 License: BSD_3_clause + file LICENSE
-URL: https://github.com/UptakeOpenSource/pkgnet
+URL: https://github.com/UptakeOpenSource/pkgnet, https://uptakeopensource.github.io/pkgnet/
 BugReports: https://github.com/UptakeOpenSource/pkgnet/issues
 LazyData: TRUE
 RoxygenNote: 6.1.1

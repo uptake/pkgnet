@@ -2,7 +2,7 @@
 % Please edit documentation in R/CreatePackageReport.R
 \name{CreatePackageReport}
 \alias{CreatePackageReport}
-\title{Surface the internal and external dependencies of an R package.}
+\title{pkgnet Analysis Report for an R package}
 \usage{
 CreatePackageReport(pkg_name, pkg_reporters = DefaultReporters(),
   pkg_path = NULL, report_path = tempfile(pattern = pkg_name, fileext =
@@ -24,11 +24,5 @@ report will be produced in the temporary directory.}
 A list of instantiated pkg_reporters fitted to \code{pkg_name}
 }
 \description{
-Surface the internal and external dependencies of an R package.
-}
-\seealso{
-GetPackageGraphs
-}
-\author{
-B. Burns
+Create a standalone HTML report about a package and its networks.
 }

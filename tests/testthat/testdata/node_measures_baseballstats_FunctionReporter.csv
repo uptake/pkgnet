@@ -1,0 +1,6 @@
+node,type,isExported,outDegree,inDegree,outCloseness,inCloseness,numRecursiveDeps,numRecursiveRevDeps,betweenness,pageRank,hubScore,authorityScore
+on_base_pct,function,TRUE,0,0,0.2,0.2,0,0,0,0.120882441825325,0,0
+OPS,function,TRUE,2,0,0.444444444444444,0.444444444444444,3,0,0,0.120882441825325,1,0
+slugging_avg,function,TRUE,1,1,0.25,0.25,1,1,0.5,0.172257479601088,1,1
+at_bats,function,TRUE,0,2,0.2,0.2,0,3,0,0.413720157147174,0,1
+batting_avg,function,TRUE,1,1,0.25,0.25,1,1,0.5,0.172257479601088,1,1

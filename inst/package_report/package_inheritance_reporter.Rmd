@@ -13,9 +13,13 @@ Here's an overview of the classes defined in **`r reporter$pkg_name`**. The foll
 
 S3 classes are not supported. For more information about object-oriented programming in R, see the section at the bottom.
 
+```{r echo = FALSE, error = TRUE}
+reporter$calculate_default_measures()
+```
+
 ### Visualization
 
-```{r echo=FALSE}
+```{r echo = FALSE, error = TRUE}
 if (nrow(reporter$nodes) > 0) {
     reporter$graph_viz
 } else {
@@ -25,7 +29,7 @@ if (nrow(reporter$nodes) > 0) {
 
 ### Table
 
-```{r}
+```{r error = TRUE}
 reporter$get_summary_view()
 ```
 

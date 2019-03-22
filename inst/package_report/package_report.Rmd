@@ -42,6 +42,12 @@ reportTabs <- lapply(params$reporters, function(reporter) {
 cat(paste0("# {.tabset} \n", paste(reportTabs, collapse = '\n')))
 ```
 
+#
+
+```{r results="asis"}
+cat(sprintf("Report built with pkgnet v%s", packageVersion('pkgnet')))
+```
+
 ```{r echo = FALSE}
 pkgnet:::unsilence_logger()
 ```

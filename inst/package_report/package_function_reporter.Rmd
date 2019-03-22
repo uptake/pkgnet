@@ -7,14 +7,18 @@ output: html_document
 
 Here's an overview of the functions defined in **`r reporter$pkg_name`**.
 
+```{r echo = FALSE, error = TRUE}
+reporter$calculate_default_measures()
+```
+
 ### Visualization
 
-```{r echo=FALSE}
+```{r echo = FALSE, error = TRUE}
 reporter$graph_viz
 ```
 
 ### Table
 
-```{r}
+```{r error = TRUE}
 reporter$get_summary_view()
 ```

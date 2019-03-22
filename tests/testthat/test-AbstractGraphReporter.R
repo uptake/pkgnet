@@ -1,41 +1,71 @@
-context("Abstract Graph Reporter Tests")
-
-##### TEST SET UP #####
-
+context("AbstractGraphReporter Tests")
 rm(list = ls())
-# Configure logger (suppress all logs in testing)
-loggerOptions <- futile.logger::logger.options()
-if (!identical(loggerOptions, list())){
-    origLogThreshold <- loggerOptions[[1]][['threshold']]
-} else {
-    origLogThreshold <- futile.logger::INFO
-}
-futile.logger::flog.threshold(0)
 
 ##### TESTS #####
 
-## Structure Available ##
+## PUBLIC INTERFACE ##
 
-test_that('AbstractGraphReporter structure is as expected', {
+test_that('AbstractGraphReporter public interface is as expected', {
 
-    expect_named(
-        object = AbstractGraphReporter$public_methods
-        , expected = c("clone")
-        , info = "Available public methods for AbstractGraphReporter not as expected."
-        , ignore.order = TRUE
-        , ignore.case = FALSE
+    publicInterfaceExpected <- c(
+        # R6 Special Methods
+        ".__enclos_env__"
+        , "clone"
+
+        # Graph Reporter fields and active bindings
+        , "pkg_name"
+        , "nodes"
+        , "edges"
+        , "pkg_graph"
+        , "network_measures"
+        , "graph_viz"
+        , "layout_type"
+
+        # Graph Reporter methods
+        , "set_package"
+        , "calculate_default_measures"
+        , "get_summary_view"
+        , "report_markdown_path"
     )
 
-    expect_named(
-        object = AbstractGraphReporter$public_fields
-        , expected = NULL
-        , info = "Available public fields for AbstractGraphReporter not as expected."
-        , ignore.order = TRUE
-        , ignore.case = FALSE
-    )
+    reporter <- pkgnet:::AbstractGraphReporter$new()
+    expect_setequal(object = names(reporter)
+                    , expected = publicInterfaceExpected)
 })
 
-### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS TO BE TESTED BY CHILD OBJECTS
+test_that("AbstractGraphReporter layout type setting works", {
+    expect_equal(
+        object = {
+            x <- pkgnet:::AbstractGraphReporter$new()
+            x$layout_type <- pkgnet:::.igraphAvailableLayouts()[[1]]
+            x$layout_type
+        }
+        , expected = pkgnet:::.igraphAvailableLayouts()[[1]]
+    )
+    expect_error({
+        x <- pkgnet:::AbstractGraphReporter$new()
+        x$layout_type <- 'layout_as_newspaper'
+    }, regexp = "layout_as_newspaper is not a supported layout by igraph")
+})
+
+test_that("AbstractGraphReporter errors on unimplemented methods", {
+    expect_error({
+        x <- pkgnet:::AbstractGraphReporter$new()
+        x$nodes
+    }, regexp = "Node extraction not implemented for this reporter")
+
+    expect_error({
+        x <- pkgnet:::AbstractGraphReporter$new()
+        x$edges
+    }, regexp = "Edge extraction not implemented for this reporter")
+
+    expect_error({
+        x <- pkgnet:::AbstractGraphReporter$new()
+        x$pkg_graph
+    }, regexp = "Reporter must set valid graph class")
+})
+
+### HELPER FUNCTIONS
 
 test_that(".igraphAvailableLayouts returns layouts correctly", {
     expect_true({
@@ -44,8 +74,8 @@ test_that(".igraphAvailableLayouts returns layouts correctly", {
 })
 
 
+
 ##### TEST TEAR DOWN #####
 
-futile.logger::flog.threshold(origLogThreshold)
 rm(list = ls())
 closeAllConnections()

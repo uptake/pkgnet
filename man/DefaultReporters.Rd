@@ -6,6 +6,10 @@
 \usage{
 DefaultReporters()
 }
+\value{
+list of instantiated reporter objects
+}
 \description{
-Instantiates a list of default reporters to feed into \link{CreatePackageReport}
+Instantiates a list of default reporters to feed into
+   \code{\link{CreatePackageReport}}.
 }

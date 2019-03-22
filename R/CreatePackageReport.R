@@ -1,17 +1,18 @@
-#' @title Surface the internal and external dependencies of an R package.
+#' @title pkgnet Analysis Report for an R package
 #' @name CreatePackageReport
-#' @description Surface the internal and external dependencies of an R package.
-#' @author B. Burns
-#' @seealso GetPackageGraphs
+#' @description Create a standalone HTML report about a package and its networks.
+#' @param pkg_name (string) name of a package
+#' @param pkg_path (string) The path to the package repository. If given, coverage
+#'                 will be calculated for each function. \code{pkg_path} can be an
+#'                 absolute or relative path.
 #' @param pkg_reporters (list) a list of package reporters
 #' @param report_path (string) The path and filename of the output report.  Default
 #'                   report will be produced in the temporary directory.
-#' @inheritParams doc_shared
 #' @importFrom assertthat assert_that is.readable is.string is.writeable
 #' @importFrom methods is
 #' @importFrom tools file_ext
 #' @importFrom utils browseURL
-#' @importFrom knitr opts_chunk
+#' @importFrom rmarkdown render
 #' @return A list of instantiated pkg_reporters fitted to \code{pkg_name}
 #' @export
 CreatePackageReport <- function(pkg_name
@@ -68,6 +69,9 @@ CreatePackageReport <- function(pkg_name
     return(invisible(builtReporters))
 }
 
+### Imports from package_report.Rmd
+#' @importFrom knitr opts_chunk knit_child
+NULL
 
 # [title] Package Report Renderer
 # [name] RenderPackageReport

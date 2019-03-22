@@ -32,6 +32,8 @@
 # produced vignettes
 vignettes/*\.html
 vignettes/*\.pdf
+^Meta$
+^doc$
 
 # Temporary files created by R markdown
 .*\.utf8\.md

@@ -1,15 +1,19 @@
-#' @title Package Dependency Reporter Class
+#' @title Recursive Package Dependency Reporter
 #' @name DependencyReporter
-#' @family PackageReporters
-#' @description This Reporter takes a package and uncovers the structure from
-#'              its other package dependencies, determining which package it relies on is most central,
-#'              allowing for a developer to determine how to vet its dependency tree
-#' @importFrom data.table data.table setnames rbindlist
-#' @importFrom DT datatable formatRound
-#' @importFrom R6 R6Class
-#' @importFrom utils installed.packages
-#' @importFrom tools package_dependencies
-#' @export
+#' @family Network Reporters
+#' @family Package Reporters
+#' @description This reporter looks at the recursive network of its dependencies
+#'    on other packages. This allows a developer to understand how individual
+#'    dependencies might lead to a much larger set of dependencies, potentially
+#'    informing decisions on including or removing them.
+#' @section Class Constructor:
+#' \preformatted{DependencyReporter$new()}
+#' @inheritSection PackageReporters Class Constructor
+#' @inheritSection PackageReporters Public Methods
+#' @inheritSection NetworkReporters Public Methods
+#' @inheritSection PackageReporters Public Fields
+#' @inheritSection NetworkReporters Public Fields
+#' @inheritSection PackageReporters Special Methods
 #' @examples
 #' \donttest{
 #'
@@ -22,12 +26,18 @@
 #' # plot it up
 #' reporter$plot_network()
 #' }
+NULL
+
+#' @importFrom R6 R6Class
+#' @importFrom assertthat assert_that is.flag
+#' @importFrom utils installed.packages
+#' @importFrom tools package_dependencies
+#' @importFrom data.table data.table rbindlist setkeyv
+#' @importFrom visNetwork visHierarchicalLayout
+#' @export
 DependencyReporter <- R6::R6Class(
     "DependencyReporter",
     inherit = AbstractGraphReporter,
-
-    #TODO [patrick.boueri@uptake.com]: Add more robust error checks and logging
-    #TODO [patrick.boueri@uptake.com]: Add version information to dependency structure
 
     public = list(
 
@@ -42,71 +52,37 @@ DependencyReporter <- R6::R6Class(
             private$dep_types <- dep_types
             private$installed <- installed
             return(invisible(NULL))
-        },
-
-        get_summary_view = function(){
-
-            # Calculate network measures if not already done
-            # since we want the node measures in summary
-            invisible(self$network_measures)
-
-            # Create DT for display
-            tableObj <- DT::datatable(
-                data = self$nodes
-                , rownames = FALSE
-                , options = list(
-                    searching = FALSE
-                    , pageLength = 50
-                    , lengthChange = FALSE
-                )
-            )
-            # Round the double columns to three digits for formatting reasons
-            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
-            tableObj <- DT::formatRound(columns = numCols, table = tableObj
-                                        , digits=3)
-            return(tableObj)
         }
-
     ),
 
     active = list(
-        edges = function(){
-            if (is.null(private$cache$edges)){
-                log_info("Calling extract_network() with default arguments...")
-                private$extract_network()
-            }
-            return(private$cache$edges)
-        },
-        nodes = function(){
-            if (is.null(private$cache$nodes)){
-                log_info("Calling extract_network() with default arguments...")
-                private$extract_network()
-            }
-            return(private$cache$nodes)
-        },
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_dependency_reporter.Rmd"), package = "pkgnet")
         }
     ),
 
     private = list(
+        # Class of graph to initialize
+        # Should be constructor
+        graph_class = DirectedGraph,
+
         # Default graph viz layout
         private_layout_type = "layout_as_tree",
 
         dep_types = NULL,
         ignore_packages = NULL,
         installed = NULL,
-        extract_network = function(){
+
+        extract_nodes = function() {private$extract_nodes_and_edges()},
+        extract_edges = function() {private$extract_nodes_and_edges()},
+        extract_nodes_and_edges = function(){
 
             # Check that package has been set
             if (is.null(self$pkg_name)){
                 log_fatal('Must set_package() before extracting dependency network.')
             }
 
-            # Reset cache, because any cached stuff will be outdated with a new package
-            private$reset_cache()
-
-            log_info(sprintf('Constructing reverse dependency graph for %s', self$pkg_name))
+            log_info(sprintf('Constructing dependency network for %s', self$pkg_name))
 
             # Consider only installed packages when building dependency network
             if (private$installed){
@@ -187,7 +163,7 @@ DependencyReporter <- R6::R6Class(
                     )
                 }
             ))
-
+            data.table::setkeyv(edges, c('SOURCE', 'TARGET'))
             private$cache$edges <- edges
 
             # Get and save nodes
@@ -199,7 +175,10 @@ DependencyReporter <- R6::R6Class(
                      )
                 )
             )
+            data.table::setkeyv(nodes, 'node')
             private$cache$nodes <- nodes
+
+            log_info('...done constructing dependency network.')
 
             return(invisible(NULL))
         },
@@ -243,12 +222,11 @@ DependencyReporter <- R6::R6Class(
         }
 
         , plot_network = function() {
-            g <- super$plot_network()
-
-            g <- (g
-                  %>% visNetwork::visHierarchicalLayout(
-                      sortMethod = "directed"
-                      , direction = "UD")
+            g <- (
+                super$plot_network()
+                %>% visNetwork::visHierarchicalLayout(
+                        sortMethod = "directed"
+                        , direction = "UD")
             )
             return(g)
         }
