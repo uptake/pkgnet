@@ -19,6 +19,8 @@ navbar:
       href: articles/index.html
     - text: "News"
       href: news/index.html
+    - text: "Gallery"
+      href: https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html
 
   right:
    - icon: fa-github
