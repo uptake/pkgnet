@@ -9,13 +9,11 @@ vignette: >
     %\VignetteEncoding{UTF-8}
 ---
 
-# Publishing Your pkgnet Package Report
-
 You've generated a **pkgnet Package Report** and used it to get a better understanding of your package. Now what? How about sharing the knowledge!
 
 Why share a pkgnet report? Developers who want to contribute to your package can use it to deep dive into your package's dependencies, function control flow, or class inheritance architecture, as discussed in our other vignettes. Or perhaps someone is looking to report a bug, and they could benefit from a little help navigating the structure of your package. Or maybe even a user of your package just wants a better appreciation of how your package ticks. There are many ways that other people benefit from having a pkgnet report available for your package. 
 
-This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the **pkgnet Gallery** website. These aren't mutally exclusive---feel free to do both!
+This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the [**pkgnet Gallery** website](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html). These aren't mutally exclusive---feel free to do both!
 
 ## Publish as a vignette in your package
 
@@ -45,6 +43,4 @@ You can check out our example for pkgnet to see what one looks like (it's actual
 
 ## Add your package to the pkgnet Gallery
 
-We also welcome contributions to the pkgnet Gallery! ...
-
-**UNDER CONSTRUCTION**
+We also welcome contributions to the [pkgnet Gallery](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! This is a webpage on our site that showcases pkgnet reports for different packages. See the [GitHub README](https://github.com/UptakeOpenSource/pkgnet-gallery) for the pkgnet Gallery for instructions on how to contribute your package's report. 
