@@ -19,16 +19,16 @@ Imports:
     data.table,
     DT,
     futile.logger,
+    glue,
     igraph,
     knitr,
     magrittr,
     methods,
     R6,
+    rlang,
     rmarkdown(>= 1.9),
     tools,
-    visNetwork,
-    glue,
-    rlang
+    visNetwork
 Suggests:
     devtools,
     testthat, 

@@ -51,8 +51,12 @@ test_that("Test that CreatePackageVignette errors for bad inputs", {
                 , basename(vignettePath)
             )
         )
-        , regexp = sprintf("Directory %s does not exist, please create first"
-                           , file.path(dirname(vignettePath), 'notarealdir'))
+        , regexp = paste(
+            "Directory"
+            , file.path(dirname(vignettePath), 'notarealdir')
+            , "does not exist, please create it before running"
+            , "CreatePackageVignette"
+        )
         , fixed = TRUE
     )
 

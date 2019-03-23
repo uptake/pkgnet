@@ -1,8 +1,8 @@
 #' @title pkgnet Report as Vignette
 #' @name CreatePackageVignette
 #' @description Create pkgnet package report as an R Markdown vignette. This
-#'    vignette is able to be rendered into a standard HTML vignette with
-#'    the \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
+#'    vignette can be rendered into a standard HTML vignette with the
+#'    \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
 #'    into HTML vignettes upon package building. It is also compatible with
 #'    \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
 #'    \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/publishing-reports.html}{
@@ -12,8 +12,9 @@
 #'    our example for pkgnet}.
 #' @param pkg_name (string) name of a package
 #' @param pkg_reporters (list) a list of initialized package reporters
-#' @param vignette_path (string) The path and filename of the output vignette
-#'    file. The default assumes your working directory is the package root.
+#' @param vignette_path (string) The location of a file to store the output
+#'    vignette file at. Must be an .Rmd file. By default, this will be
+#'    'vignettes/pkgnet-report.Rmd' relative to your current working directory.
 #' @importFrom rlang enexpr
 #' @importFrom assertthat assert_that is.string is.readable
 #' @importFrom tools file_ext
@@ -55,6 +56,7 @@ CreatePackageVignette <- function(pkg_name
                    , FUN = .is.PackageReporter
                    , FUN.VALUE = logical(1)
             ))
+        , msg = "All members of pkg_reporters must be initialized package reporters."
     )
 
     ## vignette_path input checks ##
@@ -66,7 +68,8 @@ CreatePackageVignette <- function(pkg_name
 
     # Confirm directory exists
     if (!file.exists(dirname(vignette_path))) {
-        log_fatal(sprintf("Directory %s does not exist, please create first"
+        log_fatal(sprintf(paste("Directory %s does not exist, please create it",
+                                "before running CreatePackageVignette")
                           , dirname(vignette_path)))
     }
 
@@ -98,9 +101,11 @@ CreatePackageVignette <- function(pkg_name
         # Otherwise, warn that we're writing to a vignettes folder inside
         # a directory that is not a package root
         } else {
-            log_warn(paste("You specified a path to a vignettes directory"
-                           , vignetteDirAbsPath
-                           , "that is not inside a package root directory."))
+            log_warn(paste(
+                "You specified a path to a vignettes directory"
+                , vignetteDirAbsPath
+                , "that is not inside a package root directory."
+            ))
         }
     }
 
@@ -128,8 +133,10 @@ CreatePackageVignette <- function(pkg_name
     on.exit(close(rmd_conn))
     writeLines(vignette_rmd, con = rmd_conn)
 
-    log_info(sprintf("...successfully wrote vignette R Markdown file to %s"
-                     , normalizePath(vignette_path)))
+    log_info(sprintf(
+        "...successfully wrote vignette R Markdown file to %s"
+        , normalizePath(vignette_path)
+    ))
 
     return(invisible(normalizePath(vignette_path)))
 }
