@@ -64,7 +64,7 @@ DependencyReporter <- R6::R6Class(
     private = list(
         # Class of graph to initialize
         # Should be constructor
-        graph_class = DirectedGraph,
+        graph_class = "DirectedGraph",
 
         # Default graph viz layout
         private_layout_type = "layout_as_tree",

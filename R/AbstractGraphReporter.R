@@ -130,8 +130,17 @@ AbstractGraphReporter <- R6::R6Class(
                 if (is.null(private$graph_class)) {
                     log_fatal("Reporter must set valid graph class.")
                 }
+
+                # Get graph object constructor
+                assertthat::assert_that(
+                    private$graph_class %in% names(getNamespace('pkgnet'))
+                )
+                graphConstructor <- get(private$graph_class
+                                        , pos = getNamespace('pkgnet')
+                                        )
+
                 log_info("Creating graph model for network...")
-                pkg_graph <- private$graph_class$new(self$nodes, self$edges)
+                pkg_graph <- graphConstructor$new(self$nodes, self$edges)
                 private$cache$pkg_graph <- pkg_graph
                 log_info("...graph model stored as pkg_graph.")
             }
