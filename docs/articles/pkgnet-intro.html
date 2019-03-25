@@ -48,6 +48,9 @@
 <li>
   <a href="../news/index.html">News</a>
 </li>
+<li>
+  <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -121,19 +124,19 @@ Example Dependency Graph
 <div id="dependency" class="section level2">
 <h2 class="hasAnchor">
 <a href="#dependency" class="anchor"></a>Dependency</h2>
-<p>Units of the analysis are represented as <strong>nodes</strong>, and their dependency relationships are represented as <strong>edges</strong> (a.k.a. arcs or arrows). In <code>pkgnet</code>, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point from the dependent node to the independent node.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>Units of the analysis are represented as <strong>nodes</strong>, and their dependency relationships are represented as <strong>edges</strong> (a.k.a. arcs or arrows). In <code>pkgnet</code>, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point in the direction of dependency—the tail node depends on the head node.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>In the example dependency graph above:</p>
 <ul>
 <li>
-<strong>C</strong> is dependent upon both <strong>A</strong> and <strong>B</strong>.</li>
+<strong>C</strong> depends on both <strong>A</strong> and <strong>B</strong>.</li>
 <li>
-<strong>D</strong> is dependent upon both <strong>C</strong> and <strong>B</strong>.</li>
+<strong>D</strong> depends both <strong>C</strong> and <strong>B</strong>.</li>
 <li>
-<strong>D</strong> is indirectly dependent upon <strong>A</strong> through <strong>C</strong> via the transitive property.</li>
+<strong>D</strong> indirectly depends upon <strong>A</strong> through <strong>C</strong> via the transitive property.</li>
 <li>
-<strong>B</strong> is independent of <strong>A</strong> as there is no path from <strong>A</strong> to <strong>B</strong> by following the edges.</li>
+<strong>B</strong> does not depend on <strong>A</strong> as there is no path from <strong>A</strong> to <strong>B</strong> by following the edges.</li>
 </ul>
-<p>Following the direction of the edges allows you to figure out the <strong>dependencies</strong> of a node—the nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the <strong>dependents</strong> of a node—the nodes that depend on it.</p>
+<p>Following the direction of the edges allows you to figure out the <strong>dependencies</strong> of a node—the other nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the <strong>reverse dependencies</strong> (i.e., dependents) of a node—the other nodes that depend on it.</p>
 <hr>
 </div>
 </div>
@@ -213,14 +216,13 @@ Example Dependency Graph
 <a href="#node-information" class="anchor"></a>Node Information</h3>
 <p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> contain metrics about their package dependencies or functions (a.k.a network nodes) in a <code>nodes</code> table.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/dim">dim</a></span>(report2<span class="op">$</span>FunctionReporter<span class="op">$</span>nodes)</a></code></pre></div>
-<pre><code>#&gt; [1]  5 16</code></pre>
+<pre><code>#&gt; [1]  5 14</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(report2<span class="op">$</span>FunctionReporter<span class="op">$</span>nodes)</a></code></pre></div>
 <pre><code>#&gt;  [1] "node"                "type"                "isExported"         
 #&gt;  [4] "coveredLines"        "totalLines"          "coverageRatio"      
-#&gt;  [7] "meanCoveragePerLine" "filename"            "outDegree"          
-#&gt; [10] "outBetweeness"       "outCloseness"        "outSubgraphSize"    
-#&gt; [13] "inSubgraphSize"      "hubScore"            "pageRank"           
-#&gt; [16] "inDegree"</code></pre>
+#&gt;  [7] "meanCoveragePerLine" "filename"            "betweenness"        
+#&gt; [10] "outDegree"           "inDegree"            "numRecursiveDeps"   
+#&gt; [13] "numRecursiveRevDeps" "pageRank"</code></pre>
 <p>Note, a few of these metrics provided by default are from the field of <a href="https://en.wikipedia.org/wiki/Network_theory">Network Theory</a>. You can leverage the <strong>Network Object</strong> described below to derive many more.</p>
 </div>
 <div id="network-measures" class="section level3">
@@ -228,22 +230,22 @@ Example Dependency Graph
 <a href="#network-measures" class="anchor"></a>Network Measures</h3>
 <p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> contain graph-level measures based on their network structure in a <code>network_measures</code> list.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">report2<span class="op">$</span>FunctionReporter<span class="op">$</span>network_measures</a></code></pre></div>
-<pre><code>#&gt; $centralization.OutDegree
-#&gt; [1] 0.3
-#&gt; 
-#&gt; $centralization.betweenness
-#&gt; [1] 0.03125
-#&gt; 
-#&gt; $centralization.closeness
-#&gt; [1] 0.2743056
-#&gt; 
-#&gt; $packageTestCoverage.mean
+<pre><code>#&gt; $packageTestCoverage.mean
 #&gt; [1] 0.1
 #&gt; 
 #&gt; $packageTestCoverage.betweenessWeightedMean
-#&gt; [1] 0.5</code></pre>
+#&gt; [1] 0
+#&gt; 
+#&gt; $graphOutDegree
+#&gt; [1] 0.3
+#&gt; 
+#&gt; $graphInDegree
+#&gt; [1] 0.3
+#&gt; 
+#&gt; $graphBetweenness
+#&gt; [1] 0.03125</code></pre>
 </div>
-<div id="network-object" class="section level3">
+<div id="network-graph-model-object" class="section level3">
 <h3 class="hasAnchor">
 <a href="#network-object" class="anchor"></a>Network Object</h3>
 <p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> are available as <a href="http://igraph.org/r/">igraph</a> objects named <code>pkg_graph</code></p>
@@ -263,109 +265,48 @@ Example Dependency Graph
 <p>With the reports and objects produced by <code>pkgnet</code> by default, there is plenty to inform us on the inner workings of an R package. However, we may want to know MORE! Since the <a href="http://igraph.org/r/">igraph</a> objects are available, we can leverage those graphs for further analysis.</p>
 <p>In this section, let’s examine a larger R package, such as <a href="http://lubridate.tidyverse.org/">lubridate</a>.</p>
 <p>If you would like to follow along with the examples in this section, run these commands in your terminal to download and install <code>lubridate</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># Create a temporary workspace</span></a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="fu">mkdir</span> -p ~/pkgnet_example <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Logic">&amp;&amp;</a></span> <span class="bu">cd</span> ~/pkgnet_example</a>
-<a class="sourceLine" id="cb11-3" title="3"></a>
-<a class="sourceLine" id="cb11-4" title="4"><span class="co"># Grab the lubridate source code</span></a>
-<a class="sourceLine" id="cb11-5" title="5"><span class="fu">git</span> clone https://github.com/tidyverse/lubridate</a>
-<a class="sourceLine" id="cb11-6" title="6"><span class="bu">cd</span> lubridate</a>
-<a class="sourceLine" id="cb11-7" title="7"></a>
-<a class="sourceLine" id="cb11-8" title="8"><span class="co"># If you want the examples to match exactly</span></a>
-<a class="sourceLine" id="cb11-9" title="9"><span class="fu">git</span> reset --hard 9797d69abe1574dd89310c834e52d358137669b8</a>
-<a class="sourceLine" id="cb11-10" title="10"></a>
-<a class="sourceLine" id="cb11-11" title="11"><span class="co"># Install it</span></a>
-<a class="sourceLine" id="cb11-12" title="12"><span class="ex">Rscript</span> -e <span class="st">"devtools::install()"</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># Create a temporary workspace</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="fu">mkdir</span> -p ~/pkgnet_example <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Logic">&amp;&amp;</a></span> <span class="bu">cd</span> ~/pkgnet_example</a>
+<a class="sourceLine" id="cb13-3" title="3"></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co"># Grab the lubridate source code</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="fu">git</span> clone https://github.com/tidyverse/lubridate</a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="bu">cd</span> lubridate</a>
+<a class="sourceLine" id="cb13-7" title="7"></a>
+<a class="sourceLine" id="cb13-8" title="8"><span class="co"># If you want the examples to match exactly</span></a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="fu">git</span> reset --hard 9797d69abe1574dd89310c834e52d358137669b8</a>
+<a class="sourceLine" id="cb13-10" title="10"></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="co"># Install it</span></a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="ex">Rscript</span> -e <span class="st">"devtools::install()"</span></a></code></pre></div>
 <div id="coverage-of-most-depended-on-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coverage-of-most-depended-on-functions" class="anchor"></a>Coverage of Most Depended-on Functions</h2>
 <p>Let’s examine <code>lubridate</code>’s functions through the lens of each function’s total number of dependents (i.e., the other functions that depend on it) and its code’s unit test coverage. In our graph model for the <code>FunctionReporter</code>, the subgraph of paths leading into a given node is the set of functions that directly or indirectly depend on the function that node represents.</p>
 <!--  Faked Since lubridate not guaranteed to be installed at time of report creation -->
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># Run pkgnet</span></a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pkgnet)</a>
-<a class="sourceLine" id="cb12-3" title="3">report2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(</a>
-<a class="sourceLine" id="cb12-4" title="4">    <span class="dt">pkg_name =</span> <span class="st">"lubridate"</span></a>
-<a class="sourceLine" id="cb12-5" title="5">    , <span class="dt">pkg_path =</span> <span class="st">"~/pkgnet_example/lubridate"</span></a>
-<a class="sourceLine" id="cb12-6" title="6">)</a>
-<a class="sourceLine" id="cb12-7" title="7"></a>
-<a class="sourceLine" id="cb12-8" title="8"><span class="co"># Extract Nodes Table</span></a>
-<a class="sourceLine" id="cb12-9" title="9">funcNodes &lt;-<span class="st"> </span>report2<span class="op">$</span>FunctionReporter<span class="op">$</span>nodes</a>
-<a class="sourceLine" id="cb12-10" title="10"></a>
-<a class="sourceLine" id="cb12-11" title="11"><span class="co"># List Coverage For Most Depended-on Functions</span></a>
-<a class="sourceLine" id="cb12-12" title="12">mostRef &lt;-<span class="st"> </span>funcNodes[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/order">order</a></span>(inSubgraphSize, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)][<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a>
-<a class="sourceLine" id="cb12-13" title="13">mostRef[,<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">`</span><span class="dt">Function</span><span class="st">`</span> =<span class="st"> </span>node</a>
-<a class="sourceLine" id="cb12-14" title="14">              , <span class="st">`</span><span class="dt">In-Subgraph Size</span><span class="st">`</span> =<span class="st"> </span>inSubgraphSize</a>
-<a class="sourceLine" id="cb12-15" title="15">              , <span class="st">`</span><span class="dt">Coverage Ratio</span><span class="st">`</span> =<span class="st"> </span>coverageRatio</a>
-<a class="sourceLine" id="cb12-16" title="16">              , <span class="st">`</span><span class="dt">Total Lines</span><span class="st">`</span> =<span class="st"> </span>totalLines)]</a></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">Function</th>
-<th align="right">In-Subgraph Size</th>
-<th align="right">Coverage Ratio</th>
-<th align="right">Total Lines</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">divide_period_by_period</td>
-<td align="right">39</td>
-<td align="right">1</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">days</td>
-<td align="right">22</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">check_duration</td>
-<td align="right">15</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">as.POSIXt</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">eweeks</td>
-<td align="right">13</td>
-<td align="right">0</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="left">check_interval</td>
-<td align="right">12</td>
-<td align="right">0</td>
-<td align="right">11</td>
-</tr>
-<tr class="odd">
-<td align="left">date&lt;-</td>
-<td align="right">12</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="even">
-<td align="left">add_months</td>
-<td align="right">10</td>
-<td align="right">1</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td align="left">ceil_multi_unit</td>
-<td align="right">10</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">am</td>
-<td align="right">6</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># Run pkgnet</span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(pkgnet)</a>
+<a class="sourceLine" id="cb14-3" title="3">report2 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span>(</a>
+<a class="sourceLine" id="cb14-4" title="4">    <span class="dt">pkg_name =</span> <span class="st">"lubridate"</span></a>
+<a class="sourceLine" id="cb14-5" title="5">    , <span class="dt">pkg_path =</span> <span class="st">"~/pkgnet_example/lubridate"</span></a>
+<a class="sourceLine" id="cb14-6" title="6">)</a>
+<a class="sourceLine" id="cb14-7" title="7"></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="co"># Extract Nodes Table</span></a>
+<a class="sourceLine" id="cb14-9" title="9">funcNodes &lt;-<span class="st"> </span>report2<span class="op">$</span>FunctionReporter<span class="op">$</span>nodes</a>
+<a class="sourceLine" id="cb14-10" title="10"></a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="co"># List Coverage For Most Depended-on Functions</span></a>
+<a class="sourceLine" id="cb14-12" title="12">mostRef &lt;-<span class="st"> </span>funcNodes[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/order">order</a></span>(numRecursiveRevDeps, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb14-13" title="13">                     .(node, numRecursiveRevDeps, coverageRatio, totalLines)</a>
+<a class="sourceLine" id="cb14-14" title="14">                     ][<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co">#&gt;             node numRecursiveRevDeps coverageRatio totalLines</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="co">#&gt;  1:        month                  81             1          1</span></a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="co">#&gt;  2:           tz                  79             1          1</span></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="co">#&gt;  3: reclass_date                  68             1          1</span></a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="co">#&gt;  4:         date                  67             1          1</span></a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="co">#&gt;  5:      is.Date                  60             1          1</span></a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt;  6:    is.POSIXt                  57             1          1</span></a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt;  7:         wday                  56             1          1</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt;  8:   is.POSIXct                  55             1          1</span></a>
+<a class="sourceLine" id="cb15-10" title="10"><span class="co">#&gt;  9:  .deprecated                  55             0         10</span></a>
+<a class="sourceLine" id="cb15-11" title="11"><span class="co">#&gt; 10:      as_date                  52             1          1</span></a></code></pre></div>
 <p>Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.</p>
 <p>In this case, <code>check_duration</code>, one of the most depended-on functions (either directly or indirectly), is not covered by unit tests. However, it appears to be a simple one line function that may not be necessary to cover in unit testing. <code>check_interval</code>, on the other hand, might benefit from some unit test coverage as it is a larger, uncovered function with a similar number of dependencies.</p>
 </div>
@@ -373,38 +314,51 @@ Example Dependency Graph
 <h2 class="hasAnchor">
 <a href="#discovering-similar-functions" class="anchor"></a>Discovering Similar Functions</h2>
 <p>Looking at that same large package, let’s say we want to explore options for consolidating functions. One approach might be to explore consolidating functions that share the same dependencies. In that case, we could use the <code>igraph</code> object to highlight functions with the same out-neighborhood via <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard similarity</a>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># Get igraph object</span></a>
-<a class="sourceLine" id="cb13-2" title="2">funcGraph &lt;-<span class="st"> </span>report2<span class="op">$</span>FunctionReporter<span class="op">$</span>pkg_graph</a>
-<a class="sourceLine" id="cb13-3" title="3">funcNames &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/vertex_attr">vertex_attr</a></span>(funcGraph, <span class="dt">name =</span> <span class="st">"name"</span>)</a>
-<a class="sourceLine" id="cb13-4" title="4"></a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="co"># Jaccard Similarity</span></a>
-<a class="sourceLine" id="cb13-6" title="6">sim &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/similarity">similarity</a></span>(<span class="dt">graph =</span> funcGraph</a>
-<a class="sourceLine" id="cb13-7" title="7">                          , <span class="dt">mode =</span> <span class="st">"out"</span></a>
-<a class="sourceLine" id="cb13-8" title="8">                          , <span class="dt">method =</span> <span class="st">"jaccard"</span>)</a>
-<a class="sourceLine" id="cb13-9" title="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/diag">diag</a></span>(sim) &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb13-10" title="10">sim[sim <span class="op">&lt;</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb13-11" title="11"></a>
-<a class="sourceLine" id="cb13-12" title="12">simGraph &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/graph_from_adjacency_matrix">graph_from_adjacency_matrix</a></span>(<span class="dt">adjmatrix =</span> sim, <span class="dt">mode =</span> <span class="st">"undirected"</span>)</a>
-<a class="sourceLine" id="cb13-13" title="13"></a>
-<a class="sourceLine" id="cb13-14" title="14"><span class="co"># Find groups with same out-neighbors (similarity == 1)</span></a>
-<a class="sourceLine" id="cb13-15" title="15">sameDeps &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/cliques">max_cliques</a></span>(<span class="dt">graph =</span> simGraph</a>
-<a class="sourceLine" id="cb13-16" title="16">                                , <span class="dt">min =</span> <span class="dv">2</span></a>
-<a class="sourceLine" id="cb13-17" title="17">                                )</a>
-<a class="sourceLine" id="cb13-18" title="18"></a>
-<a class="sourceLine" id="cb13-19" title="19"><span class="co"># Write results</span></a>
-<a class="sourceLine" id="cb13-20" title="20"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_along</a></span>(sameDeps)) {</a>
-<a class="sourceLine" id="cb13-21" title="21">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Group "</span>, i, <span class="st">": "</span>))</a>
-<a class="sourceLine" id="cb13-22" title="22">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(funcNames[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(sameDeps[[i]])], <span class="dt">collapse =</span> <span class="st">", "</span>))</a>
-<a class="sourceLine" id="cb13-23" title="23">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a>
-<a class="sourceLine" id="cb13-24" title="24">}</a></code></pre></div>
-<pre><code>#&gt; Group 1: stamp_time, stamp_date
-#&gt; Group 2: ms, hm
-#&gt; Group 3: new_interval, %--%, int_diff
-#&gt; Group 4: floor_date, quarter, semester
-#&gt; Group 5: picoseconds, microseconds, nanoseconds, milliseconds
-#&gt; Group 6: weeks, days, years, seconds_to_period, seconds, new_period, minutes, hours
-#&gt; Group 7: yq, dmy, ymd_hms, ymd_hm, ymd_h, ymd, ydm_hms, ydm_hm, ydm_h, ydm, pretty_dates, parse_date_time2, parse_date_time, myd, mdy_hms, mdy_hm, mdy_h, mdy, local_time, fast_strptime, dym, dmy_hms, dmy_hm, dmy_h</code></pre>
-<p>Now, we have identified seven different groups of functions within <a href="http://lubridate.tidyverse.org/">lubridate</a> that share the <em>exact same</em> dependencies. We could explore each group of functions for potential consolidation.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># Get igraph object</span></a>
+<a class="sourceLine" id="cb16-2" title="2">funcGraph &lt;-<span class="st"> </span>report2<span class="op">$</span>FunctionReporter<span class="op">$</span>pkg_graph</a>
+<a class="sourceLine" id="cb16-3" title="3">funcNames &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/vertex_attr">vertex_attr</a></span>(funcGraph, <span class="dt">name =</span> <span class="st">"name"</span>)</a>
+<a class="sourceLine" id="cb16-4" title="4"></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="co"># Jaccard Similarity</span></a>
+<a class="sourceLine" id="cb16-6" title="6">sim &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/similarity">similarity</a></span>(<span class="dt">graph =</span> funcGraph</a>
+<a class="sourceLine" id="cb16-7" title="7">                          , <span class="dt">mode =</span> <span class="st">"out"</span></a>
+<a class="sourceLine" id="cb16-8" title="8">                          , <span class="dt">method =</span> <span class="st">"jaccard"</span>)</a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/diag">diag</a></span>(sim) &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb16-10" title="10">sim[sim <span class="op">&lt;</span><span class="st"> </span><span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb16-11" title="11"></a>
+<a class="sourceLine" id="cb16-12" title="12">simGraph &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/graph_from_adjacency_matrix">graph_from_adjacency_matrix</a></span>(<span class="dt">adjmatrix =</span> sim, <span class="dt">mode =</span> <span class="st">"undirected"</span>)</a>
+<a class="sourceLine" id="cb16-13" title="13"></a>
+<a class="sourceLine" id="cb16-14" title="14"><span class="co"># Find groups with same out-neighbors (similarity == 1)</span></a>
+<a class="sourceLine" id="cb16-15" title="15">sameDeps &lt;-<span class="st"> </span>igraph<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/igraph/topics/cliques">max_cliques</a></span>(<span class="dt">graph =</span> simGraph</a>
+<a class="sourceLine" id="cb16-16" title="16">                                , <span class="dt">min =</span> <span class="dv">2</span></a>
+<a class="sourceLine" id="cb16-17" title="17">                                )</a>
+<a class="sourceLine" id="cb16-18" title="18"></a>
+<a class="sourceLine" id="cb16-19" title="19"><span class="co"># Write results</span></a>
+<a class="sourceLine" id="cb16-20" title="20"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_along</a></span>(sameDeps)) {</a>
+<a class="sourceLine" id="cb16-21" title="21">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"Group "</span>, i, <span class="st">": "</span>))</a>
+<a class="sourceLine" id="cb16-22" title="22">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(funcNames[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(sameDeps[[i]])], <span class="dt">collapse =</span> <span class="st">", "</span>))</a>
+<a class="sourceLine" id="cb16-23" title="23">    <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</a>
+<a class="sourceLine" id="cb16-24" title="24">}</a></code></pre></div>
+<pre><code>#&gt; Group 1: divisible_period, make_date
+#&gt; Group 2: parse_date_time2, fast_strptime
+#&gt; Group 3: .deprecated_fun, .deprecated_arg
+#&gt; Group 4: stamp_date, stamp_time
+#&gt; Group 5: epiweek, isoweek
+#&gt; Group 6: ms, hm
+#&gt; Group 7: quarter, semester
+#&gt; Group 8: am, .roll_hms
+#&gt; Group 9: modulo_interval_by_duration, modulo_interval_by_period
+#&gt; Group 10: .difftime_from_pieces, .duration_from_units
+#&gt; Group 11: divide_period_by_period, xtfrm.Period
+#&gt; Group 12: int_diff, %--%
+#&gt; Group 13: isoyear, epiyear
+#&gt; Group 14: nanoseconds, microseconds, picoseconds, milliseconds
+#&gt; Group 15: period_to_seconds, check_period, multiply_period_by_number, format.Period, divide_period_by_number, add_period_to_period
+#&gt; Group 16: myd, dmy, yq, ymd, dym, mdy, ydm
+#&gt; Group 17: hours, weeks, minutes, years, days, months.numeric, seconds, seconds_to_period
+#&gt; Group 18: C_force_tz, hour.default, mday.default, c.POSIXct, .mklt, yday.default, year.default, minute.default, second.default
+#&gt; Group 19: ehours, emilliseconds, eyears, eseconds, epicoseconds, enanoseconds, eminutes, olson_time_zones, edays, emicroseconds, eweeks
+#&gt; Group 20: dmy_h, ydm_hms, ymd_hms, dmy_hm, ymd_h, ydm_hm, ydm_h, dmy_hms, ymd_hm, mdy_hms, mdy_hm, mdy_h</code></pre>
+<p>Now, we have identified twenty different groups of functions within <a href="http://lubridate.tidyverse.org/">lubridate</a> that share the <em>exact same</em> dependencies. We could explore each group of functions for potential consolidation.</p>
 </div>
 </div>
 <div class="footnotes">
