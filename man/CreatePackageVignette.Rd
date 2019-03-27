@@ -4,18 +4,18 @@
 \alias{CreatePackageVignette}
 \title{pkgnet Report as Vignette}
 \usage{
-CreatePackageVignette(pkg_name,
+CreatePackageVignette(pkg = ".",
   pkg_reporters = list(DependencyReporter$new(), FunctionReporter$new()),
-  vignette_path = file.path("vignettes", "pkgnet-report.Rmd"))
+  vignette_path = file.path(pkg, "vignettes", "pkgnet-report.Rmd"))
 }
 \arguments{
-\item{pkg_name}{(string) name of a package}
+\item{pkg}{(string) path to root directory of package of interest}
 
 \item{pkg_reporters}{(list) a list of initialized package reporters}
 
 \item{vignette_path}{(string) The location of a file to store the output
 vignette file at. Must be an .Rmd file. By default, this will be
-'vignettes/pkgnet-report.Rmd' relative to your current working directory.}
+'<pkg>/vignettes/pkgnet-report.Rmd' relative to the input to pkg}
 }
 \description{
 Create pkgnet package report as an R Markdown vignette. This

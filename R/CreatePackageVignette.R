@@ -10,34 +10,45 @@
 #'    function, as well as
 #'    \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html}{
 #'    our example for pkgnet}.
-#' @param pkg_name (string) name of a package
+#' @param pkg (string) path to root directory of package of interest
 #' @param pkg_reporters (list) a list of initialized package reporters
 #' @param vignette_path (string) The location of a file to store the output
 #'    vignette file at. Must be an .Rmd file. By default, this will be
-#'    'vignettes/pkgnet-report.Rmd' relative to your current working directory.
+#'    '<pkg>/vignettes/pkgnet-report.Rmd' relative to the input to pkg
 #' @importFrom rlang enexpr
 #' @importFrom assertthat assert_that is.string is.readable
 #' @importFrom tools file_ext
 #' @importFrom R6 is.R6Class
 #' @importFrom glue glue
 #' @export
-CreatePackageVignette <- function(pkg_name
+CreatePackageVignette <- function(pkg = "."
                                   , pkg_reporters = list(
                                       DependencyReporter$new()
                                       , FunctionReporter$new()
                                   )
-                                  , vignette_path = file.path("vignettes"
+                                  , vignette_path = file.path(pkg
+                                                              , "vignettes"
                                                               , "pkgnet-report.Rmd")
                                  ) {
 
     # Capture pkg_reporters expression for later injection into Rmd
     pkg_reporters_expr <- rlang::enexpr(pkg_reporters)
 
-    ## pkg_name input checks ##
+    ## pkg input checks ##
     assertthat::assert_that(
-        assertthat::is.string(pkg_name)
-        , pkg_name != ""
+        assertthat::is.string(pkg)
+        , pkg != ""
+        , dir.exists(pkg)
     )
+    if (!file.exists(file.path(pkg, "DESCRIPTION"))) {
+        log_fatal(paste(
+            "We can't find your DESCRIPTION file."
+            , "pkg must point to a package root directory."
+        ))
+    }
+
+    # Get pkg_name from DESCRIPTION file
+    pkg_name <- read.dcf(file.path(pkg, "DESCRIPTION"))[1,][["Package"]]
 
     ## pkg_reporter input checks ##
     assertthat::assert_that(
@@ -67,7 +78,7 @@ CreatePackageVignette <- function(pkg_name
     )
 
     # Confirm directory exists
-    if (!file.exists(dirname(vignette_path))) {
+    if (!dir.exists(dirname(vignette_path))) {
         log_fatal(sprintf(paste("Directory %s does not exist, please create it",
                                 "before running CreatePackageVignette")
                           , dirname(vignette_path)))
