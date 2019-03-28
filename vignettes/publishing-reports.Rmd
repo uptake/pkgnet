@@ -17,22 +17,17 @@ This vignette will discuss two ways you can easily publish your pkgnet report: a
 
 ## Publish as a vignette in your package
 
+Vignettes are guides included with R packages---you are reading one right now! If you're not familiar with vignettes, you can learn more from the [chapter about them](https://r-pkgs.org/vignettes.html) in Hadley Wickham's book _R Packages_. 
+
 pkgnet provides an easy-to-use function `CreatePackageVignette` to create an R Markdown file that can be rendered as a standard HTML vignette using knitr. 
 
-Set your working directory to your package root and create a `vignettes` directory if you don't already have one. Then simply run:
-
-```{r, eval = FALSE}
-library(pkgnet)
-CreatePackageVignette("name-of-your-package-here")
-```
-
-For example, here is us creating a vignette for pkgnet itself:
+To get started, set set your working directory to your package root and create a `vignettes` directory if you don't already have one. Then simply run `CreatePackageVignette()`! For example, here is us creating a vignette for pkgnet itself:
 
 ```{r, eval=FALSE}
 library(pkgnet)
-CreatePackageVignette("pkgnet")
-#> INFO [2019-03-13 23:37:36] Creating pkgnet package report as vignette for pkgnet...
-#> INFO [2019-03-13 23:37:36] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd
+CreatePackageVignette()
+#> INFO [2019-03-27 21:00:50] Creating pkgnet package report as vignette for pkgnet...
+#> INFO [2019-03-27 21:00:50] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd
 ```
 
 If this is your first R Markdown vignette for your package, you'll want to add `VignetteBuilder: knitr` to your DESCRIPTION file and both `knitr` and `rmarkdown` as `Suggests` dependencies. You'll also need to install the knitr and rmarkdown packages if you haven't already. 
