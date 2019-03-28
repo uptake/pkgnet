@@ -61,6 +61,20 @@ test_that("AbstractPackageReporter errors on unimplemented methods", {
 
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS TO BE TESTED BY CHILD OBJECTS
 
+### UTIL FUNCTIONS ###
+
+test_that(".is.PackageReporter correctly identifies package reporters", {
+    expect_true(pkgnet:::.is.PackageReporter(DependencyReporter$new()))
+    expect_true(pkgnet:::.is.PackageReporter(FunctionReporter$new()))
+    expect_true(pkgnet:::.is.PackageReporter(InheritanceReporter$new()))
+    expect_true(pkgnet:::.is.PackageReporter(SummaryReporter$new()))
+
+    DependencyTabloid <- R6::R6Class(
+        classname = "DependencyTabloid"
+    )
+    expect_true(!pkgnet:::.is.PackageReporter(DependencyTabloid$new()))
+})
+
 ##### TEST TEAR DOWN #####
 
 rm(list = ls())

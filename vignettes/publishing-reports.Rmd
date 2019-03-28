@@ -1,0 +1,41 @@
+---
+title: "Publishing Your pkgnet Package Report"
+output: 
+    rmarkdown::html_vignette:
+        toc: true
+vignette: >
+    %\VignetteIndexEntry{Publishing Your pkgnet Package Report}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+You've generated a **pkgnet Package Report** and used it to get a better understanding of your package. Now what? How about sharing the knowledge!
+
+Why share a pkgnet report? Developers who want to contribute to your package can use it to deep dive into your package's dependencies, function control flow, or class inheritance architecture, as discussed in our other vignettes. Or perhaps someone is looking to report a bug, and they could benefit from a little help navigating the structure of your package. Or maybe even a user of your package just wants a better appreciation of how your package ticks. There are many ways that other people benefit from having a pkgnet report available for your package. 
+
+This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the [**pkgnet Gallery** website](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html). These aren't mutally exclusive---feel free to do both!
+
+## Publish as a vignette in your package
+
+Vignettes are guides included with R packages---you are reading one right now! If you're not familiar with vignettes, you can learn more from the [chapter about them](https://r-pkgs.org/vignettes.html) in Hadley Wickham's book _R Packages_. 
+
+pkgnet provides an easy-to-use function `CreatePackageVignette` to create an R Markdown file that can be rendered as a standard HTML vignette using knitr. 
+
+To get started, set set your working directory to your package root and create a `vignettes` directory if you don't already have one. Then simply run `CreatePackageVignette()`! For example, here is us creating a vignette for pkgnet itself:
+
+```{r, eval=FALSE}
+library(pkgnet)
+CreatePackageVignette()
+#> INFO [2019-03-27 21:00:50] Creating pkgnet package report as vignette for pkgnet...
+#> INFO [2019-03-27 21:00:50] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd
+```
+
+If this is your first R Markdown vignette for your package, you'll want to add `VignetteBuilder: knitr` to your DESCRIPTION file and both `knitr` and `rmarkdown` as `Suggests` dependencies. You'll also need to install the knitr and rmarkdown packages if you haven't already. 
+
+The R Markdown file generated in this way will be built when you use `R CMD build` to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with `devtools::build_vignettes`. If you use pkgdown, it will also be built into an article when you use `pkgdown::build_site()`. 
+
+You can check out our example for pkgnet to see what one looks like (it's actually slightly customized---we used the `pkg_reporters` parameter). You can find the regular version on [CRAN](https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html) or the pkgdown version on [our website](https://uptakeopensource.github.io/pkgnet/articles/pkgnet-report.html). 
+
+## Add your package to the pkgnet Gallery
+
+We also welcome contributions to the [pkgnet Gallery](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! This is a webpage on our site that showcases pkgnet reports for different packages. See the [GitHub README](https://github.com/UptakeOpenSource/pkgnet-gallery) for the pkgnet Gallery for instructions on how to contribute your package's report. 

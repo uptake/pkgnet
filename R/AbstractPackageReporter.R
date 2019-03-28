@@ -180,3 +180,8 @@ AbstractPackageReporter <- R6::R6Class(
         }
     )
 )
+
+# Check if an object is a pkgnet Package Reporter
+.is.PackageReporter <- function(x) {
+    inherits(x, "AbstractPackageReporter")
+}
