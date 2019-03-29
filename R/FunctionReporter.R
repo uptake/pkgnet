@@ -99,7 +99,7 @@ FunctionReporter <- R6::R6Class(
 
         # Class of graph to initialize
         # Should be constructor
-        graph_class = DirectedGraph,
+        graph_class = "DirectedGraph",
 
         get_pkg_env = function() {
             if (is.null(private$cache$pkg_env)) {
