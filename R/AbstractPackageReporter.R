@@ -171,8 +171,8 @@ AbstractPackageReporter <- R6::R6Class(
             )
 
             if (! pkg_name %in% installed_packages){
-                msg <- sprintf("pkgnet could not find a package called '%s'.", pkg_name)
-                log_fatal(msg)
+              msg <- sprintf("'%s' package not found. Run \'install.packages(\"%s\")\' to install the package. ", pkg_name, pkg_name)
+              log_fatal(msg)
             }
 
             log_info(sprintf("Found '%s' in installed packages.", pkg_name))
