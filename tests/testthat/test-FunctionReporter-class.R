@@ -165,7 +165,7 @@ test_that("FunctionReporter rejects bad packages with an informative error", {
         testObj$set_package(
             pkg_name = "w0uldNEverB33aPackageName"
         )
-    }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
+    }, regexp = "pkgnet could not find an installed package named 'w0uldNEverB33aPackageName'. Please install the package first.")
 })
 
 test_that("FunctionReporter rejects bad pkg_path with an informative error", {
