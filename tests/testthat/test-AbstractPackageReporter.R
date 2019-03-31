@@ -37,7 +37,7 @@ test_that("AbstractPackageReporter rejects bad packages with an informative erro
     expect_error({
         x <- pkgnet:::AbstractPackageReporter$new()
         x$set_package("w0uldNEverB33aPackageName")
-    }, regexp = "pkgnet could not find a package called 'w0uldNEverB33aPackageName'")
+    }, regexp = "pkgnet could not find an installed package named 'w0uldNEverB33aPackageName'. Please install the package first.")
 })
 
 test_that("AbstractPackageReporter rejects bad pkg_path with an informative error", {
