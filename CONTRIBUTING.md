@@ -254,6 +254,7 @@ However, these options can lengthen your testing cycle and make the process of c
 ***
 ## Package Versioning <a name="version"></a>
 
+### Version Format
 We follow semantic versioning for `pkgnet` releases, `MAJOR`.`MINOR`.`PATCH`: 
 
 * the `MAJOR` version will be updated when incompatible API changes are made,   
@@ -263,6 +264,12 @@ We follow semantic versioning for `pkgnet` releases, `MAJOR`.`MINOR`.`PATCH`:
 In addition, the latest development version will have a .9999 appended to the end of the `MAJOR`.`MINOR`.`PATCH`. 
 
 For more details, see https://semver.org/
+
+### Release Planning
+The authors of this package have adopted [milestones on github](https://help.github.com/en/articles/about-milestones) as a vehile to scope and schedule upcoming releases.  The main goal for a release is written in the milestone description.  Then, any ideas, specific functionality, bugs, etcs submitted as [issues](https://help.github.com/en/articles/about-issues) pertinent to that goal are tagged for that milestone.  Goals for milestone are dicsused openly via a github issue.  
+
+Past and upcoming releases can be seen on the  [pkgnet milestones page](https://github.com/UptakeOpenSource/pkgnet/milestones). 
+
 
 ***
 ## Releasing to CRAN (for maintainer) <a name="cran"></a>
