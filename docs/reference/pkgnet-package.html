@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>pkgnet Analysis Report for an R package — CreatePackageReport • pkgnet</title>
+<title>pkgnet : Network Analysis of R Packages — pkgnet-package • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,9 +36,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="pkgnet Analysis Report for an R package — CreatePackageReport" />
+<meta property="og:title" content="pkgnet : Network Analysis of R Packages — pkgnet-package" />
 
-<meta property="og:description" content="Create a standalone HTML report about a package and its networks." />
+<meta property="og:description" content="R packages can be complex bodies of code and functionality with
+   hard-to-intuit underlying structure. pkgnet provides tools to analyze and
+   understand that structure through the lens of
+   network theory." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -127,58 +130,98 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>pkgnet Analysis Report for an R package</h1>
-    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/CreatePackageReport.R'><code>R/CreatePackageReport.R</code></a></small>
-    <div class="hidden name"><code>CreatePackageReport.Rd</code></div>
+    <h1>pkgnet : Network Analysis of R Packages</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/pkgnet.R'><code>R/pkgnet.R</code></a></small>
+    <div class="hidden name"><code>pkgnet-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a standalone HTML report about a package and its networks.</p>
+    <p>R packages can be complex bodies of code and functionality with
+   hard-to-intuit underlying structure. <span class="pkg">pkgnet</span> provides tools to analyze and
+   understand that structure through the lens of
+   <a href='https://en.wikipedia.org/wiki/Network_theory'>network theory</a>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>pkg_name</span>, <span class='kw'>pkg_reporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
-  <span class='kw'>pkg_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='no'>pkg_name</span>, <span class='kw'>fileext</span> <span class='kw'>=</span>
-  <span class='st'>".html"</span>))</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>pkg_name</th>
-      <td><p>(string) name of a package</p></td>
-    </tr>
-    <tr>
-      <th>pkg_reporters</th>
-      <td><p>(list) a list of package reporters</p></td>
-    </tr>
-    <tr>
-      <th>pkg_path</th>
-      <td><p>(string) The path to the package repository. If given, coverage
-will be calculated for each function. <code>pkg_path</code> can be an
-absolute or relative path.</p></td>
-    </tr>
-    <tr>
-      <th>report_path</th>
-      <td><p>(string) The path and filename of the output report.  Default
-report will be produced in the temporary directory.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+        
+    <h2 class="hasAnchor" id="package-report"><a class="anchor" href="#package-report"></a>Package Report</h2>
 
-    <p>A list of instantiated pkg_reporters fitted to <code>pkg_name</code></p>
+    
+    <p>The simplest way of using pkgnet is through the function
+   <code><a href='CreatePackageReport.html'>CreatePackageReport</a></code>, e.g.,</p>
+<p></p><pre>    CreatePackageReport("lubridate")</pre>
+    <p>This will create a standalone HTML report containing analyses of various
+   aspects of the specified subject package.</p>
+<p>For more info, check out our introductory vignette with</p>
+<p></p><pre>    vignette("pkgnet-intro")</pre>
+    
+    <h2 class="hasAnchor" id="individual-reporters"><a class="anchor" href="#individual-reporters"></a>Individual Reporters</h2>
+
+    
+    <p>Reporters are the basic modules of functionality within pkgnet. Each
+  type of reporter is used to analyze a particular aspect of the subject
+  package. The currently available reporters are:</p>
+<p></p><dl class='dl-horizontal'>
+    <dt><b><code><a href='DependencyReporter.html'>DependencyReporter</a></code></b></dt><dd><p>: analyze the recursive
+       network of packages that the subject package depends on.</p></dd>
+    <dt><b><code><a href='FunctionReporter.html'>FunctionReporter</a></code></b></dt><dd><p>: analyze the network of
+       interdependencies of the functions defined in the subject package</p></dd>
+    <dt><b><code><a href='InheritanceReporter.html'>InheritanceReporter</a></code></b></dt><dd><p>: analyze the class
+       inheritance trees for subject packages that use object-oriented
+       programming.</p></dd>
+    <dt><b><code><a href='SummaryReporter.html'>SummaryReporter</a></code></b></dt><dd><p>: get an overview of the
+       subject package through its DESCRIPTION file.</p></dd>
+  </dl>
+    <p><code><a href='CreatePackageReport.html'>CreatePackageReport</a></code> uses a <a href='DefaultReporters.html'>standard
+  set of reporters</a> by default. You can customize the reporters you want by
+  passing in your own list of instantiated reporters, e.g.</p>
+<p></p><pre>
+      CreatePackageReport(
+          "lubridate",
+          pkg_reporters = list(FunctionReporter$new(), InheritanceReporter$new())
+      )
+  </pre>
+    <p>You can also use reporters interactively. Once you have a reporter
+  instantiated, check our that reporter's documentation to see what you can
+  do.</p>
+<p></p><pre>
+      reporter &lt;- DependencyReporter$new()
+      reporter$set_package("lubridate")
+  </pre>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Useful links:</p><ul>
+<li><p><a href='https://github.com/UptakeOpenSource/pkgnet'>https://github.com/UptakeOpenSource/pkgnet</a></p></li>
+<li><p><a href='https://uptakeopensource.github.io/pkgnet/'>https://uptakeopensource.github.io/pkgnet/</a></p></li>
+<li><p>Report bugs at <a href='https://github.com/UptakeOpenSource/pkgnet/issues'>https://github.com/UptakeOpenSource/pkgnet/issues</a></p></li>
+</ul></div>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#package-report">Package Report</a></li>
+
+      <li><a href="#individual-reporters">Individual Reporters</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
+
+    <h2>Author</h2>
+    <p><strong>Maintainer</strong>: Brian Burns <a href='mailto:brian.burns@uptake.com'>brian.burns@uptake.com</a></p>
+<p>Authors:</p><ul>
+<li><p>James Lamb <a href='mailto:james.lamb@uptake.com'>james.lamb@uptake.com</a></p></li>
+<li><p>Jay Qi <a href='mailto:jay.qi@uptake.com'>jay.qi@uptake.com</a></p></li>
+</ul>
+
+<p>Other contributors:</p><ul>
+<li><p>Patrick Boueri <a href='mailto:patrick.boueri@uptake.com'>patrick.boueri@uptake.com</a> [contributor]</p></li>
+</ul>
+
 
   </div>
 </div>

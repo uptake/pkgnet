@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>pkgnet Analysis Report for an R package — CreatePackageReport • pkgnet</title>
+<title>Graph Classes for Network Modeling — GraphClasses • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,9 +36,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="pkgnet Analysis Report for an R package — CreatePackageReport" />
+<meta property="og:title" content="Graph Classes for Network Modeling — GraphClasses" />
 
-<meta property="og:description" content="Create a standalone HTML report about a package and its networks." />
+<meta property="og:description" content="pkgnet uses R6 classes to define and encapsulate the graph
+    models for representing package networks. These classes implement
+    different types of graphs and functionality to calculate their respective
+    graph theory measures. The base class AbstractGraph defines the
+    standard interfaces and functionality.
+Currently the only implemented type of graph is DirectedGraph." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -127,57 +132,133 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>pkgnet Analysis Report for an R package</h1>
-    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/CreatePackageReport.R'><code>R/CreatePackageReport.R</code></a></small>
-    <div class="hidden name"><code>CreatePackageReport.Rd</code></div>
+    <h1>Graph Classes for Network Modeling</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/GraphClasses.R'><code>R/GraphClasses.R</code></a></small>
+    <div class="hidden name"><code>GraphClasses.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a standalone HTML report about a package and its networks.</p>
+    <p>pkgnet uses R6 classes to define and encapsulate the graph
+    models for representing package networks. These classes implement
+    different types of graphs and functionality to calculate their respective
+    graph theory measures. The base class <code>AbstractGraph</code> defines the
+    standard interfaces and functionality.</p>
+<p>Currently the only implemented type of graph is <a href='DirectedGraph.html'>DirectedGraph</a>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>CreatePackageReport</span>(<span class='no'>pkg_name</span>, <span class='kw'>pkg_reporters</span> <span class='kw'>=</span> <span class='fu'><a href='DefaultReporters.html'>DefaultReporters</a></span>(),
-  <span class='kw'>pkg_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempfile</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='no'>pkg_name</span>, <span class='kw'>fileext</span> <span class='kw'>=</span>
-  <span class='st'>".html"</span>))</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>pkg_name</th>
-      <td><p>(string) name of a package</p></td>
-    </tr>
-    <tr>
-      <th>pkg_reporters</th>
-      <td><p>(list) a list of package reporters</p></td>
-    </tr>
-    <tr>
-      <th>pkg_path</th>
-      <td><p>(string) The path to the package repository. If given, coverage
-will be calculated for each function. <code>pkg_path</code> can be an
-absolute or relative path.</p></td>
-    </tr>
-    <tr>
-      <th>report_path</th>
-      <td><p>(string) The path and filename of the output report.  Default
-report will be produced in the temporary directory.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+        
+    <h2 class="hasAnchor" id="class-constructor"><a class="anchor" href="#class-constructor"></a>Class Constructor</h2>
 
-    <p>A list of instantiated pkg_reporters fitted to <code>pkg_name</code></p>
+    
+    <dl class='dl-horizontal'>
+    <dt><code>new(nodes, edges)</code></dt><dd><p><ul>
+<li><p>Instantiate new object of the class.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>nodes</code></b>: a data.table containing nodes</p></li>
+<li><p><b><code>edges</code></b>: a data.table containing edges</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Object of the class</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
+
+    
+    <dl class='dl-horizontal'>
+    <dt><code>node_measures(measures = NULL)</code></dt><dd><p><ul>
+<li><p>Return specified node-level measures, calculating if necessary.
+            See Node Measures section below for details about each measure.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>measures</code></b>: character vector of measure
+                    names. Default NULL will return those that are already
+                    calculated.</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>data.table with specified node meaures as columns</p></li>
+</ul></p></li>
+</ul></p></dd>
+    <dt><code>graph_measures(measures = NULL)</code></dt><dd><p><ul>
+<li><p>Return specified graph-level measures, calculating if necessary.
+            See Graph Measures section below for details about each measure.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>measures</code></b>: character vector of measure
+                    names. Default NULL will return those that are already
+                    calculated.</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>list with specified graph measures</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public Fields</h2>
+
+    
+    <dl class='dl-horizontal'>
+    <dt><b><code>nodes</code></b></dt><dd><p>: node data.table, read-only</p></dd>
+    <dt><b><code>edges</code></b></dt><dd><p>: edge data.table, read-only</p></dd>
+    <dt><b><code>igraph</code></b></dt><dd><p>: igraph object, read-only</p></dd>
+    <dt><b><code>available_node_measures</code></b></dt><dd><p>: character vector of all
+    supported node measures. See Node Measures section below for detailed
+    descriptions. Read-only.</p></dd>
+    <dt><b><code>available_graph_measures</code></b></dt><dd><p>: character vector of all
+    supported graph measures. See Graph Measures section below for detailed
+    descriptions. Read-only.</p></dd>
+    <dt><b><code>default_node_measures</code></b></dt><dd><p>: character vector of default
+    node measures. See Node Measures section below for detailed descriptions.
+    Read-only.</p></dd>
+    <dt><b><code>default_graph_measures</code></b></dt><dd><p>: character vector of default
+    graph measures. See Graph Measures section below for detailed descriptions.
+    Read-only.</p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="special-methods"><a class="anchor" href="#special-methods"></a>Special Methods</h2>
+
+    
+    <dl class='dl-horizontal'>
+    <dt><code>clone(deep = FALSE)</code></dt><dd><p><ul>
+<li><p>Method for copying an object. See <a href='https://adv-r.hadley.nz/r6.html#r6-semantics'><em>Advanced R</em></a> for the intricacies of R6 reference semantics.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>deep</code></b>: logical. Whether to recursively clone nested R6 objects.</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Cloned object of this class.</p></li>
+</ul></p></li>
+</ul></p></dd>
+    <dt><code><a href='https://www.rdocumentation.org/packages/base/topics/print'>print()</a></code></dt><dd><p><ul>
+<li><p>Print igraph object.</p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Self</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#class-constructor">Class Constructor</a></li>
+
+      <li><a href="#public-methods">Public Methods</a></li>
+
+      <li><a href="#public-fields">Public Fields</a></li>
+
+      <li><a href="#special-methods">Special Methods</a></li>
           </ul>
 
   </div>

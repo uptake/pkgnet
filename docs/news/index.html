@@ -29,6 +29,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Changelog" />
 
@@ -43,6 +49,16 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137355155-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-137355155-1');
+</script>
 
   </head>
 
@@ -60,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -92,6 +108,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -106,35 +128,52 @@
       <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="pkgnet-032" class="section level1">
+    <div id="pkgnet-040" class="section level1">
 <h1 class="page-header">
-<a href="#pkgnet-032" class="anchor"></a>pkgnet 0.3.2<small> 2019-01-26 </small>
+<a href="#pkgnet-040" class="anchor"></a>pkgnet 0.4.0<small> Unreleased </small>
 </h1>
 <div id="new-features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
-<p>None</p>
+<ul>
+<li>Objects of new <code>DirectedGraph</code> class now slot into the <code>pkg_graph</code> field of network reporters. These objects encapsulate the graph modeling of networks and have a more expressive set of methods for analysis. Check out the full documentation with <code><a href="../reference/DirectedGraph.html">?DirectedGraph</a></code>. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)
+<ul>
+<li>Use <code>pkg_graph$node_measures</code> and <code>pkg_graph$graph_measures</code> to respectively calculate node-level and graph-level measures.</li>
+<li>Use <code>pkg_graph$default_node_measures</code> and <code>pkg_graph$default_graph_measures</code> to see the measures calculated by default.</li>
+<li>Use <code>pkg_graph$available_node_measures</code> and <code>pkg_graph$available_graph_measures</code> to see the all supported measures.</li>
+<li>The igraph object is now instead available at <code>pkg_graph$igraph</code>.</li>
+</ul>
+</li>
+</ul>
 </div>
 <div id="changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Added unit tests for network measure calculations (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>).</li>
-<li>Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/167"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/167'>#167</a></a>)</li>
+<li>Standardizing on the language “dependency” and “reverse dependency” to describe the directed graph relationships in the package. This completes the change introduced in v0.3.0 where edge direction convention was set to point in the direction of dependency. So this means that “depend on” follows the edge arrow direction, and “reverse depends on” is reverse edge arrow direction. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/191'>#191</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>
+<code>outSubgraphSize</code> and <code>inSubgraphSize</code> have been replaced with <code>numRecursiveDeps</code> and <code>numRecursiveRevDeps</code>, which are the former minus one (by not counting the node itself). (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/191'>#191</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Per the new <code>DirectedGraph</code> feature, reporters’ <code>pkg_graph</code> field now contain an object of new <code>DirectedGraph</code> class. Previously it held an igraph object. This igraph object is now instead available at <code>pkg_graph$igraph</code>. See NEW FEATURES section for other details about the new <code>pkg_graph</code> object. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Default measures now exist for each reporter. These can be calculated with the new method <code>calculate_default_measures</code> on reporters. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)
+<ul>
+<li>The report from <code>CreatePackageReport</code> will now only show default measures.</li>
+</ul>
+</li>
+<li>Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/106'>#106</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>The report from <code>CreatePackageReport</code> now prints the version of pkgnet used at the bottom. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
 <ul>
-<li>Corrected node statisitcs table merging error (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/165"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/165'>#165</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>)</li>
-<li>Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/168"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/168'>#168</a></a>)</li>
+<li>Static outputs shown in the vignette that were outdated have been updated. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/189"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/189'>#189</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
 </ul>
 </div>
 </div>
-    <div id="pkgnet-031" class="section level1">
+    <div id="pkgnet-032" class="section level1">
 <h1 class="page-header">
-<a href="#pkgnet-031" class="anchor"></a>pkgnet 0.3.1<small> 2019-01-20 </small>
+<a href="#pkgnet-032" class="anchor"></a>pkgnet 0.3.2<small> 2019-01-26 </small>
 </h1>
 <div id="new-features-1" class="section level2">
 <h2 class="hasAnchor">
@@ -145,12 +184,38 @@
 <h2 class="hasAnchor">
 <a href="#changes-1" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Unit testing strategy on CRAN vs Travis and local. See <a href="https://github.com/UptakeOpenSource/pkgnet/issues/160"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/160'>#160</a></a> for details.</li>
+<li>Added unit tests for network measure calculations (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>).</li>
+<li>Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/167"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/167'>#167</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
+<ul>
+<li>Corrected node statistics table merging error (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/165"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/165'>#165</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>)</li>
+<li>Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/168"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/168'>#168</a></a>)</li>
+</ul>
+</div>
+</div>
+    <div id="pkgnet-031" class="section level1">
+<h1 class="page-header">
+<a href="#pkgnet-031" class="anchor"></a>pkgnet 0.3.1<small> 2019-01-20 </small>
+</h1>
+<div id="new-features-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
+<p>None</p>
+</div>
+<div id="changes-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changes-2" class="anchor"></a>CHANGES</h2>
+<ul>
+<li>Unit testing strategy on CRAN vs Travis and local. See <a href="https://github.com/UptakeOpenSource/pkgnet/issues/160"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/160'>#160</a></a> for details.</li>
+</ul>
+</div>
+<div id="bug-fixes-2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
 <p>None</p>
 </div>
 </div>
@@ -158,18 +223,18 @@
 <h1 class="page-header">
 <a href="#pkgnet-030" class="anchor"></a>pkgnet 0.3.0<small> 2019-01-02 </small>
 </h1>
-<div id="new-features-2" class="section level2">
+<div id="new-features-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#new-features-2" class="anchor"></a>NEW FEATURES</h2>
+<a href="#new-features-3" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>
 <code>InheritanceReporter</code>, a reporter for R6, Reference, and S4 class inheritance relationships within a package. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/14"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/14'>#14</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/129"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/129'>#129</a></a>)</li>
 <li>Dropdown menu in graph visualizations for selecting which node to highlight. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/132"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/132'>#132</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
 </ul>
 </div>
-<div id="changes-2" class="section level2">
+<div id="changes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#changes-2" class="anchor"></a>CHANGES</h2>
+<a href="#changes-3" class="anchor"></a>CHANGES</h2>
 <ul>
 <li>Edge direction reversed to align with <a href="https://en.wikipedia.org/wiki/Dependency_(UML)">UML dependency diagram</a> convention. Now, if A depends on B, then A-&gt;B. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/131"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/131'>#131</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
 <li>Reporters now support all layouts available in igraph. Use <code><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code> to see valid options. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
@@ -185,13 +250,12 @@
 <li>Additional various improvements to UX for package reports. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
 </ul>
 </div>
-<div id="bug-fixes-2" class="section level2">
+<div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
-<a href="#bug-fixes-2" class="anchor"></a>BUG FIXES</h2>
+<a href="#bug-fixes-3" class="anchor"></a>BUG FIXES</h2>
 <ul>
 <li>Rendering of the table in Function Network tab. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/136"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/136'>#136</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/138"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/138'>#138</a></a>)</li>
 </ul>
-<!--- Start of NEWS.md --->
 </div>
 </div>
   </div>
@@ -200,6 +264,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#pkgnet-040">0.4.0</a></li>
         <li><a href="#pkgnet-032">0.3.2</a></li>
         <li><a href="#pkgnet-031">0.3.1</a></li>
         <li><a href="#pkgnet-030">0.3.0</a></li>
@@ -221,6 +286,23 @@
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '8c4486b693a542e8493b7944f39ab632',
+    indexName: 'pkgnet',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

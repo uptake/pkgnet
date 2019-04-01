@@ -29,6 +29,12 @@
 <script src="pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Table of contents" />
 
@@ -43,6 +49,16 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137355155-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-137355155-1');
+</script>
 
   </head>
 
@@ -60,7 +76,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -92,6 +108,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -118,8 +140,10 @@
 <li><a href="#prs">Submitting a Pull Request</a></li>
 <li><a href="#style">Code Style</a></li>
 <li><a href="#testing">Running Tests Locally</a></li>
+<li><a href="#version">Package Versioning</a></li>
 <li><a href="#cran">Releasing to CRAN (for maintainer)</a></li>
 </ol>
+<hr>
 <div id="creating-an-issue-" class="section level2">
 <h2 class="hasAnchor">
 <a href="#creating-an-issue-" class="anchor"></a>Creating an Issue <a name="issues"></a>
@@ -151,6 +175,7 @@
 <li>sample code showing how you would use this feature if it was added</li>
 </ul>
 <p>If you’re interested in submitting a pull request to address the bug you’re reporting, please indicate that in the issue.</p>
+<hr>
 </div>
 </div>
 <div id="submitting-a-pull-request-" class="section level2">
@@ -176,6 +201,7 @@
 </li>
 </ol>
 <p>We will try to review PRs promptly and get back to you within a few days.</p>
+<hr>
 </div>
 <div id="code-style-" class="section level2">
 <h2 class="hasAnchor">
@@ -193,7 +219,7 @@ some_function &lt;- function(n){
         samples = rnorm(n)
     )
 }</code></pre>
-<p>You do not need to namespace special operators in the case where doing so would hurt readablility. For example, <code>%&gt;%</code> from <code>magrittr</code> and <code>:=</code> from <code>data.table</code> do not need <code>::</code> namespacing.</p>
+<p>You do not need to namespace special operators in the case where doing so would hurt readability. For example, <code>%&gt;%</code> from <code>magrittr</code> and <code>:=</code> from <code>data.table</code> do not need <code>::</code> namespacing.</p>
 <p>If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the <code>Imports</code> section of the <a href="https://github.com/UptakeOpenSource/pkgnet/blob/master/DESCRIPTION">DESCRIPTION file</a>.</p>
 </div>
 <div id="indentation-and-whitespace" class="section level3">
@@ -354,6 +380,7 @@ RandomNumberPlotter &lt;- R6::R6Class(
 <h3 class="hasAnchor">
 <a href="#inline-comments" class="anchor"></a>Inline comments</h3>
 <p>All comments should be above code, not beside it.</p>
+<hr>
 </div>
 </div>
 <div id="running-tests-locally-" class="section level2">
@@ -363,6 +390,33 @@ RandomNumberPlotter &lt;- R6::R6Class(
 <p>We use Travis CI to automatically run unit tests and a serious of other automated checks on every PR commit and merge to <code>master</code>. Every <code>pkgnet</code> release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.</p>
 <p>However, these options can lengthen your testing cycle and make the process of contributing tedious. If you wish to run tests locally on whatever machine you are developing <code>pkgnet</code> code on, run the following from the repo root:</p>
 <pre class="{bash}"><code>./test.sh</code></pre>
+<hr>
+</div>
+<div id="package-versioning-" class="section level2">
+<h2 class="hasAnchor">
+<a href="#package-versioning-" class="anchor"></a>Package Versioning <a name="version"></a>
+</h2>
+<div id="version-format" class="section level3">
+<h3 class="hasAnchor">
+<a href="#version-format" class="anchor"></a>Version Format</h3>
+<p>We follow semantic versioning for <code>pkgnet</code> releases, <code>MAJOR</code>.<code>MINOR</code>.<code>PATCH</code>:</p>
+<ul>
+<li>the <code>MAJOR</code> version will be updated when incompatible API changes are made,<br>
+</li>
+<li>the <code>MINOR</code> version will be updated when functionality is added in a backwards-compatible manner, and<br>
+</li>
+<li>the <code>PATCH</code> version will be updated when backwards-compatible bug fixes are made.</li>
+</ul>
+<p>In addition, the latest development version will have a .9999 appended to the end of the <code>MAJOR</code>.<code>MINOR</code>.<code>PATCH</code>.</p>
+<p>For more details, see <a href="https://semver.org/" class="uri">https://semver.org/</a></p>
+</div>
+<div id="release-planning" class="section level3">
+<h3 class="hasAnchor">
+<a href="#release-planning" class="anchor"></a>Release Planning</h3>
+<p>The authors of this package have adopted <a href="https://help.github.com/en/articles/about-milestones">milestones on github</a> as a vehile to scope and schedule upcoming releases. The main goal for a release is written in the milestone description. Then, any ideas, specific functionality, bugs, etcs submitted as <a href="https://help.github.com/en/articles/about-issues">issues</a> pertinent to that goal are tagged for that milestone. Goals for milestone are dicsused openly via a github issue.</p>
+<p>Past and upcoming releases can be seen on the <a href="https://github.com/UptakeOpenSource/pkgnet/milestones">pkgnet milestones page</a>.</p>
+<hr>
+</div>
 </div>
 <div id="releasing-to-cran-for-maintainer-" class="section level2">
 <h2 class="hasAnchor">
@@ -375,15 +429,20 @@ RandomNumberPlotter &lt;- R6::R6Class(
 <h3 class="hasAnchor">
 <a href="#open-a-pr" class="anchor"></a>Open a PR</h3>
 <p>Open a PR with a branch name <code>release/v0.0.0</code> (replacing 0.0.0 with the actual version number).</p>
-<p>Add a section for this release to <code>NEWS.md</code>. This file details the new features, changes, and bug fixes that occured since the last version.</p>
+<p>Add a section for this release to <code>NEWS.md</code>. This file details the new features, changes, and bug fixes that occurred since the last version.</p>
 <p>Add a section for this release to <code>cran-comments.md</code>. This file holds details of our submission comments to CRAN and their responses to our submissions.</p>
-<p>Change the <code>Version:</code> field in <code>DESCRIPTION</code> to the official version you want on CRAN (should not have a trailing <code>.9000</code>).</p>
+<p>Change the <code>Version:</code> field in <code>DESCRIPTION</code> to the official version you want on CRAN (should not have a trailing <code>.9999</code>).</p>
 <p>Rebuild the documentation by running:</p>
 <pre><code>Rscript -e "devtools::document()"
 Rscript -e "install.packages('pkgdown', repos = 'cran.rstudio.com')"
 Rscript -e "pkgdown::build_site()"</code></pre>
 <p><code>pkgdown</code> is changing pretty rapidly, so it’s important to pull the latest from CRAN before building the site.</p>
 <p>Check in whichever of the files generated by <code>pkgdown</code> seem relevant to you. Anything that shows up as “modified” when you run <code>git status</code> should be checked in to the PR branch. New files (“not tracked by git”) should be considered on a case-by-case basis.</p>
+</div>
+<div id="test-on-latest-development-version-of-r-ie-r-devel" class="section level3">
+<h3 class="hasAnchor">
+<a href="#test-on-latest-development-version-of-r-ie-r-devel" class="anchor"></a>Test on latest development version of R (i.e. “R-Devel”)</h3>
+<p>This is a CRAN requirement. <a href="https://alexandereckert.com/post/testing-r-packages-with-latest-r-devel/">This docker based process</a> from Alexander Eckert is very useful.</p>
 </div>
 <div id="submit-to-cran" class="section level3">
 <h3 class="hasAnchor">
@@ -407,7 +466,7 @@ Rscript -e "pkgdown::build_site()"</code></pre>
 <h3 class="hasAnchor">
 <a href="#create-a-release-on-github" class="anchor"></a>Create a Release on GitHub</h3>
 <p>We use <a href="https://github.com/UptakeOpenSource/pkgnet/releases">the releases section</a> in the repo to categorize certain important commits as release checkpoints. This makes it easier for developers to associate changes in the source code with the release history on CRAN, and enables features like <code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github()</a></code> for old versions.</p>
-<p>Navigate to <a href="https://github.com/UptakeOpenSource/pkgnet/releases/new" class="uri">https://github.com/UptakeOpenSource/pkgnet/releases/new</a>. Click the dropdown in the “target” section, then click “recent commits”. Choose the latest commit for the release PR you just merged. This will automatically create a <a href="https://git-scm.com/book/en/v2/Git-Basics-Tagging">git tag</a> on that commit and tell Github which revision to build when people ask for a given release.</p>
+<p>Navigate to <a href="https://github.com/UptakeOpenSource/pkgnet/releases/new" class="uri">https://github.com/UptakeOpenSource/pkgnet/releases/new</a>. Click the drop down in the “target” section, then click “recent commits”. Choose the latest commit for the release PR you just merged. This will automatically create a <a href="https://git-scm.com/book/en/v2/Git-Basics-Tagging">git tag</a> on that commit and tell Github which revision to build when people ask for a given release.</p>
 <p>Add some notes explaining what has changed since the previous release.</p>
 </div>
 <div id="open-a-new-pr-to-begin-development-on-the-next-version" class="section level3">
@@ -437,6 +496,23 @@ Rscript -e "pkgdown::build_site()"</code></pre>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '8c4486b693a542e8493b7944f39ab632',
+    indexName: 'pkgnet',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

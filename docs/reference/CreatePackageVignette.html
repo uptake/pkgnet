@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authors • pkgnet</title>
+<title>pkgnet Report as Vignette — CreatePackageVignette • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -25,18 +25,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 <!-- docsearch -->
-<script src="docsearch.js"></script>
+<script src="../docsearch.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
-<link href="docsearch.css" rel="stylesheet">
+<link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Authors" />
+<meta property="og:title" content="pkgnet Report as Vignette — CreatePackageVignette" />
+
+<meta property="og:description" content="Create pkgnet package report as an R Markdown vignette. This
+   vignette can be rendered into a standard HTML vignette with the
+   knitr::rmarkdown vignette engine
+   into HTML vignettes upon package building. It is also compatible with
+   pkgdown sites. See the vignette
+   
+   &quot;Publishing Your pkgnet Package Report&quot; for details about how to use this
+   function, as well as
+   
+   our example for pkgnet." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -63,7 +75,7 @@
   </head>
 
   <body>
-    <div class="container template-authors">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -75,7 +87,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">pkgnet</a>
+        <a class="navbar-link" href="../index.html">pkgnet</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
@@ -83,16 +95,16 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
-  <a href="articles/index.html">Articles</a>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
-  <a href="news/index.html">News</a>
+  <a href="../news/index.html">News</a>
 </li>
 <li>
   <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
@@ -122,34 +134,61 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Authors</h1>
+    <h1>pkgnet Report as Vignette</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/CreatePackageVignette.R'><code>R/CreatePackageVignette.R</code></a></small>
+    <div class="hidden name"><code>CreatePackageVignette.Rd</code></div>
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Brian Burns</strong>. Author, maintainer. 
-        </p>
-      </li>
-      <li>
-        <p><strong>James Lamb</strong>. Author. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Patrick Boueri</strong>. Contributor. 
-        </p>
-      </li>
-      <li>
-        <p><strong>Jay Qi</strong>. Author. 
-        </p>
-      </li>
-    </ul>
+    <div class="ref-description">
+    
+    <p>Create pkgnet package report as an R Markdown vignette. This
+   vignette can be rendered into a standard HTML vignette with the
+   <code><a href='https://www.rdocumentation.org/packages/knitr/topics/vignette_engines'>knitr::rmarkdown</a></code> vignette engine
+   into HTML vignettes upon package building. It is also compatible with
+   <code><a href='https://pkgdown.r-lib.org/reference/build_articles.html'>pkgdown</a></code> sites. See the vignette
+   <a href='https://cran.r-project.org/web/packages/pkgnet/vignettes/publishing-reports.html'>
+   "Publishing Your pkgnet Package Report"</a> for details about how to use this
+   function, as well as
+   <a href='https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html'>
+   our example for pkgnet</a>.</p>
+    
+    </div>
+
+    <pre class="usage"><span class='fu'>CreatePackageVignette</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>,
+  <span class='kw'>pkg_reporters</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>DependencyReporter</span>$<span class='fu'>new</span>(), <span class='no'>FunctionReporter</span>$<span class='fu'>new</span>()),
+  <span class='kw'>vignette_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='no'>pkg</span>, <span class='st'>"vignettes"</span>, <span class='st'>"pkgnet-report.Rmd"</span>))</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>pkg</th>
+      <td><p>(string) path to root directory of package of interest</p></td>
+    </tr>
+    <tr>
+      <th>pkg_reporters</th>
+      <td><p>(list) a list of initialized package reporters</p></td>
+    </tr>
+    <tr>
+      <th>vignette_path</th>
+      <td><p>(string) The location of a file to store the output
+vignette file at. Must be an .Rmd file. By default, this will be
+'&lt;pkg&gt;/vignettes/pkgnet-report.Rmd' relative to the input to pkg</p></td>
+    </tr>
+    </table>
+    
 
   </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+                </ul>
 
+  </div>
 </div>
-
 
       <footer>
       <div class="copyright">
