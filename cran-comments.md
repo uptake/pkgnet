@@ -1,5 +1,12 @@
 # CRAN Submission History
 
+## v 0.4.0
+
+### Submission on April 1st, 2019 (Planned)
+This is a minor release that adds viggette creation functionality and makes a number of other minor changes and bug fixes.  Please see `NEWS.md` for details.
+
+As always, issues are tracked and source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+
 ## v 0.3.2 
 
 ### Submission on January 25th, 2019
@@ -39,7 +46,7 @@ BUG FIXES
 ## v 0.3.0  
 
 ### Submission on December 19th, 2018
-> This is a major release with several improvements to 
+> This is a major[sic] release with several improvements to 
 > R package diagnostics, report layout, and testing 
 > strategy.  New features and changes are now being 
 > tracked in NEWS.md.  
