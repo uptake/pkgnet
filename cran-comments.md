@@ -2,10 +2,34 @@
 
 ## v 0.4.0
 
-### Submission on April 1st, 2019 (Planned)
+### Submission on April 1st, 2019
 This is a minor release that adds vignette creation functionality and makes a number of other minor changes and bug fixes.  Please see `NEWS.md` for details.
 
 As always, issues are tracked and source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+
+### CRAN Response on April 2nd, 2019
+Thanks, we see:
+
+   Found the following (possibly) invalid URLs:
+   ...
+   [two in the CreatePackageVignette()]
+   [one in NEWS.md]
+   ...
+
+Please fix and resubmit.
+
+
+Is there some reference about the method you can add in the Description 
+field in the form Authors (year) <doi:.....>?
+
+### Resubmission on April 2nd, 2019 (planned)
+The problematic links have been fixed:   
+* two were non-canonical CRAN links and   
+* one was a link to an upcoming gallery exhibit that does not yet exist.   
+
+I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required.  However, the broken link had gone unnoticed, burred under the other two warnings.  Thanks for the check.  
+
+Regarding the references comment, the package is original work aside from the functionality utilized from the packages listed in the DESCRIPTION file.  However, I will confer with the pkgnet authors on writing a paper of our own, describing our motivations and design decisions in detail (with a full bibliography).  Thanks for the complement! 
 
 ## v 0.3.2 
 
@@ -19,7 +43,7 @@ CHANGES
 * Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing ([#167](https://github.com/UptakeOpenSource/pkgnet/pull/167))   
 
 BUG FIXES  
-* Corrected node statisitcs table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))   
+* Corrected node statistics table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))   
 * Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks ([#168](https://github.com/UptakeOpenSource/pkgnet/pull/168))   
 
 
@@ -142,7 +166,7 @@ Check: CRAN incoming feasibility, Result: Note_to_CRAN_maintainers
 ## v 0.2.0
 
 ### Submission on April 30th, 2018
-* Resubmitted to CRAN without test folder or source vigette code.
+* Resubmitted to CRAN without test folder or source vignette code.
 * This was to ensure nothing is written outside of the temp folder 
 during vignette build or package testing.  
 * Future versions will handle this issue more directly. 
