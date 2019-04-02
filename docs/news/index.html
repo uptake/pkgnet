@@ -144,6 +144,14 @@
 <li>The igraph object is now instead available at <code>pkg_graph$igraph</code>.</li>
 </ul>
 </li>
+<li>pkgnet now has a <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">gallery</a>! Check out reports for different packages. We welcome contributions—see <a href="https://github.com/UptakeOpenSource/pkgnet-gallery">here</a> for instructions on how to add a package to the gallery.</li>
+<li>New function <code>CreatePackageVignette</code> that creates an Rmarkdown HTML vignette version of a pkgnet report. This vignette can be built using knitr and distributed with a package, like any other vignette. Check out <a href="https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">our example</a> on the pkgnet gallery. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/200"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/200'>#200</a></a>)
+<ul>
+<li>A new vignette <a href="https://uptakeopensource.github.io/pkgnet/articles/publishing-reports.html">“Publishing Your pkgnet Package Report”</a> has been added that discusses <code>CreatePackageVignette</code> and the new gallery.<br>
+</li>
+</ul>
+</li>
+<li>Roxygen documentation has been improved. Each reporter’s documentation is now more complete. Additionally, there is a new package documentation article that introduces pkgnet, accessible with <code><a href="../reference/pkgnet-package.html">?pkgnet</a></code>. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/192"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/192'>#192</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/193"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/193'>#193</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/198"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/198'>#198</a></a>)</li>
 </ul>
 </div>
 <div id="changes" class="section level2">
@@ -161,6 +169,9 @@
 </li>
 <li>Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/106'>#106</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
 <li>The report from <code>CreatePackageReport</code> now prints the version of pkgnet used at the bottom. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>
+<code>AbstractPackageReporter</code> and <code>AbstractGraphReporter</code> are no longer exported. These are base classes that are not meant to be used directly. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/190"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/190'>#190</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/198"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/198'>#198</a></a>)</li>
+<li>Wide in package reports are now horizontally scrollable instead of making the page wider. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/200"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/200'>#200</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
