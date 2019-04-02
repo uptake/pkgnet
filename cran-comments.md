@@ -3,7 +3,7 @@
 ## v 0.4.0
 
 ### Submission on April 1st, 2019 (Planned)
-This is a minor release that adds viggette creation functionality and makes a number of other minor changes and bug fixes.  Please see `NEWS.md` for details.
+This is a minor release that adds vignette creation functionality and makes a number of other minor changes and bug fixes.  Please see `NEWS.md` for details.
 
 As always, issues are tracked and source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
 
