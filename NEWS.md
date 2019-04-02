@@ -7,6 +7,10 @@
     * Use `pkg_graph$default_node_measures` and `pkg_graph$default_graph_measures` to see the measures calculated by default. 
     * Use `pkg_graph$available_node_measures` and `pkg_graph$available_graph_measures` to see the all supported measures.
     * The igraph object is now instead available at `pkg_graph$igraph`.
+* pkgnet now has a [gallery](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! Check out reports for different packages. We welcome contributions---see [here](https://github.com/UptakeOpenSource/pkgnet-gallery) for instructions on how to add a package to the gallery. 
+* New function `CreatePackageVignette` that creates an Rmarkdown HTML vignette version of a pkgnet report. This vignette can be built using knitr and distributed with a package, like any other vignette. Check out [our example](https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html) on the pkgnet gallery. ([#200](https://github.com/UptakeOpenSource/pkgnet/pull/200))
+    * A new vignette ["Publishing Your pkgnet Package Report"](https://uptakeopensource.github.io/pkgnet/articles/publishing-reports.html) has been added that discusses `CreatePackageVignette` and the new gallery.  
+* Roxygen documentation has been improved. Each reporter's documentation is now more complete. Additionally, there is a new package documentation article that introduces pkgnet, accessible with `?pkgnet`. ([#192](https://github.com/UptakeOpenSource/pkgnet/pull/192), [#193](https://github.com/UptakeOpenSource/pkgnet/pull/193), [#198](https://github.com/UptakeOpenSource/pkgnet/pull/198))
 
 ## CHANGES
 
@@ -18,6 +22,8 @@ new method `calculate_default_measures` on reporters. ([#181](https://github.com
     * The report from `CreatePackageReport` will now only show default measures.
 * Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. ([#106](https://github.com/UptakeOpenSource/pkgnet/issues/106), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
 * The report from `CreatePackageReport` now prints the version of pkgnet used at the bottom. ([#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
+* `AbstractPackageReporter` and `AbstractGraphReporter` are no longer exported. These are base classes that are not meant to be used directly. ([#190](https://github.com/UptakeOpenSource/pkgnet/issues/190), [#198](https://github.com/UptakeOpenSource/pkgnet/pull/198))
+* Wide in package reports are now horizontally scrollable instead of making the page wider. ([#200](https://github.com/UptakeOpenSource/pkgnet/pull/200))
 
 ## BUG FIXES
 * Static outputs shown in the vignette that were outdated have been updated. ([#189](https://github.com/UptakeOpenSource/pkgnet/issues/189), [#181](https://github.com/UptakeOpenSource/pkgnet/pull/181))
