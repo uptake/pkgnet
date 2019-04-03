@@ -4,9 +4,12 @@
 #'    vignette can be rendered into a standard HTML vignette with the
 #'    \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
 #'    into HTML vignettes upon package building. It is also compatible with
-#'    \code{\link[pkgdown:build_articles]{pkgdown}} sites. See examples of these vignette formatted reports as well as standard formatted reports 
-#'    at \href{https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html}{the pkgnet gallery}.  Find examples of how to use
-#'    a pkgnet report in the \href{https://uptakeopensource.github.io/pkgnet/articles/index.html}{pkgnet vignettes}.
+#'    #'    \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
+#'    \href{https://uptakeopensource.github.io/pkgnet/articles/publishing-reports.html}{
+#'    "Publishing Your pkgnet Package Report"} for details about how to use this
+#'    function, as well as
+#'    \href{https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html}{
+#'    our example for pkgnet}.
 #' @param pkg (string) path to root directory of package of interest
 #' @param pkg_reporters (list) a list of initialized package reporters
 #' @param vignette_path (string) The location of a file to store the output
