@@ -25,7 +25,7 @@ field in the form Authors (year) <doi:.....>?
 ### Resubmission on April 2nd, 2019 (planned)
 The problematic links have been fixed or will be fixed with this release:   
 * two were non-canonical CRAN links and   
-* one was a link to a document that is getting created as a part of this release.
+* one was a link to a document that is getting created as a part of this release.  [Here](https://github.com/UptakeOpenSource/pkgnet/blob/929b2c3ee456870dd92e6a164f858a2b014c5e89/docs/articles/publishing-reports.html) it is queued up on github, awaiting CRAN release before merge. 
 
 I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required. 
 
