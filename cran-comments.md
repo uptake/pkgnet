@@ -23,7 +23,7 @@ Is there some reference about the method you can add in the Description
 field in the form Authors (year) <doi:.....>?
 
 ### Resubmission on April 2nd, 2019 (planned)
-The problematic links have been fixed:   
+The problematic links have been fixed or will be fixed with this release:   
 * two were non-canonical CRAN links and   
 * one was a link to a document that is getting created as a part of this release.
 
