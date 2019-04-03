@@ -25,11 +25,11 @@ field in the form Authors (year) <doi:.....>?
 ### Resubmission on April 2nd, 2019 (planned)
 The problematic links have been fixed:   
 * two were non-canonical CRAN links and   
-* one was a link to an upcoming gallery exhibit that does not yet exist.   
+* one was a link to a document that is getting created as a part of this release.
 
-I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required.  However, the broken link had gone unnoticed, burred under the other two warnings.  Thanks for the check.  
+I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required. 
 
-Regarding the references comment, the package is original work aside from the functionality utilized from the packages listed in the DESCRIPTION file.  However, I will confer with the pkgnet authors on writing a paper of our own, describing our motivations and design decisions in detail (with a full bibliography).  Thanks for the complement! 
+Regarding the references comment, the package is original work aside from the functionality utilized from the packages listed in the DESCRIPTION file. 
 
 ## v 0.3.2 
 
