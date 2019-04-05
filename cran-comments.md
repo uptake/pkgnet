@@ -22,12 +22,10 @@ Please fix and resubmit.
 Is there some reference about the method you can add in the Description 
 field in the form Authors (year) <doi:.....>?
 
-### Resubmission on April 2nd, 2019 (planned)
-The problematic links have been fixed or will be fixed with this release:   
-* two were non-canonical CRAN links and   
-* one was a link to a document that is getting created as a part of this release.  [Here](https://github.com/UptakeOpenSource/pkgnet/blob/929b2c3ee456870dd92e6a164f858a2b014c5e89/docs/articles/publishing-reports.html) it is queued up on github, awaiting CRAN release before merge. 
+### Resubmission on April 5th, 2019
+The one remaining "possibly invalid URL" is intended.  That page will be created as soon as this version is on CRAN.  [Here](https://github.com/UptakeOpenSource/pkgnet/blob/929b2c3ee456870dd92e6a164f858a2b014c5e89/docs/articles/publishing-reports.html) it is queued up on github, awaiting CRAN release before merge. 
 
-I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required. 
+The two were non-canonical CRAN links have been reformatted.  I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required. 
 
 Regarding the references comment, the package is original work aside from the functionality utilized from the packages listed in the DESCRIPTION file. 
 
