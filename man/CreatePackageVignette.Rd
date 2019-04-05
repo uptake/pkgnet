@@ -22,10 +22,10 @@ Create pkgnet package report as an R Markdown vignette. This
    vignette can be rendered into a standard HTML vignette with the
    \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
    into HTML vignettes upon package building. It is also compatible with
-   \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
-   \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/publishing-reports.html}{
+   #'    \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
+   \href{https://uptakeopensource.github.io/pkgnet/articles/publishing-reports.html}{
    "Publishing Your pkgnet Package Report"} for details about how to use this
    function, as well as
-   \href{https://cran.r-project.org/web/packages/pkgnet/vignettes/pkgnet-report.html}{
+   \href{https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html}{
    our example for pkgnet}.
 }

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Package Function Reporter Class — FunctionReporter • pkgnet</title>
+<title>Function Interdependency Reporter — FunctionReporter • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -29,19 +29,20 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
-<meta property="og:title" content="Package Function Reporter Class — FunctionReporter" />
 
-<meta property="og:description" content="This Reporter takes a package and uncovers the structure from
-             its other functions, determining useful information such as which function is most
-             central to the package. Combined with testing information it can be used as a powerful tool
-             to plan testing efforts.
-R6 classes are supported, with methods treated as functions by the Reporter.
-R6 methods will be named like &amp;lt;classname&amp;gt;$&amp;lt;methodtype&amp;gt;$&amp;lt;methodname&amp;gt;
-, e.g., FunctionReporter$private_methods$extract_nodes. Note that the
-class name used will be the name of the generator object in the package's namespace,
-and not the classname attribute of the class, which is not required to be defined
-or to be the same as the generator object name." />
+<meta property="og:title" content="Function Interdependency Reporter — FunctionReporter" />
+
+<meta property="og:description" content="This reporter looks at the network of interdependencies of its
+   defined functions. Measures of centrality from graph theory can indicate
+   which function is most important to a package. Combined with unit test
+   coverage information---also provided by this reporter--- it can be used
+   as a powerful tool to prioritize test writing." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -55,6 +56,16 @@ or to be the same as the generator object name." />
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137355155-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-137355155-1');
+</script>
 
   </head>
 
@@ -72,7 +83,7 @@ or to be the same as the generator object name." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -104,6 +115,12 @@ or to be the same as the generator object name." />
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -114,69 +131,171 @@ or to be the same as the generator object name." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Package Function Reporter Class</h1>
-    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/PackageFunctionReporter.R'><code>R/PackageFunctionReporter.R</code></a></small>
+    <h1>Function Interdependency Reporter</h1>
+    <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/FunctionReporter.R'><code>R/FunctionReporter.R</code></a></small>
     <div class="hidden name"><code>FunctionReporter.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This Reporter takes a package and uncovers the structure from
-             its other functions, determining useful information such as which function is most
-             central to the package. Combined with testing information it can be used as a powerful tool
-             to plan testing efforts.</p>
-<p>R6 classes are supported, with methods treated as functions by the Reporter.
-R6 methods will be named like <code>&lt;classname&gt;$&lt;methodtype&gt;$&lt;methodname&gt;</code>
-, e.g., <code>FunctionReporter$private_methods$extract_nodes</code>. Note that the
-class name used will be the <em>name of the generator object in the package's namespace</em>,
-and <em>not</em> the <code>classname</code> attribute of the class, which is not required to be defined
-or to be the same as the generator object name.</p>
+    <p>This reporter looks at the network of interdependencies of its
+   defined functions. Measures of centrality from graph theory can indicate
+   which function is most important to a package. Combined with unit test
+   coverage information---also provided by this reporter--- it can be used
+   as a powerful tool to prioritize test writing.</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>FunctionReporter</span></pre>
         
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    <h3>R6 Method Support:</h3>
+    R6 classes are supported, with their methods treated as functions by the
+    reporter.
+    <ul>
+<li><p>R6 methods will be named like
+         <code>&lt;classname&gt;$&lt;methodtype&gt;$&lt;methodname&gt;</code>, e.g.,
+         <code>FunctionReporter$private_methods$extract_nodes</code>.</p></li>
+<li><p>Note that the class name used will be the <strong>name of the
+         generator object in the package's namespace</strong>.</p></li>
+<li><p>The <code>classname</code> attribute of the class is <strong>not</strong> used.
+         In general, it is not required to be defined or the same as the
+         generator object name. This attribute is used primarily for
+         S3 dispatch.</p></li>
+</ul>
+    <h3>Known Limitations:</h3>
+    <ul>
+<li><p>Using non-standard evaluation to refer to things (e.g, dataframe
+          column names) that have the same name as a function will trick
+          <code>FunctionReporter</code> into thinking the function was called. This
+          can be avoided if you don't use reuse function names for other
+          purposes.</p></li>
+<li><p>Functions stored as list items and not assigned to the package
+          namespace will be invisible to <code>FunctionReporter</code>.</p></li>
+<li><p>Calls to methods of instantiated R6 or reference objects will
+          not be recognized. We don't have a reliable way of identifying
+          instantiated objects, or identifying their class.</p></li>
+<li><p>Reference class methods are not yet supported. They will not be
+          identified as nodes by <code>FunctionReporter</code>.</p></li>
+</ul>
+    
+    <h2 class="hasAnchor" id="class-constructor"><a class="anchor" href="#class-constructor"></a>Class Constructor</h2>
+
+    
+    <pre>FunctionReporter$new()</pre>
+    <dl class='dl-horizontal'>
+    <dt><code></code></dt><dd><p><ul>
+<li><p>Initialize an instance of the reporter.</p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Instantiated reporter object. Note that this
+                       reporter object isn't useful yet until you use the
+                       <code>set_package</code> method to set a package.</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
     <dl class='dl-horizontal'>
-    <dt><code>set_package(pkg_name, pkg_path)</code></dt><dd><p><ul>
-<li><p>Set properties of this reporter. If pkg_name overrides a
-                previously-set package name, any cached data will be removed.</p></li>
+    <dt><code>set_package(pkg_name, pkg_path = NULL)</code></dt><dd><p><ul>
+<li><p>Set the package that the reporter will analyze. This can
+                only be done once for a given instance of a reporter.
+                Instantiate a new copy of the reporter if you need to analyze
+                a different package.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>pkg_name</code></b>: String with the name of the package.</p></li>
-<li><p><b><code>pkg_path</code></b>: Optional directory path to source
-                  code of the package. It is used for calculating test coverage.
-                  It can be an absolute or relative path.</p></li>
+<li><p><b><code>pkg_name</code></b>: character string, name of
+                     package</p></li>
+<li><p><b><code>pkg_path</code></b>: character string, optional
+                    directory path to source code of the package. It is used
+                    for calculating test coverage. It can be an absolute or
+                    relative path.</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Self, invisibly.</p></li>
+</ul></p></li>
+</ul></p></dd>
+    <dt><code>get_summary_view()</code></dt><dd><p><ul>
+<li><p>Returns an htmlwidget object that summarizes the analysis
+                of the reporter. Used when creating a
+                <a href='CreatePackageReport.html'>package report</a>.</p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p><a href='https://www.rdocumentation.org/packages/htmlwidgets/topics/htmlwidgets-package'>htmlwidget</a>
+                        object</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
+    <dl class='dl-horizontal'>
+    <dt><code>calculate_default_measures()</code></dt><dd><p><ul>
+<li><p>Calculates the default node and network measures for this
+               reporter.</p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Self, invisibly.</p></li>
 </ul></p></li>
 </ul></p></dd>
 </dl>
     
-    <h2 class="hasAnchor" id="known-limitations"><a class="anchor" href="#known-limitations"></a>Known Limitations</h2>
+    <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public Fields</h2>
 
     
-    <ul>
-<li><p>Using non-standard evaluation to refer to things (e.g, dataframe column names)
-    that have the same name as a function will trick <code>FunctionReporter</code> into thinking
-    the function was called. This can be avoided if you don't use reuse function names
-    for other purposes.</p></li>
-<li><p>Functions stored as list items and not assigned to the package namespace
-    will be invisible to <code>FunctionReporter</code>.</p></li>
-<li><p>Calls to methods of instantiated R6 or reference objects will not be recognized.
-    We don't have a reliable way of identifying instantiated objects, or identifying
-    their class.</p></li>
-<li><p>Reference class methods are not yet supported. They will not be idenified
-    as nodes by <code>FunctionReporter</code>.</p></li>
-</ul>
+    <dl class='dl-horizontal'>
+    <dt><b><code>pkg_name</code></b></dt><dd><p>: character string, name of set package.
+        Read-only.</p></dd>
+    <dt><b><code>report_markdown_path</code></b></dt><dd><p>: character string, path to
+        R Markdown template for this reporter. Read-only.</p></dd>
+</dl>
+    <dl class='dl-horizontal'>
+    <dt><b><code>nodes</code></b></dt><dd><p>: a data.table, containing information about
+       the nodes of the network the reporter is analyzing. The <code>node</code>
+       column acts the identifier. Read-only.</p></dd>
+    <dt><b><code>edges</code></b></dt><dd><p>: a data.table, containing information about
+       the edge connections of the network the reporter is analyzing. Each
+       row is one edge, and the columns <code>SOURCE</code> and <code>TARGET</code>
+       specify the node identifiers. Read-only.</p></dd>
+    <dt><b><code>network_measures</code></b></dt><dd><p>: a list, containing any measures
+       of the network calculated by the reporter. Read-only.</p></dd>
+    <dt><b><code>pkg_graph</code></b></dt><dd><p>: a graph model object. See <a href='DirectedGraph.html'>DirectedGraph</a>
+       for additional documentation. Read-only.</p></dd>
+    <dt><b><code>graph_viz</code></b></dt><dd><p>: a graph visualization object. A
+       <code><a href='https://www.rdocumentation.org/packages/visNetwork/topics/visNetwork'>visNetwork::visNetwork</a></code> object.
+       Read-only.</p></dd>
+    <dt><b><code>layout_type</code></b></dt><dd><p>: a character string, the current layout
+       type for the graph visualization. Can be assigned a new valid layout
+       type value. Use use
+       <code><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code>
+       to see valid options.</p></dd>
+</dl>
+    
+    <h2 class="hasAnchor" id="special-methods"><a class="anchor" href="#special-methods"></a>Special Methods</h2>
+
+    
+    <dl class='dl-horizontal'>
+    <dt><code>clone(deep = FALSE)</code></dt><dd><p><ul>
+<li><p>Method for copying an object. See
+                <a href='https://adv-r.hadley.nz/r6.html#r6-semantics'><em>Advanced R</em></a>
+                for the intricacies of R6 reference semantics.</p></li>
+<li><p><b>Args:</b>
+                <ul>
+<li><p><b><code>deep</code></b>: logical. Whether to recursively
+                    clone nested R6 objects.</p></li>
+</ul></p></li>
+<li><p><b>Returns:</b>
+                <ul>
+<li><p>Cloned object of this class.</p></li>
+</ul></p></li>
+</ul></p></dd>
+</dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other PackageReporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
+    <div class='dont-index'><p>Other Network Reporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
+  <code><a href='InheritanceReporter.html'>InheritanceReporter</a></code></p>
+<p>Other Package Reporters: <code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
   <code><a href='InheritanceReporter.html'>InheritanceReporter</a></code>,
   <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
     
@@ -186,11 +305,15 @@ or to be the same as the generator object name.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
-      <li><a href="#format">Format</a></li>
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#class-constructor">Class Constructor</a></li>
 
       <li><a href="#public-methods">Public Methods</a></li>
 
-      <li><a href="#known-limitations">Known Limitations</a></li>
+      <li><a href="#public-fields">Public Fields</a></li>
+
+      <li><a href="#special-methods">Special Methods</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
@@ -210,6 +333,23 @@ or to be the same as the generator object name.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '8c4486b693a542e8493b7944f39ab632',
+    indexName: 'pkgnet',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

@@ -1,4 +1,4 @@
-# pkgnet 0.3.2.9999 (current dev)
+# pkgnet 0.4.0
 
 ## NEW FEATURES
 

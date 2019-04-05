@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Surface the internal and external dependencies of an R package. — CreatePackageReport • pkgnet</title>
+<title>pkgnet Analysis Report for an R package — CreatePackageReport • pkgnet</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -29,10 +29,16 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
-<meta property="og:title" content="Surface the internal and external dependencies of an R package. — CreatePackageReport" />
 
-<meta property="og:description" content="Surface the internal and external dependencies of an R package." />
+<meta property="og:title" content="pkgnet Analysis Report for an R package — CreatePackageReport" />
+
+<meta property="og:description" content="Create a standalone HTML report about a package and its networks." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -46,6 +52,16 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137355155-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-137355155-1');
+</script>
 
   </head>
 
@@ -63,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -95,6 +111,12 @@
 </li>
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -105,14 +127,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Surface the internal and external dependencies of an R package.</h1>
+    <h1>pkgnet Analysis Report for an R package</h1>
     <small class="dont-index">Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/R/CreatePackageReport.R'><code>R/CreatePackageReport.R</code></a></small>
     <div class="hidden name"><code>CreatePackageReport.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Surface the internal and external dependencies of an R package.</p>
+    <p>Create a standalone HTML report about a package and its networks.</p>
     
     </div>
 
@@ -148,10 +170,6 @@ report will be produced in the temporary directory.</p></td>
 
     <p>A list of instantiated pkg_reporters fitted to <code>pkg_name</code></p>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>GetPackageGraphs</p></div>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -160,12 +178,8 @@ report will be produced in the temporary directory.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
           </ul>
 
-    <h2>Author</h2>
-    <p>B. Burns</p>
   </div>
 </div>
 
@@ -181,6 +195,23 @@ report will be produced in the temporary directory.</p></td>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '8c4486b693a542e8493b7944f39ab632',
+    indexName: 'pkgnet',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>
