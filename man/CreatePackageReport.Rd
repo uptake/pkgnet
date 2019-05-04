@@ -21,7 +21,7 @@ absolute or relative path.}
 report will be produced in the temporary directory.}
 }
 \value{
-A list of instantiated pkg_reporters fitted to \code{pkg_name}
+an instantiated \code{\link{PackageReport}} object
 }
 \description{
 Create a standalone HTML report about a package and its networks.
