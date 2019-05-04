@@ -222,6 +222,12 @@ PackageReport <- R6::R6Class(
 
         , set_reporter = function(reporter, class) {
 
+            # If setting to NULL, it means we want to remove the reporter
+            if (is.null(reporter)) {
+                private$reporters[[class]] <- NULL
+                return(invisible(NULL))
+            }
+
             # Validate that it's not an R6 generator
             if (is.R6Class(reporter)) {
                 log_fatal(paste(
