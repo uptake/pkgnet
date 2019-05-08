@@ -126,7 +126,7 @@ AbstractPackageReporter <- R6::R6Class(
                 assertthat::is.string(pkg_name)
                 , pkg_name != ""
             )
-            private$validate_pkg_name(pkg_name)
+            .validate_pkg_name(pkg_name)
 
             private$private_pkg_name <- pkg_name
 
@@ -160,26 +160,26 @@ AbstractPackageReporter <- R6::R6Class(
     private = list(
         private_pkg_name = NULL,
         pkg_path = NULL,
-        cache = NULL,
-
-        # given a string with a package name, check whether
-        # it exists
-        validate_pkg_name = function(pkg_name){
-            log_info("Checking installed packages...")
-            installed_packages <- row.names(
-                utils::installed.packages()
-            )
-
-            if (! pkg_name %in% installed_packages){
-              msg <- sprintf("pkgnet could not find an installed package named '%s'. Please install the package first.", pkg_name)
-              log_fatal(msg)
-            }
-
-            log_info(sprintf("Found '%s' in installed packages.", pkg_name))
-            return(invisible(NULL))
-        }
+        cache = NULL
     )
 )
+
+# given a string with a package name, check whether
+# it exists
+.validate_pkg_name <- function(pkg_name){
+    installed_packages <- row.names(utils::installed.packages())
+    if (! pkg_name %in% installed_packages){
+        msg <- paste(
+            sprintf(
+                "pkgnet could not find an installed package named '%s'."
+                , pkg_name
+            )
+            , "Please install the package first."
+        )
+        log_fatal(msg)
+    }
+    return(invisible(NULL))
+}
 
 # Check if an object is a pkgnet Package Reporter
 .is.PackageReporter <- function(x) {

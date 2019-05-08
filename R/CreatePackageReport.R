@@ -116,6 +116,7 @@ PackageReport <- R6::R6Class(
                 , pkg_name != ""
                 , is.null(pkg_path) || assertthat::is.readable(pkg_path)
             )
+            .validate_pkg_name(pkg_name)
 
             private$protected$pkg_name <- pkg_name
             private$protected$pkg_path <- pkg_path
