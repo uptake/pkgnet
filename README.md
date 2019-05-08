@@ -2,7 +2,8 @@
 
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-last-release/pkgnet)](https://cran.r-project.org/package=pkgnet) [![CRAN\_Download\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/pkgnet)](https://cran.r-project.org/package=pkgnet) [![Build Status](https://travis-ci.org/UptakeOpenSource/pkgnet.svg?branch=master)](https://travis-ci.org/UptakeOpenSource/pkgnet)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/github/UptakeOpenSource/pkgnet?branch=master&svg=true)](https://ci.appveyor.com/project/jameslamb/pkgnet)
-[![codecov](https://codecov.io/gh/UptakeOpenSource/pkgnet/branch/master/graph/badge.svg)](https://codecov.io/gh/UptakeOpenSource/pkgnet)
+[![codecov](https://codecov.io/gh/UptakeOpenSource/pkgnet/branch/master/graph/badge.svg)](https://codecov.io/gh/UptakeOpenSource/pkgnet) 
+![Lifecycle badge](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
 
 ## Introduction
 
