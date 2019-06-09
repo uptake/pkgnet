@@ -57,12 +57,12 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
+  <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/uptakeopensource/pkgnet">
+  <a href="https://github.com/uptake/pkgnet">
     <span class="fa fa-github"></span>
      
   </a>
@@ -88,7 +88,7 @@
       <h1>Publishing Your pkgnet Package Report</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/UptakeOpenSource/pkgnet/blob/master/vignettes/publishing-reports.Rmd"><code>vignettes/publishing-reports.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/uptake/pkgnet/blob/master/vignettes/publishing-reports.Rmd"><code>vignettes/publishing-reports.Rmd</code></a></small>
       <div class="hidden name"><code>publishing-reports.Rmd</code></div>
 
     </div>
@@ -97,7 +97,7 @@
     
 <p>You’ve generated a <strong>pkgnet Package Report</strong> and used it to get a better understanding of your package. Now what? How about sharing the knowledge!</p>
 <p>Why share a pkgnet report? Developers who want to contribute to your package can use it to deep dive into your package’s dependencies, function control flow, or class inheritance architecture, as discussed in our other vignettes. Or perhaps someone is looking to report a bug, and they could benefit from a little help navigating the structure of your package. Or maybe even a user of your package just wants a better appreciation of how your package ticks. There are many ways that other people benefit from having a pkgnet report available for your package.</p>
-<p>This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html"><strong>pkgnet Gallery</strong> website</a>. These aren’t mutally exclusive—feel free to do both!</p>
+<p>This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html"><strong>pkgnet Gallery</strong> website</a>. These aren’t mutally exclusive—feel free to do both!</p>
 <div id="publish-as-a-vignette-in-your-package" class="section level2">
 <h2 class="hasAnchor">
 <a href="#publish-as-a-vignette-in-your-package" class="anchor"></a>Publish as a vignette in your package</h2>
@@ -110,12 +110,12 @@
 <a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; INFO [2019-03-27 21:00:50] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd</span></a></code></pre></div>
 <p>If this is your first R Markdown vignette for your package, you’ll want to add <code>VignetteBuilder: knitr</code> to your DESCRIPTION file and both <code>knitr</code> and <code>rmarkdown</code> as <code>Suggests</code> dependencies. You’ll also need to install the knitr and rmarkdown packages if you haven’t already.</p>
 <p>The R Markdown file generated in this way will be built when you use <code>R CMD build</code> to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with <code><a href="https://www.rdocumentation.org/packages/devtools/topics/build_vignettes">devtools::build_vignettes</a></code>. If you use pkgdown, it will also be built into an article when you use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html">pkgdown::build_site()</a></code>.</p>
-<p>You can check out our <a href="https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">example for pkgnet</a> to see what one looks like (it’s actually slightly customized—we used the <code>pkg_reporters</code> parameter).</p>
+<p>You can check out our <a href="https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">example for pkgnet</a> to see what one looks like (it’s actually slightly customized—we used the <code>pkg_reporters</code> parameter).</p>
 </div>
 <div id="add-your-package-to-the-pkgnet-gallery" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-your-package-to-the-pkgnet-gallery" class="anchor"></a>Add your package to the pkgnet Gallery</h2>
-<p>We also welcome contributions to the <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">pkgnet Gallery</a>! This is a webpage on our site that showcases pkgnet reports for different packages. See the <a href="https://github.com/UptakeOpenSource/pkgnet-gallery">GitHub README</a> for the pkgnet Gallery for instructions on how to contribute your package’s report.</p>
+<p>We also welcome contributions to the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">pkgnet Gallery</a>! This is a webpage on our site that showcases pkgnet reports for different packages. See the <a href="https://github.com/UptakeOpenSource/pkgnet-gallery">GitHub README</a> for the pkgnet Gallery for instructions on how to contribute your package’s report.</p>
 </div>
   </div>
 

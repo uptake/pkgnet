@@ -72,9 +72,9 @@ R packages can be complex bodies of code and functionality with
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/UptakeOpenSource/pkgnet}
-  \item \url{https://uptakeopensource.github.io/pkgnet/}
-  \item Report bugs at \url{https://github.com/UptakeOpenSource/pkgnet/issues}
+  \item \url{https://github.com/uptake/pkgnet}
+  \item \url{https://uptake.github.io/pkgnet/}
+  \item Report bugs at \url{https://github.com/uptake/pkgnet/issues}
 }
 
 }

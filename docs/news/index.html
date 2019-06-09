@@ -95,13 +95,13 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
+  <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/uptakeopensource/pkgnet">
+  <a href="https://github.com/uptake/pkgnet">
     <span class="fa fa-github"></span>
      
   </a>
@@ -125,7 +125,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/UptakeOpenSource/pkgnet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/uptake/pkgnet/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
     <div id="pkgnet-040" class="section level1">
@@ -136,7 +136,7 @@
 <h2 class="hasAnchor">
 <a href="#new-features" class="anchor"></a>NEW FEATURES</h2>
 <ul>
-<li>Objects of new <code>DirectedGraph</code> class now slot into the <code>pkg_graph</code> field of network reporters. These objects encapsulate the graph modeling of networks and have a more expressive set of methods for analysis. Check out the full documentation with <code><a href="../reference/DirectedGraph.html">?DirectedGraph</a></code>. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)
+<li>Objects of new <code>DirectedGraph</code> class now slot into the <code>pkg_graph</code> field of network reporters. These objects encapsulate the graph modeling of networks and have a more expressive set of methods for analysis. Check out the full documentation with <code><a href="../reference/DirectedGraph.html">?DirectedGraph</a></code>. (<a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)
 <ul>
 <li>Use <code>pkg_graph$node_measures</code> and <code>pkg_graph$graph_measures</code> to respectively calculate node-level and graph-level measures.</li>
 <li>Use <code>pkg_graph$default_node_measures</code> and <code>pkg_graph$default_graph_measures</code> to see the measures calculated by default.</li>
@@ -144,41 +144,41 @@
 <li>The igraph object is now instead available at <code>pkg_graph$igraph</code>.</li>
 </ul>
 </li>
-<li>pkgnet now has a <a href="https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">gallery</a>! Check out reports for different packages. We welcome contributions—see <a href="https://github.com/UptakeOpenSource/pkgnet-gallery">here</a> for instructions on how to add a package to the gallery.</li>
-<li>New function <code>CreatePackageVignette</code> that creates an Rmarkdown HTML vignette version of a pkgnet report. This vignette can be built using knitr and distributed with a package, like any other vignette. Check out <a href="https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">our example</a> on the pkgnet gallery. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/200"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/200'>#200</a></a>)
+<li>pkgnet now has a <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">gallery</a>! Check out reports for different packages. We welcome contributions—see <a href="https://github.com/uptake/pkgnet-gallery">here</a> for instructions on how to add a package to the gallery.</li>
+<li>New function <code>CreatePackageVignette</code> that creates an Rmarkdown HTML vignette version of a pkgnet report. This vignette can be built using knitr and distributed with a package, like any other vignette. Check out <a href="https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">our example</a> on the pkgnet gallery. (<a href="https://github.com/uptake/pkgnet/pull/200"><a href='https://github.com/uptake/pkgnet/issues/200'>#200</a></a>)
 <ul>
-<li>A new vignette <a href="https://uptakeopensource.github.io/pkgnet/articles/publishing-reports.html">“Publishing Your pkgnet Package Report”</a> has been added that discusses <code>CreatePackageVignette</code> and the new gallery.<br>
+<li>A new vignette <a href="https://uptake.github.io/pkgnet/articles/publishing-reports.html">“Publishing Your pkgnet Package Report”</a> has been added that discusses <code>CreatePackageVignette</code> and the new gallery.<br>
 </li>
 </ul>
 </li>
-<li>Roxygen documentation has been improved. Each reporter’s documentation is now more complete. Additionally, there is a new package documentation article that introduces pkgnet, accessible with <code><a href="../reference/pkgnet-package.html">?pkgnet</a></code>. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/192"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/192'>#192</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/193"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/193'>#193</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/198"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/198'>#198</a></a>)</li>
+<li>Roxygen documentation has been improved. Each reporter’s documentation is now more complete. Additionally, there is a new package documentation article that introduces pkgnet, accessible with <code><a href="../reference/pkgnet-package.html">?pkgnet</a></code>. (<a href="https://github.com/uptake/pkgnet/pull/192"><a href='https://github.com/uptake/pkgnet/issues/192'>#192</a></a>, <a href="https://github.com/uptake/pkgnet/pull/193"><a href='https://github.com/uptake/pkgnet/issues/193'>#193</a></a>, <a href="https://github.com/uptake/pkgnet/pull/198"><a href='https://github.com/uptake/pkgnet/issues/198'>#198</a></a>)</li>
 </ul>
 </div>
 <div id="changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Standardizing on the language “dependency” and “reverse dependency” to describe the directed graph relationships in the package. This completes the change introduced in v0.3.0 where edge direction convention was set to point in the direction of dependency. So this means that “depend on” follows the edge arrow direction, and “reverse depends on” is reverse edge arrow direction. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/191'>#191</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Standardizing on the language “dependency” and “reverse dependency” to describe the directed graph relationships in the package. This completes the change introduced in v0.3.0 where edge direction convention was set to point in the direction of dependency. So this means that “depend on” follows the edge arrow direction, and “reverse depends on” is reverse edge arrow direction. (<a href="https://github.com/uptake/pkgnet/issues/106"><a href='https://github.com/uptake/pkgnet/issues/191'>#191</a></a>, <a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)</li>
 <li>
-<code>outSubgraphSize</code> and <code>inSubgraphSize</code> have been replaced with <code>numRecursiveDeps</code> and <code>numRecursiveRevDeps</code>, which are the former minus one (by not counting the node itself). (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/191'>#191</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
-<li>Per the new <code>DirectedGraph</code> feature, reporters’ <code>pkg_graph</code> field now contain an object of new <code>DirectedGraph</code> class. Previously it held an igraph object. This igraph object is now instead available at <code>pkg_graph$igraph</code>. See NEW FEATURES section for other details about the new <code>pkg_graph</code> object. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
-<li>Default measures now exist for each reporter. These can be calculated with the new method <code>calculate_default_measures</code> on reporters. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)
+<code>outSubgraphSize</code> and <code>inSubgraphSize</code> have been replaced with <code>numRecursiveDeps</code> and <code>numRecursiveRevDeps</code>, which are the former minus one (by not counting the node itself). (<a href="https://github.com/uptake/pkgnet/issues/106"><a href='https://github.com/uptake/pkgnet/issues/191'>#191</a></a>, <a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Per the new <code>DirectedGraph</code> feature, reporters’ <code>pkg_graph</code> field now contain an object of new <code>DirectedGraph</code> class. Previously it held an igraph object. This igraph object is now instead available at <code>pkg_graph$igraph</code>. See NEW FEATURES section for other details about the new <code>pkg_graph</code> object. (<a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Default measures now exist for each reporter. These can be calculated with the new method <code>calculate_default_measures</code> on reporters. (<a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)
 <ul>
 <li>The report from <code>CreatePackageReport</code> will now only show default measures.</li>
 </ul>
 </li>
-<li>Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/106"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/106'>#106</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
-<li>The report from <code>CreatePackageReport</code> now prints the version of pkgnet used at the bottom. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Reporters now only allow packages to be set once. To report on a new package, please instantiate a new instance of the reporter of interest. (<a href="https://github.com/uptake/pkgnet/issues/106"><a href='https://github.com/uptake/pkgnet/issues/106'>#106</a></a>, <a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)</li>
+<li>The report from <code>CreatePackageReport</code> now prints the version of pkgnet used at the bottom. (<a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)</li>
 <li>
-<code>AbstractPackageReporter</code> and <code>AbstractGraphReporter</code> are no longer exported. These are base classes that are not meant to be used directly. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/190"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/190'>#190</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/198"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/198'>#198</a></a>)</li>
-<li>Wide in package reports are now horizontally scrollable instead of making the page wider. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/200"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/200'>#200</a></a>)</li>
+<code>AbstractPackageReporter</code> and <code>AbstractGraphReporter</code> are no longer exported. These are base classes that are not meant to be used directly. (<a href="https://github.com/uptake/pkgnet/issues/190"><a href='https://github.com/uptake/pkgnet/issues/190'>#190</a></a>, <a href="https://github.com/uptake/pkgnet/pull/198"><a href='https://github.com/uptake/pkgnet/issues/198'>#198</a></a>)</li>
+<li>Wide in package reports are now horizontally scrollable instead of making the page wider. (<a href="https://github.com/uptake/pkgnet/pull/200"><a href='https://github.com/uptake/pkgnet/issues/200'>#200</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>BUG FIXES</h2>
 <ul>
-<li>Static outputs shown in the vignette that were outdated have been updated. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/189"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/189'>#189</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/181"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/181'>#181</a></a>)</li>
+<li>Static outputs shown in the vignette that were outdated have been updated. (<a href="https://github.com/uptake/pkgnet/issues/189"><a href='https://github.com/uptake/pkgnet/issues/189'>#189</a></a>, <a href="https://github.com/uptake/pkgnet/pull/181"><a href='https://github.com/uptake/pkgnet/issues/181'>#181</a></a>)</li>
 </ul>
 </div>
 </div>
@@ -195,16 +195,16 @@
 <h2 class="hasAnchor">
 <a href="#changes-1" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Added unit tests for network measure calculations (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>).</li>
-<li>Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/167"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/167'>#167</a></a>)</li>
+<li>Added unit tests for network measure calculations (<a href="https://github.com/uptake/pkgnet/pull/166"><a href='https://github.com/uptake/pkgnet/issues/166'>#166</a></a>).</li>
+<li>Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing (<a href="https://github.com/uptake/pkgnet/pull/167"><a href='https://github.com/uptake/pkgnet/issues/167'>#167</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-1" class="anchor"></a>BUG FIXES</h2>
 <ul>
-<li>Corrected node statistics table merging error (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/165"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/165'>#165</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/166"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/166'>#166</a></a>)</li>
-<li>Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/168"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/168'>#168</a></a>)</li>
+<li>Corrected node statistics table merging error (<a href="https://github.com/uptake/pkgnet/issues/165"><a href='https://github.com/uptake/pkgnet/issues/165'>#165</a></a>, <a href="https://github.com/uptake/pkgnet/pull/166"><a href='https://github.com/uptake/pkgnet/issues/166'>#166</a></a>)</li>
+<li>Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks (<a href="https://github.com/uptake/pkgnet/pull/168"><a href='https://github.com/uptake/pkgnet/issues/168'>#168</a></a>)</li>
 </ul>
 </div>
 </div>
@@ -221,7 +221,7 @@
 <h2 class="hasAnchor">
 <a href="#changes-2" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Unit testing strategy on CRAN vs Travis and local. See <a href="https://github.com/UptakeOpenSource/pkgnet/issues/160"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/160'>#160</a></a> for details.</li>
+<li>Unit testing strategy on CRAN vs Travis and local. See <a href="https://github.com/uptake/pkgnet/issues/160"><a href='https://github.com/uptake/pkgnet/issues/160'>#160</a></a> for details.</li>
 </ul>
 </div>
 <div id="bug-fixes-2" class="section level2">
@@ -239,33 +239,33 @@
 <a href="#new-features-3" class="anchor"></a>NEW FEATURES</h2>
 <ul>
 <li>
-<code>InheritanceReporter</code>, a reporter for R6, Reference, and S4 class inheritance relationships within a package. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/14"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/14'>#14</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/129"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/129'>#129</a></a>)</li>
-<li>Dropdown menu in graph visualizations for selecting which node to highlight. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/132"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/132'>#132</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
+<code>InheritanceReporter</code>, a reporter for R6, Reference, and S4 class inheritance relationships within a package. (<a href="https://github.com/uptake/pkgnet/issues/14"><a href='https://github.com/uptake/pkgnet/issues/14'>#14</a></a>, <a href="https://github.com/uptake/pkgnet/pull/129"><a href='https://github.com/uptake/pkgnet/issues/129'>#129</a></a>)</li>
+<li>Dropdown menu in graph visualizations for selecting which node to highlight. (<a href="https://github.com/uptake/pkgnet/issues/132"><a href='https://github.com/uptake/pkgnet/issues/132'>#132</a></a>, <a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
 </ul>
 </div>
 <div id="changes-3" class="section level2">
 <h2 class="hasAnchor">
 <a href="#changes-3" class="anchor"></a>CHANGES</h2>
 <ul>
-<li>Edge direction reversed to align with <a href="https://en.wikipedia.org/wiki/Dependency_(UML)">UML dependency diagram</a> convention. Now, if A depends on B, then A-&gt;B. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/131"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/131'>#131</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
-<li>Reporters now support all layouts available in igraph. Use <code><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code> to see valid options. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
+<li>Edge direction reversed to align with <a href="https://en.wikipedia.org/wiki/Dependency_(UML)">UML dependency diagram</a> convention. Now, if A depends on B, then A-&gt;B. (<a href="https://github.com/uptake/pkgnet/issues/131"><a href='https://github.com/uptake/pkgnet/issues/131'>#131</a></a>, <a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
+<li>Reporters now support all layouts available in igraph. Use <code><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code> to see valid options. (<a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
 <li>
-<code>FunctionReporter</code> now utilizes graphopt layout by default. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
+<code>FunctionReporter</code> now utilizes graphopt layout by default. (<a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
 <li>
-<code>FunctionReporter</code> now supports non-exported functions and R6 class methods. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/123"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/123'>#123</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/128"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/128'>#128</a></a>)</li>
-<li>Orphaned node clustering was removed in favor of using layout to better handle graphs with many orphaned nodes. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/102"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/102'>#102</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
-<li>Testing strategy with subpackages are now CRAN and TRAVIS compatible. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/121"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/121'>#121</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/139"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/139'>#139</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/144"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/144'>#144</a></a>)</li>
-<li>Test package <code>milne</code> created for unit testing of <code>InheritanceReporter</code> and R6 method support in <code>FunctionReporter</code>. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/128"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/128'>#128</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/129"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/129'>#129</a></a>)</li>
-<li>Width of html reports now adjust to size of screen. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
-<li>Default node colors are now colorblind accessible. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/130"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/130'>#130</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/141"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/141'>#141</a></a>)</li>
-<li>Additional various improvements to UX for package reports. (<a href="https://github.com/UptakeOpenSource/pkgnet/pull/143"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/143'>#143</a></a>)</li>
+<code>FunctionReporter</code> now supports non-exported functions and R6 class methods. (<a href="https://github.com/uptake/pkgnet/issues/123"><a href='https://github.com/uptake/pkgnet/issues/123'>#123</a></a>, <a href="https://github.com/uptake/pkgnet/pull/128"><a href='https://github.com/uptake/pkgnet/issues/128'>#128</a></a>)</li>
+<li>Orphaned node clustering was removed in favor of using layout to better handle graphs with many orphaned nodes. (<a href="https://github.com/uptake/pkgnet/issues/102"><a href='https://github.com/uptake/pkgnet/issues/102'>#102</a></a>, <a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
+<li>Testing strategy with subpackages are now CRAN and TRAVIS compatible. (<a href="https://github.com/uptake/pkgnet/issues/121"><a href='https://github.com/uptake/pkgnet/issues/121'>#121</a></a>, <a href="https://github.com/uptake/pkgnet/pull/139"><a href='https://github.com/uptake/pkgnet/issues/139'>#139</a></a>, <a href="https://github.com/uptake/pkgnet/pull/144"><a href='https://github.com/uptake/pkgnet/issues/144'>#144</a></a>)</li>
+<li>Test package <code>milne</code> created for unit testing of <code>InheritanceReporter</code> and R6 method support in <code>FunctionReporter</code>. (<a href="https://github.com/uptake/pkgnet/issues/128"><a href='https://github.com/uptake/pkgnet/issues/128'>#128</a></a>, <a href="https://github.com/uptake/pkgnet/pull/129"><a href='https://github.com/uptake/pkgnet/issues/129'>#129</a></a>)</li>
+<li>Width of html reports now adjust to size of screen. (<a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
+<li>Default node colors are now colorblind accessible. (<a href="https://github.com/uptake/pkgnet/issues/130"><a href='https://github.com/uptake/pkgnet/issues/130'>#130</a></a>, <a href="https://github.com/uptake/pkgnet/pull/141"><a href='https://github.com/uptake/pkgnet/issues/141'>#141</a></a>)</li>
+<li>Additional various improvements to UX for package reports. (<a href="https://github.com/uptake/pkgnet/pull/143"><a href='https://github.com/uptake/pkgnet/issues/143'>#143</a></a>)</li>
 </ul>
 </div>
 <div id="bug-fixes-3" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bug-fixes-3" class="anchor"></a>BUG FIXES</h2>
 <ul>
-<li>Rendering of the table in Function Network tab. (<a href="https://github.com/UptakeOpenSource/pkgnet/issues/136"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/136'>#136</a></a>, <a href="https://github.com/UptakeOpenSource/pkgnet/pull/138"><a href='https://github.com/UptakeOpenSource/pkgnet/issues/138'>#138</a></a>)</li>
+<li>Rendering of the table in Function Network tab. (<a href="https://github.com/uptake/pkgnet/issues/136"><a href='https://github.com/uptake/pkgnet/issues/136'>#136</a></a>, <a href="https://github.com/uptake/pkgnet/pull/138"><a href='https://github.com/uptake/pkgnet/issues/138'>#138</a></a>)</li>
 </ul>
 </div>
 </div>
