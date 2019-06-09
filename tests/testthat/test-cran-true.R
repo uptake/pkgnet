@@ -1,7 +1,7 @@
 context("always true for cran")
 # Due to complications on CRAN with handling of temporary packages during testing, TRAVIS
 # and local testing will remain the main test processes for pkgnet.
-# See https://github.com/UptakeOpenSource/pkgnet/issues/160 for details on this decision.
+# See https://github.com/uptake/pkgnet/issues/160 for details on this decision.
 
 ##### THE TEST #####
 

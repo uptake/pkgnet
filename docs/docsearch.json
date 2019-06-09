@@ -2,21 +2,21 @@
   "index_name": "pkgnet",
   "start_urls": [
     {
-      "url": "https://uptakeopensource.github.io/pkgnet//index.html",
+      "url": "https://uptake.github.io/pkgnet//index.html",
       "selectors_key": "homepage",
       "tags": [
         "homepage"
       ]
     },
     {
-      "url": "https://uptakeopensource.github.io/pkgnet//reference",
+      "url": "https://uptake.github.io/pkgnet//reference",
       "selectors_key": "reference",
       "tags": [
         "reference"
       ]
     },
     {
-      "url": "https://uptakeopensource.github.io/pkgnet//articles",
+      "url": "https://uptake.github.io/pkgnet//articles",
       "selectors_key": "articles",
       "tags": [
         "articles"
@@ -30,7 +30,7 @@
     "/articles/index.html"
   ],
   "sitemap_urls": [
-    "https://uptakeopensource.github.io/pkgnet//sitemap.xml"
+    "https://uptake.github.io/pkgnet//sitemap.xml"
   ],
   "selectors": {
     "homepage": {

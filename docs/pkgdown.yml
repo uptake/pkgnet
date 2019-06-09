@@ -5,6 +5,6 @@ articles:
   pkgnet-intro: pkgnet-intro.html
   publishing-reports: publishing-reports.html
 urls:
-  reference: https://uptakeopensource.github.io/pkgnet//reference
-  article: https://uptakeopensource.github.io/pkgnet//articles
+  reference: https://uptake.github.io/pkgnet//reference
+  article: https://uptake.github.io/pkgnet//articles
 

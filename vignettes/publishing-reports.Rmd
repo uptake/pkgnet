@@ -13,7 +13,7 @@ You've generated a **pkgnet Package Report** and used it to get a better underst
 
 Why share a pkgnet report? Developers who want to contribute to your package can use it to deep dive into your package's dependencies, function control flow, or class inheritance architecture, as discussed in our other vignettes. Or perhaps someone is looking to report a bug, and they could benefit from a little help navigating the structure of your package. Or maybe even a user of your package just wants a better appreciation of how your package ticks. There are many ways that other people benefit from having a pkgnet report available for your package. 
 
-This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the [**pkgnet Gallery** website](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html). These aren't mutally exclusive---feel free to do both!
+This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the [**pkgnet Gallery** website](https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html). These aren't mutally exclusive---feel free to do both!
 
 ## Publish as a vignette in your package
 
@@ -34,8 +34,8 @@ If this is your first R Markdown vignette for your package, you'll want to add `
 
 The R Markdown file generated in this way will be built when you use `R CMD build` to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with `devtools::build_vignettes`. If you use pkgdown, it will also be built into an article when you use `pkgdown::build_site()`. 
 
-You can check out our [example for pkgnet](https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html) to see what one looks like (it's actually slightly customized---we used the `pkg_reporters` parameter). 
+You can check out our [example for pkgnet](https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html) to see what one looks like (it's actually slightly customized---we used the `pkg_reporters` parameter). 
 
 ## Add your package to the pkgnet Gallery
 
-We also welcome contributions to the [pkgnet Gallery](https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! This is a webpage on our site that showcases pkgnet reports for different packages. See the [GitHub README](https://github.com/UptakeOpenSource/pkgnet-gallery) for the pkgnet Gallery for instructions on how to contribute your package's report. 
+We also welcome contributions to the [pkgnet Gallery](https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! This is a webpage on our site that showcases pkgnet reports for different packages. See the [GitHub README](https://github.com/UptakeOpenSource/pkgnet-gallery) for the pkgnet Gallery for instructions on how to contribute your package's report. 

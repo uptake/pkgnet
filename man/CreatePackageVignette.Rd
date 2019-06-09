@@ -23,9 +23,9 @@ Create pkgnet package report as an R Markdown vignette. This
    \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine
    into HTML vignettes upon package building. It is also compatible with
    #'    \code{\link[pkgdown:build_articles]{pkgdown}} sites. See the vignette
-   \href{https://uptakeopensource.github.io/pkgnet/articles/publishing-reports.html}{
+   \href{https://uptake.github.io/pkgnet/articles/publishing-reports.html}{
    "Publishing Your pkgnet Package Report"} for details about how to use this
    function, as well as
-   \href{https://uptakeopensource.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html}{
+   \href{https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html}{
    our example for pkgnet}.
 }
