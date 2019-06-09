@@ -1,8 +1,8 @@
 # pkgnet
 
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-last-release/pkgnet)](https://cran.r-project.org/package=pkgnet) [![CRAN\_Download\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/pkgnet)](https://cran.r-project.org/package=pkgnet) [![Build Status](https://img.shields.io/travis/UptakeOpenSource/pkgnet.svg?label=build&logo=travis&branch=master)](https://travis-ci.org/UptakeOpenSource/pkgnet)
-[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/github/UptakeOpenSource/pkgnet?branch=master&svg=true)](https://ci.appveyor.com/project/jameslamb/pkgnet)
-[![codecov](https://codecov.io/gh/UptakeOpenSource/pkgnet/branch/master/graph/badge.svg)](https://codecov.io/gh/UptakeOpenSource/pkgnet) 
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-last-release/pkgnet)](https://cran.r-project.org/package=pkgnet) [![CRAN\_Download\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/pkgnet)](https://cran.r-project.org/package=pkgnet) [![Build Status](https://img.shields.io/travis/uptake/pkgnet.svg?label=build&logo=travis&branch=master)](https://travis-ci.org/uptake/pkgnet)
+[![Appveyor Build status](https://ci.appveyor.com/api/projects/status/github/uptake/pkgnet?branch=master&svg=true)](https://ci.appveyor.com/project/jameslamb/pkgnet)
+[![codecov](https://codecov.io/gh/uptake/pkgnet/branch/master/graph/badge.svg)](https://codecov.io/gh/uptake/pkgnet) 
 ![Lifecycle badge](https://img.shields.io/badge/lifecycle-maturing-blue.svg)
 
 ## Introduction
@@ -13,7 +13,7 @@
 - examining the recursive dependencies you are taking on by using a given package
 - exploring the structure of a new package provided by a coworker or downloaded from the internet
 
-![](https://raw.githubusercontent.com/UptakeOpenSource/pkgnet/master/readme_figures/demo.gif)
+![](https://raw.githubusercontent.com/uptake/pkgnet/master/readme_figures/demo.gif)
 
 # Table of contents
 1. [How it Works](#howitworks)
@@ -45,9 +45,9 @@ result <- CreatePackageReport('ggplot2')
 
 ## How to Contribute <a name="contributing"></a>
 
-To report bugs, request features, or ask questions about the structure of the code, please [open an issue](https://github.com/UptakeOpenSource/pkgnet/issues).
+To report bugs, request features, or ask questions about the structure of the code, please [open an issue](https://github.com/uptake/pkgnet/issues).
 
-If you'd like to contribute to the project, please [open a pull request](https://github.com/UptakeOpenSource/pkgnet/pulls). PRs should follow the project's [contribution guidelines](https://github.com/UptakeOpenSource/pkgnet/blob/master/CONTRIBUTING.md).
+If you'd like to contribute to the project, please [open a pull request](https://github.com/uptake/pkgnet/pulls). PRs should follow the project's [contribution guidelines](https://github.com/uptake/pkgnet/blob/master/CONTRIBUTING.md).
 
 ## Next Steps <a name="nextsteps"></a>
 
