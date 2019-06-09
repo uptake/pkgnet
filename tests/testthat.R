@@ -11,7 +11,7 @@ Sys.setenv("R_TESTS" = "")
 #######  TESTING ON vs. OFF CRAN #############
 # Due to complications on CRAN with handling of temporary packages during testing, TRAVIS
 # and local testing will remain the main test processes for pkgnet.
-# See https://github.com/UptakeOpenSource/pkgnet/issues/160 for details on this decision.
+# See https://github.com/uptake/pkgnet/issues/160 for details on this decision.
 
 cat("testthat.R | NOT_CRAN =", Sys.getenv("NOT_CRAN"), "\n")
 if(identical(Sys.getenv("NOT_CRAN"), "true")){

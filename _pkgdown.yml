@@ -6,7 +6,7 @@ template:
       api_key: 8c4486b693a542e8493b7944f39ab632 # intended API inclusion.  Not private.
       index_name: pkgnet # See https://pkgdown.r-lib.org/articles/pkgdown.html#docsearch-configuration
 
-url: https://uptakeopensource.github.io/pkgnet/
+url: https://uptake.github.io/pkgnet/
 
 navbar:
   title: "pkgnet"
@@ -21,11 +21,11 @@ navbar:
     - text: "News"
       href: news/index.html
     - text: "Gallery"
-      href: https://uptakeopensource.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html
+      href: https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html
 
   right:
    - icon: fa-github
-     href: https://github.com/uptakeopensource/pkgnet
+     href: https://github.com/uptake/pkgnet
      
 reference:
 - title: All Functions
