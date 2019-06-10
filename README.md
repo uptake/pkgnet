@@ -1,4 +1,4 @@
-# pkgnet
+# pkgnet <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-last-release/pkgnet)](https://cran.r-project.org/package=pkgnet) [![CRAN\_Download\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/pkgnet)](https://cran.r-project.org/package=pkgnet) [![Build Status](https://img.shields.io/travis/uptake/pkgnet.svg?label=build&logo=travis&branch=master)](https://travis-ci.org/uptake/pkgnet)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/github/uptake/pkgnet?branch=master&svg=true)](https://ci.appveyor.com/project/jameslamb/pkgnet)
