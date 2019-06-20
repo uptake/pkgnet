@@ -2,11 +2,11 @@
 #' @name PackageReport
 #' @description pkgnet compiles one or more package reporters into a package
 #'     report for a specified package. \code{PackageReport} is an R6 class that
-#'     holds all of those reporters and has a method \code{render_report}
+#'     holds all of those reporters and has a method \code{render_report()}
 #'     to generate an HTML report file. You can access each individual reporter
-#'     and modify them using their methods if you wish.
+#'     and modify it using its methods if you wish.
 #'
-#'     The function \code{\link{CreatePackageReport}} is a shortcut for both
+#'     The function \code{\link{CreatePackageReport}()} is a shortcut for both
 #'     generating a \code{PackageReport} object with instantiated reporters
 #'     and creating the HTML report in one call.
 #' @section Class Constructor:
@@ -125,12 +125,22 @@ PackageReport <- R6::R6Class(
             return(invisible(self))
         }
 
+        , add_reporter = function(reporter) {
+            assertthat::assert_that(
+                R6::is.R6(reporter)
+                , .is.PackageReporter(reporter)
+                , class(reporter)[1] %in% names(PackageReport$active)
+            )
+            private$set_reporter(reporter, class = class(reporter)[1])
+            return(invisible(self))
+        }
+
         , render_report = function() {
             log_info("Rendering package report...")
 
             silence_logger()
             rmarkdown::render(
-                system.file(
+                input = system.file(
                     file.path("package_report", "package_report.Rmd")
                     , package = "pkgnet"
                 )
