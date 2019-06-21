@@ -182,6 +182,7 @@ AbstractPackageReporter <- R6::R6Class(
 }
 
 # Check if an object is a pkgnet Package Reporter
+#' @importFrom R6 is.R6
 .is.PackageReporter <- function(x) {
-    inherits(x, "AbstractPackageReporter")
+    return(R6::is.R6(x) & inherits(x, "AbstractPackageReporter"))
 }

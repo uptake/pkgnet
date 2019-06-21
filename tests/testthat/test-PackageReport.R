@@ -34,6 +34,7 @@ test_that('PackageReport public interface is as expected', {
         , "pkg_name"
         , "pkg_path"
         , "report_path"
+        , "add_reporter"
         , "render_report"
         , REPORTERS
     )
@@ -46,9 +47,7 @@ test_that('PackageReport public interface is as expected', {
 
 ### USAGE OF PUBLIC METHODS AND FIELDS ###
 
-test_that('PackageReport can correctly initialize reporters', {
-
-    # Just package name
+test_that('PackageReport can correctly initialize reporters with active bindings', {
     reporterObj <- PackageReport$new(pkg_name = 'milne')
     for (reporter in REPORTERS) {
         # Reporters are null if not assigned
@@ -62,7 +61,25 @@ test_that('PackageReport can correctly initialize reporters', {
         expect_true(inherits(reporterObj[[reporter]], reporter))
         expect_true(reporterObj[[reporter]]$pkg_name == 'milne')
     }
+})
 
+test_that('PackageReport can correctly initialize reporters with active bindings', {
+    reporterObj <- PackageReport$new(pkg_name = 'milne')
+    for (reporter in REPORTERS) {
+        # Reporters are null if not assigned
+        expect_true(is.null(reporterObj[[reporter]]))
+
+        # Assign reporter
+        reporterObj$add_reporter(getNamespace('pkgnet')[[reporter]]$new())
+
+        # Reporter assigned correctly
+        expect_true(inherits(reporterObj[[reporter]], 'AbstractPackageReporter'))
+        expect_true(inherits(reporterObj[[reporter]], reporter))
+        expect_true(reporterObj[[reporter]]$pkg_name == 'milne')
+    }
+})
+
+test_that('PackageReport works with pkg_path', {
     # Package path
     reporterObj <- PackageReport$new(
         pkg_name = "milne"
@@ -71,6 +88,7 @@ test_that('PackageReport can correctly initialize reporters', {
     reporterObj$DependencyReporter <- DependencyReporter$new()
     expect_true(reporterObj$pkg_path == MILNE_PKG_PATH)
     expect_true(reporterObj$DependencyReporter$.__enclos_env__$private$pkg_path == MILNE_PKG_PATH)
+
 })
 
 test_that('PackageReport correctly renders reports', {
@@ -105,12 +123,6 @@ test_that('PackageReport correctly renders reports with pkg_path', {
     reporterObj$render_report()
     expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
 })
-
-
-### VALUES OF MEASURE FUNCTIONS ARE EXPECTED ###
-
-
-
 
 ### EXPECTED ERRORS ###
 
@@ -162,7 +174,17 @@ test_that("PackageReport rejects wrong reporter assignments", {
     })
     expect_error({
         reporterObj <- PackageReport$new("baseballstats")
+        reporterObj$add_reporter('foo')
+    })
+    expect_error({
+        reporterObj <- PackageReport$new("baseballstats")
         reporterObj$DependencyReporter <- DependencyReporter
+    }
+    , regexp = "You specified an R6 class generator for class DependencyReporter"
+    )
+    expect_error({
+        reporterObj <- PackageReport$new("baseballstats")
+        reporterObj$add_reporter(DependencyReporter)
     }
     , regexp = "You specified an R6 class generator for class DependencyReporter"
     )

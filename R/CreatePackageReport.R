@@ -35,6 +35,21 @@
 #'
 #' @section Public Methods:
 #' \describe{
+#'     \item{\code{add_reporter(reporter)}}{
+#'         \itemize{
+#'             \item{Add a reporter to the package report.}
+#'             \item{\bold{Args:}}{
+#'                 \item{\bold{\code{reporter}}: Instantiated package reporter
+#'                 object
+#'                 }
+#'             }
+#'             \item{\bold{Returns:}}{
+#'                 \itemize{
+#'                     \item{Self, invisibly.}
+#'                 }
+#'             }
+#'         }
+#'     }
 #'     \item{\code{render_report()}}{
 #'         \itemize{
 #'             \item{Render html pkgnet package report.
@@ -126,11 +141,6 @@ PackageReport <- R6::R6Class(
         }
 
         , add_reporter = function(reporter) {
-            assertthat::assert_that(
-                R6::is.R6(reporter)
-                , .is.PackageReporter(reporter)
-                , class(reporter)[1] %in% names(PackageReport$active)
-            )
             private$set_reporter(reporter, class = class(reporter)[1])
             return(invisible(self))
         }
@@ -138,7 +148,6 @@ PackageReport <- R6::R6Class(
         , render_report = function() {
             log_info("Rendering package report...")
 
-            silence_logger()
             rmarkdown::render(
                 input = system.file(
                     file.path("package_report", "package_report.Rmd")
@@ -152,7 +161,6 @@ PackageReport <- R6::R6Class(
                     , pkg_name = self$pkg_name
                 )
             )
-            unsilence_logger()
 
             log_info(paste(
                 "Done creating package report!"
@@ -317,9 +325,9 @@ CreatePackageReport <- function(pkg_name
 
     log_info(paste0("Creating package report for package "
                     , pkg_name
-                    , " with reporters:\n\n"
+                    , " with reporters: "
                     , paste(unlist(lapply(pkg_reporters, function(x) class(x)[1]))
-                            , collapse = "\n")))
+                            , collapse = ", ")))
 
     ## Create PackageReport object ##
     createdReport <- PackageReport$new(
