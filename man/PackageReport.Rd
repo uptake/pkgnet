@@ -8,7 +8,7 @@ pkgnet compiles one or more package reporters into a package
     report for a specified package. \code{PackageReport} is an R6 class that
     holds all of those reporters and has a method \code{render_report()}
     to generate an HTML report file. You can access each individual reporter
-    and modify them using their methods if you wish.
+    and modify it using its methods if you wish.
 
     The function \code{\link{CreatePackageReport}()} is a shortcut for both
     generating a \code{PackageReport} object with instantiated reporters
@@ -43,6 +43,21 @@ pkgnet compiles one or more package reporters into a package
 \section{Public Methods}{
 
 \describe{
+    \item{\code{add_reporter(reporter)}}{
+        \itemize{
+            \item{Add a reporter to the package report.}
+            \item{\bold{Args:}}{
+                \item{\bold{\code{reporter}}: Instantiated package reporter
+                object
+                }
+            }
+            \item{\bold{Returns:}}{
+                \itemize{
+                    \item{Self, invisibly.}
+                }
+            }
+        }
+    }
     \item{\code{render_report()}}{
         \itemize{
             \item{Render html pkgnet package report.
