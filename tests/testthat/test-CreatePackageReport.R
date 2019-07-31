@@ -15,16 +15,29 @@ test_that("Test that CreatePackageReport runs", {
         , fileext = ".html"
     )
 
-    reporters <- CreatePackageReport(
+    createdReport <- CreatePackageReport(
         pkg_name = "baseballstats"
         , report_path = testReportPath
     )
 
-    testthat::expect_true(all(unlist(lapply(reporters, function(x) "AbstractPackageReporter" %in% class(x)))))
+    testthat::expect_true({
+        reporters <- grep("Reporter$", names(createdReport), value = TRUE)
+        all(vapply(
+            X = reporters
+            , FUN = function(x) {
+                is.null(createdReport[[x]]) | inherits(createdReport[[x]], "AbstractPackageReporter")
+            }
+            , FUN.VALUE = logical(1)
+        ))
+    })
     testthat::expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
-    testthat::expect_named(object = reporters
-                           , expected = sapply(DefaultReporters(), function(x){class(x)[1]})
-                           , info = "Ensure Named List")
+    testthat::expect_true(inherits(createdReport, "PackageReport"))
+    testthat::expect_true(
+        all(
+            vapply(DefaultReporters(), function(x){class(x)[1]}, FUN.VALUE = character(1))
+                %in% names(createdReport)
+        )
+        , info = "Returned report object doesn't have reporters accessible")
     file.remove(testReportPath)
 })
 
@@ -35,7 +48,7 @@ test_that("CreatePackageReports generates the expected tables", {
         , fileext = ".html"
     )
 
-    reporters <- CreatePackageReport(
+    createdReport <- CreatePackageReport(
         pkg_name = "baseballstats"
         , report_path = testReportPath
     )
@@ -57,7 +70,7 @@ test_that("CreatePackageReport rejects bad inputs to reporters", {
             pkg_name = "baseballstats"
             , pkg_reporters = list(a = rnorm(100))
         )
-    }, regexp = "At least one of the reporters in the pkg_reporters parameter is not a PackageReporter")
+    }, regexp = "All members of pkg_reporters must be initialized package reporters")
 
 })
 
