@@ -155,6 +155,8 @@ PackageReport <- R6::R6Class(
                 )
                 , output_dir = dirname(self$report_path)
                 , output_file = basename(self$report_path)
+                , intermediates_dir = tempdir()
+                , clean = FALSE
                 , quiet = TRUE
                 , params = list(
                     reporters = private$reporters

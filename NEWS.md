@@ -4,6 +4,10 @@
 
 * `CreatePackageReport()` now outputs an object of new class `PackageReport` (instead of a list of reporters). This object will let you interactively manipulate the included reporter objects to customize the report, and regenerate the report on demand. You can also instantiate and interact with a `PackageReport` object directly without `CreatePackageReport()`.
 
+## BUG FIXES
+
+* Fixed a bug which could cause `CreatePackageReport()` to fail if being run by a user who doesn't have write access to wherever `pkgnet` was originally installed.
+
 # pkgnet 0.4.0
 
 ## NEW FEATURES
