@@ -4,7 +4,7 @@ Title: Get Network Representation of an R Package
 Version: 0.4.0.9999
 Authors@R: c(
     person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
-    person("James", "Lamb", email = "james.lamb@uptake.com", role = c("aut")),
+    person("James", "Lamb", email = "jaylamb20@gmail.com", role = c("aut")),
     person("Patrick", "Boueri", email = "patrick.boueri@uptake.com", role = c("ctb")),
     person("Jay", "Qi", email = "jay.qi@uptake.com", role = c("aut"))
     )
@@ -31,7 +31,7 @@ Imports:
     visNetwork
 Suggests:
     devtools,
-    testthat, 
+    testthat,
     withr
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/uptake/pkgnet, https://uptake.github.io/pkgnet/
