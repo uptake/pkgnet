@@ -83,8 +83,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item James Lamb \email{james.lamb@uptake.com}
-  \item Jay Qi \email{jay.qi@uptake.com}
+  \item James Lamb \email{jaylamb20@gmail.com}
+  \item Jay Qi \email{jayqi.opensource@gmail.com}
 }
 
 Other contributors:
