@@ -222,9 +222,9 @@ AbstractGraphReporter <- R6::R6Class(
 
             # Confirm All Colors in palette are Colors
             areColors <- function(x) {
-                sapply(x, function(X) {
+                sapply(x, function(color_string) {
                     tryCatch({
-                        is.matrix(col2rgb(X))
+                        is.matrix(col2rgb(color_string))
                     }, error = function(e){
                         FALSE
                     })
@@ -240,6 +240,7 @@ AbstractGraphReporter <- R6::R6Class(
                     , notColorsTXT
                 ))
             }
+            print("wow")
 
             private$plotNodeColorScheme <- list(
                 field = field
@@ -339,7 +340,6 @@ AbstractGraphReporter <- R6::R6Class(
                 # If colorFieldValues are numeric, assume continuous variable
                 # Then we want to create a continuous palette
                 } else if (is.numeric(colorFieldValues)) {
-
 
                     # Create Continuous Color Palette
                     newPalette <- grDevices::colorRamp(colors = colorFieldPalette)

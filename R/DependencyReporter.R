@@ -221,11 +221,36 @@ DependencyReporter <- R6::R6Class(
         }
 
         , plot_network = function() {
-            g <- (
-                super$plot_network()
-                %>% visNetwork::visHierarchicalLayout(
-                        sortMethod = "directed"
-                        , direction = "UD")
+            # color base packages and the package in focus differently
+            pkgnet_blue <- "#97c2fc"
+            gray <- "#dfdfdf"
+            this_package <- "#aafca8"
+
+            packageDT <- data.table::as.data.table(
+                installed.packages()
+            )
+            base_packages <- packageDT[!is.na(Priority) & Priority == "base"][, Package]
+
+            nodeDT <- self$nodes
+            nodeDT[, package_type := "regular_dependency"]
+            nodeDT[node %in% base_packages, package_type := "base_dependency"]
+            nodeDT[node == self$pkg_name, package_type := "report_package"]
+            private$update_nodes(nodeDT)
+            private$set_plot_node_color_scheme(
+                field = "package_type"
+                , palette = c(
+                    pkgnet_blue,
+                    gray,
+                    this_package
+                )
+            )
+
+            g <<- super$plot_network()
+            print("ok")
+            g <- visNetwork::visHierarchicalLayout(
+                g
+                , sortMethod = "directed"
+                , direction = "UD"
             )
             return(g)
         }
