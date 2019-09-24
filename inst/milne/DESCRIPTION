@@ -4,9 +4,9 @@ Title: Now We Are Six
 Version: 6.0
 Author: Uptake Data Science
 Authors@R: c(
-    person("Jay", "Qi", email = "jay.qi@uptake.com", role = c("aut", "cre"))
+    person("Jay", "Qi", email = "jayqi.opensource@gmail.com", role = c("aut", "cre"))
     )
-Maintainer: Jay Qi <jay.qi@uptake.com>
+Maintainer: Jay Qi <jayqi.opensource@gmail.com>
 Description: This package is used to test object-oriented class functionality for the reporters in `pkgnet`. So I think I'll be six now for ever and ever.
 Imports:
     R6
