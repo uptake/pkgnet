@@ -65,6 +65,29 @@ test_that("AbstractGraphReporter errors on unimplemented methods", {
     }, regexp = "Reporter must set valid graph class")
 })
 
+test_that("AbstractGraphReporter$set_plot_node_color_scheme() correctly sets color palette", {
+    x <- pkgnet:::AbstractGraphReporter$new()
+    res <- x$.__enclos_env__$private$set_plot_node_color_scheme(
+        field = "blegh"
+        , palette = c("red", "blue")
+    )
+    color_scheme <- x$.__enclos_env__$private$plotNodeColorScheme
+    expect_identical(
+        color_scheme
+        , list(field = "blegh", palette = c("red", "blue"))
+    )
+})
+
+test_that("AbstractGraphReporter$set_plot_node_color_scheme() correctly rejects bad colors", {
+    x <- pkgnet:::AbstractGraphReporter$new()
+    expect_error({
+        res <- x$.__enclos_env__$private$set_plot_node_color_scheme(
+            field = "blegh"
+            , palette = c("#32CD32", "32CD32")
+        )
+    }, "The following are invalid color")
+})
+
 ### HELPER FUNCTIONS
 
 test_that(".igraphAvailableLayouts returns layouts correctly", {
@@ -72,8 +95,6 @@ test_that(".igraphAvailableLayouts returns layouts correctly", {
         length(pkgnet:::.igraphAvailableLayouts()) > 0
     })
 })
-
-
 
 ##### TEST TEAR DOWN #####
 
