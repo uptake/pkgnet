@@ -229,11 +229,14 @@ AbstractGraphReporter <- R6::R6Class(
                 })
             }
 
-            if (!all(areColors(palette))) {
-                notColors <- names(areColors)[areColors == FALSE]
+            colorChecks <- areColors(palette)
+            if (!all(colorChecks)) {
+                notColors <- names(colorChecks)[colorChecks == FALSE]
                 notColorsTXT <- paste(notColors, collapse = ", ")
-                log_fatal(sprintf("The following are invalid colors: %s"
-                                  , notColorsTXT))
+                log_fatal(sprintf(
+                    "The following are invalid colors: %s"
+                    , notColorsTXT
+                ))
             }
 
             private$plotNodeColorScheme <- list(
