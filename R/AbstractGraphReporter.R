@@ -240,7 +240,6 @@ AbstractGraphReporter <- R6::R6Class(
                     , notColorsTXT
                 ))
             }
-            print("wow")
 
             private$plotNodeColorScheme <- list(
                 field = field
@@ -293,79 +292,86 @@ AbstractGraphReporter <- R6::R6Class(
 
             ## Color Nodes
 
-            # Flag for us to do stuff later
+            # This flag controls whether nodes are colored by categorical
+            # groups or some continuous attribute
             colorByGroup <- FALSE
+            colorByField <- !is.null(private$plotNodeColorScheme[['field']])
 
-            # If no field specified, use uniform color for all nodes
-            if (is.null(private$plotNodeColorScheme[['field']])) {
+            if (!colorByField){
 
                 # Default Color for all Nodes
                 plotDTnodes[, color := private$plotNodeColorScheme[['palette']]]
 
-            # Otherwise use specified field to color node
-            } else {
+            }
 
-                # Fetch Color Scheme Values
+            if (colorByField){
+
                 colorFieldName <- private$plotNodeColorScheme[['field']]
+                nodeColorPalette <- private$plotNodeColorScheme[['palette']]
 
-                # Check that that column exists in nodes table
+                # If that column doesn't exist, throw an error
                 if (!is.element(colorFieldName, names(self$nodes))) {
-                    log_fatal(sprintf(paste0("'%s' is not a field in the nodes table",
-                                             " and as such cannot be used in plot color scheme.")
-                                      , private$plotNodeColorScheme[['field']])
+                    msg <- sprintf(
+                        "'%s' is not a field in the nodes table and as such cannot be used in plot color scheme."
+                        , colorFieldName
                     )
+                    log_fatal(msg)
                 }
 
-                colorFieldPalette <- private$plotNodeColorScheme[['palette']]
+                # if that column isn't a type we recognize, throw an error
                 colorFieldValues <- plotDTnodes[, unique(get(colorFieldName))]
-                log_info(sprintf("Coloring plot nodes by %s...", colorFieldName))
+                colorFieldIsContinuous <- is.numeric(colorFieldValues)
+                colorFieldIsCategorical <- is.character(colorFieldValues) | is.factor(colorFieldValues)
+                if (!(colorFieldIsContinuous | colorFieldIsCategorical)){
+                    msg <- sprintf(
+                        "A character, factor, or numeric field can be used to color nodes. Field '%s' is of type '%s'."
+                        , colorFieldName
+                        , typeof(colorFieldValues)
+                    )
+                    log_fatal(msg)
+                }
 
-                # If colorFieldValues are character or factor
-                # then we are coloring by group
-                if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
+                log_info(sprintf("Coloring plot nodes by field '%s'...", colorFieldName))
 
-                    # Create palette by unique values
-                    valCount <- length(colorFieldValues)
-                    newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
+                # For categorical coloring, all nodes stay at the default color unless the value
+                # of colorFieldValues is found in the provided palette
+                if (colorFieldIsCategorical){
 
-                    # For each character value, update all nodes with that value
-                    plotDTnodes[, color := newPalette[.GRP], by = .(get(colorFieldName))]
+                    for (val in names(nodeColorPalette)){
+                        thisColor <- nodeColorPalette[[val]]
+                        plotDTnodes[get(colorFieldName) == val, color := thisColor]
+                    }
 
                     # Set the group column to the field
                     plotDTnodes[, group := get(colorFieldName)]
+                }
 
-                    # Set flag for us to build a legend in the graph viz later
-                    colorByGroup <- TRUE
+                # For continuous coloring, use a ramp palette
+                if (colorFieldIsContinuous){
 
-                # If colorFieldValues are numeric, assume continuous variable
-                # Then we want to create a continuous palette
-                } else if (is.numeric(colorFieldValues)) {
-
-                    # Create Continuous Color Palette
-                    newPalette <- grDevices::colorRamp(colors = colorFieldPalette)
+                    newPalette <- grDevices::colorRamp(
+                        colors = nodeColorPalette
+                    )
 
                     # Scale Values to be with range 0 - 1
-                    plotDTnodes[!is.na(get(colorFieldName)), scaledColorValues := get(colorFieldName) / max(get(colorFieldName))]
+                    plotDTnodes[
+                        !is.na(get(colorFieldName))
+                        , scaledColorValues := get(colorFieldName) / max(get(colorFieldName))
+                    ]
 
                     # Assign Color Values From Palette
-                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPalette(scaledColorValues), maxColorValue = 255)]
+                    plotDTnodes[
+                        !is.na(scaledColorValues)
+                        , color := grDevices::rgb(
+                            newPalette(scaledColorValues)
+                            , maxColorValue = 255
+                        )
+                    ]
 
                     # NA Values get gray color
                     plotDTnodes[is.na(scaledColorValues), color := "gray"]
-
-                # If none of the above, something is wrong
-                } else {
-                    # Error Out
-                    log_fatal(
-                        sprintf(
-                            paste0("A character, factor, or numeric field can be used to color nodes. "
-                                , "Field %s is of type %s.")
-                            , colorFieldName
-                            , typeof(colorFieldValues)
-                        )
-                    )
-                } # end non-default color field
-            } # end color setting
+                }
+            }
 
             # Order nodes alphabetically to make them easier to find in dropdown
             data.table::setkeyv(plotDTnodes, 'id')
