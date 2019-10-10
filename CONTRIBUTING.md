@@ -13,7 +13,7 @@ The goal of this guide is to help you contribute to `pkgnet` as quickly and as e
 ***
 ## Creating an Issue <a name="issues"></a>
 
-To report bugs, request features, or ask questions about the structure of the code, please [open an issue](https://github.com/UptakeOpenSource/pkgnet/issues).
+To report bugs, request features, or ask questions about the structure of the code, please [open an issue](https://github.com/uptake/pkgnet/issues).
 
 ### Bug Reports
 
@@ -60,7 +60,7 @@ To submit a PR, please follow these steps:
 3. When you are ready, click "Compare & Pull Request". Open A PR comparing your branch to the `master` branch in this repo
 4. In the description section on your PR, please indicate the following:
     - description of what the PR is trying to do and how it improves `pkgnet`
-    - links to any open [issues](https://github.com/UptakeOpenSource/pkgnet/issues) that your PR is addressing
+    - links to any open [issues](https://github.com/uptake/pkgnet/issues) that your PR is addressing
 
 We will try to review PRs promptly and get back to you within a few days.
 
@@ -86,7 +86,7 @@ some_function <- function(n){
 
 You do not need to namespace special operators in the case where doing so would hurt readability. For example, `%>%` from `magrittr` and `:=` from `data.table` do not need `::` namespacing.
 
-If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the `Imports` section of the [DESCRIPTION file](https://github.com/UptakeOpenSource/pkgnet/blob/master/DESCRIPTION).
+If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the `Imports` section of the [DESCRIPTION file](https://github.com/uptake/pkgnet/blob/master/DESCRIPTION).
 
 ### Indentation and whitespace
 
@@ -268,7 +268,7 @@ For more details, see https://semver.org/
 ### Release Planning
 The authors of this package have adopted [milestones on github](https://help.github.com/en/articles/about-milestones) as a vehile to scope and schedule upcoming releases.  The main goal for a release is written in the milestone description.  Then, any ideas, specific functionality, bugs, etcs submitted as [issues](https://help.github.com/en/articles/about-issues) pertinent to that goal are tagged for that milestone.  Goals for milestone are dicsused openly via a github issue.  
 
-Past and upcoming releases can be seen on the  [pkgnet milestones page](https://github.com/UptakeOpenSource/pkgnet/milestones). 
+Past and upcoming releases can be seen on the  [pkgnet milestones page](https://github.com/uptake/pkgnet/milestones). 
 
 
 ***
@@ -328,9 +328,9 @@ Once the submission is accepted, great! Update `cran-comments.md` and merge the 
 
 ### Create a Release on GitHub
 
-We use [the releases section](https://github.com/UptakeOpenSource/pkgnet/releases) in the repo to categorize certain important commits as release checkpoints. This makes it easier for developers to associate changes in the source code with the release history on CRAN, and enables features like `devtools::install_github()` for old versions.
+We use [the releases section](https://github.com/uptake/pkgnet/releases) in the repo to categorize certain important commits as release checkpoints. This makes it easier for developers to associate changes in the source code with the release history on CRAN, and enables features like `devtools::install_github()` for old versions.
 
-Navigate to https://github.com/UptakeOpenSource/pkgnet/releases/new. Click the drop down in the "target" section, then click "recent commits". Choose the latest commit for the release PR you just merged. This will automatically create a [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) on that commit and tell Github which revision to build when people ask for a given release.
+Navigate to https://github.com/uptake/pkgnet/releases/new. Click the drop down in the "target" section, then click "recent commits". Choose the latest commit for the release PR you just merged. This will automatically create a [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging) on that commit and tell Github which revision to build when people ask for a given release.
 
 Add some notes explaining what has changed since the previous release.
 

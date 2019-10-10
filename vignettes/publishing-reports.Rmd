@@ -38,4 +38,4 @@ You can check out our [example for pkgnet](https://uptake.github.io/pkgnet-galle
 
 ## Add your package to the pkgnet Gallery
 
-We also welcome contributions to the [pkgnet Gallery](https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! This is a webpage on our site that showcases pkgnet reports for different packages. See the [GitHub README](https://github.com/UptakeOpenSource/pkgnet-gallery) for the pkgnet Gallery for instructions on how to contribute your package's report. 
+We also welcome contributions to the [pkgnet Gallery](https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html)! This is a webpage on our site that showcases pkgnet reports for different packages. See the [GitHub README](https://github.com/uptake/pkgnet-gallery) for the pkgnet Gallery for instructions on how to contribute your package's report. 
