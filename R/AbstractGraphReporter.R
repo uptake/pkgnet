@@ -94,11 +94,21 @@ AbstractGraphReporter <- R6::R6Class(
             )
 
             # Round the double columns to three digits for formatting reasons
-            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+
+            # what are the double columns (but still may contain values with all integers)?
+
+            numDCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+
+            # Check if each individual value in a double column is an integer,
+            # If at least one of the values is not an integers, then we want to round only those columns
+
+            numNonIntDCols <- names(which(unlist(lapply(tableObj$x$data[ ,numDCols],
+              function(x) sum(as.integer(x) != x) > 0))))
+
             tableObj <- DT::formatRound(
-                columns = numCols
+                columns = numNonIntDCols
                 , table = tableObj
-                , digits=3
+                , digits = 3
             )
             return(tableObj)
         }
