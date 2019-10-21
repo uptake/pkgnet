@@ -5,7 +5,7 @@
 ### Submission on April 1st, 2019
 This is a minor release that adds vignette creation functionality and makes a number of other minor changes and bug fixes.  Please see `NEWS.md` for details.
 
-As always, issues are tracked and source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.
 
 ### CRAN Response on April 2nd, 2019
 Thanks, we see:
@@ -23,7 +23,7 @@ Is there some reference about the method you can add in the Description
 field in the form Authors (year) <doi:.....>?
 
 ### Resubmission on April 5th, 2019
-The one remaining "possibly invalid URL" is intended.  That page will be created as soon as this version is on CRAN.  [Here](https://github.com/UptakeOpenSource/pkgnet/blob/929b2c3ee456870dd92e6a164f858a2b014c5e89/docs/articles/publishing-reports.html) it is queued up on github, awaiting CRAN release before merge. 
+The one remaining "possibly invalid URL" is intended.  That page will be created as soon as this version is on CRAN.  [Here](https://github.com/uptake/pkgnet/blob/929b2c3ee456870dd92e6a164f858a2b014c5e89/docs/articles/publishing-reports.html) it is queued up on github, awaiting CRAN release before merge. 
 
 The two were non-canonical CRAN links have been reformatted.  I had seen the warnings for the non-canonical CRAN links during testing and had interpreted them as optional.  In future testing, these CRAN link formatting warnings will be interpreted as required. 
 
@@ -32,17 +32,17 @@ Regarding the references comment, the package is original work aside from the fu
 ## v 0.3.2 
 
 ### Submission on January 25th, 2019
-Discovery and correction of a critical bug in the creation of table data in the package report necessitates this minor version upgrade.  As always, source code and issue tracking is available at https://github.com/UptakeOpenSource/pkgnet.
+Discovery and correction of a critical bug in the creation of table data in the package report necessitates this minor version upgrade.  As always, source code and issue tracking is available at https://github.com/uptake/pkgnet.
 
 Specifically, here are the changes:  
 
 CHANGES  
-* Added unit tests for network measure calculations ([#166](https://github.com/UptakeOpenSource/pkgnet/pull/166)).   
-* Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing ([#167](https://github.com/UptakeOpenSource/pkgnet/pull/167))   
+* Added unit tests for network measure calculations ([#166](https://github.com/uptake/pkgnet/pull/166)).   
+* Revised unit test setup and teardown files to enable devtools::test() to work as well as CRAN server testing ([#167](https://github.com/uptake/pkgnet/pull/167))   
 
 BUG FIXES  
-* Corrected node statistics table merging error ([#165](https://github.com/UptakeOpenSource/pkgnet/issues/165), [#166](https://github.com/UptakeOpenSource/pkgnet/pull/166))   
-* Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks ([#168](https://github.com/UptakeOpenSource/pkgnet/pull/168))   
+* Corrected node statistics table merging error ([#165](https://github.com/uptake/pkgnet/issues/165), [#166](https://github.com/uptake/pkgnet/pull/166))   
+* Added a NAMESPACE entry for knitr to suppress warning on CRAN server checks ([#168](https://github.com/uptake/pkgnet/pull/168))   
 
 
 ## v 0.3.1
@@ -59,7 +59,7 @@ BUG FIXES
 
 >As unit testing is at the discretion of the package authors, we choose to have TRAVIS remain the main vehicle for automated unit testing for this package.  Of course, all other tests of package integrity on CRAN will continue, just not custom unit testing. 
 
->As always, tests and source code are maintained at https://github.com/UptakeOpenSource/pkgnet
+>As always, tests and source code are maintained at https://github.com/uptake/pkgnet
 
 >Sincerely, 
 
@@ -74,7 +74,7 @@ BUG FIXES
 > tracked in NEWS.md.  
 >
 > This NEWS.md file and all 
-> source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+> source code is maintained at https://github.com/uptake/pkgnet.
   
 ### CRAN Response on December 20th, 2018 (Paraphrased)
 
@@ -91,12 +91,12 @@ BUG FIXES
 > Best regards,
 > CRAN teams' auto-check service
 
-See [#154](https://github.com/UptakeOpenSource/pkgnet/pull/154) for the issue description and fix. 
+See [#154](https://github.com/uptake/pkgnet/pull/154) for the issue description and fix. 
 
 ### Resubmission on December 20th, 2018
 > The attached package addresses issues found earlier today in the CRAN teams' auto-check service.  It has been checked (via R CMD check --as-cran) on both R-core and R-devel versions today. 
 >
-> This NEWS.md file and all source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+> This NEWS.md file and all source code is maintained at https://github.com/uptake/pkgnet.
 
 ### CRAN response on December 21st (Paraphrased)
 >Dear maintainer,
@@ -131,7 +131,7 @@ Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 >
 >The exact procedure I followed is outlined here: https://alexandereckert.com/post/testing-r-packages-with-latest-r-devel/
 >
->All source code is maintained at https://github.com/UptakeOpenSource/pkgnet.
+>All source code is maintained at https://github.com/uptake/pkgnet.
 >
 >Sincerely, 
 >
