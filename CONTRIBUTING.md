@@ -251,6 +251,23 @@ However, these options can lengthen your testing cycle and make the process of c
 ```{bash}
 ./test.sh
 ```
+
+### Smoke Tests <a name="smoke-tests"></a>
+
+This repo also contains smoke tests which can be run from time-to-time to see if there are certain types of R packages that break `pkgnet`. If you want to try running `pkgnet::CreatePackageReport()` on every package installed on your system, run the following from the root of this repo:
+
+```{bash}
+TEST_DATA_DIR=$(pwd)/smoke_tests/test_data
+NUM_PARALLEL=4
+./smoke_tests/test.sh ${TEST_DATA_DIR} ${NUM_PARALLEL}
+```
+
+`test.sh` will create a file `${TEST_DATA_DIR}/package_run_status.txt` that tells you whether individual packages failed or succeeded in `pkgnet::CreatePackageReport()`. For the failed packages, you can open `${TEST_DATA_DIR}/<that package name>.html` to view the report and see the error.
+
+When you find errors, check the [open issues](https://github.com/uptake/pkgnet/issues) to see if it's already been reported. If not, report it!
+
+NOTE: this may take 20-30 minutes to run, dependning on your available resources and the number of installed packages. Also note that this will spin off `NUM_PARALLEL` parallel processes, so if you stop the process early you will see some weird logs.
+
 ***
 ## Package Versioning <a name="version"></a>
 

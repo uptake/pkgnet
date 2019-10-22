@@ -53,8 +53,7 @@ export PKGNET_SUPPRESS_BROWSER=0
 
 run_pkgnet_report(){
     chunk_file=${1}
-    #for pkg in $(cat ${chunk_file}); do
-    for pkg in $(head -10 ${chunk_file}); do
+    for pkg in $(cat ${chunk_file}); do
         report_path="${OUT_DIR}/${pkg}.html"
         Rscript \
             -e "pkgnet::CreatePackageReport(pkg_name='${pkg}', report_path='${report_path}')" \
