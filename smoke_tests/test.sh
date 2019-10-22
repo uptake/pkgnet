@@ -90,31 +90,6 @@ for chunk_file in $(ls ${CHUNK_DIR}); do
 done
 wait
 
-#PACKAGES="lightgbm alphahull ${RANDOM_PACKAGES}"
-#for pkg in ${PACKAGES}; do
-
-
-    # report_path="${OUT_DIR}/${pkg}.html"
-    # Rscript -e "pkgnet::CreatePackageReport(pkg_name='${pkg}', report_path='${report_path}')" > /dev/null
-
-    # # a lot of code in CreatePackageReport() is try-catched, so
-    # # doing this to check for issues in the logs of the reports
-    # errors_found=$(cat ${report_path} | grep 'Error in' | wc -l)
-
-    # # the error message like
-    # # "Package 'svGUI' does not have any dependencies in" is known
-    # # and expected behavior, so we can ignore it
-    # allowed_errors=$(cat ${report_path} | grep 'does not have any dependencies in ' | wc -l)
-
-    # if ! (( ${errors_found} - ${allowed_errors} == 0 )); then
-    #     echo "${pkg}: FAILURE"
-    #     echo ${pkg} >> ${FAILURE_FILE}
-    # else
-    #     echo "${pkg}: SUCCESS"
-    #     echo ${pkg} >> ${SUCCESS_FILE}
-    # fi
-#done
-
 # sort all the failures to the top of the status file
 tmp_file=${OUT_DIR}/blegh.txt
 cat ${STATUS_FILE} \
