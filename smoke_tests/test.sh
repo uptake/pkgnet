@@ -4,7 +4,7 @@
 #     Run pkgnet report on every R package installed
 #     on a system
 # [usage]
-#     ./smoke_tests/all_r_packages.sh | tee out.log  | cat
+#     ./smoke_tests/test.sh $(pwd)/smoke_tests/test_data 4
 
 # failure is a natural part of life
 set -e
@@ -52,16 +52,18 @@ split \
 export PKGNET_SUPPRESS_BROWSER=0
 
 run_pkgnet_report(){
-    chunk_file=${1}
+    local chunk_file=${1}
     for pkg in $(cat ${chunk_file}); do
-        report_path="${OUT_DIR}/${pkg}.html"
+        local report_path="${OUT_DIR}/${pkg}.html"
         Rscript \
             -e "pkgnet::CreatePackageReport(pkg_name='${pkg}', report_path='${report_path}')" \
-            > /dev/null
+            > /dev/null \
+        || \
+            echo "Error in package '${pkg}': failed to even create report" > ${report_path}
 
         # a lot of code in CreatePackageReport() is try-catched, so
         # doing this to check for issues in the logs of the reports
-        errors_found=$(
+        local errors_found=$(
             cat ${report_path} \
             | grep 'Error in' \
             | wc -l
@@ -70,16 +72,16 @@ run_pkgnet_report(){
         # the error message like
         # "Package 'svGUI' does not have any dependencies in" is known
         # and expected behavior, so we can ignore it
-        allowed_errors=$(
+        local allowed_errors=$(
             cat ${report_path} \
             | grep 'does not have any dependencies in ' \
             | wc -l
         )
 
         if ! (( ${errors_found} - ${allowed_errors} == 0 )); then
-            msg="FAILURE: ${pkg}"
+            local msg="FAILURE: ${pkg}"
         else
-            msg="SUCCESS: ${pkg}"
+            local msg="SUCCESS: ${pkg}"
         fi
         echo ${msg} >> ${STATUS_FILE}
     done
