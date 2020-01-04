@@ -304,6 +304,7 @@ FunctionReporter <- R6::R6Class(
                             , pkg_env = private$get_pkg_env()
                             , pkg_functions = funs
                             )
+                        , SIMPLIFY = FALSE
                         )
                     )
                     , fill = TRUE
