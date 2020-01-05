@@ -6,12 +6,12 @@ rm(list = ls())
 ## PUBLIC INTERFACE ##
 
 test_that('FunctionReporter public interface is as expected', {
-
+    
     publicInterfaceExpected <- c(
         # R6 Special Methods
         ".__enclos_env__"
         , "clone"
-
+        
         # Graph Reporter fields and active bindings
         , "pkg_name"
         , "nodes"
@@ -20,17 +20,17 @@ test_that('FunctionReporter public interface is as expected', {
         , "network_measures"
         , "graph_viz"
         , "layout_type"
-
+        
         # Graph Reporter methods
         , "set_package"
         , "calculate_default_measures"
         , "get_summary_view"
         , "report_markdown_path"
-
+        
         # FunctionReporter-specific
         # none
     )
-
+    
     reporter <- pkgnet::FunctionReporter$new()
     expect_setequal(object = names(reporter)
                     , expected = publicInterfaceExpected)
@@ -40,9 +40,9 @@ test_that('FunctionReporter public interface is as expected', {
 ### USAGE OF PUBLIC AND PRIVATE METHODS AND FIELDS
 
 test_that('FunctionReporter works end-to-end for typical use', {
-
+    
     testObj <- FunctionReporter$new()
-
+    
     # inherited set_package works, with pkg_path
     expect_silent({
         testObj$set_package(
@@ -55,29 +55,29 @@ test_that('FunctionReporter works end-to-end for typical use', {
             )
         )
     })
-
+    
     # pkg_name works
     expect_equal(object = testObj$pkg_name
                  , expected = "baseballstats"
                  , info = "$pkg_name did not return expected package name")
-
+    
     ## Node and Edge extraction work ##
     expect_silent({
         testObj$nodes
         testObj$edges
     })
-
+    
     expect_true(data.table::is.data.table(testObj$nodes))
     expect_true(object = is.element("node", names(testObj$nodes))
                 , info = "Node column created")
-
+    
     expect_true(data.table::is.data.table(testObj$edges))
     expect_true(object = all(c("TARGET", "SOURCE") %in% names(testObj$edges))
                 , info = "TARGET and SOURCE fields in edge table at minimum")
-
-
+    
+    
     ## pkg_graph works ##
-
+    
     expect_silent({testObj$pkg_graph})
     expect_true({"AbstractGraph" %in% class(testObj$pkg_graph)})
     expect_true({"DirectedGraph" %in% class(testObj$pkg_graph)})
@@ -94,9 +94,9 @@ test_that('FunctionReporter works end-to-end for typical use', {
         object = igraph::get.edgelist(testObj$pkg_graph$igraph)[,2]
         , expected = testObj$edges[, TARGET]
     )
-
+    
     ## calculate_default_measures works ##
-
+    
     expect_true({
         testObj$calculate_default_measures()
         TRUE
@@ -109,7 +109,7 @@ test_that('FunctionReporter works end-to-end for typical use', {
     expect_true({
         all(testObj$pkg_graph$default_graph_measures %in% names(testObj$network_measures))
     })
-
+    
     # Coverage measures were generated
     expect_true(object = all( c("coverageRatio"
                                 , "meanCoveragePerLine"
@@ -117,9 +117,9 @@ test_that('FunctionReporter works end-to-end for typical use', {
                                 , "coveredLines"
                                 , "filename")
                               %in% names(testObj$nodes))
-        , info = "Not all expected function coverage measures are in nodes table"
+                , info = "Not all expected function coverage measures are in nodes table"
     )
-
+    
     ## graph_viz works ##
     expect_silent({testObj$graph_viz})
     expect_true(object = is.element("visNetwork", attributes(testObj$graph_viz)))
@@ -179,7 +179,7 @@ test_that("set_package works with relative pkg_path",{
     # set_package works
     expect_silent({
         testObj <- FunctionReporter$new()
-
+        
         # testing set_package with a pkg_path that is relative to the current directory
         entry_wd <- getwd()
         baseball_dir <- system.file(
@@ -189,14 +189,14 @@ test_that("set_package works with relative pkg_path",{
         )
         parent_dir <- dirname(baseball_dir)
         setwd(parent_dir)
-
+        
         testObj$set_package(
             pkg_name = "baseballstats"
             , pkg_path = 'baseballstats'
         )
         setwd(entry_wd)
     })
-
+    
     # Sometimes with R CMD CHECK the temp dir begins /private/vars. Other times, just /vars.
     # Also, sometimes there are double slashes.
     fmtPath <- function(path){
@@ -205,7 +205,7 @@ test_that("set_package works with relative pkg_path",{
         out <- tools::file_path_as_absolute(out)
         return(out)
     }
-
+    
     # Correct path
     expect_identical(
         object = fmtPath(testObj$.__enclos_env__$private$pkg_path)
@@ -258,7 +258,7 @@ test_that(".parse_R6_expression correctly parses expressions for symbols", {
         }
         result <- pkgnet:::.parse_R6_expression(body(myr6method))
         all(c("regularfunc1", "regularfunc2", "regularfunc3", "self$public_method"
-            , "self$active_binding", "private$private_method"
+              , "self$active_binding", "private$private_method"
         ) %in% result)
     })
 })
@@ -271,6 +271,18 @@ test_that(".parse_R6_expression correctly ignores right side of list extraction"
     })
 })
 
+
+
+test_that("FunctionReporter$private$extract_edges doesn't fail because of Carrots class", {
+    
+    testObj <- FunctionReporter$new()$set_package('silverstein')
+    
+    expect_equal(testObj$edges, 
+                 data.table::data.table(SOURCE = c("Carrots$private_methods$finalize", 
+                                                   "Carrots$public_methods$initialize"), 
+                                        TARGET = c("couplet_2", 
+                                                   "couplet_1"),key = c("SOURCE","TARGET")))
+})
 
 ##### TEST TEAR DOWN #####
 rm(list = ls())

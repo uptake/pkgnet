@@ -64,6 +64,7 @@
         baseballstats = file.path(pkgnetSourcePath, testPkgSourceDir, "baseballstats")
         , sartre = file.path(pkgnetSourcePath, testPkgSourceDir, "sartre")
         , milne = file.path(pkgnetSourcePath, testPkgSourceDir, "milne")
+        , silverstein = file.path(pkgnetSourcePath, testPkgSourceDir, "silverstein")
         , pkgnet = pkgnetSourcePath
     )
 

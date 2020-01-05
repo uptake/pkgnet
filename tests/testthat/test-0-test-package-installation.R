@@ -6,7 +6,7 @@ rm(list = ls())
 # correctly and being available.
 
 test_that('Test packages installed correctly',{
-    testPkgNames <- c("baseballstats", "sartre", "milne")
+    testPkgNames <- c("baseballstats", "sartre", "milne", "silverstein")
     for (thisTestPkg in testPkgNames) {
         expect_true(
             object = require(thisTestPkg

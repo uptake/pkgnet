@@ -7,7 +7,7 @@ if(identical(Sys.getenv("NOT_CRAN"), "true")){
     # Uninstall Test Packages From Test Library if Not Already Uninstalled
     try(
         utils::remove.packages(
-            pkgs = c('baseballstats', 'sartre', 'milne', 'pkgnet')
+            pkgs = c('baseballstats', 'sartre', 'milne', 'silverstein', 'pkgnet')
             , lib = Sys.getenv('PKGNET_TEST_LIB')
         )
     )
