@@ -273,7 +273,7 @@ test_that(".parse_R6_expression correctly ignores right side of list extraction"
 
 
 
-test_that("FunctionReporter R6 edge extraction handles all-singleton dependency edges properly", {
+test_that("FunctionReporter R6 edge extraction handles case where all methods have the same number of dependencies", {
 
     testObj <- FunctionReporter$new()$set_package('silverstein')
 
