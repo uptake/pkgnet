@@ -564,7 +564,7 @@ FunctionReporter <- R6::R6Class(
     # Not not matched, try parent if there is one and it is in package
     if (is.na(out)
         && inheritanceDT[CLASS_NAME == class_name
-                         , !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
+                         , .N > 0 && !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
         out <- .match_R6_class_methods(
             symbol_name
             , inheritanceDT[CLASS_NAME == class_name, PARENT_NAME]
@@ -605,7 +605,7 @@ FunctionReporter <- R6::R6Class(
     # If not matched, try parent if there is one and it is in package
     if (is.na(out)
         && inheritanceDT[CLASS_NAME == parent_name
-                         , !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
+                         , .N > 0 && !is.na(PARENT_NAME) && PARENT_IN_PKG]) {
         out <- .match_R6_super_methods(
             method_name
             , inheritanceDT[CLASS_NAME == parent_name, PARENT_NAME]
