@@ -607,3 +607,4 @@ DirectedGraph <- R6::R6Class(
 #'     Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
 #'     [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
 #' }
+NULL
