@@ -1,0 +1,14 @@
+Package: silverstein
+Type: Package
+Title: If the track is tough and the hill is rough, THINKING you can just ain't enough!
+Version: 0.1
+Author: Tyler Grant Smith
+Maintainer: Tyler Grant Smith <tyler.grant.smith@gmail.com>
+Description: This package is used to test the functions in `pkgnet`.
+Imports:
+    R6
+License: file LICENSE
+LazyData: TRUE
+RoxygenNote: 7.0.2
+Suggests: 
+    testthat (>= 2.1.0)

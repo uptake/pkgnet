@@ -117,7 +117,7 @@ test_that('FunctionReporter works end-to-end for typical use', {
                                 , "coveredLines"
                                 , "filename")
                               %in% names(testObj$nodes))
-        , info = "Not all expected function coverage measures are in nodes table"
+                , info = "Not all expected function coverage measures are in nodes table"
     )
 
     ## graph_viz works ##
@@ -258,7 +258,7 @@ test_that(".parse_R6_expression correctly parses expressions for symbols", {
         }
         result <- pkgnet:::.parse_R6_expression(body(myr6method))
         all(c("regularfunc1", "regularfunc2", "regularfunc3", "self$public_method"
-            , "self$active_binding", "private$private_method"
+              , "self$active_binding", "private$private_method"
         ) %in% result)
     })
 })
@@ -271,6 +271,18 @@ test_that(".parse_R6_expression correctly ignores right side of list extraction"
     })
 })
 
+
+
+test_that("FunctionReporter R6 edge extraction handles case where all methods have the same number of dependencies", {
+
+    testObj <- FunctionReporter$new()$set_package('silverstein')
+
+    expect_equal(testObj$edges,
+                 data.table::data.table(SOURCE = c("Carrots$private_methods$finalize",
+                                                   "Carrots$public_methods$initialize"),
+                                        TARGET = c("couplet_2",
+                                                   "couplet_1"),key = c("SOURCE","TARGET")))
+})
 
 ##### TEST TEAR DOWN #####
 rm(list = ls())
