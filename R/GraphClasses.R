@@ -355,20 +355,24 @@ DirectedGraph <- R6::R6Class(
 
             # Out-Degree
             outDegree = function(self){
-                igraph::degree(
+                result <- igraph::degree(
                     graph = self$igraph
                     , mode = "out"
                     , loops = TRUE
                 )
+                mode(result) <- "integer"
+                return(result)
             }
 
             # In-Degree
             , inDegree = function(self){
-                igraph::degree(
+                result <- igraph::degree(
                     graph = self$igraph
                     , mode = "in"
                     , loops = TRUE
                 )
+                mode(result) <- "integer"
+                return(result)
             }
 
             # Out-Closeness
@@ -409,6 +413,7 @@ DirectedGraph <- R6::R6Class(
                 # Subtract 1 so we don't include the root node itself
                 result <- result - 1
                 names(result) <- igraph::V(self$igraph)$name
+                mode(result) <- "integer"
                 return(result)
             }
 
@@ -424,6 +429,7 @@ DirectedGraph <- R6::R6Class(
                 # Subtract 1 so we don't include the root node itself
                 result <- result - 1
                 names(result) <- igraph::V(self$igraph)$name
+                mode(result) <- "integer"
                 return(result)
             }
 

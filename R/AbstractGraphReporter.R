@@ -94,11 +94,12 @@ AbstractGraphReporter <- R6::R6Class(
             )
 
             # Round the double columns to three digits for formatting reasons
-            numCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+            doubleCols <- names(which(unlist(lapply(tableObj$x$data, is.double))))
+
             tableObj <- DT::formatRound(
-                columns = numCols
+                columns = doubleCols
                 , table = tableObj
-                , digits=3
+                , digits = 3
             )
             return(tableObj)
         }
