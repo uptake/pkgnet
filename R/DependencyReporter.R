@@ -223,8 +223,8 @@ DependencyReporter <- R6::R6Class(
         , plot_network = function() {
 
             # color base packages and the package in focus differently
-            pkgnet_blue <- "#97c2fc"
             gray <- "#dfdfdf"
+            black <- "#181818"
             bright_green <- "#aafca8"
 
             packageDT <- data.table::as.data.table(
@@ -240,9 +240,9 @@ DependencyReporter <- R6::R6Class(
             private$set_plot_node_color_scheme(
                 field = "package_type"
                 , palette = c(
-                    "regular_dependency" = pkgnet_blue
-                    , "report_package" = gray
-                    , "base_dependency" = bright_green
+                    "regular_dependency" = bright_green
+                    , "report_package" = black
+                    , "base_dependency" = gray
                 )
             )
 
