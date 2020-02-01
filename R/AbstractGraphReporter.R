@@ -294,7 +294,6 @@ AbstractGraphReporter <- R6::R6Class(
 
             # This flag controls whether nodes are colored by categorical
             # groups or some continuous attribute
-            colorByGroup <- FALSE
             colorByField <- !is.null(private$plotNodeColorScheme[['field']])
 
             if (!colorByField){
@@ -408,8 +407,7 @@ AbstractGraphReporter <- R6::R6Class(
                 )
             )
 
-
-            if (colorByGroup) {
+            if (colorByField) {
                 # Add group definitions
                 for (groupVal in colorFieldValues) {
                     thisGroupColor <- plotDTnodes[
@@ -423,17 +421,44 @@ AbstractGraphReporter <- R6::R6Class(
                     )
                 }
 
+                palette_vec <- private$plotNodeColorScheme[["palette"]]
+                legendControlDT <- data.table::data.table(
+                    label = names(palette_vec)
+                    , color = unname(palette_vec)
+                )
+                legendControlDT[, shape := "ellipse"]
+
+                # when you draw circles or ellipses in visNetwork::addLegend(),
+                # their width is determined by the number of characters
+                # in the label you write. Pad the labels with whitespace
+                # to get shapes of the same size.
+                label_lengths <- legendControlDT[, nchar(label)]
+                new_labels <- sapply(
+                    X = legendControlDT[, label]
+                    , FUN = function(label_val, max_length){
+                        num_spaces_to_add <- max_length - nchar(label_val)
+                        return(paste0(
+                            label_val
+                            , paste0(rep(" ", num_spaces_to_add), collapse = "")
+                        ))
+                    }
+                    , max_length = max(label_lengths)
+                )
+                legendControlDT[, label := new_labels]
+
                 # Add legend
-                if (length(colorFieldValues) > 1) {
-                    g <- visNetwork::visLegend(
-                        graph = g
-                        , position = "right"
-                        , main = list(
-                            text = colorFieldName
-                            , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'
-                        )
+                g <- visNetwork::visLegend(
+                    graph = g
+                    , position = "right"
+                    , main = list(
+                        text = colorFieldName
+                        , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;text-align:center;'
                     )
-                }
+                    , zoom = FALSE
+                    , addNodes = legendControlDT
+                    , useGroups = FALSE
+                    , enabled = TRUE
+                )
             }
 
             log_info("...done plotting visualization.")

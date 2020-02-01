@@ -224,7 +224,7 @@ DependencyReporter <- R6::R6Class(
 
             # color base packages and the package in focus differently
             gray <- "#dfdfdf"
-            black <- "#181818"
+            orange <- "#FFBD33"
             bright_green <- "#aafca8"
 
             packageDT <- data.table::as.data.table(
@@ -241,7 +241,7 @@ DependencyReporter <- R6::R6Class(
                 field = "package_type"
                 , palette = c(
                     "regular_dependency" = bright_green
-                    , "report_package" = black
+                    , "report_package" = orange
                     , "base_dependency" = gray
                 )
             )
