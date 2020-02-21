@@ -49,9 +49,7 @@ def get_submodules(module_name):
     ]
 
 
-def _recursive_node_search(
-    node, search_function, seen_nodes=None, nodes_to_ignore=None
-):
+def _recursive_node_search(node, search_function, seen_nodes=None, nodes_to_ignore=None):
     if seen_nodes is None:
         seen_nodes = set()
     if nodes_to_ignore is None:
@@ -66,10 +64,7 @@ def _recursive_node_search(
 
     for search_node in nodes_to_search:
         _recursive_node_search(
-            search_node,
-            search_function,
-            seen_nodes=seen_nodes,
-            nodes_to_ignore=nodes_to_ignore,
+            search_node, search_function, seen_nodes=seen_nodes, nodes_to_ignore=nodes_to_ignore,
         )
 
     return seen_nodes

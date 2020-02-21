@@ -23,9 +23,7 @@ class ModuleReporter(AbstractGraphReporter):
         if self.pkg_name is None:
             raise AttributeError("pkg_name is not set for this reporter.")
 
-        self._nodes = pd.DataFrame(
-            {"node": list(get_all_package_modules(self.pkg_name))}
-        )
+        self._nodes = pd.DataFrame({"node": list(get_all_package_modules(self.pkg_name))})
 
     def _extract_edges(self):
         if self.pkg_name is None:
@@ -38,10 +36,6 @@ class ModuleReporter(AbstractGraphReporter):
             # If module A is child of module B, then A -> B
             # A is the SOURCE and B is the TARGET
             # This is UML dependency convention
-            dfs.append(
-                pd.DataFrame(
-                    {"SOURCE": [module] * len(submodules), "TARGET": submodules}
-                )
-            )
+            dfs.append(pd.DataFrame({"SOURCE": [module] * len(submodules), "TARGET": submodules}))
 
         self._edges = pd.concat(dfs, axis=0, ignore_index=True)

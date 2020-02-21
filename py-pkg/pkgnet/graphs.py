@@ -46,10 +46,7 @@ class AbstractGraph:
     def initialize_nx_graph(self):
         # Connected graph
         connected_graph = nx.convert_matrix.from_pandas_edgelist(
-            self.edges,
-            source="SOURCE",
-            target="TARGET",
-            create_using=self._nx_graph_class,
+            self.edges, source="SOURCE", target="TARGET", create_using=self._nx_graph_class,
         )
 
         # Unconnected graph
@@ -100,11 +97,7 @@ class DirectedGraph(AbstractGraph):
         @staticmethod
         def num_recursive_deps(nx_graph):
             return {
-                node: len(
-                    nx.algorithms.shortest_paths.generic.shortest_path(
-                        nx_graph, source=node
-                    )
-                )
+                node: len(nx.algorithms.shortest_paths.generic.shortest_path(nx_graph, source=node))
                 for node in nx_graph.nodes
             }
 

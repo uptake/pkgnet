@@ -46,9 +46,7 @@ class InheritanceReporter(AbstractGraphReporter):
         # Keep only classes defined in this package
         # Other classes may be imported to be used in functions
         classes = [
-            class_name
-            for class_name in classes
-            if class_name.split(".", 1)[0] == self.pkg_name
+            class_name for class_name in classes if class_name.split(".", 1)[0] == self.pkg_name
         ]
 
         # Search classes for ancestors
@@ -62,9 +60,7 @@ class InheritanceReporter(AbstractGraphReporter):
         self._nodes = pd.DataFrame(
             {
                 "node": searched_classes,
-                "package": [
-                    class_name.split(".", 1)[0] for class_name in searched_classes
-                ],
+                "package": [class_name.split(".", 1)[0] for class_name in searched_classes],
             }
         )
 
@@ -94,7 +90,6 @@ class InheritanceReporter(AbstractGraphReporter):
         class_obj = get_object(class_name)
         parent_class_objs = class_obj.__bases__
         parent_class_names = [
-            get_fully_qualified_name(parent_class_obj)
-            for parent_class_obj in parent_class_objs
+            get_fully_qualified_name(parent_class_obj) for parent_class_obj in parent_class_objs
         ]
         return parent_class_names

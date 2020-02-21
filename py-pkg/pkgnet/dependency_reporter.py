@@ -57,6 +57,5 @@ class DependencyReporter(AbstractGraphReporter):
     @staticmethod
     def get_dependencies(pkg_name):
         return [
-            requirement.key
-            for requirement in pkg_resources.working_set.by_key[pkg_name].requires()
+            requirement.key for requirement in pkg_resources.working_set.by_key[pkg_name].requires()
         ]
