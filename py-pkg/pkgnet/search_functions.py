@@ -12,8 +12,20 @@ def get_object(obj_name):
     Returns:
         that object
     """
+    # Edge case: builtins.module is actually types.ModuleType
+    if obj_name == "builtins.module":
+        obj_name = "types.ModuleType"
     parts = obj_name.rsplit(".", 1)
     return getattr(import_module(parts[0]), parts[1])
+
+
+def safe_import_module(module):
+    try:
+        return import_module(module)
+    except ModuleNotFoundError:
+        # Sometimes non-public facing modules are included in a package, such as tests
+        # These may have undeclared dependencies, so we can't load them.
+        return None
 
 
 def get_fully_qualified_name(obj):

@@ -1,5 +1,4 @@
 import inspect
-import sys
 import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
@@ -8,6 +7,7 @@ from pkgnet.search_functions import (
     get_all_package_modules,
     get_object,
     get_fully_qualified_name,
+    safe_import_module,
     _recursive_node_search,
 )
 
@@ -31,12 +31,9 @@ class InheritanceReporter(AbstractGraphReporter):
         # Get all classes used in modules
         classes = []
         for module_name in modules:
-            if module_name not in sys.modules.keys():
-                # Need to import it first
-                # import_module(module_name)
-                # Maybe intentionally not imported? Skip?
+            module_obj = safe_import_module(module_name)
+            if module_obj is None:
                 continue
-            module_obj = sys.modules[module_name]
             classes += [
                 # Need to get name from object, because class may be imported
                 get_fully_qualified_name(get_object(f"{module_name}.{class_name}"))
@@ -50,6 +47,7 @@ class InheritanceReporter(AbstractGraphReporter):
         ]
 
         # Search classes for ancestors
+        print(classes)
         searched_classes = set()
         for class_name in classes:
             _recursive_node_search(
@@ -87,6 +85,7 @@ class InheritanceReporter(AbstractGraphReporter):
 
     @staticmethod
     def _get_parent_classes(class_name):
+        print(class_name)
         class_obj = get_object(class_name)
         parent_class_objs = class_obj.__bases__
         parent_class_names = [

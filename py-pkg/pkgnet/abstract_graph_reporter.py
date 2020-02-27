@@ -1,16 +1,18 @@
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
+from pkgnet.graph_viz import VisJs
 
 
 class AbstractGraphReporter(AbstractPackageReporter):
 
     _graph_class = None
 
-    def __init__(self):
+    def __init__(self, viz_class=VisJs):
         super().__init__()
         self._nodes = None
         self._edges = None
         self._pkg_graph = None
         self._graph_viz = None
+        self._viz_class = viz_class
 
     ### PROPERTIES ###
 
@@ -38,7 +40,18 @@ class AbstractGraphReporter(AbstractPackageReporter):
 
     @property
     def graph_viz(self):
+        if self._graph_viz is None:
+            self._graph_viz = self.viz_class(nodes=self.nodes, edges=self.edges)
         return self._graph_viz
+
+    @property
+    def viz_class(self):
+        return self._viz_class
+
+    @viz_class.setter
+    def viz_class(self, value):
+        # TODO: Validation
+        self._viz_class = value
 
     ### PUBLIC METHODS ###
 

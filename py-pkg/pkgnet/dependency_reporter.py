@@ -10,13 +10,30 @@ class DependencyReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph
 
-    def __init__(self):
-        super().__init__()
+    report_template = "tab_dependency_report.jinja"
+    report_slug = "dependency-report"
+    report_name = "Dependency Summary"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self._ignore_packages = []
 
     ### PROPERTIES ###
 
     ### PUBLIC METHODS ###
+
+    def get_summary_view(self):
+        datatables_init_script = f"""
+        <script>
+            $(document).ready( function () {{
+                $('#{self.report_slug}-table').DataTable();
+            }} );
+        </script>
+        """
+        return (
+            self.nodes.to_html(classes=["display"], table_id=f"{self.report_slug}-table")
+            + datatables_init_script
+        )
 
     ### PRIVATE METHODS ###
 
@@ -38,7 +55,7 @@ class DependencyReporter(AbstractGraphReporter):
 
         # Recursively list dependencies, terminating search at ignore_package nodes
         # all_dependencies = self.recursive_dependencies(self.pkg_name)
-        all_dependencies = _recursive_node_search(self.pkg_name, self.dependencies)
+        all_dependencies = _recursive_node_search(self.pkg_name, self.get_dependencies)
 
         # Set nodes df
         self._nodes = pd.DataFrame({"node": list(all_dependencies)})
@@ -46,7 +63,7 @@ class DependencyReporter(AbstractGraphReporter):
         # Set edges df
         dfs = []
         for pkg in all_dependencies:
-            deps = self.dependencies(pkg)
+            deps = self.get_dependencies(pkg)
             # If pkg A depends on pkg B, then A -> B
             # A is the SOURCE and B is the TARGET
             # This is UML dependency convention
