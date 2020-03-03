@@ -2,20 +2,23 @@ from pathlib import Path
 
 from pkgnet.summary_reporter import SummaryReporter
 from pkgnet.dependency_reporter import DependencyReporter
+from pkgnet.function_reporter import FunctionReporter
 from pkgnet.module_reporter import ModuleReporter
+from pkgnet.import_reporter import ImportReporter
 from pkgnet.inheritance_reporter import InheritanceReporter
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 import webbrowser
 
-JINJA_ENV = Environment(
+
+_JINJA_ENV = Environment(
     loader=PackageLoader("pkgnet", "templates"), autoescape=select_autoescape(["html", "xml"]),
 )
 
 
 class PackageReport:
 
-    _report_template = JINJA_ENV.get_template("package_report.jinja")
+    _report_template = _JINJA_ENV.get_template("package_report.jinja")
 
     def __init__(self, pkg_name, report_path, pkg_path=None):
         # TODO: Validation
@@ -66,6 +69,22 @@ class PackageReport:
     @module_reporter.setter
     def module_reporter(self, reporter):
         self._set_reporter(reporter, expected_class=ModuleReporter)
+
+    @property
+    def function_reporter(self):
+        return self._reporters["FunctionReporter"]
+
+    @function_reporter.setter
+    def function_reporter(self, reporter):
+        self._set_reporter(reporter, expected_class=FunctionReporter)
+
+    @property
+    def import_reporter(self):
+        return self._reporters["ImportReporter"]
+
+    @import_reporter.setter
+    def import_reporter(self, reporter):
+        self._set_reporter(reporter, expected_class=ImportReporter)
 
     @property
     def inheritance_reporter(self):

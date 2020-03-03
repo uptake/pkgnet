@@ -1,7 +1,8 @@
 from importlib import import_module
+from abc import ABC
 
 
-class AbstractPackageReporter:
+class AbstractPackageReporter(ABC):
     def __init__(self):
         self._pkg_name = None
 

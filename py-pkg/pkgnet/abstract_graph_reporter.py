@@ -1,5 +1,6 @@
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
 from pkgnet.graph_viz import VisJs
+from abc import abstractmethod
 
 
 class AbstractGraphReporter(AbstractPackageReporter):
@@ -67,8 +68,10 @@ class AbstractGraphReporter(AbstractPackageReporter):
 
     ### PRIVATE METHODS ###
 
+    @abstractmethod
     def _extract_nodes(self):
         raise NotImplementedError("Node extraction not implemented for this reporter.")
 
+    @abstractmethod
     def _extract_edges(self):
         raise NotImplementedError("Edge extraction not implemented for this reporter.")
