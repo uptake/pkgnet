@@ -1,14 +1,17 @@
 import networkx as nx
 import pandas as pd
+from abc import ABC, abstractmethod
 
 
-class AbstractGraph:
+class AbstractGraph(ABC):
     _nx_graph_class = None
 
     def __init__(self, nodes, edges):
         self._nodes = nodes
         self._edges = edges
         self._nx_graph = None
+
+    ### PROPERTIES ###
 
     @property
     def nodes(self):
@@ -23,6 +26,13 @@ class AbstractGraph:
         if self._nx_graph is None:
             self.initialize_nx_graph()
         return self._nx_graph
+
+    @property
+    @abstractmethod
+    def default_node_measures(self):
+        pass
+
+    ### PUBLIC METHODS ###
 
     def node_measures(self, measures=None):
         # If not specifying, return entire node table
@@ -40,6 +50,7 @@ class AbstractGraph:
         return self.nodes[measures]
 
     def graph_measures(self, measures=None):
+        raise NotImplementedError
         pass
 
     def compute_layout(self, layout):

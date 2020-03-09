@@ -79,8 +79,7 @@ class AbstractGraphReporter(AbstractPackageReporter):
 
     ### PUBLIC METHODS ###
     def calculate_default_measures(self):
-        # TODO
-        raise NotImplementedError
+        self.pkg_graph.node_measures(measures=self.pkg_graph.default_node_measures)
         return self
 
     def summary_view(self):
