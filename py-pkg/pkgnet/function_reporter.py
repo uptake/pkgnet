@@ -1,19 +1,28 @@
 import inspect
 import pandas as pd
 
+from pkgnet.package_report import register_reporter
+
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
-from pkgnet.search_functions import (
-    get_all_package_modules,
+from pkgnet.search_utils import (
+    get_all_modules_in_package,
     get_object,
     get_fully_qualified_name,
+    get_package_name,
     safe_import_module,
 )
 
 
+@register_reporter
 class FunctionReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph
+
+    report_template = "tab_function_report.jinja"
+    report_slug = "function-report"
+    report_name = "Functions"
+    layout = "kamada_kawai_layout"
 
     ### PROPERTIES ###
 
@@ -21,30 +30,26 @@ class FunctionReporter(AbstractGraphReporter):
 
     ### PRIVATE METHODS ###
 
-    def _extract_nodes(self):
-        return self._extract_nodes_and_edges()
-
-    def _extract_edges(self):
-        return self._extract_nodes_and_edges()
-
     def _extract_nodes_and_edges(self):
         if self.pkg_name is None:
             raise AttributeError("pkg_name is not set for this reporter.")
 
-        modules = get_all_package_modules(self.pkg_name)
+        modules = get_all_modules_in_package(self.pkg_name)
 
         # Get all functions used in modules
-        pkg_fcns = []
+        pkg_fcns = set()
         for module_name in modules:
             module_obj = safe_import_module(module_name)
             if module_obj is None:
                 continue
-            pkg_fcns += [
-                # Need to get name from object, because class may be imported
-                get_fully_qualified_name(get_object(f"{module_name}.{function_name}"))
-                for function_name, _ in inspect.getmembers(module_obj, inspect.isfunction)
-            ]
+            pkg_fcns |= {
+                get_fully_qualified_name(fcn_object)
+                for _, fcn_object in inspect.getmembers(module_obj, inspect.isfunction)
+                # Only want functions defined in this module, not imported functions
+                if fcn_object.__module__ == module_name
+            }
 
+        # Edges
         dfs = []
         for fcn_name in pkg_fcns:
             called_fcns = self._get_called_functions(fcn_name)
@@ -57,29 +62,27 @@ class FunctionReporter(AbstractGraphReporter):
 
         self._edges = pd.concat(dfs, axis=0, ignore_index=True)
 
-        internal_nodes = pd.DataFrame({"node": pkg_fcns, "type": ["internal"] * pkg_fcns})
+        # Nodes
+        all_fcns = set(self.edges["SOURCE"].values) | set(self.edges["TARGET"].values)
+        self._nodes = pd.DataFrame(index=all_fcns)
+        self.nodes["package"] = self.nodes.index.map(get_package_name)
 
-        external_fcns = [fcn for fcn in self.edges["TARGET"].values if fcn not in pkg_fcns]
-        external_nodes = pd.DataFrame({"node": external_fcns, "type": ["external"] * len(pkg_fcns)})
-
-        self._nodes = pd.concat([internal_nodes, external_nodes], axis=0, ignore_index=True)
-
-    @staticmethod
-    def _get_called_functions(fcn_name):
+    def _get_called_functions(self, fcn_name):
         fcn_obj = get_object(fcn_name)
         referenced_names = fcn_obj.__code__.co_names
         module = safe_import_module(fcn_obj.__module__)
-        referenced_objs = [getattr(module, ref_name) for ref_name in referenced_names]
+        referenced_objs = [getattr(module, ref_name, None) for ref_name in referenced_names]
         referenced_fcn_names = [
-            get_fully_qualified_name(obj) for obj in referenced_objs if is_package_function(obj)
+            get_fully_qualified_name(obj)
+            for obj in referenced_objs
+            if obj is not None and is_package_function(obj, self.pkg_name)
         ]
         return referenced_fcn_names
 
 
 def is_package_function(obj, pkg_name):
-    return inspect.isfunction and is_package_object(obj, pkg_name=pkg_name)
+    return inspect.isfunction(obj) and is_package_object(obj, pkg_name=pkg_name)
 
 
 def is_package_object(obj, pkg_name):
-    module_name = obj.__module__
-    return module_name.split(".", 1)[0] == pkg_name
+    return get_package_name(obj.__module__) == pkg_name

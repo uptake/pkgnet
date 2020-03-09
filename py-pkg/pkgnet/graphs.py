@@ -1,4 +1,5 @@
 import networkx as nx
+import pandas as pd
 
 
 class AbstractGraph:
@@ -34,12 +35,23 @@ class AbstractGraph:
             # If not already calculated it, calculate and add to node dataframe
             if m not in self.nodes.columns:
                 result = getattr(self.NodeMeasureFunctions, m)(self.nx_graph)
-                self.nodes[m] = self.nodes["node"].apply(lambda n: result[n])
+                self.nodes[m] = self.nodes.index.map(lambda n: result[n])
 
-        return self.nodes[["node"] + measures]
+        return self.nodes[measures]
 
     def graph_measures(self, measures=None):
         pass
+
+    def compute_layout(self, layout):
+        # Validation
+        layout_func = getattr(nx.drawing.layout, layout, None)
+        if layout_func is None:
+            # TODO: raise exception
+            pass
+        positions = layout_func(self.nx_graph)
+        positions_df = pd.DataFrame.from_records(positions).transpose()
+        positions_df.columns = ["x", "y"]
+        return positions_df
 
     ### PRIVATE METHODS ###
 
@@ -51,7 +63,7 @@ class AbstractGraph:
 
         # Unconnected graph
         unconnected_graph = self._nx_graph_class()
-        unconnected_graph.add_nodes_from(self.nodes["node"].values)
+        unconnected_graph.add_nodes_from(self.nodes.index.values)
 
         # Combine graphs
         complete_graph = nx.compose(connected_graph, unconnected_graph)

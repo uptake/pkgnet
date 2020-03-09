@@ -1,7 +1,5 @@
 <div id="{{ reporter.report_slug }}-graph-viz" style="width: 100%; height:480px"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.14.0/cytoscape.min.js" integrity="sha256-rI7zH7xDqO306nxvXUw9gqkeBpvvmddDdlXJjJM7rEM=" crossorigin="anonymous"></script>
-
 <script>
   var nodes = JSON.parse('{{ reporter.graph_viz.nodes_to_json() }}');
   var edges = JSON.parse('{{ reporter.graph_viz.edges_to_json() }}');

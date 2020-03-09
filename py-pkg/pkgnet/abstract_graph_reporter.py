@@ -1,11 +1,16 @@
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
 from pkgnet.graph_viz import VisJs
 from abc import abstractmethod
+from pkgnet.html_dependencies import HtmlDependencies
 
 
 class AbstractGraphReporter(AbstractPackageReporter):
 
     _graph_class = None
+
+    _html_dependencies = HtmlDependencies(
+        scripts=["jquery-3.4.1.min.js", "datatables.min.js"], stylesheets=["datatables.min.css"]
+    )
 
     def __init__(self, viz_class=VisJs):
         super().__init__()
@@ -20,13 +25,13 @@ class AbstractGraphReporter(AbstractPackageReporter):
     @property
     def nodes(self):
         if self._nodes is None:
-            self._extract_nodes()
+            self._extract_nodes_and_edges()
         return self._nodes
 
     @property
     def edges(self):
         if self._edges is None:
-            self._extract_edges()
+            self._extract_nodes_and_edges()
         return self._edges
 
     @property
@@ -42,7 +47,7 @@ class AbstractGraphReporter(AbstractPackageReporter):
     @property
     def graph_viz(self):
         if self._graph_viz is None:
-            self._graph_viz = self.viz_class(nodes=self.nodes, edges=self.edges)
+            self._graph_viz = self.viz_class(reporter=self)
         return self._graph_viz
 
     @property
@@ -54,8 +59,25 @@ class AbstractGraphReporter(AbstractPackageReporter):
         # TODO: Validation
         self._viz_class = value
 
-    ### PUBLIC METHODS ###
+    @property
+    def nodes_table_html(self):
+        datatables_init_script = f"""
+        <script>
+            $(document).ready( function () {{
+                $('#{self.report_slug}-table').DataTable();
+            }} );
+        </script>
+        """
+        return (
+            self.nodes.to_html(classes=["display"], table_id=f"{self.report_slug}-table")
+            + datatables_init_script
+        )
 
+    @property
+    def html_dependencies(self):
+        return self._html_dependencies + self.graph_viz.html_dependencies
+
+    ### PUBLIC METHODS ###
     def calculate_default_measures(self):
         # TODO
         raise NotImplementedError
@@ -69,9 +91,5 @@ class AbstractGraphReporter(AbstractPackageReporter):
     ### PRIVATE METHODS ###
 
     @abstractmethod
-    def _extract_nodes(self):
-        raise NotImplementedError("Node extraction not implemented for this reporter.")
-
-    @abstractmethod
-    def _extract_edges(self):
-        raise NotImplementedError("Edge extraction not implemented for this reporter.")
+    def _extract_nodes_and_edges(self):
+        pass

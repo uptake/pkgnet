@@ -6,72 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{pkg_name}} | Package Report by pkgnet</title>
 
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/flatly/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-yrfSO0DBjS56u5M+SjWTyAHujrkiYVtRYh2dtB3yLQtUz3bodOeialO59u5lUCFF" crossorigin="anonymous">
+    {% for script_block in html_dependencies.script_blocks %}
+        {{ script_block }}
+    {% endfor %}
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
-
-    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    {% for stylesheet_block in html_dependencies.stylesheet_blocks %}
+        {{ stylesheet_block }}
+    {% endfor %}
 
     <style>
         body .main-container {
             max-width: 80%;
         }
     </style>
+    <script type="text/javascript">
+        window.onresize = function() {};
+    </script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="http://uptake.github.io/pkgnet">pkgnet</a>
+        <a class="navbar-brand" href="http://uptake.github.io/pkgnet">pkgnet</a> &#8226; Package Report
     </nav>
     <div class="container-fluid main-container">
-        <div class="fluid-row" id="header">
-            <h1 class="title toc-ignore">
-                {{ pkg_name }}
-                <span style="height: 15px; width: auto; display: inline-block;">
-                    {% include "python_logo.svg" %}
-                </span>
+        <div class="row" id="header">
+            <div class="col">
+                <h1>
+                    {{ pkg_name }}
+                    <span style="height: 15px; width: auto; display: inline-block;">
+                        {% include "assets/python_logo.svg" %}
+                    </span>
+                </h1>
+            </div>
         </div>
-            </h1>
-
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            {# First Reporter Tab #}
-                {% set reporter = reporters[0] %}
-                <li class="nav-item">
-                    <a class="nav-link active" id="{{ reporter.report_slug }}-tab" data-toggle="tab" href="#{{ reporter.report_slug }}" role="tab"
-                    aria-controls="home" aria-selected="true">{{ reporter.report_name }}</a>
-                </li>
-            {# / First Reporter Tab #}
-            {% for reporter in reporters[1:] %}
-                <li class="nav-item">
-                    <a class="nav-link" id="{{ reporter.report_slug }}-tab" data-toggle="tab" href="#{{ reporter.report_slug }}" role="tab"
-                    aria-controls="home" aria-selected="true">{{ reporter.report_name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            {# First Reporter Tab #}
-                {% set reporter = reporters[0] %}
-                <div class="tab-pane fade show active" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
-                    {% include reporter.report_template %}
+        <div class="row" id="content">
+            <div class="col">
+                <ul class="nav nav-tabs" id="tab-navigation" role="tablist">
+                    {# First Reporter Tab #}
+                        {% set reporter = reporters[0] %}
+                        <li class="nav-item">
+                            <a class="nav-link active" id="{{ reporter.report_slug }}-tab" data-toggle="tab" href="#{{ reporter.report_slug }}" role="tab"
+                            aria-controls="{{ reporter.report_slug }}" aria-selected="true" onclick="window.onresize()">{{ reporter.report_name }}</a>
+                        </li>
+                    {# / First Reporter Tab #}
+                    {% for reporter in reporters[1:] %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="{{ reporter.report_slug }}-tab" data-toggle="tab" href="#{{ reporter.report_slug }}" role="tab"
+                            aria-controls="{{ reporter.report_slug }}" aria-selected="false" onclick="window.onresize()">{{ reporter.report_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content" id="tab-content">
+                    {# First Reporter Tab #}
+                        {% set reporter = reporters[0] %}
+                        <div class="tab-pane fade show active" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
+                            {% include reporter.report_template %}
+                        </div>
+                    {# / First Reporter Tab #}
+                    {% for reporter in reporters[1:] %}
+                        <div class="tab-pane fade" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
+                            {% include reporter.report_template %}
+                        </div>
+                    {% endfor %}
                 </div>
-            {# / First Reporter Tab #}
-            {% for reporter in reporters[1:] %}
-                <div class="tab-pane fade" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
-                    {% include reporter.report_template %}
-                </div>
-            {% endfor %}
+            </div>
         </div>
     </div>
 </body>

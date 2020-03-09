@@ -3,12 +3,24 @@ import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
-from pkgnet.search_functions import get_all_package_modules, safe_import_module
+from pkgnet.search_utils import (
+    get_all_modules_in_package,
+    safe_import_module,
+    get_package_name,
+    get_fully_qualified_name,
+)
+from pkgnet.package_report import register_reporter
 
 
+@register_reporter
 class ImportReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph
+
+    report_template = "tab_import_report.jinja"
+    report_slug = "import-report"
+    report_name = "Imported Modules"
+    layout = "kamada_kawai_layout"
 
     def __init__(self):
         super().__init__()
@@ -20,24 +32,18 @@ class ImportReporter(AbstractGraphReporter):
 
     ### PRIVATE METHODS ###
 
-    def _extract_nodes(self):
-        return self._extract_nodes_and_edges()
-
-    def _extract_edges(self):
-        return self._extract_nodes_and_edges()
-
     def _extract_nodes_and_edges(self):
         if self.pkg_name is None:
             raise AttributeError("pkg_name is not set for this reporter.")
 
-        pkg_modules = get_all_package_modules(self.pkg_name)
+        pkg_modules = get_all_modules_in_package(self.pkg_name)
 
         # TODO: Something about edge search is not deterministic. figure this out
 
-        # Set edges df
+        # Edges
         dfs = []
         for module in pkg_modules:
-            imports = self._get_imported_modules(module)
+            imports = get_imported_modules(module)
             # If module A imports module B, then A -> B
             # A is the SOURCE and B is the TARGET
             # This is UML dependency convention
@@ -45,30 +51,25 @@ class ImportReporter(AbstractGraphReporter):
 
         self._edges = pd.concat(dfs, axis=0, ignore_index=True)
 
-        internal_nodes = pd.DataFrame(
-            {"node": list(pkg_modules), "type": ["internal"] * len(pkg_modules)}
-        )
+        # Nodes
+        all_modules = set(self.edges["SOURCE"].values) | set(self.edges["TARGET"].values)
+        self._nodes = pd.DataFrame(index=all_modules)
+        self.nodes["package"] = self.nodes.index.map(get_package_name)
 
-        external_modules = [
-            module for module in self.edges["TARGET"].values if module not in pkg_modules
-        ]
-        external_nodes = pd.DataFrame(
-            {"node": external_modules, "type": ["external"] * len(external_modules)}
-        )
 
-        self._nodes = pd.concat([internal_nodes, external_nodes], axis=0, ignore_index=True)
+def get_imported_modules(module_name: str):
 
-    @staticmethod
-    def _get_imported_modules(module_name):
-        module_obj = safe_import_module(module_name)
-        imports = []
-        if module_obj is None:
-            return imports
-        for member_name, member_obj in inspect.getmembers(module_obj):
-            if inspect.ismodule(member_obj):
-                imports.append(member_name)
-            else:
-                member_module = getattr(member_obj, "__module__", None)
-                if member_module is not None and member_module not in (module_name, "buildins"):
-                    imports.append(member_module)
-        return imports
+    module_obj = safe_import_module(module_name)
+    import_names = []
+    if module_obj is None:
+        return import_names
+    for _, member_obj in inspect.getmembers(module_obj):
+        if inspect.ismodule(member_obj):
+            # Member is itself a module ("import x")
+            import_names.append(get_fully_qualified_name(member_obj))
+        else:
+            # Get all modules imported with "from x import y"
+            member_module = getattr(member_obj, "__module__", None)
+            if member_module is not None and member_module not in (module_name, "buildins"):
+                import_names.append(member_module)
+    return import_names

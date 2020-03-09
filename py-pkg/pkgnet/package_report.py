@@ -1,11 +1,7 @@
 from pathlib import Path
 
-from pkgnet.summary_reporter import SummaryReporter
-from pkgnet.dependency_reporter import DependencyReporter
-from pkgnet.function_reporter import FunctionReporter
-from pkgnet.module_reporter import ModuleReporter
-from pkgnet.import_reporter import ImportReporter
-from pkgnet.inheritance_reporter import InheritanceReporter
+from pkgnet.abstract_package_reporter import AbstractPackageReporter
+from pkgnet.html_dependencies import HtmlDependencies
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 import webbrowser
@@ -19,6 +15,11 @@ _JINJA_ENV = Environment(
 class PackageReport:
 
     _report_template = _JINJA_ENV.get_template("package_report.jinja")
+
+    _html_dependencies = HtmlDependencies(
+        scripts=["jquery-3.4.1.min.js", "popper.min.js", "bootstrap.min.js"],
+        stylesheets=["bootstrap.min.css"],
+    )
 
     def __init__(self, pkg_name, report_path, pkg_path=None):
         # TODO: Validation
@@ -47,87 +48,58 @@ class PackageReport:
         return [reporter for reporter in self._reporters.values()]
 
     @property
-    def summary_reporter(self):
-        return self._reporters["SummaryReporter"]
-
-    @summary_reporter.setter
-    def summary_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=SummaryReporter)
-
-    @property
-    def dependency_reporter(self):
-        return self._reporters["DependencyReporter"]
-
-    @dependency_reporter.setter
-    def dependency_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=DependencyReporter)
-
-    @property
-    def module_reporter(self):
-        return self._reporters["ModuleReporter"]
-
-    @module_reporter.setter
-    def module_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=ModuleReporter)
-
-    @property
-    def function_reporter(self):
-        return self._reporters["FunctionReporter"]
-
-    @function_reporter.setter
-    def function_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=FunctionReporter)
-
-    @property
-    def import_reporter(self):
-        return self._reporters["ImportReporter"]
-
-    @import_reporter.setter
-    def import_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=ImportReporter)
-
-    @property
-    def inheritance_reporter(self):
-        return self._reporters["InheritanceReporter"]
-
-    @inheritance_reporter.setter
-    def inheritance_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=InheritanceReporter)
+    def html_dependencies(self):
+        return sum(
+            [self._html_dependencies] + [reporter.html_dependencies for reporter in self.reporters],
+            HtmlDependencies(),
+        )
 
     ### PUBLIC METHODS ###
 
     def add_reporter(self, reporter):
-        self._set_reporter(reporter, expected_class=reporter.__class__)
+        setattr(self, reporter.__class__.__name__, reporter)
         return self
 
     def render_report(self):
         rendered_report = self._report_template.render(
-            pkg_name=self.pkg_name, reporters=self.reporters
+            pkg_name=self.pkg_name,
+            reporters=self.reporters,
+            html_dependencies=self.html_dependencies,
         )
 
         with open(self.report_path, "w+") as report_file:
             report_file.write(rendered_report)
             webbrowser.open(self.report_path.as_uri())
 
-    ### PRIVATE METHODS ###
 
-    def _set_reporter(self, reporter, expected_class):
-        # TODO: Validation
+def _reporter_property(reporter_class, docstring=None):
+    """Property factory for reporters.
 
-        self._reporters[expected_class.__name__] = reporter
+    Args:
+        reporter_class ([type]): [description]
+        docstring ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        [type]: [description]
+    """
+
+    def getter(self):
+        return self._reporters[reporter_class.__name__]
+
+    def setter(self, reporter):
+        if not isinstance(reporter, reporter_class):
+            raise TypeError(
+                f"Cannot assign object of type {reporter.__class__} "
+                + "to slot for {reporter_class.__name__}."
+            )
+        self._reporters[reporter_class.__name__] = reporter
         reporter.set_package(pkg_name=self.pkg_name, pkg_path=self.pkg_path)
 
-
-def create_package_report(pkg_name, pkg_reporters, pkg_path, report_path):
-    # TODO: Validation
-
-    created_report = PackageReport(pkg_name=pkg_name, pkg_path=pkg_path, report_path=report_path)
-
-    for reporter in pkg_reporters:
-        created_report.add_reporter(reporter)
-
-    return created_report
+    return property(getter, setter, doc=docstring)
 
 
-def default_reporters():
-    return [DependencyReporter()]
+def register_reporter(cls):
+    if not issubclass(cls, AbstractPackageReporter):
+        raise TypeError("Only subclasses of AbstractPackageReporter can be registered.")
+    setattr(PackageReport, cls.__name__, _reporter_property(cls))
+    return cls

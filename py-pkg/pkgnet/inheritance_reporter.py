@@ -3,18 +3,26 @@ import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
-from pkgnet.search_functions import (
-    get_all_package_modules,
+from pkgnet.search_utils import (
+    get_all_modules_in_package,
     get_object,
     get_fully_qualified_name,
     safe_import_module,
-    _recursive_node_search,
+    recursive_node_search,
+    get_package_name,
 )
+from pkgnet.package_report import register_reporter
 
 
+@register_reporter
 class InheritanceReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph
+
+    report_template = "tab_inheritance_report.jinja"
+    report_slug = "inheritance-report"
+    report_name = "Class Inheritance"
+    layout = "kamada_kawai_layout"
 
     ### PROPERTIES ###
 
@@ -22,73 +30,46 @@ class InheritanceReporter(AbstractGraphReporter):
 
     ### PRIVATE METHODS ###
 
-    def _extract_nodes(self):
+    def _extract_nodes_and_edges(self):
         if self.pkg_name is None:
             raise AttributeError("pkg_name is not set for this reporter.")
 
-        modules = get_all_package_modules(self.pkg_name)
+        pkg_modules = get_all_modules_in_package(self.pkg_name)
 
-        # Get all classes used in modules
-        classes = []
-        for module_name in modules:
+        # Get all classes defined in modules
+        pkg_classes = set()
+        for module_name in pkg_modules:
             module_obj = safe_import_module(module_name)
             if module_obj is None:
                 continue
-            classes += [
-                # Need to get name from object, because class may be imported
-                get_fully_qualified_name(get_object(f"{module_name}.{class_name}"))
-                for class_name, _ in inspect.getmembers(module_obj, inspect.isclass)
-            ]
-
-        # Keep only classes defined in this package
-        # Other classes may be imported to be used in functions
-        classes = [
-            class_name for class_name in classes if class_name.split(".", 1)[0] == self.pkg_name
-        ]
+            pkg_classes |= {
+                get_fully_qualified_name(class_obj)
+                for _, class_obj in inspect.getmembers(module_obj, inspect.isclass)
+                # Only want classes defined in this module, not imported
+                if class_obj.__module__ == module_name
+            }
 
         # Search classes for ancestors
-        print(classes)
-        searched_classes = set()
-        for class_name in classes:
-            _recursive_node_search(
-                class_name, self._get_parent_classes, seen_nodes=searched_classes
-            )
-        searched_classes = list(searched_classes)
-
-        self._nodes = pd.DataFrame(
-            {
-                "node": searched_classes,
-                "package": [class_name.split(".", 1)[0] for class_name in searched_classes],
-            }
-        )
-
-    def _extract_edges(self):
-        if self.pkg_name is None:
-            raise AttributeError("pkg_name is not set for this reporter.")
-
-        dfs = []
-        for class_name in self.nodes["node"].values:
-            parent_class_names = self._get_parent_classes(class_name)
+        nodes = set()
+        edges = set()
+        for class_name in pkg_classes:
             # If class A is child of class B, then A -> B
             # A is the SOURCE and B is the TARGET
             # This is UML class inheritance convention
-            dfs.append(
-                pd.DataFrame(
-                    {
-                        "SOURCE": [class_name] * len(parent_class_names),
-                        "TARGET": parent_class_names,
-                    }
-                )
+            recursive_node_search(
+                class_name, get_parent_classes, seen_nodes=nodes, seen_edges=edges
             )
 
-        self._edges = pd.concat(dfs, axis=0, ignore_index=True)
+        self._nodes = pd.DataFrame(index=nodes)
+        self.nodes["package"] = self.nodes.index.map(get_package_name)
 
-    @staticmethod
-    def _get_parent_classes(class_name):
-        print(class_name)
-        class_obj = get_object(class_name)
-        parent_class_objs = class_obj.__bases__
-        parent_class_names = [
-            get_fully_qualified_name(parent_class_obj) for parent_class_obj in parent_class_objs
-        ]
-        return parent_class_names
+        self._edges = pd.DataFrame(edges)
+
+
+def get_parent_classes(class_name):
+    class_obj = get_object(class_name)
+    parent_class_objs = class_obj.__bases__
+    parent_class_names = [
+        get_fully_qualified_name(parent_class_obj) for parent_class_obj in parent_class_objs
+    ]
+    return parent_class_names

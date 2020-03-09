@@ -1,8 +1,6 @@
 
 <div id="{{ reporter.report_slug }}-graph-viz" style="width: 100%; height:480px"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/sigma.min.js" integrity="sha256-ii2D7w2jthCadZtIl2OjRn2vu1iEtGWcOrmd+UOZorc=" crossorigin="anonymous"></script>
-
 <script>
   var data = {
     nodes: JSON.parse('{{ reporter.graph_viz.nodes_to_json() }}'),

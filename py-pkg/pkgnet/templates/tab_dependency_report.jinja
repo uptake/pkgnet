@@ -1,13 +1,17 @@
-<h2>Dependency Network</h2>
+<h3>Dependency Network</h3>
 
-This section analyzes the recursive package dependencies of <b>{{pkg_name}}</b>.
+<p>
+    This section analyzes the recursive package dependencies of <b>{{pkg_name}}</b>.
+</p>
 
-<h3>Vizualization</h3>
+<h4>Vizualization</h4>
 
-Nodes are packages. Edges point in the direction of dependence.
+<p>
+    Nodes are packages. Edges point in the direction of dependence.
+</p>
 
 {% include reporter.graph_viz.viz_template %}
 
-<h3>Nodes Table</h3>
+<h4>Nodes Table</h4>
 
-{{ reporter.get_summary_view() }}
+{{ reporter.nodes_table_html }}
