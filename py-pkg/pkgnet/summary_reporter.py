@@ -1,10 +1,11 @@
-from pkgnet.abstract_package_reporter import AbstractPackageReporter
-from pkgnet.package_report import register_reporter
-from pkgnet.html_dependencies import HtmlDependencies
-
-from pkg_resources import get_distribution
 from email import message_from_string
+
 import pandas as pd
+from pkg_resources import get_distribution
+
+from pkgnet.abstract_package_reporter import AbstractPackageReporter
+from pkgnet.html_dependencies import HtmlDependencies
+from pkgnet.package_report import register_reporter
 
 
 @register_reporter

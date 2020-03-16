@@ -1,5 +1,5 @@
-import pkg_resources
 import pandas as pd
+import pkg_resources
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph

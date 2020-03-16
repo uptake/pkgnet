@@ -1,6 +1,7 @@
+from abc import ABC, abstractmethod
+
 import networkx as nx
 import pandas as pd
-from abc import ABC, abstractmethod
 
 
 class AbstractGraph(ABC):

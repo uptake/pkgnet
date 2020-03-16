@@ -1,8 +1,8 @@
-from pkgnet.package_report import PackageReport
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
-from pkgnet.summary_reporter import SummaryReporter
 from pkgnet.dependency_reporter import DependencyReporter
 from pkgnet.function_reporter import FunctionReporter
+from pkgnet.package_report import PackageReport
+from pkgnet.summary_reporter import SummaryReporter
 
 
 def default_reporters():

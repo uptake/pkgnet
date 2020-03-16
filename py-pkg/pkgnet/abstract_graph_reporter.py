@@ -1,6 +1,7 @@
+from abc import abstractmethod
+
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
 from pkgnet.graph_viz import VisJs
-from abc import abstractmethod
 from pkgnet.html_dependencies import HtmlDependencies
 
 

@@ -1,5 +1,5 @@
-from importlib import import_module
 from abc import ABC
+from importlib import import_module
 
 
 class AbstractPackageReporter(ABC):

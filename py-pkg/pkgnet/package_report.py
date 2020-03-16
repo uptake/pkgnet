@@ -1,11 +1,10 @@
+import webbrowser
 from pathlib import Path
+
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
 from pkgnet.html_dependencies import HtmlDependencies
-
-from jinja2 import Environment, PackageLoader, select_autoescape
-import webbrowser
-
 
 _JINJA_ENV = Environment(
     loader=PackageLoader("pkgnet", "templates"), autoescape=select_autoescape(["html", "xml"]),

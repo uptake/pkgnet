@@ -1,14 +1,14 @@
 import inspect
-import pandas as pd
 
-from pkgnet.package_report import register_reporter
+import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
+from pkgnet.package_report import register_reporter
 from pkgnet.search_utils import (
     get_all_modules_in_package,
-    get_object,
     get_fully_qualified_name,
+    get_object,
     get_package_name,
     safe_import_module,
 )

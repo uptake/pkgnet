@@ -1,7 +1,7 @@
-import sys
 import pkgutil
-from importlib import import_module
+import sys
 from collections import namedtuple
+from importlib import import_module
 from inspect import ismodule
 
 
