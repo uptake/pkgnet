@@ -10,4 +10,5 @@ setup(
     license="BSD",
     packages=["pkgnet"],
     zip_safe=False,
+    install_requires=["jinja2", "networkx", "pandas", "setuptools"],
 )
