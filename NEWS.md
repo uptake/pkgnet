@@ -12,7 +12,6 @@ _No changes since latest release_
 * Rounding format within report tables improved.
 * Contact information updated throughout the package documentation.
 * Appveyor testing configured in order to test windows builds in CI process.
-
 * Package logos were created.  They are available within this repository at `./man/figures`.
 
 ## BUGFIXES
