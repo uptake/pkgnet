@@ -79,7 +79,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Brian Burns \email{brian.burns@uptake.com}
+\strong{Maintainer}: Brian Burns \email{brian.burns.opensource@gmail.com}
 
 Authors:
 \itemize{

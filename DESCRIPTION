@@ -1,14 +1,14 @@
 Package: pkgnet
 Type: Package
 Title: Get Network Representation of an R Package
-Version: 0.4.0.9999
+Version: 0.4.1
 Authors@R: c(
-    person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
+    person("Brian", "Burns", email = "brian.burns.opensource@gmail.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "jaylamb20@gmail.com", role = c("aut")),
     person("Patrick", "Boueri", email = "patrick.boueri@uptake.com", role = c("ctb")),
     person("Jay", "Qi", email = "jayqi.opensource@gmail.com", role = c("aut"))
     )
-Maintainer: Brian Burns <brian.burns@uptake.com>
+Maintainer: Brian Burns <brian.burns.opensource@gmail.com>
 Description: Tools from the domain of graph theory can be used to quantify the complexity
              and vulnerability to failure of a software package. That is the guiding philosophy
              of this package. 'pkgnet' provides tools to analyze the dependencies between functions

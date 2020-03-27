@@ -1,8 +1,24 @@
 # pkgnet (dev)
 
+_No changes since latest release_
+
+# pkgnet 0.4.1
+
 ## NEW FEATURES
 
 * `CreatePackageReport()` now outputs an object of new class `PackageReport` (instead of a list of reporters). This object will let you interactively manipulate the included reporter objects to customize the report, and regenerate the report on demand. You can also instantiate and interact with a `PackageReport` object directly without `CreatePackageReport()`.
+
+## CHANGES
+* Rounding format within report tables improved.
+* Contact information updated throughout the package documentation.
+* Appveyor testing configured in order to test windows builds in CI process.
+
+* Package logos were created.  They are available within this repository at `./man/figures`.
+
+## BUGFIXES
+* Fixed error handling for erroneous colors within `AbstractGraphReporter$set_plot_node_color_scheme()`.
+* Fixed data.table osx install bug for Travis.
+* Fixed single row data.table handling with R6 report code. 
 
 # pkgnet 0.4.0
 

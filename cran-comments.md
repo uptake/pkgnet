@@ -1,5 +1,15 @@
 # CRAN Submission History
 
+## v 0.4.1
+
+### Submission on XXX
+This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
+
+Please note that the maintainer of this package has not changed, just his email address.  Specifically, "brian.burns@uptake.com" has changed to "brian.burns.opensource@gmail.com".  If you would like further verification of this change, please email Dennis Lee at dennis.lee@uptake.com.  Dennis is a member of the Open Source Software Committee at Uptake as well as legal counsel.  He can confirm this change.  sfg 
+
+As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.
+
+
 ## v 0.4.0
 
 ### Submission on April 1st, 2019
@@ -47,7 +57,7 @@ BUG FIXES
 
 ## v 0.3.1
 
-### CRAN Notiifcation on January 6th, 2019
+### CRAN Notification on January 6th, 2019
 >Dear maintainer,
 >
 >Please see the problems shown on the pkgnet check test results page. 
@@ -147,7 +157,7 @@ Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 CRAN teams' auto-check service
 Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 Check: CRAN incoming feasibility, Result: Note_to_CRAN_maintainers
-  Maintainer: 'Brian Burns <brian.burns@uptake.com>'
+  Maintainer: 'Brian Burns <brian.burns.opensource@gmail.com>'
 
 ---
 
