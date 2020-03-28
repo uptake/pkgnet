@@ -5,7 +5,6 @@ Version: 0.4.1
 Authors@R: c(
     person("Brian", "Burns", email = "brian.burns.opensource@gmail.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "jaylamb20@gmail.com", role = c("aut")),
-    person("Patrick", "Boueri", email = "patrick.boueri@uptake.com", role = c("ctb")),
     person("Jay", "Qi", email = "jayqi.opensource@gmail.com", role = c("aut"))
     )
 Maintainer: Brian Burns <brian.burns.opensource@gmail.com>
@@ -31,7 +30,9 @@ Imports:
     visNetwork
 Suggests:
     devtools,
+    ggplot2,
     testthat,
+    webshot,
     withr
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/uptake/pkgnet, https://uptake.github.io/pkgnet/
