@@ -1,14 +1,16 @@
 # Files currently checked into the repo
 ^docs$
 ^_pkgdown\.yml$
+^pkgdown$
 ^cran-comments\.md$
-^CONDUCT\.md$
+^CODE_OF_CONDUCT\.md$
 ^LICENSE\.MD$
 ^.travis\.yml$
 ^appveyor\.yml$
 ^coverage.sh$
 ^CONTRIBUTING\.md$
 ^test\.sh$
+^CODEOWNERS
 
 # History files
 ^\.Rhistory*

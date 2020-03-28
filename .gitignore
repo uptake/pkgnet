@@ -8,6 +8,7 @@ tests/testthat/Rplots.pdf
 **/*.rds
 **/*.rda
 **/*.csv
+**/*.RData
 
 # Keep data files in testdata
 !/tests/testthat/testdata/*.csv
