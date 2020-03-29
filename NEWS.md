@@ -15,9 +15,10 @@ _No changes since latest release_
 * Package logos were created.  They are available within this repository at `./man/figures`.
 
 ## BUGFIXES
-* Fixed error handling for erroneous colors within `AbstractGraphReporter$set_plot_node_color_scheme()`. ([#262](https://github.com/uptake/pkgnet/pull/262)
-* Fixed data.table osx install bug for Travis. ([#251](https://github.com/uptake/pkgnet/pull/251) thanks @TylerGrantSmith
-* Fixed single row data.table handling with R6 report code. ([#263](https://github.com/uptake/pkgnet/pull/263) thanks @TylerGrantSmith
+* Error handling for erroneous colors within `AbstractGraphReporter$set_plot_node_color_scheme()`. ([#262](https://github.com/uptake/pkgnet/pull/262)
+* data.table osx install bug for Travis. ([#251](https://github.com/uptake/pkgnet/pull/251) Thanks @TylerGrantSmith
+* Single row data.table handling with R6 report code. ([#263](https://github.com/uptake/pkgnet/pull/263) Thanks @TylerGrantSmith
+* Jaccard similarity example in pkgnet-intro vignette. Thanks @marcpaterno
 
 # pkgnet 0.4.0
 

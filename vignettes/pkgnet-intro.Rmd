@@ -340,7 +340,7 @@ Looking at that same large package, let's say we want to explore options for con
 
 ```{r fakeDetail2, eval=FALSE}
 # Get igraph object
-funcGraph <- report2$FunctionReporter$pkg_graph
+funcGraph <- report2$FunctionReporter$pkg_graph$igraph
 funcNames <- igraph::vertex_attr(funcGraph, name = "name")
 
 # Jaccard Similarity
