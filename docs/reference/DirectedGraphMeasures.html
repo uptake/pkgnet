@@ -15,21 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,18 +46,17 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Measures for Directed Graph Class — DirectedGraphMeasures" />
 
+<meta property="og:title" content="Measures for Directed Graph Class — DirectedGraphMeasures" />
 <meta property="og:description" content="Descriptions for all available node and graph measures for
    networks modeled by DirectedGraph." />
-
 <meta property="og:image" content="https://uptake.github.io/pkgnet/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -73,9 +80,10 @@
   gtag('config', 'UA-137355155-1');
 </script>
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -89,7 +97,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -111,7 +119,6 @@
   <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/uptake/pkgnet">
@@ -121,7 +128,7 @@
 </li>
       </ul>
       
-      <form class="navbar-form navbar-right" role="search">
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
         </div>
@@ -132,6 +139,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -143,100 +151,99 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Descriptions for all available node and graph measures for
    networks modeled by <a href='DirectedGraph.html'>DirectedGraph</a>.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="node-measures"><a class="anchor" href="#node-measures"></a>Node Measures</h2>
 
     
-    <dl class='dl-horizontal'>
+
+<dl'>
     <dt><b><code>outDegree</code></b></dt><dd><p>: outdegree, the number of outward edges (tail ends).
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/degree'>igraph::degree</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/degree.html'>igraph::degree</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Directed_graph#Indegree_and_outdegree'>Wikipedia</a>]</p></dd>
     <dt><b><code>inDegree</code></b></dt><dd><p>: indegree, number of inward edges (head ends).
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/degree'>igraph::degree</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/degree.html'>igraph::degree</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Directed_graph#Indegree_and_outdegree'>Wikipedia</a>]</p></dd>
     <dt><b><code>outCloseness</code></b></dt><dd><p>: closeness centrality (out), a measure of
     path lengths to other nodes along edge directions.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/closeness'>igraph::closeness</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/closeness.html'>igraph::closeness</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Closeness_centrality'>Wikipedia</a>]</p></dd>
     <dt><b><code>inCloseness</code></b></dt><dd><p>: closeness centrality (in), a measure of
     path lengths to other nodes in reverse of edge directions.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/closeness'>igraph::closeness</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/closeness.html'>igraph::closeness</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Closeness_centrality'>Wikipedia</a>]</p></dd>
     <dt><b><code>numRecursiveDeps</code></b></dt><dd><p>: number recursive dependencies, i.e., count of all nodes reachable by following edges
     out from this node.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/ego'>igraph::neighborhood.size</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/ego.html'>igraph::neighborhood.size</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Rooted_graph'>Wikipedia</a>]</p></dd>
     <dt><b><code>numRecursiveRevDeps</code></b></dt><dd><p>: number of recursive reverse dependencies (dependents), i.e., count all nodes reachable by following edges
     into this node in reverse direction.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/ego'>igraph::neighborhood.size</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/ego.html'>igraph::neighborhood.size</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Rooted_graph'>Wikipedia</a>]</p></dd>
     <dt><b><code>betweenness</code></b></dt><dd><p>: betweenness centrality, a measure of
     the number of shortest paths in graph passing through this node
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/betweenness'>igraph::betweenness</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/betweenness.html'>igraph::betweenness</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Betweenness_centrality'>Wikipedia</a>]</p></dd>
     <dt><b><code>pageRank</code></b></dt><dd><p>: Google PageRank.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/page_rank'>igraph::page_rank</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/page_rank.html'>igraph::page_rank</a></code>.
     [<a href='https://en.wikipedia.org/wiki/PageRank'>Wikipedia</a>]</p></dd>
     <dt><b><code>hubScore</code></b></dt><dd><p>: hub score from Hyperlink-Induced Topic
     Search (HITS) algorithm.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/hub_score'>igraph::hub_score</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/hub_score.html'>igraph::hub_score</a></code>.
     [<a href='https://en.wikipedia.org/wiki/HITS_algorithm'>Wikipedia</a>]</p></dd>
     <dt><b><code>authorityScore</code></b></dt><dd><p>: authority score from
     Hyperlink-Induced Topic Search (HITS) algorithm.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/authority_score'>igraph::authority_score</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/authority_score.html'>igraph::authority_score</a></code>.
     [<a href='https://en.wikipedia.org/wiki/HITS_algorithm'>Wikipedia</a>]</p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="graph-measures"><a class="anchor" href="#graph-measures"></a>Graph Measures</h2>
 
     
-    <dl class='dl-horizontal'>
+
+<dl'>
     <dt><b><code>graphOutDegree</code></b></dt><dd><p>: graph freeman centralization for
     outdegree. A measure of the most central node by outdegree in relation to
     all other nodes.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/centralize'>igraph::centralize</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/centralize.html'>igraph::centralize</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Centrality#Freeman_centralization'>Wikipedia</a>]</p></dd>
     <dt><b><code>graphInDegree</code></b></dt><dd><p>: graph Freeman centralization for
     indegree. A measure of the most central node by indegree in relation to
     all other nodes.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/centralize'>igraph::centralize</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/centralize.html'>igraph::centralize</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Centrality#Freeman_centralization'>Wikipedia</a>]</p></dd>
     <dt><b><code>graphOutClosness</code></b></dt><dd><p>: graph Freeman centralization for
     out-closeness. A measure of the most central node by out-closeness in relation to
     all other nodes.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/centralize'>igraph::centralize</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/centralize.html'>igraph::centralize</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Centrality#Freeman_centralization'>Wikipedia</a>]</p></dd>
     <dt><b><code>graphInCloseness</code></b></dt><dd><p>: graph Freeman centralization for
     outdegree. A measure of the most central node by outdegree in relation to
     all other nodes.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/centralize'>igraph::centralize</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/centralize.html'>igraph::centralize</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Centrality#Freeman_centralization'>Wikipedia</a>]</p></dd>
     <dt><b><code>graphBetweennness</code></b></dt><dd><p>: graph Freeman centralization for
     betweenness A measure of the most central node by betweenness in relation to
     all other nodes.
-    Calculated by <code><a href='https://www.rdocumentation.org/packages/igraph/topics/centralize'>igraph::centralize</a></code>.
+    Calculated by <code><a href='https://rdrr.io/pkg/igraph/man/centralize.html'>igraph::centralize</a></code>.
     [<a href='https://en.wikipedia.org/wiki/Centrality#Freeman_centralization'>Wikipedia</a>]</p></dd>
+
 </dl>
-    
+
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#node-measures">Node Measures</a></li>
-
-      <li><a href="#graph-measures">Graph Measures</a></li>
-          </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -244,8 +251,9 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
+
       </footer>
    </div>
 
@@ -268,6 +276,8 @@
 </script>
 
 
+
   </body>
 </html>
+
 

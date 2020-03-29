@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function Interdependency Reporter — FunctionReporter • pkgnet</title>
+<title>Package Report — PackageReport • pkgnet</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,15 @@
 
 
 
-<meta property="og:title" content="Function Interdependency Reporter — FunctionReporter" />
-<meta property="og:description" content="This reporter looks at the network of interdependencies of its
-   defined functions. Measures of centrality from graph theory can indicate
-   which function is most important to a package. Combined with unit test
-   coverage information---also provided by this reporter--- it can be used
-   as a powerful tool to prioritize test writing." />
+<meta property="og:title" content="Package Report — PackageReport" />
+<meta property="og:description" content="pkgnet compiles one or more package reporters into a package
+    report for a specified package. PackageReport is an R6 class that
+    holds all of those reporters and has a method render_report()
+    to generate an HTML report file. You can access each individual reporter
+    and modify it using its methods if you wish.
+The function CreatePackageReport() is a shortcut for both
+    generating a PackageReport object with instantiated reporters
+    and creating the HTML report in one call." />
 <meta property="og:image" content="https://uptake.github.io/pkgnet/logo.png" />
 
 
@@ -148,118 +151,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Function Interdependency Reporter</h1>
-    <small class="dont-index">Source: <a href='https://github.com/uptake/pkgnet/blob/master/R/FunctionReporter.R'><code>R/FunctionReporter.R</code></a></small>
-    <div class="hidden name"><code>FunctionReporter.Rd</code></div>
+    <h1>Package Report</h1>
+    <small class="dont-index">Source: <a href='https://github.com/uptake/pkgnet/blob/master/R/CreatePackageReport.R'><code>R/CreatePackageReport.R</code></a></small>
+    <div class="hidden name"><code>PackageReport.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This reporter looks at the network of interdependencies of its
-   defined functions. Measures of centrality from graph theory can indicate
-   which function is most important to a package. Combined with unit test
-   coverage information---also provided by this reporter--- it can be used
-   as a powerful tool to prioritize test writing.</p>
+    <p>pkgnet compiles one or more package reporters into a package
+    report for a specified package. <code>PackageReport</code> is an R6 class that
+    holds all of those reporters and has a method <code>render_report()</code>
+    to generate an HTML report file. You can access each individual reporter
+    and modify it using its methods if you wish.</p>
+<p>The function <code><a href='CreatePackageReport.html'>CreatePackageReport</a>()</code> is a shortcut for both
+    generating a <code>PackageReport</code> object with instantiated reporters
+    and creating the HTML report in one call.</p>
     </div>
 
-
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-<h3>R6 Method Support:</h3>
-<p>R6 classes are supported, with their methods treated as functions by the
-    reporter.</p>
-<p></p><ul>
-<li><p>R6 methods will be named like
-         <code>&lt;classname&gt;$&lt;methodtype&gt;$&lt;methodname&gt;</code>, e.g.,
-         <code>FunctionReporter$private_methods$extract_nodes</code>.</p></li>
-<li><p>Note that the class name used will be the <strong>name of the
-         generator object in the package's namespace</strong>.</p></li>
-<li><p>The <code>classname</code> attribute of the class is <strong>not</strong> used.
-         In general, it is not required to be defined or the same as the
-         generator object name. This attribute is used primarily for
-         S3 dispatch.</p></li>
-</ul>
-
-<h3>Known Limitations:</h3>
-<p></p><ul>
-<li><p>Using non-standard evaluation to refer to things (e.g, dataframe
-          column names) that have the same name as a function will trick
-          <code>FunctionReporter</code> into thinking the function was called. This
-          can be avoided if you don't use reuse function names for other
-          purposes.</p></li>
-<li><p>Functions stored as list items and not assigned to the package
-          namespace will be invisible to <code>FunctionReporter</code>.</p></li>
-<li><p>Calls to methods of instantiated R6 or reference objects will
-          not be recognized. We don't have a reliable way of identifying
-          instantiated objects, or identifying their class.</p></li>
-<li><p>Reference class methods are not yet supported. They will not be
-          identified as nodes by <code>FunctionReporter</code>.</p></li>
-</ul>
 
 
     <h2 class="hasAnchor" id="class-constructor"><a class="anchor" href="#class-constructor"></a>Class Constructor</h2>
 
     
 
-<pre><span class='no'>FunctionReporter</span>$<span class='fu'>new</span>()</pre>
-
-
-<dl'>
-    <dt><code></code></dt><dd><p><ul>
-<li><p>Initialize an instance of the reporter.</p></li>
-<li><p><b>Returns:</b>
-                <ul>
-<li><p>Instantiated reporter object. Note that this
-                       reporter object isn't useful yet until you use the
-                       <code>set_package</code> method to set a package.</p></li>
+<pre><span class='no'>DependencyReporter</span>$<span class='fu'>new</span>(<span class='no'>pkg_name</span>, <span class='kw'>pkg_path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>report_path</span> <span class='kw'>=</span>
+   <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span>(<span class='kw'>pattern</span> <span class='kw'>=</span> <span class='no'>pkg_name</span>, <span class='kw'>fileext</span> <span class='kw'>=</span> <span class='st'>".html"</span>))</pre>
+<ul>
+<li><p>Initialize an instance of a package report object.</p></li>
+<li><p><b>Args:</b><ul>
+<li><p><b><code>pkg_name</code></b>: (character string) name of
+               package</p></li>
+<li><p><b><code>pkg_path</code></b>: (character string) optional
+               directory path to source code of the package. It is used
+               for calculating test coverage. It can be an absolute or
+               relative path.</p></li>
+<li><p><b><code>report_path</code></b>: (character string) The
+               path and filename of the output report.  Default
+               report will be produced in the temporary directory.</p></li>
 </ul></p></li>
-</ul></p></dd>
-
-</dl>
+<li><p><b>Returns:</b><ul>
+<li><p>Instantiated package report object.</p></li>
+</ul></p></li>
+</ul>
 
     <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
 
 <dl'>
-    <dt><code>set_package(pkg_name, pkg_path = NULL)</code></dt><dd><p><ul>
-<li><p>Set the package that the reporter will analyze. This can
-                only be done once for a given instance of a reporter.
-                Instantiate a new copy of the reporter if you need to analyze
-                a different package.</p></li>
+    <dt><code>add_reporter(reporter)</code></dt><dd><p><ul>
+<li><p>Add a reporter to the package report.</p></li>
 <li><p><b>Args:</b>
-                <ul>
-<li><p><b><code>pkg_name</code></b>: character string, name of
-                     package</p></li>
-<li><p><b><code>pkg_path</code></b>: character string, optional
-                    directory path to source code of the package. It is used
-                    for calculating test coverage. It can be an absolute or
-                    relative path.</p></li>
-</ul></p></li>
+                <b><code>reporter</code></b>: Instantiated package reporter
+                object</p></li>
 <li><p><b>Returns:</b>
                 <ul>
 <li><p>Self, invisibly.</p></li>
 </ul></p></li>
 </ul></p></dd>
-    <dt><code>get_summary_view()</code></dt><dd><p><ul>
-<li><p>Returns an htmlwidget object that summarizes the analysis
-                of the reporter. Used when creating a
-                <a href='CreatePackageReport.html'>package report</a>.</p></li>
-<li><p><b>Returns:</b>
-                <ul>
-<li><p><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlwidget</a>
-                        object</p></li>
-</ul></p></li>
-</ul></p></dd>
-
-</dl>
-
-
-<dl'>
-    <dt><code>calculate_default_measures()</code></dt><dd><p><ul>
-<li><p>Calculates the default node and network measures for this
-               reporter.</p></li>
+    <dt><code>render_report()</code></dt><dd><p><ul>
+<li><p>Render html pkgnet package report.</p></li>
 <li><p><b>Returns:</b>
                 <ul>
 <li><p>Self, invisibly.</p></li>
@@ -273,34 +223,20 @@
     
 
 <dl'>
-    <dt><b><code>pkg_name</code></b></dt><dd><p>: character string, name of set package.
+    <dt><b><code>pkg_name</code></b></dt><dd><p>: (character string) name of package.
         Read-only.</p></dd>
-    <dt><b><code>report_markdown_path</code></b></dt><dd><p>: character string, path to
-        R Markdown template for this reporter. Read-only.</p></dd>
-
-</dl>
-
-
-<dl'>
-    <dt><b><code>nodes</code></b></dt><dd><p>: a data.table, containing information about
-       the nodes of the network the reporter is analyzing. The <code>node</code>
-       column acts the identifier. Read-only.</p></dd>
-    <dt><b><code>edges</code></b></dt><dd><p>: a data.table, containing information about
-       the edge connections of the network the reporter is analyzing. Each
-       row is one edge, and the columns <code>SOURCE</code> and <code>TARGET</code>
-       specify the node identifiers. Read-only.</p></dd>
-    <dt><b><code>network_measures</code></b></dt><dd><p>: a list, containing any measures
-       of the network calculated by the reporter. Read-only.</p></dd>
-    <dt><b><code>pkg_graph</code></b></dt><dd><p>: a graph model object. See <a href='DirectedGraph.html'>DirectedGraph</a>
-       for additional documentation. Read-only.</p></dd>
-    <dt><b><code>graph_viz</code></b></dt><dd><p>: a graph visualization object. A
-       <code><a href='https://rdrr.io/pkg/visNetwork/man/visNetwork.html'>visNetwork::visNetwork</a></code> object.
-       Read-only.</p></dd>
-    <dt><b><code>layout_type</code></b></dt><dd><p>: a character string, the current layout
-       type for the graph visualization. Can be assigned a new valid layout
-       type value. Use use
-       <code><a href='https://rdrr.io/r/base/grep.html'>grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code>
-       to see valid options.</p></dd>
+    <dt><b><code>pkg_path</code></b></dt><dd><p>: (character string) path to source code of
+        the package. Read-only.</p></dd>
+    <dt><b><code>report_path</code></b></dt><dd><p>: (character string) path and filename
+        of output report.</p></dd>
+    <dt><b><code>SummaryReporter</code></b></dt><dd><p>: instantiated pkgnet
+        <code><a href='SummaryReporter.html'>SummaryReporter</a></code> object</p></dd>
+    <dt><b><code>DependencyReporter</code></b></dt><dd><p>: instantiated pkgnet
+        <code><a href='DependencyReporter.html'>DependencyReporter</a></code> object</p></dd>
+    <dt><b><code>FunctionReporter</code></b></dt><dd><p>: instantiated pkgnet
+        <code><a href='FunctionReporter.html'>FunctionReporter</a></code> object</p></dd>
+    <dt><b><code>InheritanceReporter</code></b></dt><dd><p>: instantiated pkgnet
+        <code><a href='InheritanceReporter.html'>InheritanceReporter</a></code> object</p></dd>
 
 </dl>
 
@@ -315,7 +251,7 @@
                 for the intricacies of R6 reference semantics.</p></li>
 <li><p><b>Args:</b>
                 <ul>
-<li><p><b><code>deep</code></b>: logical. Whether to recursively
+<li><p><b><code>deep</code></b>: (logical) Whether to recursively
                     clone nested R6 objects.</p></li>
 </ul></p></li>
 <li><p><b>Returns:</b>
@@ -326,15 +262,6 @@
 
 </dl>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other Network Reporters: 
-<code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
-<code><a href='InheritanceReporter.html'>InheritanceReporter</a></code></p>
-<p>Other Package Reporters: 
-<code><a href='DependencyReporter.html'>DependencyReporter</a></code>,
-<code><a href='InheritanceReporter.html'>InheritanceReporter</a></code>,
-<code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

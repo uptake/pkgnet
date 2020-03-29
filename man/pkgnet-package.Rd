@@ -87,10 +87,5 @@ Authors:
   \item Jay Qi \email{jayqi.opensource@gmail.com}
 }
 
-Other contributors:
-\itemize{
-  \item Patrick Boueri \email{patrick.boueri@uptake.com} [contributor]
-}
-
 }
 \keyword{internal}

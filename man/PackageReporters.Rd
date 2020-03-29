@@ -113,4 +113,5 @@ pkgnet defines several package reporter R6 classes that analyze
 }
 }
 
+\concept{Reporters}
 \keyword{internal}

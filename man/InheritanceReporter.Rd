@@ -190,12 +190,15 @@ Note the following details about class naming:
 }
 
 \seealso{
-Other Network Reporters: \code{\link{DependencyReporter}},
-  \code{\link{FunctionReporter}}
+Other Network Reporters: 
+\code{\link{DependencyReporter}},
+\code{\link{FunctionReporter}}
 
-Other Package Reporters: \code{\link{DependencyReporter}},
-  \code{\link{FunctionReporter}},
-  \code{\link{SummaryReporter}}
+Other Package Reporters: 
+\code{\link{DependencyReporter}},
+\code{\link{FunctionReporter}},
+\code{\link{SummaryReporter}}
 }
 \concept{Network Reporters}
 \concept{Package Reporters}
+\concept{Reporters}

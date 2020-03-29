@@ -15,21 +15,29 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,20 +46,19 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Recursive Package Dependency Reporter — DependencyReporter" />
 
+<meta property="og:title" content="Recursive Package Dependency Reporter — DependencyReporter" />
 <meta property="og:description" content="This reporter looks at the recursive network of its dependencies
    on other packages. This allows a developer to understand how individual
    dependencies might lead to a much larger set of dependencies, potentially
    informing decisions on including or removing them." />
-
 <meta property="og:image" content="https://uptake.github.io/pkgnet/logo.png" />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -75,9 +82,10 @@
   gtag('config', 'UA-137355155-1');
 </script>
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -91,7 +99,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
       </span>
     </div>
 
@@ -113,7 +121,6 @@
   <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">Gallery</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/uptake/pkgnet">
@@ -123,7 +130,7 @@
 </li>
       </ul>
       
-      <form class="navbar-form navbar-right" role="search">
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
         </div>
@@ -134,6 +141,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -145,20 +153,22 @@
     </div>
 
     <div class="ref-description">
-    
     <p>This reporter looks at the recursive network of its dependencies
    on other packages. This allows a developer to understand how individual
    dependencies might lead to a much larger set of dependencies, potentially
    informing decisions on including or removing them.</p>
-    
     </div>
 
-        
+
+
     <h2 class="hasAnchor" id="class-constructor"><a class="anchor" href="#class-constructor"></a>Class Constructor</h2>
 
     
-    <pre>DependencyReporter$new()</pre>
-    <dl class='dl-horizontal'>
+
+<pre><span class='no'>DependencyReporter</span>$<span class='fu'>new</span>()</pre>
+
+
+<dl'>
     <dt><code></code></dt><dd><p><ul>
 <li><p>Initialize an instance of the reporter.</p></li>
 <li><p><b>Returns:</b>
@@ -168,12 +178,14 @@
                        <code>set_package</code> method to set a package.</p></li>
 </ul></p></li>
 </ul></p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="public-methods"><a class="anchor" href="#public-methods"></a>Public Methods</h2>
 
     
-    <dl class='dl-horizontal'>
+
+<dl'>
     <dt><code>set_package(pkg_name, pkg_path = NULL)</code></dt><dd><p><ul>
 <li><p>Set the package that the reporter will analyze. This can
                 only be done once for a given instance of a reporter.
@@ -199,12 +211,15 @@
                 <a href='CreatePackageReport.html'>package report</a>.</p></li>
 <li><p><b>Returns:</b>
                 <ul>
-<li><p><a href='https://www.rdocumentation.org/packages/htmlwidgets/topics/htmlwidgets-package'>htmlwidget</a>
+<li><p><a href='https://rdrr.io/pkg/htmlwidgets/man/htmlwidgets-package.html'>htmlwidget</a>
                         object</p></li>
 </ul></p></li>
 </ul></p></dd>
+
 </dl>
-    <dl class='dl-horizontal'>
+
+
+<dl'>
     <dt><code>calculate_default_measures()</code></dt><dd><p><ul>
 <li><p>Calculates the default node and network measures for this
                reporter.</p></li>
@@ -213,18 +228,23 @@
 <li><p>Self, invisibly.</p></li>
 </ul></p></li>
 </ul></p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="public-fields"><a class="anchor" href="#public-fields"></a>Public Fields</h2>
 
     
-    <dl class='dl-horizontal'>
+
+<dl'>
     <dt><b><code>pkg_name</code></b></dt><dd><p>: character string, name of set package.
         Read-only.</p></dd>
     <dt><b><code>report_markdown_path</code></b></dt><dd><p>: character string, path to
         R Markdown template for this reporter. Read-only.</p></dd>
+
 </dl>
-    <dl class='dl-horizontal'>
+
+
+<dl'>
     <dt><b><code>nodes</code></b></dt><dd><p>: a data.table, containing information about
        the nodes of the network the reporter is analyzing. The <code>node</code>
        column acts the identifier. Read-only.</p></dd>
@@ -237,19 +257,21 @@
     <dt><b><code>pkg_graph</code></b></dt><dd><p>: a graph model object. See <a href='DirectedGraph.html'>DirectedGraph</a>
        for additional documentation. Read-only.</p></dd>
     <dt><b><code>graph_viz</code></b></dt><dd><p>: a graph visualization object. A
-       <code><a href='https://www.rdocumentation.org/packages/visNetwork/topics/visNetwork'>visNetwork::visNetwork</a></code> object.
+       <code><a href='https://rdrr.io/pkg/visNetwork/man/visNetwork.html'>visNetwork::visNetwork</a></code> object.
        Read-only.</p></dd>
     <dt><b><code>layout_type</code></b></dt><dd><p>: a character string, the current layout
        type for the graph visualization. Can be assigned a new valid layout
        type value. Use use
-       <code><a href='https://www.rdocumentation.org/packages/base/topics/grep'>grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code>
+       <code><a href='https://rdrr.io/r/base/grep.html'>grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE)</a></code>
        to see valid options.</p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="special-methods"><a class="anchor" href="#special-methods"></a>Special Methods</h2>
 
     
-    <dl class='dl-horizontal'>
+
+<dl'>
     <dt><code>clone(deep = FALSE)</code></dt><dd><p><ul>
 <li><p>Method for copying an object. See
                 <a href='https://adv-r.hadley.nz/r6.html#r6-semantics'><em>Advanced R</em></a>
@@ -264,47 +286,37 @@
 <li><p>Cloned object of this class.</p></li>
 </ul></p></li>
 </ul></p></dd>
+
 </dl>
-    
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other Network Reporters: <code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
-  <code><a href='InheritanceReporter.html'>InheritanceReporter</a></code></p>
-<p>Other Package Reporters: <code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
-  <code><a href='InheritanceReporter.html'>InheritanceReporter</a></code>,
-  <code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
-    
+    <div class='dont-index'><p>Other Network Reporters: 
+<code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
+<code><a href='InheritanceReporter.html'>InheritanceReporter</a></code></p>
+<p>Other Package Reporters: 
+<code><a href='FunctionReporter.html'>FunctionReporter</a></code>,
+<code><a href='InheritanceReporter.html'>InheritanceReporter</a></code>,
+<code><a href='SummaryReporter.html'>SummaryReporter</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+
 <span class='co'># Instantiate an object</span>
 <span class='no'>reporter</span> <span class='kw'>&lt;-</span> <span class='no'>DependencyReporter</span>$<span class='fu'>new</span>()
 
 <span class='co'># Seed it with a package</span>
-<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)</div><div class='output co'>#&gt; INFO [2019-06-09 19:38:28] Checking installed packages...
-#&gt; INFO [2019-06-09 19:38:28] Found 'ggplot2' in installed packages.</div><div class='input'>
-<span class='co'># plot it up</span>
-<span class='no'>reporter</span>$<span class='fu'>plot_network</span>()</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): attempt to apply non-function</span></div></pre>
+<span class='no'>reporter</span>$<span class='fu'>set_package</span>(<span class='st'>"ggplot2"</span>)
+
+<span class='co'># }</span></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#class-constructor">Class Constructor</a></li>
-
-      <li><a href="#public-methods">Public Methods</a></li>
-
-      <li><a href="#public-fields">Public Fields</a></li>
-
-      <li><a href="#special-methods">Special Methods</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -312,8 +324,9 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
+
       </footer>
    </div>
 
@@ -336,6 +349,8 @@
 </script>
 
 
+
   </body>
 </html>
+
 

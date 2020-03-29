@@ -154,3 +154,4 @@ R6 class defining a directed graph model for representing a
 }
 }
 
+\concept{Graph Classes}

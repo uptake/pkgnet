@@ -4,9 +4,11 @@
 \alias{CreatePackageVignette}
 \title{pkgnet Report as Vignette}
 \usage{
-CreatePackageVignette(pkg = ".",
+CreatePackageVignette(
+  pkg = ".",
   pkg_reporters = list(DependencyReporter$new(), FunctionReporter$new()),
-  vignette_path = file.path(pkg, "vignettes", "pkgnet-report.Rmd"))
+  vignette_path = file.path(pkg, "vignettes", "pkgnet-report.Rmd")
+)
 }
 \arguments{
 \item{pkg}{(string) path to root directory of package of interest}
@@ -29,3 +31,4 @@ Create pkgnet package report as an R Markdown vignette. This
    \href{https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html}{
    our example for pkgnet}.
 }
+\concept{Main Functions}

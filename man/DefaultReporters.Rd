@@ -13,3 +13,4 @@ list of instantiated reporter objects
 Instantiates a list of default reporters to feed into
    \code{\link{CreatePackageReport}}.
 }
+\concept{Reporters}

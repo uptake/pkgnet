@@ -115,8 +115,10 @@ This reporter provides a high-level overview of a package via
 }
 
 \seealso{
-Other Package Reporters: \code{\link{DependencyReporter}},
-  \code{\link{FunctionReporter}},
-  \code{\link{InheritanceReporter}}
+Other Package Reporters: 
+\code{\link{DependencyReporter}},
+\code{\link{FunctionReporter}},
+\code{\link{InheritanceReporter}}
 }
 \concept{Package Reporters}
+\concept{Reporters}
