@@ -23,8 +23,6 @@
 #' # Seed it with a package
 #' reporter$set_package("ggplot2")
 #'
-#' # plot it up
-#' reporter$plot_network()
 #' }
 NULL
 
