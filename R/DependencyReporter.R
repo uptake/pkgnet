@@ -2,6 +2,7 @@
 #' @name DependencyReporter
 #' @family Network Reporters
 #' @family Package Reporters
+#' @concept Reporters
 #' @description This reporter looks at the recursive network of its dependencies
 #'    on other packages. This allows a developer to understand how individual
 #'    dependencies might lead to a much larger set of dependencies, potentially

@@ -28,6 +28,13 @@ navbar:
      href: https://github.com/uptake/pkgnet
      
 reference:
-- title: All Functions
+- title: Main Functions
   contents:
-  - -matches("doc_shared") 
+  - has_concept("Main Functions")
+- title: Reporter Objects and Supporting Functions
+  contents:
+  - has_concept("Reporters")
+- title: Graph Classes
+  contents:
+  - has_concept("Graph Classes")
+  

@@ -1,5 +1,6 @@
 #' @title Package Report
 #' @name PackageReport
+#' @concept Reporters
 #' @description pkgnet compiles one or more package reporters into a package
 #'     report for a specified package. \code{PackageReport} is an R6 class that
 #'     holds all of those reporters and has a method \code{render_report()}
@@ -276,6 +277,7 @@ PackageReport <- R6::R6Class(
 
 #' @title pkgnet Analysis Report for an R package
 #' @name CreatePackageReport
+#' @concept Main Functions
 #' @description Create a standalone HTML report about a package and its networks.
 #' @param pkg_name (string) name of a package
 #' @param pkg_path (string) The path to the package repository. If given, coverage

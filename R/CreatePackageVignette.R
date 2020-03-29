@@ -1,5 +1,6 @@
 #' @title pkgnet Report as Vignette
 #' @name CreatePackageVignette
+#' @concept Main Functions
 #' @description Create pkgnet package report as an R Markdown vignette. This
 #'    vignette can be rendered into a standard HTML vignette with the
 #'    \code{\link[knitr:vignette_engines]{knitr::rmarkdown}} vignette engine

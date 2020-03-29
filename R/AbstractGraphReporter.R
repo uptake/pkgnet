@@ -1,6 +1,7 @@
 #' @title Network Reporters for Packages
 #' @name NetworkReporters
 #' @keywords internal
+#' @concept Reporters
 #' @description \pkg{pkgnet} defines several package reporter R6 classes that model
 #'     a particular network aspect of a package as a graph. These network
 #'     reporter classes are extended from \code{AbstractGraphReporter}, which

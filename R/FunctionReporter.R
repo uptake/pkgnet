@@ -2,6 +2,7 @@
 #' @name FunctionReporter
 #' @family Network Reporters
 #' @family Package Reporters
+#' @concept Reporters
 #' @description This reporter looks at the network of interdependencies of its
 #'    defined functions. Measures of centrality from graph theory can indicate
 #'    which function is most important to a package. Combined with unit test
