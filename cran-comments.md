@@ -2,13 +2,24 @@
 
 ## v 0.4.1
 
-### Submission on XXX
+### Submission on March 29th, 2020
 This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
 
 Please note that the maintainer of this package has not changed, just his email address.  Specifically, "brian.burns@uptake.com" has changed to "brian.burns.opensource@gmail.com".  If you would like further verification of this change, please email Dennis Lee at dennis.lee@uptake.com.  Dennis is a member of the Open Source Software Committee at Uptake as well as legal counsel.  He can confirm this change. 
 
 As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.
 
+### CRAN Response on March 29th, 2020 
+
+In short, one warning building the vignettes on windows. 
+
+### Resubmission on March 30th, 2020
+
+This is a second submission.  While I could not reproduce the sole warning in the vignette from the CRAN windows server on either my windows setup or the rocker/r-devel linux image, I added some code that I believe may address the issue.  
+
+As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.  This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
+
+Please note that the maintainer of this package has not changed, just his email address.  Specifically, "brian.burns@uptake.com" has changed to "brian.burns.opensource@gmail.com".  If you would like further verification of this change, please email Dennis Lee at dennis.lee@uptake.com.  Dennis is a member of the Open Source Software Committee at Uptake as well as legal counsel.  He can confirm this change. 
 
 ## v 0.4.0
 

@@ -70,6 +70,18 @@
 
     # [DEBUG] write(paste0("Installing: ", paste(pkgList)), file = "~/thing.txt", append = TRUE)
 
+    ### Check Exists and Uninstall - Needed for at least one CRAN windows machine
+    foundPkgs <- names(pkgList) %in% .packages()
+    if(!is.logical(foundPkgs)){
+        for (p in foundPkgs){
+            pkgSyntax <- paste0('package:', p)
+            detach(name = pkgSyntax
+                   , unload = TRUE
+                   , character.only = TRUE
+                   )
+        }
+    }
+    
     ### Install
 
     # Figure out where R is to use the current R binary to install the packages
