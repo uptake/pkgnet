@@ -13,9 +13,9 @@ As always, issues are tracked and source code is maintained at https://github.co
 
 In short, one warning building the vignettes on windows. 
 
-### Resubmission on March 30th, 2020
+### Resubmission on April 1st, 2020
 
-This is a second submission.  While I could not reproduce the sole warning in the vignette from the CRAN windows server on either my windows setup or the rocker/r-devel linux image, I added some code that I believe may address the issue.  
+This is a second submission for version 0.4.1 of pkgnet.  It corrects an error in vignettte build on CRAN windows r-devel server in the original submission. This build has passed both rocker/r-devel linux tests as well as those on https://win-builder.r-project.org/. 
 
 As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.  This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
 

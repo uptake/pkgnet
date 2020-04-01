@@ -11,6 +11,7 @@
 ^CONTRIBUTING\.md$
 ^test\.sh$
 ^CODEOWNERS
+^vignettes
 
 # History files
 ^\.Rhistory*

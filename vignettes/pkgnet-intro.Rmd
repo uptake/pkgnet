@@ -205,7 +205,7 @@ funcReporter2 <- pkgnet::FunctionReporter$new()
 funcReporter2$layout_type <- "layout_as_tree"
 funcReporter2$set_package(
     pkg_name = "baseballstats"
-    , pkg_path = pkgload::pkg_path(system.file('baseballstats',package="pkgnet"))
+    , pkg_path = system.file('baseballstats',package="pkgnet")
 )
 funcReporter2$calculate_default_measures()
 g <- visNetwork::visHierarchicalLayout(
