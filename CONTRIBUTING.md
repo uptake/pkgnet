@@ -323,7 +323,6 @@ docker run --rm -ti -v $(pwd):/RPackage pkgnet_rdevel ./r_devel_check.sh
 6. Grab a coffee and wait for an email (about 10 minutes later but varies)
 7. Fix your errors and reupload until good. 
 
-
 ### Submit to CRAN
 
 Go to https://cran.r-project.org/submit.html, take the tarball that passed the gauntlet and submit it! 
