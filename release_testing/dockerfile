@@ -15,9 +15,9 @@ COPY . pkgnet/
 # RUN apt-get update && \
 RUN apt-get install -y pandoc pandoc-citeproc qpdf ghostscript libssl-dev libxml2-dev
 
-RUN RD -e 'install.packages(c("xml2", "rversions", "roxygen2", "devtools"))'
+RUN RD -e 'install.packages(c("xml2", "rversions", "roxygen2", "devtools"), repos = "https://cloud.r-project.org")'
 RUN RD -e 'devtools::install_dev_deps(pkg = "pkgnet/", dependencies=TRUE, repos = "https://cloud.r-project.org")'
-RUN RD -e 'install.packages(c("webshot", "ggplot2"))'
+RUN RD -e 'install.packages(c("webshot", "ggplot2"), repos = "https://cloud.r-project.org")'
 RUN RD -e 'webshot::install_phantomjs()'
 
 # Remove packge in order to avoid confusion later

@@ -315,7 +315,7 @@ docker run --rm -ti -v %cd%:/RPackage pkgnet_rdevel ./r_devel_check.sh
 
 # On Mac
 docker build -f release_testing\dockerfile -t pkgnet_rdevel . 
-docker run --rm -ti -v `pwd`:/RPackage pkgnet_rdevel ./r_devel_check.sh
+docker run --rm -ti -v $(pwd):/RPackage pkgnet_rdevel ./r_devel_check.sh
 ```
 3. Fix your errors and rerun container (second line) until clean CRAN level checks.
 4. Once your satisfied with your results, you're done with _linux_ checks.  
