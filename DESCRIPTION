@@ -40,4 +40,3 @@ URL: https://github.com/uptake/pkgnet, https://uptake.github.io/pkgnet/
 BugReports: https://github.com/uptake/pkgnet/issues
 LazyData: TRUE
 RoxygenNote: 7.1.0
-VignetteBuilder: knitr
