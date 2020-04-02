@@ -494,6 +494,11 @@ Rscript -e "pkgdown::build_site()"</code></pre>
 <p>Now that everything is done, the last thing you have to do is move the repo ahead of the version you just pushed to CRAN.</p>
 <p>Make a PR that adds a <code>.9000</code> on the end of the version you just released. This is a common practice in open source software development. It makes it obvious that the code in source control is newer than what’s available from package managers, but doesn’t interfere with the <a href="https://semver.org/">semantic versioning</a> components of the package version.</p>
 </div>
+<div id="update-pkgnet-gallery" class="section level3">
+<h3 class="hasAnchor">
+<a href="#update-pkgnet-gallery" class="anchor"></a>Update pkgnet gallery</h3>
+<p>Currently, the pkgnet gallery is maintained in a seperate repository, <a href="https://github.com/uptake/pkgnet-gallery">pkgnet-gallery</a>. Follow the README in that repository to update. If you do not, the gallery page may look out of sync from the other website pages.</p>
+</div>
 </div>
 </div>
 
