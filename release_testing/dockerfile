@@ -4,7 +4,6 @@
 
 FROM rocker/r-devel
 
-
 # Copy test script
 COPY release_testing/r_devel_check.sh .
 RUN chmod +x r_devel_check.sh
