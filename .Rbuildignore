@@ -12,6 +12,7 @@
 ^test\.sh$
 ^CODEOWNERS
 ^vignettes.*
+^release_testing*
 
 # History files
 ^\.Rhistory*
