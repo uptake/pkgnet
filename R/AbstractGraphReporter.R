@@ -222,9 +222,9 @@ AbstractGraphReporter <- R6::R6Class(
 
             # Confirm All Colors in palette are Colors
             areColors <- function(x) {
-                sapply(x, function(color_string) {
+                sapply(x, function(X) {
                     tryCatch({
-                        is.matrix(col2rgb(color_string))
+                        is.matrix(col2rgb(X))
                     }, error = function(e){
                         FALSE
                     })
@@ -292,85 +292,80 @@ AbstractGraphReporter <- R6::R6Class(
 
             ## Color Nodes
 
-            # This flag controls whether nodes are colored by categorical
-            # groups or some continuous attribute
-            colorByField <- !is.null(private$plotNodeColorScheme[['field']])
+            # Flag for us to do stuff later
+            colorByGroup <- FALSE
 
-            if (!colorByField){
+            # If no field specified, use uniform color for all nodes
+            if (is.null(private$plotNodeColorScheme[['field']])) {
 
                 # Default Color for all Nodes
                 plotDTnodes[, color := private$plotNodeColorScheme[['palette']]]
 
-            }
+            # Otherwise use specified field to color node
+            } else {
 
-            if (colorByField){
-
+                # Fetch Color Scheme Values
                 colorFieldName <- private$plotNodeColorScheme[['field']]
-                nodeColorPalette <- private$plotNodeColorScheme[['palette']]
 
-                # If that column doesn't exist, throw an error
+                # Check that that column exists in nodes table
                 if (!is.element(colorFieldName, names(self$nodes))) {
-                    msg <- sprintf(
-                        "'%s' is not a field in the nodes table and as such cannot be used in plot color scheme."
-                        , colorFieldName
+                    log_fatal(sprintf(paste0("'%s' is not a field in the nodes table",
+                                             " and as such cannot be used in plot color scheme.")
+                                      , private$plotNodeColorScheme[['field']])
                     )
-                    log_fatal(msg)
                 }
 
-                # if that column isn't a type we recognize, throw an error
+                colorFieldPalette <- private$plotNodeColorScheme[['palette']]
                 colorFieldValues <- plotDTnodes[, unique(get(colorFieldName))]
-                colorFieldIsContinuous <- is.numeric(colorFieldValues)
-                colorFieldIsCategorical <- is.character(colorFieldValues) | is.factor(colorFieldValues)
-                if (!(colorFieldIsContinuous | colorFieldIsCategorical)){
-                    msg <- sprintf(
-                        "A character, factor, or numeric field can be used to color nodes. Field '%s' is of type '%s'."
-                        , colorFieldName
-                        , typeof(colorFieldValues)
-                    )
-                    log_fatal(msg)
-                }
+                log_info(sprintf("Coloring plot nodes by %s...", colorFieldName))
 
-                log_info(sprintf("Coloring plot nodes by field '%s'...", colorFieldName))
+                # If colorFieldValues are character or factor
+                # then we are coloring by group
+                if (is.character(colorFieldValues) | is.factor(colorFieldValues)) {
 
-                # For categorical coloring, all nodes stay at the default color unless the value
-                # of colorFieldValues is found in the provided palette
-                if (colorFieldIsCategorical){
+                    # Create palette by unique values
+                    valCount <- length(colorFieldValues)
+                    newPalette <- grDevices::colorRampPalette(colors = colorFieldPalette)(valCount)
 
-                    for (val in names(nodeColorPalette)){
-                        thisColor <- nodeColorPalette[[val]]
-                        plotDTnodes[get(colorFieldName) == val, color := thisColor]
-                    }
+                    # For each character value, update all nodes with that value
+                    plotDTnodes[, color := newPalette[.GRP], by = .(get(colorFieldName))]
 
                     # Set the group column to the field
                     plotDTnodes[, group := get(colorFieldName)]
-                }
 
-                # For continuous coloring, use a ramp palette
-                if (colorFieldIsContinuous){
+                    # Set flag for us to build a legend in the graph viz later
+                    colorByGroup <- TRUE
 
-                    newPalette <- grDevices::colorRamp(
-                        colors = nodeColorPalette
-                    )
+                # If colorFieldValues are numeric, assume continuous variable
+                # Then we want to create a continuous palette
+                } else if (is.numeric(colorFieldValues)) {
+
+
+                    # Create Continuous Color Palette
+                    newPalette <- grDevices::colorRamp(colors = colorFieldPalette)
 
                     # Scale Values to be with range 0 - 1
-                    plotDTnodes[
-                        !is.na(get(colorFieldName))
-                        , scaledColorValues := get(colorFieldName) / max(get(colorFieldName))
-                    ]
+                    plotDTnodes[!is.na(get(colorFieldName)), scaledColorValues := get(colorFieldName) / max(get(colorFieldName))]
 
                     # Assign Color Values From Palette
-                    plotDTnodes[
-                        !is.na(scaledColorValues)
-                        , color := grDevices::rgb(
-                            newPalette(scaledColorValues)
-                            , maxColorValue = 255
-                        )
-                    ]
+                    plotDTnodes[!is.na(scaledColorValues), color := grDevices::rgb(newPalette(scaledColorValues), maxColorValue = 255)]
 
                     # NA Values get gray color
                     plotDTnodes[is.na(scaledColorValues), color := "gray"]
-                }
-            }
+
+                # If none of the above, something is wrong
+                } else {
+                    # Error Out
+                    log_fatal(
+                        sprintf(
+                            paste0("A character, factor, or numeric field can be used to color nodes. "
+                                , "Field %s is of type %s.")
+                            , colorFieldName
+                            , typeof(colorFieldValues)
+                        )
+                    )
+                } # end non-default color field
+            } # end color setting
 
             # Order nodes alphabetically to make them easier to find in dropdown
             data.table::setkeyv(plotDTnodes, 'id')
@@ -407,7 +402,8 @@ AbstractGraphReporter <- R6::R6Class(
                 )
             )
 
-            if (colorByField) {
+
+            if (colorByGroup) {
                 # Add group definitions
                 for (groupVal in colorFieldValues) {
                     thisGroupColor <- plotDTnodes[
@@ -421,44 +417,17 @@ AbstractGraphReporter <- R6::R6Class(
                     )
                 }
 
-                palette_vec <- private$plotNodeColorScheme[["palette"]]
-                legendControlDT <- data.table::data.table(
-                    label = names(palette_vec)
-                    , color = unname(palette_vec)
-                )
-                legendControlDT[, shape := "ellipse"]
-
-                # when you draw circles or ellipses in visNetwork::addLegend(),
-                # their width is determined by the number of characters
-                # in the label you write. Pad the labels with whitespace
-                # to get shapes of the same size.
-                label_lengths <- legendControlDT[, nchar(label)]
-                new_labels <- sapply(
-                    X = legendControlDT[, label]
-                    , FUN = function(label_val, max_length){
-                        num_spaces_to_add <- max_length - nchar(label_val)
-                        return(paste0(
-                            label_val
-                            , paste0(rep(" ", num_spaces_to_add), collapse = "")
-                        ))
-                    }
-                    , max_length = max(label_lengths)
-                )
-                legendControlDT[, label := new_labels]
-
                 # Add legend
-                g <- visNetwork::visLegend(
-                    graph = g
-                    , position = "right"
-                    , main = list(
-                        text = colorFieldName
-                        , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;text-align:center;'
+                if (length(colorFieldValues) > 1) {
+                    g <- visNetwork::visLegend(
+                        graph = g
+                        , position = "right"
+                        , main = list(
+                            text = colorFieldName
+                            , style = 'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;'
+                        )
                     )
-                    , zoom = FALSE
-                    , addNodes = legendControlDT
-                    , useGroups = FALSE
-                    , enabled = TRUE
-                )
+                }
             }
 
             log_info("...done plotting visualization.")
