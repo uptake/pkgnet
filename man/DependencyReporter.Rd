@@ -170,17 +170,18 @@ reporter <- DependencyReporter$new()
 # Seed it with a package
 reporter$set_package("ggplot2")
 
-# plot it up
-reporter$plot_network()
 }
 }
 \seealso{
-Other Network Reporters: \code{\link{FunctionReporter}},
-  \code{\link{InheritanceReporter}}
+Other Network Reporters: 
+\code{\link{FunctionReporter}},
+\code{\link{InheritanceReporter}}
 
-Other Package Reporters: \code{\link{FunctionReporter}},
-  \code{\link{InheritanceReporter}},
-  \code{\link{SummaryReporter}}
+Other Package Reporters: 
+\code{\link{FunctionReporter}},
+\code{\link{InheritanceReporter}},
+\code{\link{SummaryReporter}}
 }
 \concept{Network Reporters}
 \concept{Package Reporters}
+\concept{Reporters}

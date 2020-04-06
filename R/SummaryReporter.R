@@ -1,6 +1,7 @@
 #' @title Package Summary Reporter
 #' @name SummaryReporter
 #' @family Package Reporters
+#' @concept Reporters
 #' @description This reporter provides a high-level overview of a package via
 #'    its package DESCRIPTION file.
 #' @section Class Constructor:

@@ -1,5 +1,7 @@
 #' @title Graph Classes for Network Modeling
 #' @name GraphClasses
+#' @concept Graph Classes
+#' @keywords internal
 #' @description pkgnet uses R6 classes to define and encapsulate the graph
 #'     models for representing package networks. These classes implement
 #'     different types of graphs and functionality to calculate their respective
@@ -116,7 +118,6 @@
 #'         }
 #'     }
 #' }
-#' @keywords internal
 NULL
 
 ## Base class for Graphs
@@ -293,6 +294,7 @@ AbstractGraph <- R6::R6Class(
 
 #' @title Directed Graph Network Model
 #' @name DirectedGraph
+#' @concept Graph Classes
 #' @description R6 class defining a directed graph model for representing a
 #'    network, including methods to calculate various measures from graph
 #'    theory. The \link[igraph:igraph-package]{igraph} package is used as a
@@ -536,6 +538,7 @@ DirectedGraph <- R6::R6Class(
 
 #' @title Measures for Directed Graph Class
 #' @name DirectedGraphMeasures
+#' @concept Graph Classes
 #' @keywords internal
 #' @description Descriptions for all available node and graph measures for
 #'    networks modeled by \link{DirectedGraph}.

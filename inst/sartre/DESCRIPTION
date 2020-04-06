@@ -4,10 +4,10 @@ Title: Nothingness lies coiled in the heart of being - like a worm.
 Version: 0.1
 Author: Uptake Data Science
 Authors@R: c(
-    person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut", "cre")),
+    person("Brian", "Burns", email = "brian.burns.opensource@gmail.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "jaylamb20@gmail.com", role = c("aut"))
     )
-Maintainer: Brian Burns <Brian.Burns@uptake.com>
+Maintainer: Brian Burns <brian.burns.opensource@gmail.com>
 Description: This package is used to test the functions in `pkgnet`.  It's a "nothing" network. Get it?
 License: file LICENSE
 LazyData: TRUE

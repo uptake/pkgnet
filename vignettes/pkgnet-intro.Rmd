@@ -10,6 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
 ```{r setupVignette, include = FALSE}
 
 ## NOTE:    Vignettes are built within their own environment. 
@@ -34,7 +35,6 @@ knitr::opts_chunk$set(
   out.width='100%'
 )
 ```
-
 
 <!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
 <style>
@@ -174,6 +174,7 @@ As a sample, here's how the **Function Network Visualization** looks for `baseba
 
 <div class="column-left">
 #### Default
+
 ```{r demoVis1, fig.height=3, message=FALSE, warning=FALSE, echo=FALSE}
 pkgnet:::silence_logger()
 funcReporter1 <- pkgnet::FunctionReporter$new()
@@ -340,7 +341,7 @@ Looking at that same large package, let's say we want to explore options for con
 
 ```{r fakeDetail2, eval=FALSE}
 # Get igraph object
-funcGraph <- report2$FunctionReporter$pkg_graph
+funcGraph <- report2$FunctionReporter$pkg_graph$igraph
 funcNames <- igraph::vertex_attr(funcGraph, name = "name")
 
 # Jaccard Similarity

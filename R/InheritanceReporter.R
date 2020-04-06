@@ -2,6 +2,7 @@
 #' @name InheritanceReporter
 #' @family Network Reporters
 #' @family Package Reporters
+#' @concept Reporters
 #' @description This reporter takes a package and traces the class inheritance
 #'   structure. Currently the following object-oriented systems are supported:
 #'   \itemize{

@@ -34,13 +34,16 @@
     <loc>https://uptake.github.io/pkgnet//reference/NetworkReporters.html</loc>
   </url>
   <url>
+    <loc>https://uptake.github.io/pkgnet//reference/PackageReport.html</loc>
+  </url>
+  <url>
     <loc>https://uptake.github.io/pkgnet//reference/PackageReporters.html</loc>
   </url>
   <url>
-    <loc>https://uptake.github.io/pkgnet//reference/SummaryReporter.html</loc>
+    <loc>https://uptake.github.io/pkgnet//reference/pkgnet-package.html</loc>
   </url>
   <url>
-    <loc>https://uptake.github.io/pkgnet//reference/pkgnet-package.html</loc>
+    <loc>https://uptake.github.io/pkgnet//reference/SummaryReporter.html</loc>
   </url>
   <url>
     <loc>https://uptake.github.io/pkgnet//articles/pkgnet-intro.html</loc>

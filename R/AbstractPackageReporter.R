@@ -1,6 +1,7 @@
 #' @title Package Reporters
 #' @name PackageReporters
 #' @keywords internal
+#' @concept Reporters
 #' @description pkgnet defines several package reporter R6 classes that analyze
 #'     some particular aspect of a package. These reporters share common
 #'     functionality and interfaces defined by a base reporter class

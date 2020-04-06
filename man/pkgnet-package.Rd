@@ -79,17 +79,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Brian Burns \email{brian.burns@uptake.com}
+\strong{Maintainer}: Brian Burns \email{brian.burns.opensource@gmail.com}
 
 Authors:
 \itemize{
   \item James Lamb \email{jaylamb20@gmail.com}
   \item Jay Qi \email{jayqi.opensource@gmail.com}
-}
-
-Other contributors:
-\itemize{
-  \item Patrick Boueri \email{patrick.boueri@uptake.com} [contributor]
 }
 
 }

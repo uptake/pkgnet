@@ -1,5 +1,46 @@
 # CRAN Submission History
 
+## v 0.4.1
+
+### Submission on March 29th, 2020
+This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
+
+Please note that the maintainer of this package has not changed, just his email address.  Specifically, "brian.burns@uptake.com" has changed to "brian.burns.opensource@gmail.com".  If you would like further verification of this change, please email Dennis Lee at dennis.lee@uptake.com.  Dennis is a member of the Open Source Software Committee at Uptake as well as legal counsel.  He can confirm this change. 
+
+As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.
+
+### CRAN Response on March 29th, 2020 
+
+In short, one warning building the vignettes on windows. 
+
+### Resubmission on April 1st, 2020
+
+This is a second submission for version 0.4.1 of pkgnet.  It corrects an error in vignettte build on CRAN windows r-devel server in the original submission. This build has passed both rocker/r-devel linux tests as well as those on https://win-builder.r-project.org/. 
+
+As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.  This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
+
+Please note that the maintainer of this package has not changed, just his email address.  Specifically, "brian.burns@uptake.com" has changed to "brian.burns.opensource@gmail.com".  If you would like further verification of this change, please email Dennis Lee at dennis.lee@uptake.com.  Dennis is a member of the Open Source Software Committee at Uptake as well as legal counsel.  He can confirm this change. 
+
+### CRAN Response/Discussion on April 1st, 2020
+
+CRAN robot: Does not pass tests
+
+Me: This one note is the maintainer email change I mentioned in the submission note.  This is fine.  Please upload. 
+
+CRAN person: But the problem is: "Package has a VignetteBuilder field but no prebuilt vignette index." Please fix and resubmit.
+
+Me: Is it possible to proceed with that as is?  I would like to use vignettes to build the website articles but not host them on CRAN (because issues).  It would be easier if I could keep the DESCRIPTION file the same for both processes. 
+
+CRAN person: No, if you have the field all our checks assume there is also a vignette.
+
+### Resubmission on April 2nd, 2020
+
+This is a third submission for version 0.4.1 of pkgnet.  It corrects the issue with the "VignetteBuilder" field in the DESCRIPTION file. 
+
+As always, issues are tracked and source code is maintained at https://github.com/uptake/pkgnet.  This is a patch release that includes a number of bug fixes and minor backwards compatible changes.  Please see `NEWS.md` for details.
+
+Please note that the maintainer of this package has not changed, just his email address.  Specifically, "brian.burns@uptake.com" has changed to "brian.burns.opensource@gmail.com".  If you would like further verification of this change, please email Dennis Lee at dennis.lee@uptake.com.  Dennis is a member of the Open Source Software Committee at Uptake as well as legal counsel.  He can confirm this change. 
+
 ## v 0.4.0
 
 ### Submission on April 1st, 2019
@@ -47,7 +88,7 @@ BUG FIXES
 
 ## v 0.3.1
 
-### CRAN Notiifcation on January 6th, 2019
+### CRAN Notification on January 6th, 2019
 >Dear maintainer,
 >
 >Please see the problems shown on the pkgnet check test results page. 
@@ -147,7 +188,7 @@ Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 CRAN teams' auto-check service
 Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
 Check: CRAN incoming feasibility, Result: Note_to_CRAN_maintainers
-  Maintainer: 'Brian Burns <brian.burns@uptake.com>'
+  Maintainer: 'Brian Burns <brian.burns.opensource@gmail.com>'
 
 ---
 
@@ -189,5 +230,4 @@ during vignette build or package testing.
 #### CRAN Response
 * Need to use CRAN recognized LICENSE format
 * Need to single-quote `pkgnet` in `DESCRIPTION` file
-
 

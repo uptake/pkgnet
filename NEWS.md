@@ -1,8 +1,25 @@
 # pkgnet (dev)
 
+_No changes since latest release_
+
+# pkgnet 0.4.1
+
 ## NEW FEATURES
 
 * `CreatePackageReport()` now outputs an object of new class `PackageReport` (instead of a list of reporters). This object will let you interactively manipulate the included reporter objects to customize the report, and regenerate the report on demand. You can also instantiate and interact with a `PackageReport` object directly without `CreatePackageReport()`.
+
+## CHANGES
+* Rounding format within report tables improved.
+* Contact information updated throughout the package documentation.
+* Appveyor testing configured in order to test windows builds in CI process.
+* Package logos were created.  They are available within this repository at `./man/figures`.
+* Remove vignettes from CRAN hosted package.  They remain as articles on the website.
+
+## BUGFIXES
+* Error handling for erroneous colors within `AbstractGraphReporter$set_plot_node_color_scheme()`. ([#262](https://github.com/uptake/pkgnet/pull/262)
+* data.table osx install bug for Travis. ([#251](https://github.com/uptake/pkgnet/pull/251) Thanks @TylerGrantSmith
+* Single row data.table handling with R6 report code. ([#263](https://github.com/uptake/pkgnet/pull/263) Thanks @TylerGrantSmith
+* Jaccard similarity example in pkgnet-intro vignette. Thanks @marcpaterno
 
 # pkgnet 0.4.0
 

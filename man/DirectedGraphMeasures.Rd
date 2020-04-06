@@ -81,4 +81,5 @@ Descriptions for all available node and graph measures for
 }
 }
 
+\concept{Graph Classes}
 \keyword{internal}

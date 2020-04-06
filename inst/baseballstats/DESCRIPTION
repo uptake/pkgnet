@@ -5,7 +5,7 @@ Version: 0.1
 Author: Uptake Data Science
 Authors@R: c(
     person("James", "Lamb", email = "jaylamb20@gmail.com", role = c("aut", "cre")),
-    person("Brian", "Burns", email = "brian.burns@uptake.com", role = c("aut")))
+    person("Brian", "Burns", email = "brian.burns.opensource@gmail.com", role = c("aut")))
 Maintainer: James Lamb <james.lamb@uptake.com>
 Description: This package is used to test the functions in `pkgnet`.
 Imports:

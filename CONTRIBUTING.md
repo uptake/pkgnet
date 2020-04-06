@@ -339,3 +339,7 @@ Add some notes explaining what has changed since the previous release.
 Now that everything is done, the last thing you have to do is move the repo ahead of the version you just pushed to CRAN.
 
 Make a PR that adds a `.9000` on the end of the version you just released. This is a common practice in open source software development. It makes it obvious that the code in source control is newer than what's available from package managers, but doesn't interfere with the [semantic versioning](https://semver.org/) components of the package version.
+
+### Update pkgnet gallery
+
+Currently, the pkgnet gallery is maintained in a seperate repository, [pkgnet-gallery](https://github.com/uptake/pkgnet-gallery).  Follow the README in that repository to update.  If you do not, the gallery page may look out of sync from the other website pages. 

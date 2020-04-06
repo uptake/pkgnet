@@ -128,4 +128,5 @@ pkgnet uses R6 classes to define and encapsulate the graph
 }
 }
 
+\concept{Graph Classes}
 \keyword{internal}

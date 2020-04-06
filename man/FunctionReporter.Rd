@@ -204,12 +204,15 @@ This reporter looks at the network of interdependencies of its
 }
 
 \seealso{
-Other Network Reporters: \code{\link{DependencyReporter}},
-  \code{\link{InheritanceReporter}}
+Other Network Reporters: 
+\code{\link{DependencyReporter}},
+\code{\link{InheritanceReporter}}
 
-Other Package Reporters: \code{\link{DependencyReporter}},
-  \code{\link{InheritanceReporter}},
-  \code{\link{SummaryReporter}}
+Other Package Reporters: 
+\code{\link{DependencyReporter}},
+\code{\link{InheritanceReporter}},
+\code{\link{SummaryReporter}}
 }
 \concept{Network Reporters}
 \concept{Package Reporters}
+\concept{Reporters}
