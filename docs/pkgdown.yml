@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   pkgnet-intro: pkgnet-intro.html
   publishing-reports: publishing-reports.html
-last_built: 2020-04-02T17:11Z
+last_built: 2020-04-07T01:02Z
 urls:
   reference: https://uptake.github.io/pkgnet//reference
   article: https://uptake.github.io/pkgnet//articles
