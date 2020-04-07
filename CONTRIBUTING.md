@@ -322,6 +322,10 @@ The maintainer will get an email from CRAN with the status of the submission.
 
 If the submission is not accepted, do whatever CRAN asked you to do. Update `cran-comments.md` with some comments explaining the requested changes. Rebuild the `pkgdown` site. Repeat this process until the package gets accepted.
 
+### Rebuild the Website
+
+Rebuilding the website now, after all changes and after CRAN update, will build the site with the latest updates and version status tags.
+
 ### Merge the PR
 
 Once the submission is accepted, great! Update `cran-comments.md` and merge the PR.
