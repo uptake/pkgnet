@@ -327,6 +327,7 @@ docker run --rm -ti -v $(pwd):/RPackage pkgnet_rdevel ./r_devel_check.sh
 
 Go to https://cran.r-project.org/submit.html, take the tarball that passed the gauntlet and submit it! 
 ![](https://cdn.dribbble.com/users/30794/screenshots/4088042/e__push-button.gif)
+
 **WAIT! You're not done.**
 
 ### Handle feedback from CRAN
