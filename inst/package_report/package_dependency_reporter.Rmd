@@ -7,6 +7,12 @@ output: html_document
 
 This section analyzes the recursive package dependencies of **`r reporter$pkg_name`**. 
 
+In the plot below, you'll see the following colors:
+
+- gray: **`r reporter$pkg_name`**
+- orange: R packages available [in every R session by default](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Default-packages)
+- green: third-party R packages
+
 ```{r echo = FALSE, error = TRUE}
 reporter$calculate_default_measures()
 ```
