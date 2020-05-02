@@ -249,9 +249,8 @@ DependencyReporter <- R6::R6Class(
             g <- (
                 super$plot_network()
                 %>% visNetwork::visHierarchicalLayout(
-                    sortMethod = "directed"
-                    , direction = "UD"
-                )
+                        sortMethod = "directed"
+                        , direction = "UD")
             )
             return(g)
         }
