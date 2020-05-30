@@ -2,5 +2,5 @@
 cd /RPackage
 rm *.tar.gz
 
-RD CMD build pkgnet/
+RD CMD build .
 RD CMD check --as-cran *.tar.gz
