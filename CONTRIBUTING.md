@@ -314,7 +314,7 @@ docker build -f release_testing\dockerfile -t pkgnet_rdevel .
 docker run --rm -ti -v %cd%:/RPackage pkgnet_rdevel ./r_devel_check.sh
 
 # On Mac
-docker build -f release_testing\dockerfile -t pkgnet_rdevel . 
+docker build -f release_testing/dockerfile -t pkgnet_rdevel . 
 docker run --rm -ti -v $(pwd):/RPackage pkgnet_rdevel ./r_devel_check.sh
 ```
 3. Fix your errors and rerun container (second line) until clean CRAN level checks.

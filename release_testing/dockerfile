@@ -4,23 +4,25 @@
 
 FROM rocker/r-devel
 
-# Copy test script
+# Copy test script into container
 COPY release_testing/r_devel_check.sh .
 RUN chmod +x r_devel_check.sh
 
-# Copy pkg in order to install packages
-COPY . pkgnet/
-
-# RUN apt-get update && \
+# Install System Dependencies
+RUN apt-get update
 RUN apt-get install -y pandoc pandoc-citeproc qpdf ghostscript libssl-dev libxml2-dev
 
+# Install Devtools
 RUN RD -e 'install.packages(c("xml2", "rversions", "roxygen2", "devtools"), repos = "https://cloud.r-project.org")'
+
+# Install R Package Dependencies from source code
+COPY . pkgnet/
 RUN RD -e 'devtools::install_dev_deps(pkg = "pkgnet/", dependencies=TRUE, repos = "https://cloud.r-project.org")'
+RUN rm -rf pkgnet/
+
+# Install R Package Dependencies that somehow get missed in the other process
 RUN RD -e 'install.packages(c("webshot", "ggplot2"), repos = "https://cloud.r-project.org")'
 RUN RD -e 'webshot::install_phantomjs()'
-
-# Remove packge in order to avoid confusion later
-RUN rm -rf pkgnet/
 
 # Later, during docker run, pkgnet source folder will be included as a mounted volume. 
 # That will allow updates to be immediately tested (barring additional package installations).
