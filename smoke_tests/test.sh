@@ -102,6 +102,11 @@ mv ${tmp_file} ${STATUS_FILE}
 echo ""
 echo "===== RESULTS ====="
 echo "successes: $(cat ${STATUS_FILE} | grep 'SUCCESS' | wc -l)"
-echo "failures: $(cat ${STATUS_FILE} | grep 'FAILURE' | wc -l)"
+num_failures=$(cat ${STATUS_FILE} | grep 'FAILURE' | wc -l)
+echo "failures: ${num_failures}"
 
-open ${STATUS_FILE}
+cat ${STATUS_FILE}
+
+if [[ ${GITHUB_ACTIONS} == "true" ]]; then
+    exit ${num_failures}
+fi
