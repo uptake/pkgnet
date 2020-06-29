@@ -281,7 +281,8 @@ With the reports and objects produced by `pkgnet` by default, there is plenty to
      
 In this section, let's examine a larger R package, such as [lubridate](http://lubridate.tidyverse.org/).
        
-If you would like to follow along with the examples in this section, run these commands in your terminal to download and install `lubridate`^[Examples from version 1.7.3 of Lubridate].  
+If you would like to follow along with the examples in this section, run these commands in your terminal to download and install `lubridate`^[Examples from version 1.7.3 of Lubridate].
+
 ```{r bashText, engine='bash', eval=FALSE}
 # Create a temporary workspace
 mkdir -p ~/pkgnet_example && cd ~/pkgnet_example
@@ -294,7 +295,7 @@ cd lubridate
 git reset --hard 9797d69abe1574dd89310c834e52d358137669b8
 
 # Install it
-Rscript -e "devtools::install()"
+R CMD install .
 ```
 
 ## Coverage of Most Depended-on Functions

@@ -32,7 +32,7 @@ CreatePackageVignette()
 
 If this is your first R Markdown vignette for your package, you'll want to add `VignetteBuilder: knitr` to your DESCRIPTION file and both `knitr` and `rmarkdown` as `Suggests` dependencies. You'll also need to install the knitr and rmarkdown packages if you haven't already. 
 
-The R Markdown file generated in this way will be built when you use `R CMD build` to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with `devtools::build_vignettes`. If you use pkgdown, it will also be built into an article when you use `pkgdown::build_site()`. 
+The R Markdown file generated in this way will be built when you use `R CMD build` to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with `devtools::build_vignettes()`. If you use pkgdown, it will also be built into an article when you use `pkgdown::build_site()`. 
 
 You can check out our [example for pkgnet](https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html) to see what one looks like (it's actually slightly customized---we used the `pkg_reporters` parameter). 
 

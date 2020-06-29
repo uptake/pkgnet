@@ -30,7 +30,6 @@ Imports:
     tools,
     visNetwork
 Suggests:
-    devtools,
     ggplot2,
     testthat,
     webshot,
