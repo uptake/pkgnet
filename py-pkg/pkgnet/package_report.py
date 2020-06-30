@@ -1,6 +1,8 @@
+import atexit
 import webbrowser
 from pathlib import Path
-from typing import Dict, Optional
+from tempfile import TemporaryDirectory
+from typing import Dict, Iterable, Optional, Union
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
@@ -10,7 +12,6 @@ from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.dependency_reporter import DependencyReporter
 from pkgnet.function_reporter import FunctionReporter
 from pkgnet.summary_reporter import SummaryReporter
-
 
 _JINJA_ENV = Environment(
     loader=PackageLoader("pkgnet", "templates"), autoescape=select_autoescape(["html", "xml"]),
@@ -34,38 +35,23 @@ class PackageReport:
         stylesheets=["bootstrap.min.css"],
     )
 
-    def __init__(self, pkg_name, report_path, pkg_path=None):
+    def __init__(
+        self,
+        pkg_name: str,
+        pkg_path: Optional[Union[Path, str]] = None,
+        report_path: Optional[Union[Path, str]] = None,
+    ):
         # TODO: Validation
 
         self._pkg_name = pkg_name
-        self._report_path = Path(report_path).expanduser().resolve()
+        if report_path is not None:
+            self._report_path = Path(report_path).expanduser().resolve()
+        else:
+            temp_dir = TemporaryDirectory()
+            atexit.register(temp_dir.cleanup)
+            self._report_path = Path(temp_dir.name) / f"{pkg_name}.html"
         self._pkg_path = Path(pkg_path).expanduser().resolve() if pkg_path is not None else None
         self._reporters = dict()
-
-    ### PROPERTIES ###
-
-    @property
-    def pkg_name(self):
-        return self._pkg_name
-
-    @property
-    def pkg_path(self):
-        return self._pkg_path
-
-    @property
-    def report_path(self):
-        return self._report_path
-
-    @property
-    def reporters(self):
-        return [reporter for reporter in self._reporters.values()]
-
-    @property
-    def html_dependencies(self):
-        return sum(
-            [self._html_dependencies] + [reporter.html_dependencies for reporter in self.reporters],
-            HtmlDependencies(),
-        )
 
     ### PUBLIC METHODS ###
 
@@ -83,6 +69,33 @@ class PackageReport:
         with open(self.report_path, "w+") as report_file:
             report_file.write(rendered_report)
             webbrowser.open(self.report_path.as_uri())
+
+    ### PROPERTIES ###
+
+    @property
+    def pkg_name(self):
+        return self._pkg_name
+
+    @property
+    def pkg_path(self):
+        return self._pkg_path
+
+    @property
+    def report_path(self):
+        return self._report_path
+
+    # Properties for individual reporter classes are registered by set_report_properties
+
+    @property
+    def reporters(self):
+        return [reporter for reporter in self._reporters.values()]
+
+    @property
+    def html_dependencies(self):
+        return sum(
+            [self._html_dependencies] + [reporter.html_dependencies for reporter in self.reporters],
+            HtmlDependencies(),
+        )
 
 
 def _reporter_property(reporter_class: type, docstring: Optional[str] = None):
@@ -120,7 +133,12 @@ def set_report_properties(available_reporters: Dict[str, AbstractPackageReporter
 registrar.callbacks.append(set_report_properties)
 
 
-def create_package_report(pkg_name, report_path, pkg_reporters=None, pkg_path=None):
+def create_package_report(
+    pkg_name: str,
+    pkg_reporters: Optional[Iterable[AbstractPackageReporter]] = None,
+    pkg_path: Optional[Union[Path, str]] = None,
+    report_path: Optional[Union[Path, str]] = None,
+):
     if pkg_reporters is None:
         pkg_reporters = default_reporters()
     # TODO: Validation
