@@ -3,7 +3,7 @@ from pkgnet.dependency_reporter import DependencyReporter
 from pkgnet.function_reporter import FunctionReporter
 from pkgnet.import_reporter import ImportReporter
 from pkgnet.inheritance_reporter import InheritanceReporter
-from pkgnet.module_reporter import ModuleReporter
+from pkgnet.submodule_reporter import SubmoduleReporter
 from pkgnet.package_report import PackageReport
 from pkgnet.summary_reporter import SummaryReporter
 
@@ -16,5 +16,5 @@ __all__ = [
     FunctionReporter,
     ImportReporter,
     InheritanceReporter,
-    ModuleReporter,
+    SubmoduleReporter,
 ]

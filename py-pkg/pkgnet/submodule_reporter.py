@@ -7,7 +7,7 @@ from pkgnet.search_utils import get_all_modules_in_package, get_submodules
 
 
 @register_reporter
-class ModuleReporter(AbstractGraphReporter):
+class SubmoduleReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph
 
