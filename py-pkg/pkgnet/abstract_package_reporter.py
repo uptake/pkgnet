@@ -2,6 +2,25 @@ from abc import ABC
 from importlib import import_module
 
 
+class _ReporterRegistrar:
+    def __init__(self):
+        self.available_reporters = {}
+        self.callbacks = []
+
+    def register_reporter(self, cls: type):
+        if not issubclass(cls, AbstractPackageReporter):
+            raise TypeError("Only subclasses of AbstractPackageReporter can be registered.")
+        self.available_reporters[cls.__name__] = cls
+        # Run callbacks so that listeners can update with new reporters
+        for callback in self.callbacks:
+            callback(self.available_reporters)
+        return cls
+
+
+registrar = _ReporterRegistrar()
+available_reporters = registrar.available_reporters
+
+
 class AbstractPackageReporter(ABC):
     def __init__(self):
         self._pkg_name = None

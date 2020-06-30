@@ -1,14 +1,28 @@
 import webbrowser
 from pathlib import Path
+from typing import Dict, Optional
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 
-from pkgnet.abstract_package_reporter import AbstractPackageReporter
+from pkgnet.abstract_package_reporter import AbstractPackageReporter, registrar
 from pkgnet.html_dependencies import HtmlDependencies
+from pkgnet.abstract_graph_reporter import AbstractGraphReporter
+from pkgnet.dependency_reporter import DependencyReporter
+from pkgnet.function_reporter import FunctionReporter
+from pkgnet.summary_reporter import SummaryReporter
+
 
 _JINJA_ENV = Environment(
     loader=PackageLoader("pkgnet", "templates"), autoescape=select_autoescape(["html", "xml"]),
 )
+
+
+def default_reporters():
+    return [
+        SummaryReporter(),
+        DependencyReporter(),
+        FunctionReporter(),
+    ]
 
 
 class PackageReport:
@@ -71,7 +85,7 @@ class PackageReport:
             webbrowser.open(self.report_path.as_uri())
 
 
-def _reporter_property(reporter_class, docstring=None):
+def _reporter_property(reporter_class: type, docstring: Optional[str] = None):
     """Property factory for reporters.
 
     Args:
@@ -97,8 +111,27 @@ def _reporter_property(reporter_class, docstring=None):
     return property(getter, setter, doc=docstring)
 
 
-def register_reporter(cls):
-    if not issubclass(cls, AbstractPackageReporter):
-        raise TypeError("Only subclasses of AbstractPackageReporter can be registered.")
-    setattr(PackageReport, cls.__name__, _reporter_property(cls))
-    return cls
+def set_report_properties(available_reporters: Dict[str, AbstractPackageReporter]):
+    for reporter_name, reporter_class in available_reporters.items():
+        if not hasattr(PackageReport, reporter_name):
+            setattr(PackageReport, reporter_name, _reporter_property(reporter_class))
+
+
+registrar.callbacks.append(set_report_properties)
+
+
+def create_package_report(pkg_name, report_path, pkg_reporters=None, pkg_path=None):
+    if pkg_reporters is None:
+        pkg_reporters = default_reporters()
+    # TODO: Validation
+
+    created_report = PackageReport(pkg_name=pkg_name, pkg_path=pkg_path, report_path=report_path)
+
+    for reporter in pkg_reporters:
+        created_report.add_reporter(reporter)
+        if isinstance(reporter, AbstractGraphReporter):
+            reporter.calculate_default_measures()
+
+    created_report.render_report()
+
+    return created_report

@@ -5,10 +5,10 @@ from pkg_resources import get_distribution
 
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
 from pkgnet.html_dependencies import HtmlDependencies
-from pkgnet.package_report import register_reporter
+from pkgnet.abstract_package_reporter import registrar
 
 
-@register_reporter
+@registrar.register_reporter
 class SummaryReporter(AbstractPackageReporter):
 
     report_template = "tab_summary_report.jinja"

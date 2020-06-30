@@ -3,11 +3,11 @@ import pkg_resources
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
-from pkgnet.package_report import register_reporter
+from pkgnet.abstract_package_reporter import registrar
 from pkgnet.search_utils import recursive_node_search
 
 
-@register_reporter
+@registrar.register_reporter
 class DependencyReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph

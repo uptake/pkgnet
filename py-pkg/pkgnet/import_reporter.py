@@ -4,7 +4,7 @@ import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
-from pkgnet.package_report import register_reporter
+from pkgnet.package_report import registrar
 from pkgnet.search_utils import (
     get_all_modules_in_package,
     get_fully_qualified_name,
@@ -13,7 +13,7 @@ from pkgnet.search_utils import (
 )
 
 
-@register_reporter
+@registrar.register_reporter
 class ImportReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph

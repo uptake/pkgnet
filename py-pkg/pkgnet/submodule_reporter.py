@@ -2,11 +2,11 @@ import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.graphs import DirectedGraph
-from pkgnet.package_report import register_reporter
+from pkgnet.abstract_package_reporter import registrar
 from pkgnet.search_utils import get_all_modules_in_package, get_submodules
 
 
-@register_reporter
+@registrar.register_reporter
 class SubmoduleReporter(AbstractGraphReporter):
 
     _graph_class = DirectedGraph
