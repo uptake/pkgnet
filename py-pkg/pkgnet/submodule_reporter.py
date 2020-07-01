@@ -1,3 +1,11 @@
+from typing import Callable, Optional
+
+try:
+    import importlib.resources as importlib_resources
+except ImportError:
+    # Python 3.6 uses importlib_resources backport
+    import importlib_resources
+
 import pandas as pd
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
@@ -20,9 +28,16 @@ class SubmoduleReporter(AbstractGraphReporter):
         super().__init__()
         self._ignore_packages = []
 
-    ### PROPERTIES ###
-
     ### PUBLIC METHODS ###
+
+    @classmethod
+    def report_template(cls) -> (str, str, Optional[Callable]):
+        source = importlib_resources.read_text("pkgnet.templates", "tab_submodule_report.jinja")
+        path = next(importlib_resources.path("pkgnet.templates", "tab_submodule_report.jinja").gen)
+        mtime = path.stat().st_mtime  # last modified time
+        return source, str(path), lambda: path.stat().st_mtime == mtime
+
+    ### PROPERTIES ###
 
     ### PRIVATE METHODS ###
 

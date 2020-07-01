@@ -24,9 +24,11 @@ def get_object(obj_name: str):
 def safe_import_module(module_name: str):
     try:
         return import_module(module_name)
+    # Sometimes non-public facing modules are included in a package, such as tests
+    # These may have undeclared dependencies, so we can't load them.
     except ModuleNotFoundError:
-        # Sometimes non-public facing modules are included in a package, such as tests
-        # These may have undeclared dependencies, so we can't load them.
+        return None
+    except ImportError:
         return None
 
 

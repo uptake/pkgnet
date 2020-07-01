@@ -1,5 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from importlib import import_module
+from pathlib import Path
+from typing import Callable, Optional, Union
 
 
 class _ReporterRegistrar:
@@ -25,11 +27,9 @@ class AbstractPackageReporter(ABC):
     def __init__(self):
         self._pkg_name = None
 
-    @property
-    def pkg_name(self):
-        return self._pkg_name
+    ### PUBLIC METHODS ###
 
-    def set_package(self, pkg_name, pkg_path=None):
+    def set_package(self, pkg_name: str, pkg_path: Optional[Union[Path, str]] = None):
         # Packages can only be set once
         if self._pkg_name is not None:
             # TODO: Better exception classing
@@ -50,3 +50,18 @@ class AbstractPackageReporter(ABC):
             raise NotImplementedError("pkg_path not yet implemented")
 
         return self
+
+    @abstractmethod
+    def get_summary_view(self):
+        pass
+
+    @classmethod
+    @abstractmethod
+    def report_template(self) -> (str, str, Optional[Callable]):
+        pass
+
+    ### PROPERTIES ###
+
+    @property
+    def pkg_name(self):
+        return self._pkg_name

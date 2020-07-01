@@ -60,12 +60,12 @@
                     {# First Reporter Tab #}
                         {% set reporter = reporters[0] %}
                         <div class="tab-pane fade show active" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
-                            {% include reporter.report_template %}
+                            {% include reporter.__class__.__name__ %}
                         </div>
                     {# / First Reporter Tab #}
                     {% for reporter in reporters[1:] %}
                         <div class="tab-pane fade" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
-                            {% include reporter.report_template %}
+                            {% include reporter.__class__.__name__ %}
                         </div>
                     {% endfor %}
                 </div>

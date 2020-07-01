@@ -4,7 +4,20 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Dict, Iterable, Optional, Union
 
-from jinja2 import Environment, PackageLoader, select_autoescape
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    import importlib_resources as pkg_resources
+
+from jinja2 import (
+    BaseLoader,
+    ChoiceLoader,
+    Environment,
+    PackageLoader,
+    select_autoescape,
+    TemplateNotFound,
+)
 
 from pkgnet.abstract_package_reporter import AbstractPackageReporter, registrar
 from pkgnet.html_dependencies import HtmlDependencies
@@ -12,10 +25,6 @@ from pkgnet.abstract_graph_reporter import AbstractGraphReporter
 from pkgnet.dependency_reporter import DependencyReporter
 from pkgnet.function_reporter import FunctionReporter
 from pkgnet.summary_reporter import SummaryReporter
-
-_JINJA_ENV = Environment(
-    loader=PackageLoader("pkgnet", "templates"), autoescape=select_autoescape(["html", "xml"]),
-)
 
 
 def default_reporters():
@@ -26,10 +35,30 @@ def default_reporters():
     ]
 
 
+class ReporterTemplateLoader(BaseLoader):
+    def __init__(self, available_reporters: Dict[str, AbstractPackageReporter]):
+        self.available_reporters = available_reporters
+
+    def get_source(self, environment, template):
+        if template not in self.available_reporters:
+            raise TemplateNotFound(template)
+        return self.available_reporters[template].report_template()
+
+
+jinja_env = Environment(
+    loader=ChoiceLoader(
+        [
+            ReporterTemplateLoader(available_reporters=registrar.available_reporters),
+            PackageLoader("pkgnet", "templates"),
+        ]
+    ),
+    autoescape=select_autoescape(["html", "xml"]),
+)
+
+
 class PackageReport:
 
-    _report_template = _JINJA_ENV.get_template("package_report.jinja")
-
+    _report_template = jinja_env.get_template("package_report.jinja")
     _html_dependencies = HtmlDependencies(
         scripts=["jquery-3.4.1.min.js", "popper.min.js", "bootstrap.min.js"],
         stylesheets=["bootstrap.min.css"],

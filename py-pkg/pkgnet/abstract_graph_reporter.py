@@ -8,7 +8,6 @@ from pkgnet.html_dependencies import HtmlDependencies
 class AbstractGraphReporter(AbstractPackageReporter):
 
     _graph_class = None
-
     _html_dependencies = HtmlDependencies(
         scripts=["jquery-3.4.1.min.js", "datatables.min.js"], stylesheets=["datatables.min.css"]
     )
@@ -20,6 +19,24 @@ class AbstractGraphReporter(AbstractPackageReporter):
         self._pkg_graph = None
         self._graph_viz = None
         self._viz_class = viz_class
+
+    ### PUBLIC METHODS ###
+    def calculate_default_measures(self):
+        self.pkg_graph.node_measures(measures=self.pkg_graph.default_node_measures)
+        return self
+
+    def get_summary_view(self):
+        datatables_init_script = f"""
+        <script>
+            $(document).ready( function () {{
+                $('#{self.report_slug}-table').DataTable();
+            }} );
+        </script>
+        """
+        return (
+            self.nodes.to_html(classes=["display"], table_id=f"{self.report_slug}-table")
+            + datatables_init_script
+        )
 
     ### PROPERTIES ###
 
@@ -52,6 +69,10 @@ class AbstractGraphReporter(AbstractPackageReporter):
         return self._graph_viz
 
     @property
+    def layout_type(self):
+        raise NotImplementedError
+
+    @property
     def viz_class(self):
         return self._viz_class
 
@@ -61,27 +82,8 @@ class AbstractGraphReporter(AbstractPackageReporter):
         self._viz_class = value
 
     @property
-    def nodes_table_html(self):
-        datatables_init_script = f"""
-        <script>
-            $(document).ready( function () {{
-                $('#{self.report_slug}-table').DataTable();
-            }} );
-        </script>
-        """
-        return (
-            self.nodes.to_html(classes=["display"], table_id=f"{self.report_slug}-table")
-            + datatables_init_script
-        )
-
-    @property
     def html_dependencies(self):
         return self._html_dependencies + self.graph_viz.html_dependencies
-
-    ### PUBLIC METHODS ###
-    def calculate_default_measures(self):
-        self.pkg_graph.node_measures(measures=self.pkg_graph.default_node_measures)
-        return self
 
     ### PRIVATE METHODS ###
 

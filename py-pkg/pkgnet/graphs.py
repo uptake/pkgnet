@@ -12,27 +12,6 @@ class AbstractGraph(ABC):
         self._edges = edges
         self._nx_graph = None
 
-    ### PROPERTIES ###
-
-    @property
-    def nodes(self):
-        return self._nodes
-
-    @property
-    def edges(self):
-        return self._edges
-
-    @property
-    def nx_graph(self):
-        if self._nx_graph is None:
-            self.initialize_nx_graph()
-        return self._nx_graph
-
-    @property
-    @abstractmethod
-    def default_node_measures(self):
-        pass
-
     ### PUBLIC METHODS ###
 
     def node_measures(self, measures=None):
@@ -64,6 +43,27 @@ class AbstractGraph(ABC):
         positions_df = pd.DataFrame.from_records(positions).transpose()
         positions_df.columns = ["x", "y"]
         return positions_df
+
+    ### PROPERTIES ###
+
+    @property
+    def nodes(self):
+        return self._nodes
+
+    @property
+    def edges(self):
+        return self._edges
+
+    @property
+    def nx_graph(self):
+        if self._nx_graph is None:
+            self.initialize_nx_graph()
+        return self._nx_graph
+
+    @property
+    @abstractmethod
+    def default_node_measures(self):
+        pass
 
     ### PRIVATE METHODS ###
 

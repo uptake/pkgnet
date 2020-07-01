@@ -1,9 +1,18 @@
+from typing import Optional, Callable
+
+try:
+    import importlib.resources as importlib_resources
+except ImportError:
+    # Python 3.6 uses importlib_resources backport
+    import importlib_resources
+
+
 import pandas as pd
 import pkg_resources
 
 from pkgnet.abstract_graph_reporter import AbstractGraphReporter
-from pkgnet.graphs import DirectedGraph
 from pkgnet.abstract_package_reporter import registrar
+from pkgnet.graphs import DirectedGraph
 from pkgnet.search_utils import recursive_node_search
 
 
@@ -21,9 +30,16 @@ class DependencyReporter(AbstractGraphReporter):
         super().__init__(**kwargs)
         self._ignore_packages = []
 
-    ### PROPERTIES ###
-
     ### PUBLIC METHODS ###
+
+    @classmethod
+    def report_template(cls) -> (str, str, Optional[Callable]):
+        source = importlib_resources.read_text("pkgnet.templates", "tab_dependency_report.jinja")
+        path = next(importlib_resources.path("pkgnet.templates", "tab_dependency_report.jinja").gen)
+        mtime = path.stat().st_mtime  # last modified time
+        return source, str(path), lambda: path.stat().st_mtime == mtime
+
+    ### PROPERTIES ###
 
     ### PRIVATE METHODS ###
 
