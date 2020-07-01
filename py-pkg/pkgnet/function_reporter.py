@@ -60,6 +60,8 @@ class FunctionReporter(AbstractGraphReporter):
                 for _, fcn_object in inspect.getmembers(module_obj, inspect.isfunction)
                 # Only want functions defined in this module, not imported functions
                 if fcn_object.__module__ == module_name
+                and fcn_object.__qualname__ != "<lambda>"  # lambda functions
+                and ".<locals>." not in fcn_object.__qualname__  # functions inside fcn factory
             }
 
         # Edges
