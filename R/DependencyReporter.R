@@ -31,7 +31,7 @@ NULL
 #' @importFrom assertthat assert_that is.flag
 #' @importFrom utils installed.packages
 #' @importFrom tools package_dependencies
-#' @importFrom data.table data.table rbindlist setkeyv
+#' @importFrom data.table := data.table rbindlist setkeyv
 #' @importFrom visNetwork visHierarchicalLayout
 #' @export
 DependencyReporter <- R6::R6Class(
@@ -221,6 +221,31 @@ DependencyReporter <- R6::R6Class(
         }
 
         , plot_network = function() {
+
+            # color base packages and the package in focus differently
+            gray <- "#dfdfdf"
+            orange <- "#FFBD33"
+            bright_green <- "#aafca8"
+
+            packageDT <- data.table::as.data.table(
+                installed.packages()
+            )
+            base_packages <- packageDT[!is.na(Priority) & Priority == "base"][, Package]
+
+            nodeDT <- self$nodes
+            nodeDT[, package_type := "regular_dependency"]
+            nodeDT[node %in% base_packages, package_type := "base_dependency"]
+            nodeDT[node == self$pkg_name, package_type := "report_package"]
+            private$update_nodes(nodeDT)
+            private$set_plot_node_color_scheme(
+                field = "package_type"
+                , palette = c(
+                    "regular_dependency" = bright_green
+                    , "report_package" = orange
+                    , "base_dependency" = gray
+                )
+            )
+
             g <- (
                 super$plot_network()
                 %>% visNetwork::visHierarchicalLayout(
