@@ -167,7 +167,7 @@ def create_package_report(
     pkg_reporters: Optional[Iterable[AbstractPackageReporter]] = None,
     pkg_path: Optional[Union[Path, str]] = None,
     report_path: Optional[Union[Path, str]] = None,
-):
+) -> PackageReport:
     if pkg_reporters is None:
         pkg_reporters = default_reporters()
     # TODO: Validation
