@@ -1,5 +1,10 @@
 from pathlib import Path
-from setuptools import setup
+import setuptools
+
+
+with (Path(__file__).parent / "README.md").open("r") as fp:
+    long_description = fp.read().strip()
+
 
 INSTALL_REQUIREMENTS_FILE = Path(__file__).parent / "requirements.txt"
 
@@ -17,15 +22,22 @@ def load_requirements(path: Path):
     return requirements
 
 
-setup(
+setuptools.setup(
     name="pkgnet",
-    version="0.1",
-    description="",
-    url="",
+    version="0.1.0",
     author="",
     author_email="",
+    description="Network analysis of the structure and dependencies of Python packages.",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+    ],
     install_requires=load_requirements(INSTALL_REQUIREMENTS_FILE),
-    license="BSD",
-    packages=["pkgnet"],
-    zip_safe=False,
+    license="BSD 3-Clause License",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    packages=setuptools.find_packages(include=["pkgnet"]),
+    url="https://github.com/uptake/pkgnet",
 )
