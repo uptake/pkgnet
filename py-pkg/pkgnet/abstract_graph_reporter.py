@@ -53,6 +53,7 @@ class AbstractGraphReporter(AbstractPackageReporter):
         return self._edges
 
     @property
+    @abstractmethod
     def network_measures(self):
         pass
 
