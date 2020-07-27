@@ -48,10 +48,12 @@ class SummaryReporter(AbstractPackageReporter):
 
     @classmethod
     def report_template(cls) -> (str, str, Optional[Callable]):
+        # Implements jinja2 Loader get_source interface
+        # https://jinja.palletsprojects.com/en/2.11.x/api/#loaders
         source = importlib_resources.read_text("pkgnet.templates", "tab_summary_report.jinja")
         path = next(importlib_resources.path("pkgnet.templates", "tab_summary_report.jinja").gen)
-        mtime = path.stat().st_mtime  # last modified time
-        return source, str(path), lambda: path.stat().st_mtime == mtime
+        modified_time = path.stat().st_mtime  # last modified time
+        return source, str(path), lambda: path.stat().st_mtime == modified_time
 
     ### PROPERTIES ###
 
