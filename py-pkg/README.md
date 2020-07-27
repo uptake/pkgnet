@@ -15,7 +15,7 @@ The core functionality of this package is the CreatePackageReport function.
 This package is not yet available via PyPI. You will need to clone this repository and run from the repo root:
 
 ```bash
-    pip install py-pkg
+    pip install ./py-pkg
 ```
 
 ## Usage Examples
