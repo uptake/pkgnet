@@ -1,0 +1,5 @@
+-c requirements.txt
+-r requirements.txt
+
+black
+flake8

@@ -3,6 +3,7 @@
 *.Rproj
 tests/testthat/Rplots.pdf
 **/.DS_Store
+.vscode
 
 # data files
 **/*.rds

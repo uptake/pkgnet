@@ -1,0 +1,36 @@
+
+<div id="{{ reporter.report_slug }}-graph-viz" style="width: 100%; height:480px"></div>
+
+<script>
+  ;(function() {
+    var data = {
+      nodes: JSON.parse('{{ reporter.graph_viz.nodes_to_json() }}'),
+      edges: JSON.parse('{{ reporter.graph_viz.edges_to_json() }}')
+    };
+    var options = {
+      autoResize: true,
+      height: '100%',
+      width: '100%',
+      nodes: {
+        "shape": 'dot',
+        "physics": false
+      },
+      edges: {
+        "smooth": false,
+        "arrows": "to"
+      }
+    };
+
+    var container = document.getElementById("{{ reporter.report_slug }}-graph-viz");
+
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+
+    var old_onresize = window.onresize
+    window.onresize = function() {
+      old_onresize();
+      network.fit();
+    };
+
+  })();
+</script>

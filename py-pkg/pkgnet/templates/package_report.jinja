@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pkg_name}} | Package Report by pkgnet</title>
+
+    {% for script_block in html_dependencies.script_blocks %}
+        {{ script_block }}
+    {% endfor %}
+
+    {% for stylesheet_block in html_dependencies.stylesheet_blocks %}
+        {{ stylesheet_block }}
+    {% endfor %}
+
+    <style>
+        body .main-container {
+            max-width: 80%;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onresize = function() {};
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="http://uptake.github.io/pkgnet">pkgnet</a>
+    </nav>
+    <div class="container-fluid main-container">
+        <div class="row" id="header">
+            <div class="col">
+                <h1>
+                    {{ pkg_name }}
+                    <span style="height: 15px; width: auto; display: inline-block;">
+                        {% include "assets/python_logo.svg" %}
+                    </span>
+                </h1>
+            </div>
+        </div>
+        <div class="row" id="content">
+            <div class="col">
+                <ul class="nav nav-tabs" id="tab-navigation" role="tablist">
+                    {# First Reporter Tab #}
+                        {% set reporter = reporters[0] %}
+                        <li class="nav-item">
+                            <a class="nav-link active" id="{{ reporter.report_slug }}-tab" data-toggle="tab" href="#{{ reporter.report_slug }}" role="tab"
+                            aria-controls="{{ reporter.report_slug }}" aria-selected="true" onclick="window.onresize()">{{ reporter.report_name }}</a>
+                        </li>
+                    {# / First Reporter Tab #}
+                    {% for reporter in reporters[1:] %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="{{ reporter.report_slug }}-tab" data-toggle="tab" href="#{{ reporter.report_slug }}" role="tab"
+                            aria-controls="{{ reporter.report_slug }}" aria-selected="false" onclick="window.onresize()">{{ reporter.report_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content" id="tab-content">
+                    {# First Reporter Tab #}
+                        {% set reporter = reporters[0] %}
+                        <div class="tab-pane fade show active" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
+                            {% include reporter.__class__.__name__ %}
+                        </div>
+                    {# / First Reporter Tab #}
+                    {% for reporter in reporters[1:] %}
+                        <div class="tab-pane fade" id="{{ reporter.report_slug }}" role="tabpanel" aria-labelledby="{{ reporter.report_slug }}-tab">
+                            {% include reporter.__class__.__name__ %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

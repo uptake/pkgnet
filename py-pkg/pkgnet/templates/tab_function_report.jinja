@@ -1,0 +1,17 @@
+<h3>Function Network</h3>
+
+<p>
+    This section analyzes the dependency relationships between functions of <b>{{pkg_name}}</b>.
+</p>
+
+<h4>Vizualization</h4>
+
+<p>
+    Nodes are functions. Edges point in the direction of dependence, from calling function to called function.
+</p>
+
+{% include reporter.graph_viz.viz_template %}
+
+<h4>Nodes Table</h4>
+
+{{ reporter.get_summary_view() }}
