@@ -22,7 +22,7 @@ sudo apt-get update
 sudo apt-get install \
     --no-install-recommends \
     -y \
-        libcurl-devel \
+        libcurl4-openssl-dev \
         curl \
         pandoc \
         r-base-dev=${R_LINUX_VERSION} \
