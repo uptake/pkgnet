@@ -20,6 +20,7 @@ sudo add-apt-repository \
     "deb https://cloud.r-project.org/bin/linux/ubuntu ${R_APT_REPO}"
 sudo apt-get update
 sudo apt-get install \
+    --allow-downgrades \
     --no-install-recommends \
     -y \
         libcurl4-openssl-dev \
