@@ -25,3 +25,9 @@ doc/*
 
 # aspell stuff
 **/*.bak
+
+# test artifacts
+smoke_tests/test_data/*.html
+smoke_tests/test_data/*.txt
+smoke_tests/test_data/chunks/
+**/*.log

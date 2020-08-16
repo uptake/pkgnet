@@ -1,0 +1,32 @@
+name: smoke tests
+
+# only build on merges to master
+on:
+  push:
+    branches:
+    - master
+  schedule:
+    # Run every Sunday
+    - cron: '0 0 * * 0'
+
+jobs:
+  test:
+    name: smoke-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - name: set up R
+        shell: bash
+        run: |
+          export GITHUB_ACTIONS="true"
+          ${GITHUB_WORKSPACE}/smoke_tests/setup.sh
+      - name: run smoke tests
+        shell: bash
+        run: |
+          R CMD INSTALL .
+          TEST_DATA_DIR=$(pwd)/smoke_tests/test_data
+          NUM_PARALLEL=4
+          ${GITHUB_WORKSPACE}/smoke_tests/test.sh ${TEST_DATA_DIR} ${NUM_PARALLEL}
