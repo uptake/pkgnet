@@ -5,7 +5,9 @@ on:
   push:
     branches:
     - master
-    - misc/smoke_tests
+  schedule:
+    # Run every Sunday
+    - cron: '0 0 * * 0'
 
 jobs:
   test:
