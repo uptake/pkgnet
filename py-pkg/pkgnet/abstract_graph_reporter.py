@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import Dict, Any
 
 from pkgnet.abstract_package_reporter import AbstractPackageReporter
 from pkgnet.graph_viz import VisJs
@@ -16,6 +17,7 @@ class AbstractGraphReporter(AbstractPackageReporter):
         super().__init__()
         self._nodes = None
         self._edges = None
+        self._network_measures = {}
         self._pkg_graph = None
         self._graph_viz = None
         self._viz_class = viz_class
@@ -53,9 +55,8 @@ class AbstractGraphReporter(AbstractPackageReporter):
         return self._edges
 
     @property
-    @abstractmethod
-    def network_measures(self):
-        pass
+    def network_measures(self) -> Dict[str, Any]:
+        return dict(**self._network_measures, **self.pkg_graph.graph_measures())
 
     @property
     def pkg_graph(self):
