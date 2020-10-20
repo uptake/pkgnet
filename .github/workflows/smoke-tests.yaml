@@ -1,10 +1,10 @@
 name: smoke tests
 
-# only build on merges to master
+# only build on merges to main
 on:
   push:
     branches:
-    - master
+    - main
   schedule:
     # Run every Sunday
     - cron: '0 0 * * 0'

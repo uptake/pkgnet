@@ -210,7 +210,7 @@
 <li>Fork <code>pkgnet</code> to your GitHub account</li>
 <li>Create a branch on your fork and add your changes</li>
 <li>If you are changing or adding to the R code in the package, add unit tests confirming that your code works as expected</li>
-<li>When you are ready, click “Compare &amp; Pull Request”. Open A PR comparing your branch to the <code>master</code> branch in this repo</li>
+<li>When you are ready, click “Compare &amp; Pull Request”. Open A PR comparing your branch to the <code>main</code> branch in this repo</li>
 <li>In the description section on your PR, please indicate the following:
 <ul>
 <li>description of what the PR is trying to do and how it improves <code>pkgnet</code>
@@ -239,7 +239,7 @@ some_function &lt;- function(n){
     )
 }</code></pre>
 <p>You do not need to namespace special operators in the case where doing so would hurt readability. For example, <code>%&gt;%</code> from <code>magrittr</code> and <code>:=</code> from <code>data.table</code> do not need <code>::</code> namespacing.</p>
-<p>If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the <code>Imports</code> section of the <a href="https://github.com/uptake/pkgnet/blob/master/DESCRIPTION">DESCRIPTION file</a>.</p>
+<p>If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the <code>Imports</code> section of the <a href="https://github.com/uptake/pkgnet/blob/main/DESCRIPTION">DESCRIPTION file</a>.</p>
 </div>
 <div id="indentation-and-whitespace" class="section level3">
 <h3 class="hasAnchor">
@@ -406,7 +406,7 @@ RandomNumberPlotter &lt;- R6::R6Class(
 <h2 class="hasAnchor">
 <a href="#running-tests-locally-" class="anchor"></a>Running Tests Locally <a name="testing"></a>
 </h2>
-<p>We use Travis CI to automatically run unit tests and a serious of other automated checks on every PR commit and merge to <code>master</code>. Every <code>pkgnet</code> release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.</p>
+<p>We use Travis CI to automatically run unit tests and a serious of other automated checks on every PR commit and merge to <code>main</code>. Every <code>pkgnet</code> release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.</p>
 <p>However, these options can lengthen your testing cycle and make the process of contributing tedious. If you wish to run tests locally on whatever machine you are developing <code>pkgnet</code> code on, run the following from the repo root:</p>
 <pre class="{bash}"><code>./test.sh</code></pre>
 <hr>
