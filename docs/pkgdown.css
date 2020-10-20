@@ -2,7 +2,7 @@
 
 /**
  * Basic idea: https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
- * Details: https://github.com/philipwalton/solved-by-flexbox/blob/main/assets/css/components/site.css
+ * Details: https://github.com/philipwalton/solved-by-flexbox/blob/master/assets/css/components/site.css
  *
  * .Site -> body > .container
  * .Site-content -> body > .container .row
