@@ -57,7 +57,7 @@ To submit a PR, please follow these steps:
 1. Fork `pkgnet` to your GitHub account
 2. Create a branch on your fork and add your changes
 3. If you are changing or adding to the R code in the package, add unit tests confirming that your code works as expected
-3. When you are ready, click "Compare & Pull Request". Open A PR comparing your branch to the `master` branch in this repo
+3. When you are ready, click "Compare & Pull Request". Open A PR comparing your branch to the `main` branch in this repo
 4. In the description section on your PR, please indicate the following:
     - description of what the PR is trying to do and how it improves `pkgnet`
     - links to any open [issues](https://github.com/uptake/pkgnet/issues) that your PR is addressing
@@ -86,7 +86,7 @@ some_function <- function(n){
 
 You do not need to namespace special operators in the case where doing so would hurt readability. For example, `%>%` from `magrittr` and `:=` from `data.table` do not need `::` namespacing.
 
-If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the `Imports` section of the [DESCRIPTION file](https://github.com/uptake/pkgnet/blob/master/DESCRIPTION).
+If you are adding new dependencies to the package (i.e. using an entirely new package), you need to also add that dependency to the `Imports` section of the [DESCRIPTION file](https://github.com/uptake/pkgnet/blob/main/DESCRIPTION).
 
 ### Indentation and whitespace
 
@@ -244,7 +244,7 @@ All comments should be above code, not beside it.
 ***
 ## Running Tests Locally <a name="testing"></a>
 
-We use Travis CI to automatically run unit tests and a serious of other automated checks on every PR commit and merge to `master`. Every `pkgnet` release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.
+We use Travis CI to automatically run unit tests and a serious of other automated checks on every PR commit and merge to `main`. Every `pkgnet` release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.
 
 However, these options can lengthen your testing cycle and make the process of contributing tedious. If you wish to run tests locally on whatever machine you are developing `pkgnet` code on, run the following from the repo root:
 
