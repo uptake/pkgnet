@@ -21,7 +21,7 @@ pkgnet compiles one or more package reporters into a package
 \itemize{
    \item{Initialize an instance of a package report object.}
        \item{\bold{Args:}}{\itemize{
-           \item{\bold{\code{pkg_name}}: (character string) name of
+           \item{\bold{\code{pkg_name}} (character string) name of
                package
            }
            \item{\bold{\code{pkg_path}}: (character string) optional
@@ -75,22 +75,22 @@ pkgnet compiles one or more package reporters into a package
 \section{Public Fields}{
 
 \describe{
-    \item{\bold{\code{pkg_name}}}{: (character string) name of package.
+    \item{\bold{\code{pkg_name}}}{(character string) name of package.
         Read-only.
     }
-    \item{\bold{\code{pkg_path}}}{: (character string) path to source code of
+    \item{\bold{\code{pkg_path}}}{(character string) path to source code of
         the package. Read-only.
     }
-    \item{\bold{\code{report_path}}}{: (character string) path and filename
+    \item{\bold{\code{report_path}}}{(character string) path and filename
         of output report.
     }
-    \item{\bold{\code{SummaryReporter}}}{: instantiated pkgnet
+    \item{\bold{\code{SummaryReporter}}}{instantiated pkgnet
         \code{\link{SummaryReporter}} object}
-    \item{\bold{\code{DependencyReporter}}}{: instantiated pkgnet
+    \item{\bold{\code{DependencyReporter}}}{instantiated pkgnet
         \code{\link{DependencyReporter}} object}
-    \item{\bold{\code{FunctionReporter}}}{: instantiated pkgnet
+    \item{\bold{\code{FunctionReporter}}}{instantiated pkgnet
         \code{\link{FunctionReporter}} object}
-    \item{\bold{\code{InheritanceReporter}}}{: instantiated pkgnet
+    \item{\bold{\code{InheritanceReporter}}}{instantiated pkgnet
         \code{\link{InheritanceReporter}} object}
 }
 }
@@ -106,7 +106,7 @@ pkgnet compiles one or more package reporters into a package
             }
             \item{\bold{Args:}}{
                 \itemize{
-                    \item{\bold{\code{deep}}: (logical) Whether to recursively
+                    \item{\bold{\code{deep}}(logical) Whether to recursively
                     clone nested R6 objects.
                  }
                 }

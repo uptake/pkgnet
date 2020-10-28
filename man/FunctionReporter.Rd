@@ -139,36 +139,36 @@ This reporter looks at the network of interdependencies of its
 \section{Public Fields}{
 
 \describe{
-    \item{\bold{\code{pkg_name}}}{: character string, name of set package.
+    \item{\bold{\code{pkg_name}}}{character string, name of set package.
         Read-only.
     }
-    \item{\bold{\code{report_markdown_path}}}{: character string, path to
+    \item{\bold{\code{report_markdown_path}}}{character string, path to
         R Markdown template for this reporter. Read-only.
     }
 }
 
 
 \describe{
-    \item{\bold{\code{nodes}}}{: a data.table, containing information about
+    \item{\bold{\code{nodes}}}{a data.table, containing information about
        the nodes of the network the reporter is analyzing. The \code{node}
        column acts the identifier. Read-only.
     }
-    \item{\bold{\code{edges}}}{: a data.table, containing information about
+    \item{\bold{\code{edges}}}{a data.table, containing information about
        the edge connections of the network the reporter is analyzing. Each
        row is one edge, and the columns \code{SOURCE} and \code{TARGET}
        specify the node identifiers. Read-only.
     }
-    \item{\bold{\code{network_measures}}}{: a list, containing any measures
+    \item{\bold{\code{network_measures}}}{a list, containing any measures
        of the network calculated by the reporter. Read-only.
     }
-    \item{\bold{\code{pkg_graph}}}{: a graph model object. See \link{DirectedGraph}
+    \item{\bold{\code{pkg_graph}}}{a graph model object. See \link{DirectedGraph}
        for additional documentation. Read-only.
     }
-    \item{\bold{\code{graph_viz}}}{: a graph visualization object. A
+    \item{\bold{\code{graph_viz}}}{a graph visualization object. A
        \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
        Read-only.
     }
-    \item{\bold{\code{layout_type}}}{: a character string, the current layout
+    \item{\bold{\code{layout_type}}}{a character string, the current layout
        type for the graph visualization. Can be assigned a new valid layout
        type value. Use use
        \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)}
