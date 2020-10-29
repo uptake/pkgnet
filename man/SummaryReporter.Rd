@@ -79,10 +79,10 @@ This reporter provides a high-level overview of a package via
 \section{Public Fields}{
 
 \describe{
-    \item{\bold{\code{pkg_name}}}{: character string, name of set package.
+    \item{\bold{\code{pkg_name}}}{character string, name of set package.
         Read-only.
     }
-    \item{\bold{\code{report_markdown_path}}}{: character string, path to
+    \item{\bold{\code{report_markdown_path}}}{character string, path to
         R Markdown template for this reporter. Read-only.
     }
 }
