@@ -78,10 +78,10 @@ pkgnet defines several package reporter R6 classes that analyze
 \section{Public Fields}{
 
 \describe{
-    \item{\bold{\code{pkg_name}}}{: character string, name of set package.
+    \item{\bold{\code{pkg_name}}}{character string, name of set package.
         Read-only.
     }
-    \item{\bold{\code{report_markdown_path}}}{: character string, path to
+    \item{\bold{\code{report_markdown_path}}}{character string, path to
         R Markdown template for this reporter. Read-only.
     }
 }

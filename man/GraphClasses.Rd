@@ -79,19 +79,19 @@ pkgnet uses R6 classes to define and encapsulate the graph
 \section{Public Fields}{
 
 \describe{
-    \item{\bold{\code{nodes}}}{: node data.table, read-only}
-    \item{\bold{\code{edges}}}{: edge data.table, read-only}
-    \item{\bold{\code{igraph}}}{: igraph object, read-only}
-    \item{\bold{\code{available_node_measures}}}{: character vector of all
+    \item{\bold{\code{nodes}}}{node data.table, read-only}
+    \item{\bold{\code{edges}}}{edge data.table, read-only}
+    \item{\bold{\code{igraph}}}{igraph object, read-only}
+    \item{\bold{\code{available_node_measures}}}{character vector of all
     supported node measures. See Node Measures section below for detailed
     descriptions. Read-only.}
-    \item{\bold{\code{available_graph_measures}}}{: character vector of all
+    \item{\bold{\code{available_graph_measures}}}{character vector of all
     supported graph measures. See Graph Measures section below for detailed
     descriptions. Read-only.}
-    \item{\bold{\code{default_node_measures}}}{: character vector of default
+    \item{\bold{\code{default_node_measures}}}{character vector of default
     node measures. See Node Measures section below for detailed descriptions.
     Read-only.}
-    \item{\bold{\code{default_graph_measures}}}{: character vector of default
+    \item{\bold{\code{default_graph_measures}}}{character vector of default
     graph measures. See Graph Measures section below for detailed descriptions.
     Read-only.}
 }

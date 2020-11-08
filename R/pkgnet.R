@@ -60,17 +60,17 @@ globalVariables(c('.'
 #'   package. The currently available reporters are:
 #'
 #'   \describe{
-#'     \item{\bold{\code{\link{DependencyReporter}}}}{: analyze the recursive
+#'     \item{\bold{\code{\link{DependencyReporter}}}}{analyze the recursive
 #'        network of packages that the subject package depends on.
 #'     }
-#'     \item{\bold{\code{\link{FunctionReporter}}}}{: analyze the network of
+#'     \item{\bold{\code{\link{FunctionReporter}}}}{analyze the network of
 #'        interdependencies of the functions defined in the subject package
 #'     }
-#'     \item{\bold{\code{\link{InheritanceReporter}}}}{: analyze the class
+#'     \item{\bold{\code{\link{InheritanceReporter}}}}{analyze the class
 #'        inheritance trees for subject packages that use object-oriented
 #'        programming.
 #'     }
-#'     \item{\bold{\code{\link{SummaryReporter}}}}{: get an overview of the
+#'     \item{\bold{\code{\link{SummaryReporter}}}}{get an overview of the
 #'        subject package through its DESCRIPTION file.
 #'     }
 #'   }
