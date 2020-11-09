@@ -31,10 +31,10 @@ jobs:
       - name: Setup and run tests
         shell: bash
         run: |
-          if [[ "${{ matrix.os }}" == "macOS-latest" ]]; then
+          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
               export OS_NAME="macos"
           elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-              export OS_NAME="osx"
+              export OS_NAME="linux"
           fi
           $GITHUB_WORKSPACE/.ci/test.sh
       - name: covr
