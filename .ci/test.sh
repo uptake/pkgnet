@@ -29,6 +29,8 @@ elif [[ "${OS_NAME}" == "linux" ]]; then
         -y \
         --allow-downgrades \
             libcurl4-openssl-dev \
+            libfribidi-dev \
+            libharfbuzz-dev \
             curl \
             devscripts \
             texinfo \
