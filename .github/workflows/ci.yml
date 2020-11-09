@@ -29,7 +29,7 @@ jobs:
         with:
           r-version: ${{ matrix.r_version }}
       - uses: r-lib/actions/setup-pandoc@v1
-      - name: run tests
+      - name: set up dependencies
         shell: bash
         run: |
           if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
@@ -38,7 +38,10 @@ jobs:
               export OS_NAME="linux"
           fi
           $GITHUB_WORKSPACE/.ci/setup.sh
-          $GITHUB_WORKSPACE/.ci/test.sh
+      - name: run tests
+        shell: bash
+        run: |
+          $GITHUB_WORKSPACE/test.sh
       - name: upload coverage
         shell: bash
         run: |
