@@ -4,8 +4,8 @@ set -e
 
 packages="
   c('assertthat', 'covr', 'data.table', 'DT', 'futile.logger', 'ggplot2',
-    'glue', 'igraph', 'knitr', 'magrittr', 'methods', 'pkgdown', 'R6', 'roxygen2',
-    'rlang', 'rmarkdown', 'testthat', 'tools', 'visNetwork', 'webshot', 'withr')
+    'glue', 'igraph', 'knitr', 'magrittr', 'pkgdown', 'R6', 'roxygen2',
+    'rlang', 'rmarkdown', 'testthat', 'visNetwork', 'webshot', 'withr')
     "
 
 if [[ "${OS_NAME}" == "macos" ]]; then
