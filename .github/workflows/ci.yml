@@ -37,6 +37,7 @@ jobs:
           elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
               export OS_NAME="linux"
           fi
+          $GITHUB_WORKSPACE/.ci/setup.sh
           $GITHUB_WORKSPACE/.ci/test.sh
       - name: upload coverage
         shell: bash
