@@ -25,17 +25,16 @@ jobs:
         with:
           fetch-depth: 1
       - name: Setup R
-        uses: r-lib/actions/setup-R@v1
+        uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r_version }}
       - name: Setup and run tests
         shell: bash
         run: |
           if [[ "${{ matrix.os }}" == "macOS-latest" ]]; then
-              export TASK="macos"
+              export OS_NAME="macos"
           elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-              export TASK="osx"
-              Rscript -e "install.packages('roxygen2', repos = 'http://cran.rstudio.org')"
+              export OS_NAME="osx"
           fi
           $GITHUB_WORKSPACE/.ci/test.sh
       - name: covr
