@@ -11,10 +11,6 @@ packages="
     "
 
 if [[ "${OS_NAME}" == "macos" ]]; then
-    # brew install llvm
-    # export PATH="/usr/local/opt/llvm/bin:$PATH"
-    # export LDFLAGS="-L/usr/local/opt/llvm/lib"
-    # export CFLAGS="-I/usr/local/opt/llvm/include"
     Rscript -e "
       options(install.packages.check.source = 'no');
       install.packages(${packages}, type = 'binary', repos = 'http://cran.rstudio.org')
