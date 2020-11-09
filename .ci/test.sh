@@ -11,11 +11,32 @@ packages="
     "
 
 if [[ "${OS_NAME}" == "macos" ]]; then
+    brew install \
+        checkbashisms \
+        qpdf
+    brew cask install basictex
+    export PATH="/Library/TeX/texbin:$PATH"
+    sudo tlmgr --verify-repo=none update --self
+    sudo tlmgr --verify-repo=none install inconsolata helvetic
     Rscript -e "
       options(install.packages.check.source = 'no');
       install.packages(${packages}, type = 'binary', repos = 'http://cran.rstudio.org')
     "
 elif [[ "${OS_NAME}" == "linux" ]]; then
+    sudo apt-get update
+    sudo apt-get install \
+        --no-install-recommends \
+        -y \
+        --allow-downgrades \
+            libcurl4-openssl-dev \
+            curl \
+            devscripts \
+            texinfo \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            qpdf \
+        || exit -1
     Rscript -e "install.packages(${packages}, repos = 'http://cran.rstudio.org')"
 fi
 
