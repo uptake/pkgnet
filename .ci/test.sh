@@ -20,7 +20,7 @@ if [[ "${OS_NAME}" == "macos" ]]; then
     sudo tlmgr --verify-repo=none install inconsolata helvetic
     Rscript -e "
       options(install.packages.check.source = 'no');
-      install.packages(${packages}, type = 'binary', repos = 'http://cran.rstudio.org')
+      install.packages(${packages}, type = 'binary', repos = 'https://cran.r-project.org')
     "
 elif [[ "${OS_NAME}" == "linux" ]]; then
     sudo apt-get update
@@ -39,7 +39,7 @@ elif [[ "${OS_NAME}" == "linux" ]]; then
             texlive-fonts-extra \
             qpdf \
         || exit -1
-    Rscript -e "install.packages(${packages}, repos = 'http://cran.rstudio.org')"
+    Rscript -e "install.packages(${packages}, repos = 'https://cran.r-project.org')"
 fi
 
 R CMD build .

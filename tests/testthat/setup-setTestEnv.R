@@ -4,7 +4,7 @@
 
 cat("setup-setTestEnv.R | NOT_CRAN =", Sys.getenv("NOT_CRAN"), "\n")
 if(identical(Sys.getenv("NOT_CRAN"), "true")){
-    ######## TRAVIS and LOCAL TEST PROCEDURE #############
+    ######## CI and LOCAL TEST PROCEDURE #############
 
     # record original libpaths in order to reset later.
     # This should be unnecessary since tests are conducted within a seperate enviornment.

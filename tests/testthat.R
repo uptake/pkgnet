@@ -9,13 +9,13 @@ Sys.setenv("R_TESTS" = "")
 
 
 #######  TESTING ON vs. OFF CRAN #############
-# Due to complications on CRAN with handling of temporary packages during testing, TRAVIS
+# Due to complications on CRAN with handling of temporary packages during testing, continuous integration (CI)
 # and local testing will remain the main test processes for pkgnet.
 # See https://github.com/uptake/pkgnet/issues/160 for details on this decision.
 
 cat("testthat.R | NOT_CRAN =", Sys.getenv("NOT_CRAN"), "\n")
 if(identical(Sys.getenv("NOT_CRAN"), "true")){
-    ######## TRAVIS and LOCAL TEST PROCEDURE #############
+    ######## CI and LOCAL TEST PROCEDURE #############
 
     # Check if setup and helper funs have been run.
     # If in R CMD CHECK, they may not have been run yet.
@@ -26,7 +26,7 @@ if(identical(Sys.getenv("NOT_CRAN"), "true")){
         library(pkgnet)
         ## ******************************************************************************************
         ## THIS IS THIS SAME CONTENT as setup_setTestEnv.R but neccessary to paste here due to
-        ## travis checks.
+        ## CI checks.
         ## ******************************************************************************************
 
         # [DEBUG] write("PKGNET_REBUILD triggered", file = "~/thing.txt", append = TRUE)
@@ -70,7 +70,7 @@ if(identical(Sys.getenv("NOT_CRAN"), "true")){
 
         ## ******************************************************************************************
         ## THIS IS THIS SAME CONTENT as teardown_setTestEnv.R but neccessary to paste here due to
-        ## travis checks.
+        ## CI checks.
         ## ******************************************************************************************
 
         # [DEBUG] write("PKGNET_REBUILD tear-down triggered", file = "~/thing.txt", append = TRUE)
