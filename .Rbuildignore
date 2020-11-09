@@ -1,7 +1,10 @@
 # Files currently checked into the repo
+^.*\.ci
+^.*\.github
 ^docs$
 ^_pkgdown\.yml$
 ^pkgdown$
+^smoke_tests
 ^cran-comments\.md$
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.MD$
@@ -64,4 +67,3 @@ vignettes/*\.pdf
 # Stuff
 .Rbuildignore
 .*\.gitkeep
-

@@ -6,7 +6,7 @@ export _R_CHECK_CRAN_INCOMING_=false
 
 packages="
   c('assertthat', 'covr', 'data.table', 'DT', 'futile.logger', 'ggplot2',
-    'glue', 'igraph', 'knitr', 'magrittr', 'methods', 'R6', 'roxygen2',
+    'glue', 'igraph', 'knitr', 'magrittr', 'methods', 'pkgdown', 'R6', 'roxygen2',
     'rlang', 'rmarkdown', 'testthat', 'tools', 'visNetwork', 'webshot', 'withr')
     "
 
