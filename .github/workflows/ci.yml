@@ -20,15 +20,16 @@ jobs:
           - os: macos-latest
             r_version: '4.0.3'
     steps:
-      - name: Checkout repository
+      - name: sheckout repository
         uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 1
-      - name: Setup R
+      - name: set up R
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.r_version }}
-      - name: Setup and run tests
+      - uses: r-lib/actions/setup-pandoc@v1
+      - name: run tests
         shell: bash
         run: |
           if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
@@ -37,7 +38,7 @@ jobs:
               export OS_NAME="linux"
           fi
           $GITHUB_WORKSPACE/.ci/test.sh
-      - name: covr
+      - name: upload coverage
         shell: bash
         run: |
           cat "pkgnet.Rcheck/tests/testthat.Rout"
