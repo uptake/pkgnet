@@ -3,7 +3,7 @@
 set -eo pipefail
 
 rm -f *.tar.gz
-R CMD BUILD .
+R CMD build .
 
 # Work outside of the source directory to avoid false
 # positives (i.e. test the tarball in isolation)
@@ -12,7 +12,7 @@ cp *.tar.gz ~/pkgnet_test_dir
 
 export _R_CHECK_CRAN_INCOMING_=false
 pushd ~/pkgnet_test_dir
-    R CMD CHECK *.tar.gz --as-cran
+    R CMD check *.tar.gz --as-cran
 
     LOG_FILE_NAME="pkgnet.Rcheck/00check.log"
 
