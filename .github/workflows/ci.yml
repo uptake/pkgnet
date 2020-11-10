@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test:
-    name: ${{ matrix.os }} (R ${{ matrix.r_version }})
+    name: ${{ matrix.os }} (R ${{ matrix.r-version }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     strategy:
@@ -12,13 +12,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            r_version: '3.6.3'
+            r-version: '3.6'
           - os: ubuntu-latest
-            r_version: '4.0.3'
+            r-version: 'release'
           - os: macos-latest
-            r_version: '3.6.3'
+            r-version: '3.6'
           - os: macos-latest
-            r_version: '4.0.3'
+            r-version: 'release'
     steps:
       - name: sheckout repository
         uses: actions/checkout@v2.3.4
@@ -27,8 +27,9 @@ jobs:
       - name: set up R
         uses: r-lib/actions/setup-r@v1
         with:
-          r-version: ${{ matrix.r_version }}
+          r-version: ${{ matrix.r-version }}
       - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-tinytex@v1
       - name: set up dependencies
         shell: bash
         run: |
@@ -37,12 +38,13 @@ jobs:
           elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
               export OS_NAME="linux"
           fi
-          $GITHUB_WORKSPACE/.ci/setup.sh
+          $GITHUB_WORKSPACE/.github/setup.sh
       - name: run tests
         shell: bash
         run: |
           $GITHUB_WORKSPACE/test.sh
       - name: upload coverage
+        if: ${{ matrix.os == 'macos-latest' && matrix.r-version == 'release' }}
         shell: bash
         run: |
           cat "pkgnet.Rcheck/tests/testthat.Rout"
