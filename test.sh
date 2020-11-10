@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
 rm -f *.tar.gz
 R CMD BUILD .
