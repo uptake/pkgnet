@@ -21,12 +21,12 @@ elif [[ "${OS_NAME}" == "linux" ]]; then
             libharfbuzz-dev \
             curl \
             devscripts \
+        || exit -1
             # texinfo \
             # texlive-latex-recommended \
             # texlive-fonts-recommended \
             # texlive-fonts-extra \
             # qpdf \
-        || exit -1
 fi
 
 Rscript -e "
