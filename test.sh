@@ -32,3 +32,5 @@ pushd ~/pkgnet_test_dir
         exit 1
     fi
 popd
+
+exit 0
