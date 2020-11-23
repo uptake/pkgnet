@@ -21,7 +21,7 @@ elif [[ "${OS_NAME}" == "linux" ]]; then
             libharfbuzz-dev \
             curl \
             devscripts \
-            qpdf
+            qpdf \
         || exit -1
             # texinfo \
             # texlive-latex-recommended \
