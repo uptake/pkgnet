@@ -100,10 +100,11 @@ test_that("Test that CreatePackageVignette runs end-to-end with non-default repo
     )
     outputPath <- tempfile(pattern = "vignette", fileext = ".html")
 
+    # using :: to avoid masking by testthat::SummaryReporter
     expect_true({
         CreatePackageVignette(pkg = pkgPath
                               , pkg_reporters = list(
-                                  SummaryReporter$new()
+                                  pkgnet::SummaryReporter$new()
                                   , DependencyReporter$new()
                               )
                               , vignette_path = vignettePath
