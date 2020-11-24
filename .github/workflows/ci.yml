@@ -47,7 +47,6 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' && matrix.r-version == 'release' }}
         shell: bash
         run: |
-          cat "pkgnet.Rcheck/tests/testthat.Rout"
           Rscript -e "covr::codecov()"
   # https://github.community/t/is-it-possible-to-require-all-github-actions-tasks-to-pass-without-enumerating-them/117957/4?u=graingert
   all-successful:

@@ -16,6 +16,16 @@ pushd ~/pkgnet_test_dir
 
     LOG_FILE_NAME="pkgnet.Rcheck/00check.log"
 
+    echo ""
+    echo "----- R CMD check logs -----"
+    echo ""
+    cat pkgnet.Rcheck/00check.log
+
+    echo ""
+    echo "----- test outputs -----"
+    echo ""
+    cat pkgnet.Rcheck/tests/testthat.Rout
+
     if grep -q -R "WARNING" "$LOG_FILE_NAME"; then
         echo "WARNINGS have been found by R CMD check!"
         exit 1
@@ -31,4 +41,5 @@ pushd ~/pkgnet_test_dir
         echo "Found ${NUM_CHECK_NOTES} NOTEs from R CMD check. Only ${ALLOWED_CHECK_NOTES} are allowed"
         exit 1
     fi
+
 popd || exit 0
