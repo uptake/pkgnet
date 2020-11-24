@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eo pipefail
+set -e pipefail
 
 rm -f *.tar.gz
 R CMD build .
@@ -12,7 +12,7 @@ cp *.tar.gz ~/pkgnet_test_dir
 
 export _R_CHECK_CRAN_INCOMING_=false
 pushd ~/pkgnet_test_dir
-    R CMD check *.tar.gz --as-cran
+    R CMD check *.tar.gz --as-cran || exit 1
 
     LOG_FILE_NAME="pkgnet.Rcheck/00check.log"
 
@@ -31,6 +31,4 @@ pushd ~/pkgnet_test_dir
         echo "Found ${NUM_CHECK_NOTES} NOTEs from R CMD check. Only ${ALLOWED_CHECK_NOTES} are allowed"
         exit 1
     fi
-popd
-
-exit 0
+popd || exit 0
