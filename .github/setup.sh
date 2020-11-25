@@ -23,11 +23,6 @@ elif [[ "${OS_NAME}" == "linux" ]]; then
             devscripts \
             qpdf \
         || exit -1
-            # texinfo \
-            # texlive-latex-recommended \
-            # texlive-fonts-recommended \
-            # texlive-fonts-extra \
-            # qpdf \
 fi
 
 Rscript -e "
