@@ -41,9 +41,8 @@ jobs:
           $GITHUB_WORKSPACE/test.sh
       - name: upload coverage
         if: ${{ matrix.os == 'macos-latest' && matrix.r-version == 'release' }}
-        shell: bash
-        run: |
-          Rscript -e "covr::codecov()"
+        shell: Rscript {0}
+        run: covr::codecov()
   # https://github.community/t/is-it-possible-to-require-all-github-actions-tasks-to-pass-without-enumerating-them/117957/4?u=graingert
   all-successful:
     runs-on: ubuntu-latest

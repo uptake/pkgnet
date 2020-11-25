@@ -6,10 +6,6 @@ if [[ "${OS_NAME}" == "macos" ]]; then
     brew install \
         checkbashisms \
         qpdf
-    # brew cask install basictex
-    # export PATH="/Library/TeX/texbin:$PATH"
-    # sudo tlmgr --verify-repo=none update --self
-    # sudo tlmgr --verify-repo=none install inconsolata helvetic
 elif [[ "${OS_NAME}" == "linux" ]]; then
     sudo apt-get update
     sudo apt-get install \
