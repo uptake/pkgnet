@@ -41,6 +41,8 @@ jobs:
           $GITHUB_WORKSPACE/.github/setup.sh
       - name: run tests
         shell: bash
+        env:
+          NOT_CRAN: true
         run: |
           $GITHUB_WORKSPACE/test.sh
       - name: upload coverage
