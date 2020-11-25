@@ -2,11 +2,11 @@
 
 set -e
 
-if [[ "${OS_NAME}" == "macos" ]]; then
+if [[ "${OS_NAME}" == "macos-latest" ]]; then
     brew install \
         checkbashisms \
         qpdf
-elif [[ "${OS_NAME}" == "linux" ]]; then
+elif [[ "${OS_NAME}" == "ubuntu-latest" ]]; then
     sudo apt-get update
     sudo apt-get install \
         --no-install-recommends \

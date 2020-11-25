@@ -28,17 +28,12 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v1
       - name: set up dependencies
         shell: bash
-        run: |
-          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-              export OS_NAME="macos"
-          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-              export OS_NAME="linux"
-          fi
-          $GITHUB_WORKSPACE/.github/setup.sh
+        env:
+          OS_NAME: ${{ matrix.os }}
+        run: $GITHUB_WORKSPACE/.github/setup.sh
       - name: run tests
         shell: bash
-        run: |
-          $GITHUB_WORKSPACE/test.sh
+        run: $GITHUB_WORKSPACE/test.sh
       - name: upload coverage
         if: ${{ matrix.os == 'macos-latest' && matrix.r-version == 'release' }}
         shell: Rscript {0}
