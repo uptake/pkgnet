@@ -12,11 +12,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            r-version: '3.6'
-          - os: ubuntu-latest
             r-version: 'release'
-          - os: macos-latest
-            r-version: '3.6'
           - os: macos-latest
             r-version: 'release'
     steps:
@@ -41,8 +37,6 @@ jobs:
           $GITHUB_WORKSPACE/.github/setup.sh
       - name: run tests
         shell: bash
-        env:
-          NOT_CRAN: true
         run: |
           $GITHUB_WORKSPACE/test.sh
       - name: upload coverage
