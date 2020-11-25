@@ -244,7 +244,7 @@ All comments should be above code, not beside it.
 ***
 ## Running Tests Locally <a name="testing"></a>
 
-We use GitHub Actions to automatically run unit tests and a serious of other automated checks on every PR commit and merge to `main`. Every `pkgnet` release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.
+We use GitHub Actions to automatically run unit tests and a series of other automated checks on every PR commit and merge to `main`. Every `pkgnet` release also goes through a battery of automated tests run on CRAN before becoming officially available through CRAN.
 
 However, these options can lengthen your testing cycle and make the process of contributing tedious. If you wish to run tests locally on whatever machine you are developing `pkgnet` code on, run the following from the repo root:
 
