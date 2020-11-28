@@ -31,6 +31,7 @@ Imports:
     visNetwork
 Suggests:
     ggplot2,
+    pkgdown,
     testthat,
     webshot,
     withr

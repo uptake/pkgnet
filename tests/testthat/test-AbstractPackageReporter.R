@@ -67,7 +67,9 @@ test_that(".is.PackageReporter correctly identifies package reporters", {
     expect_true(pkgnet:::.is.PackageReporter(DependencyReporter$new()))
     expect_true(pkgnet:::.is.PackageReporter(FunctionReporter$new()))
     expect_true(pkgnet:::.is.PackageReporter(InheritanceReporter$new()))
-    expect_true(pkgnet:::.is.PackageReporter(SummaryReporter$new()))
+
+    # using :: to avoid masking by testthat::SummaryReporter
+    expect_true(pkgnet:::.is.PackageReporter(pkgnet::SummaryReporter$new()))
 
     DependencyTabloid <- R6::R6Class(
         classname = "DependencyTabloid"
