@@ -10,7 +10,7 @@ RUN chmod +x r_devel_check.sh
 
 # Install System Dependencies
 RUN apt-get update
-RUN apt-get install -y pandoc pandoc-citeproc qpdf ghostscript libssl-dev libxml2-dev
+RUN apt-get install -y pandoc pandoc-citeproc qpdf ghostscript libssl-dev libxml2-dev gfortran
 
 # Install Devtools
 RUN RD -e 'install.packages(c("xml2", "rversions", "roxygen2", "devtools"), repos = "https://cloud.r-project.org")'
