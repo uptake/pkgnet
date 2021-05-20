@@ -2,7 +2,7 @@
 # intended build command to be run from package root:
 # 		docker build -f release_testing\dockerfile -t pkgnet_rdevel .
 
-FROM rocker/r-devel
+FROM rocker/drd
 
 # Copy test script into container
 COPY release_testing/r_devel_check.sh .
