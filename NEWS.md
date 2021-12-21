@@ -1,6 +1,11 @@
 # pkgnet (dev)
+## NEW FEATURES
+* Node coloring in DependencyReporter (#243)
 
-_No changes since latest release_
+## CHANGES
+* Removed LazyData field to accomodate change in CRAN policy. (#289)
+
+## BUGFIXES
 
 # pkgnet 0.4.1
 
