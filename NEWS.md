@@ -13,7 +13,7 @@
 * Removed LazyData field to accomodate change in CRAN policy. (#289)
 
 ## BUGFIXES
-None.
+* Updated Codecov URL.
 
 # pkgnet 0.4.1
 
