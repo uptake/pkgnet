@@ -1,7 +1,7 @@
 Package: pkgnet
 Type: Package
 Title: Get Network Representation of an R Package
-Version: 0.4.1.9999
+Version: 0.4.2
 Authors@R: c(
     person("Brian", "Burns", email = "brian.burns.opensource@gmail.com", role = c("aut", "cre")),
     person("James", "Lamb", email = "jaylamb20@gmail.com", role = c("aut")),

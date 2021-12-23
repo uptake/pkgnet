@@ -1,11 +1,19 @@
 # pkgnet (dev)
 ## NEW FEATURES
+
+## CHANGES
+
+## BUGFIXES
+
+# pkgnet 0.4.2
+## NEW FEATURES
 * Node coloring in DependencyReporter (#243)
 
 ## CHANGES
 * Removed LazyData field to accomodate change in CRAN policy. (#289)
 
 ## BUGFIXES
+* Updated Codecov URL.
 
 # pkgnet 0.4.1
 

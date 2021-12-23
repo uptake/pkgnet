@@ -1,5 +1,13 @@
 # CRAN Submission History
 
+## v 0.4.2
+
+### Submission on December 21st, 2021
+Some insignificant submission note linking back to #290
+
+### CRAN Response 
+None.  We made it through the auto-approval process with no issues.
+
 ## v 0.4.1
 
 ### Submission on March 29th, 2020

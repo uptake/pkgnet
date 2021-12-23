@@ -327,10 +327,12 @@ This is a CRAN requirement, and yes, it's a pain.  Luckily, Dirk Eddelbuettel an
 2. Build the r-devel pkgnet docker image and run CRAN checks via these commands: 
 ```
 # On Windows
+docker pull rocker/drd
 docker build -f release_testing\dockerfile -t pkgnet_rdevel . 
 docker run --rm -ti -v %cd%:/RPackage pkgnet_rdevel ./r_devel_check.sh
 
 # On Mac
+docker pull rocker/drd
 docker build -f release_testing/dockerfile -t pkgnet_rdevel . 
 docker run --rm -ti -v $(pwd):/RPackage pkgnet_rdevel ./r_devel_check.sh
 ```
