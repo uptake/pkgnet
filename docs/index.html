@@ -38,6 +38,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -50,7 +52,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
       </span>
     </div>
 
@@ -74,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/uptake/pkgnet">
+  <a href="https://github.com/uptake/pkgnet" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -98,14 +100,13 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="pkgnet-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#pkgnet-" class="anchor"></a>pkgnet <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<div class="section level1">
+<div class="page-header"><h1 id="pkgnet-">pkgnet <img src="reference/figures/logo.png" align="right" alt="" width="120"><a class="anchor" aria-label="anchor" href="#pkgnet-"></a>
 </h1></div>
 
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p><code>pkgnet</code> is an R library designed for the analysis of R libraries! The goal of the package is to build a graph representation of a package and its dependencies to inform a variety of activities, including:</p>
 <ul>
 <li>prioritizing functions to unit test based on their centrality</li>
@@ -115,49 +116,42 @@
 <p><img src="https://raw.githubusercontent.com/uptake/pkgnet/main/readme_figures/demo.gif"></p>
 </div>
 </div>
-<div id="table-of-contents" class="section level1">
-<h1 class="hasAnchor">
-<a href="#table-of-contents" class="anchor"></a>Table of contents</h1>
-<ol>
+<div class="section level1">
+<h1 id="table-of-contents">Table of contents<a class="anchor" aria-label="anchor" href="#table-of-contents"></a>
+</h1>
+<ol style="list-style-type: decimal">
 <li><a href="#howitworks">How it Works</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#examples">Usage Examples</a></li>
 <li><a href="#contributing">How to Contribute</a></li>
-<li><a href="#nextsteps">Next Steps</a></li>
 </ol>
-<div id="how-it-works-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-it-works-" class="anchor"></a>How it Works <a name="howitworks"></a>
+<div class="section level2">
+<h2 id="how-it-works-">How it Works <a name="howitworks"></a>
+<a class="anchor" aria-label="anchor" href="#how-it-works-"></a>
 </h2>
 <p>The core functionality of this package is the <code>CreatePackageReport</code> function.</p>
 </div>
-<div id="installation-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation-" class="anchor"></a>Installation <a name="installation"></a>
+<div class="section level2">
+<h2 id="installation-">Installation <a name="installation"></a>
+<a class="anchor" aria-label="anchor" href="#installation-"></a>
 </h2>
-<p>This package is now available from <a href="https://cran.r-project.org/package=pkgnet">CRAN</a>!</p>
-<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages('pkgnet')</a></code></pre>
+<p>This package is now available from <a href="https://cran.r-project.org/package=pkgnet" class="external-link">CRAN</a>!</p>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'pkgnet'</span><span class="op">)</span></code></pre>
 </div>
-<div id="usage-examples-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage-examples-" class="anchor"></a>Usage Examples <a name="examples"></a>
+<div class="section level2">
+<h2 id="usage-examples-">Usage Examples <a name="examples"></a>
+<a class="anchor" aria-label="anchor" href="#usage-examples-"></a>
 </h2>
 <p>Try it out!</p>
-<pre><code>library(pkgnet)
-result &lt;- CreatePackageReport('ggplot2')</code></pre>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span>
+<span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/CreatePackageReport.html">CreatePackageReport</a></span><span class="op">(</span><span class="st">'ggplot2'</span><span class="op">)</span></code></pre>
 </div>
-<div id="how-to-contribute-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-contribute-" class="anchor"></a>How to Contribute <a name="contributing"></a>
+<div class="section level2">
+<h2 id="how-to-contribute-">How to Contribute <a name="contributing"></a>
+<a class="anchor" aria-label="anchor" href="#how-to-contribute-"></a>
 </h2>
-<p>To report bugs, request features, or ask questions about the structure of the code, please <a href="https://github.com/uptake/pkgnet/issues">open an issue</a>.</p>
-<p>If you’d like to contribute to the project, please <a href="https://github.com/uptake/pkgnet/pulls">open a pull request</a>. PRs should follow the project’s <a href="https://github.com/uptake/pkgnet/blob/main/CONTRIBUTING.md">contribution guidelines</a>.</p>
-</div>
-<div id="next-steps-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#next-steps-" class="anchor"></a>Next Steps <a name="nextsteps"></a>
-</h2>
-<p>This is a fairly new project and, as the version number indicates, should be regarded as a work in progress.</p>
+<p>To report bugs, request features, or ask questions about the structure of the code, please <a href="https://github.com/uptake/pkgnet/issues" class="external-link">open an issue</a>.</p>
+<p>If you’d like to contribute to the project, please <a href="https://github.com/uptake/pkgnet/pulls" class="external-link">open a pull request</a>. PRs should follow the project’s <a href="https://github.com/uptake/pkgnet/blob/main/CONTRIBUTING.md" class="external-link">contribution guidelines</a>.</p>
 </div>
 </div>
 
@@ -165,33 +159,40 @@ result &lt;- CreatePackageReport('ggplot2')</code></pre>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=pkgnet">https://​cloud.r-project.org/​package=pkgnet</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/uptake/pkgnet/">https://​github.com/​uptake/​pkgnet/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/uptake/pkgnet/issues">https://​github.com/​uptake/​pkgnet/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=pkgnet" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/uptake/pkgnet/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/uptake/pkgnet/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li>
-<a href="https://opensource.org/licenses/BSD-3-Clause">BSD_3_clause</a> + file <a href="LICENSE-text.html">LICENSE</a>
+<a href="https://opensource.org/licenses/BSD-3-Clause" class="external-link">BSD_3_clause</a> + file <a href="LICENSE-text.html">LICENSE</a>
 </li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing pkgnet</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Brian Burns <br><small class="roles"> Author, maintainer </small>  </li>
 <li>James Lamb <br><small class="roles"> Author </small>  </li>
@@ -199,26 +200,30 @@ result &lt;- CreatePackageReport('ggplot2')</code></pre>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=pkgnet"><img src="https://www.r-pkg.org/badges/version-last-release/pkgnet" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://cran.r-project.org/package=pkgnet"><img src="https://cranlogs.r-pkg.org/badges/grand-total/pkgnet" alt="CRAN_Download_Badge"></a></li>
-<li><a href="https://travis-ci.org/uptake/pkgnet"><img src="https://img.shields.io/travis/uptake/pkgnet.svg?label=build&amp;logo=travis&amp;branch=main" alt="Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/jameslamb/pkgnet"><img src="https://ci.appveyor.com/api/projects/status/github/uptake/pkgnet?branch=main&amp;svg=true" alt="Appveyor Build status"></a></li>
-<li><a href="https://codecov.io/gh/uptake/pkgnet"><img src="https://codecov.io/gh/uptake/pkgnet/branch/main/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://cran.r-project.org/package=pkgnet" class="external-link"><img src="https://www.r-pkg.org/badges/version-last-release/pkgnet" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://cran.r-project.org/package=pkgnet" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/pkgnet" alt="CRAN_Download_Badge"></a></li>
+<li><a href="https://github.com/uptake/pkgnet/actions?query=workflow%3ATests+branch%3Amain" class="external-link"><img src="https://github.com/uptake/pkgnet/workflows/Tests/badge.svg?branch=main" alt="GitHub Actions Build Status"></a></li>
+<li><a href="https://ci.appveyor.com/project/jameslamb/pkgnet" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/uptake/pkgnet?branch=main&amp;svg=true" alt="Appveyor Build status"></a></li>
+<li><a href="https://app.codecov.io/gh/uptake/pkgnet" class="external-link"><img src="https://app.codecov.io/gh/uptake/pkgnet/branch/main/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg" alt="Lifecycle badge"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Brian Burns, James Lamb, Jay Qi.</p>
+  <p></p>
+<p>Developed by Brian Burns, James Lamb, Jay Qi.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
