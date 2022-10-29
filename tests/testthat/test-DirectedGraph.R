@@ -145,7 +145,7 @@ for (thisTest in testList) {
                 , info = sprintf("Value testing for %s, %s : %s"
                                  , thisTest[['pkg']]
                                  , thisTest[['reporter']]
-                                 , nodeMeas)
+                                 , graphMeas)
             )
         } # /for graphMeas
         }) # /test_that
