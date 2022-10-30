@@ -1,6 +1,3 @@
-context("FunctionReporter Expected Network Tests")
-rm(list = ls())
-
 ##### RUN TESTS #####
 
 for (testPkg in c('baseballstats', 'sartre', 'milne')) {
@@ -34,8 +31,3 @@ for (testPkg in c('baseballstats', 'sartre', 'milne')) {
         )
     })
 }
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

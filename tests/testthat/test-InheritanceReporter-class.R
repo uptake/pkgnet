@@ -1,6 +1,3 @@
-context("InheritanceReporter Class Tests")
-rm(list = ls())
-
 ##### TESTS #####
 
 ## PUBLIC INTERFACE ##
@@ -147,8 +144,3 @@ test_that("InheritanceReporter should give warning for packages with no classes"
         reporter$edges
     }, regexp = "No S4, Reference, or R6 class definitions found")
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

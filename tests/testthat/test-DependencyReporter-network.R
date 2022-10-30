@@ -1,5 +1,3 @@
-context("DependencyReporter Expected Network Tests")
-
 ##### TESTS #####
 
 test_that('DependencyReporter extracts expected network for baseballstats', {

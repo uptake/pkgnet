@@ -1,6 +1,3 @@
-context("CreatePackageVignette Tests")
-rm(list = ls())
-
 ##### TESTS #####
 
 # baseballstats source path
@@ -225,8 +222,3 @@ test_that("CreatePackageVignette warns if vignette_path seems wrong", {
     unlink(file.path(tempdir(), "basketballstats"), recursive = TRUE)
 
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

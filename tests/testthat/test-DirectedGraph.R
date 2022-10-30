@@ -1,8 +1,3 @@
-context("DirectedGraph Class Tests")
-rm(list = ls())
-
-library(data.table)
-
 ##### TEST SET UP #####
 
 milneNodes <- data.table::fread(file.path('testdata', 'milne_function_nodes.csv'))
@@ -202,8 +197,3 @@ test_that('DirectedGraph constructor errors on bad inputs', {
         , fixed = TRUE
     )
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

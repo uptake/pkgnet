@@ -1,6 +1,3 @@
-context("CreatePackageReport Tests")
-rm(list = ls())
-
 ##### TEST SET UP #####
 
 # Set flag to suppress browser opening
@@ -138,6 +135,3 @@ test_that("CreatePackageReport respects report_path when explicitly given", {
 ##### TEST TEAR DOWN #####
 
 Sys.unsetenv("PKGNET_SUPPRESS_BROWSER")
-
-rm(list = ls())
-closeAllConnections()

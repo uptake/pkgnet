@@ -1,5 +1,3 @@
-context("InheritanceReporter Expected Network Tests")
-
 ##### TESTS #####
 
 test_that('InheritanceReporter extracts expected network for milne', {

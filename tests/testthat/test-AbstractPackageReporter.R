@@ -1,8 +1,4 @@
-context("AbstractPackageReporter Tests")
-rm(list = ls())
-
 ##### TESTS #####
-
 test_that('AbstractPackageReporter public interface is as expected', {
 
     publicInterfaceExpected <- c(
@@ -76,8 +72,3 @@ test_that(".is.PackageReporter correctly identifies package reporters", {
     )
     expect_true(!pkgnet:::.is.PackageReporter(DependencyTabloid$new()))
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

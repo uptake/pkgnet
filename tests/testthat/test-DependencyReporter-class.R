@@ -1,6 +1,3 @@
-context("DependencyReporter Class Tests")
-rm(list = ls())
-
 ##### TESTS #####
 
 ## PUBLIC INTERFACE ##
@@ -147,8 +144,3 @@ test_that("DependencyReporter should break with an informative error for package
         reporter$graph_viz
     }, regexp = "consider adding more dependency types in your definition of DependencyReporter")
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()
