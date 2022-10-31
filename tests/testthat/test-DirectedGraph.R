@@ -135,7 +135,7 @@ for (thisTest in testList) {
 
         for (graphMeas in reporter$pkg_graph$available_graph_measures) {
             expect_equivalent(
-                object = reporter$pkg_graph$graph_measures(graphMeas)
+                object = reporter$pkg_graph$graph_measures(graphMeas)[[graphMeas]]
                 , expected = expectedGraphMeasuresDT[measure == graphMeas, value]
                 , ignore.col.order = TRUE
                 , ignore.row.order = TRUE
