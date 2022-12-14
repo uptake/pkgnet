@@ -1,6 +1,12 @@
 name: Tests
 
-on: [push]
+on:
+  push:
+  pull_request:
+  schedule:
+    # Run every Monday at midnight
+    - cron: "0 0 * * 1"
+  workflow_dispatch:
 
 jobs:
   test:
