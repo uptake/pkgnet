@@ -1,6 +1,3 @@
-context("Installation of Test Packages")
-rm(list = ls())
-
 # Test packages are installed in a temporary directory before testing and
 # uninstalled after. Many pkgnet tests depend on these packages installing
 # correctly and being available.

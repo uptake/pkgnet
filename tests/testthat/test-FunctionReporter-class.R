@@ -1,6 +1,3 @@
-context("FunctionReporter Class Tests")
-rm(list = ls())
-
 ##### TESTS #####
 
 ## PUBLIC INTERFACE ##
@@ -283,7 +280,3 @@ test_that("FunctionReporter R6 edge extraction handles case where all methods ha
                                         TARGET = c("couplet_2",
                                                    "couplet_1"),key = c("SOURCE","TARGET")))
 })
-
-##### TEST TEAR DOWN #####
-rm(list = ls())
-closeAllConnections()

@@ -1,8 +1,4 @@
-context("Plotting Tests")
-
 ##### TEST SET UP #####
-
-rm(list = ls())
 
 test_that('node coloring by discrete and continuous', {
     b <- FunctionReporter$new()
@@ -42,8 +38,3 @@ test_that('node coloring by discrete and continuous', {
     expect_is(viz, "visNetwork")
     expect_is(viz, "htmlwidget")
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

@@ -8,7 +8,3 @@ context("always true for cran")
 test_that("always true", {
     expect_true(TRUE, info = "always true")
 })
-
-##### TEST TEAR DOWN #####
-rm(list = ls())
-closeAllConnections()

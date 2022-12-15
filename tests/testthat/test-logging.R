@@ -1,6 +1,3 @@
-context("Test logger functions.")
-rm(list = ls())
-
 ##### TESTS #####
 
 test_that("logging works", {
@@ -19,8 +16,3 @@ test_that("logging works", {
     }, regexp = "other stuff")
 
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

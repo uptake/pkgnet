@@ -20,7 +20,7 @@ Imports:
     DT,
     futile.logger,
     glue,
-    igraph,
+    igraph(>= 1.3),
     knitr,
     magrittr,
     methods,

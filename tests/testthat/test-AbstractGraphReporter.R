@@ -1,6 +1,3 @@
-context("AbstractGraphReporter Tests")
-rm(list = ls())
-
 ##### TESTS #####
 
 ## PUBLIC INTERFACE ##
@@ -95,8 +92,3 @@ test_that(".igraphAvailableLayouts returns layouts correctly", {
         length(pkgnet:::.igraphAvailableLayouts()) > 0
     })
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

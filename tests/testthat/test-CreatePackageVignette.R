@@ -1,6 +1,3 @@
-context("CreatePackageVignette Tests")
-rm(list = ls())
-
 ##### TESTS #####
 
 # baseballstats source path
@@ -199,7 +196,15 @@ test_that("CreatePackageVignette warns if vignette_path seems wrong", {
 
     # If in root of a different package
     suppressWarnings({
-        utils::package.skeleton(name = "basketballstats", path = tempdir())
+        # creating a temporary environment to avoid the following error from package.skeleton()
+        # "... no R objects specified or available"
+        basketball_env <- new.env()
+        basketball_env[["a"]] <- function(){return(1)}
+        utils::package.skeleton(
+            name = "basketballstats"
+            , environment = basketball_env
+            , path = tempdir()
+        )
     })
     dir.create(file.path(tempdir(), "basketballstats", "vignettes"))
     expect_warning(
@@ -217,8 +222,3 @@ test_that("CreatePackageVignette warns if vignette_path seems wrong", {
     unlink(file.path(tempdir(), "basketballstats"), recursive = TRUE)
 
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()

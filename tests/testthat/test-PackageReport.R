@@ -1,6 +1,3 @@
-context("PackageReport Class Tests")
-rm(list = ls())
-
 ##### TEST SET UP #####
 
 # Set flag to suppress browser opening
@@ -200,6 +197,3 @@ test_that("PackageReport rejects wrong reporter assignments", {
 ##### TEST TEAR DOWN #####
 
 Sys.unsetenv("PKGNET_SUPPRESS_BROWSER")
-
-rm(list = ls())
-closeAllConnections()

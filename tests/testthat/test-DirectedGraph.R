@@ -1,6 +1,3 @@
-context("DirectedGraph Class Tests")
-rm(list = ls())
-
 ##### TEST SET UP #####
 
 milneNodes <- data.table::fread(file.path('testdata', 'milne_function_nodes.csv'))
@@ -106,12 +103,11 @@ for (thisTest in testList) {
         ))
 
         reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
-
+        
         for (nodeMeas in reporter$pkg_graph$available_node_measures) {
-
             expect_equivalent(
                 object = reporter$pkg_graph$node_measures(nodeMeas)
-                , expected = expectedNodeMeasuresDT[, .SD, .SDcols = c('node', nodeMeas)]
+                , expected = expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
                 , ignore.col.order = TRUE
                 , ignore.row.order = TRUE
                 , info = sprintf("Value testing for %s, %s : %s"
@@ -137,15 +133,20 @@ for (thisTest in testList) {
         reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
 
         for (graphMeas in reporter$pkg_graph$available_graph_measures) {
+
+            # NAs to NaNs 
+            expected_value <- expectedGraphMeasuresDT[measure == graphMeas, value]
+            expected_value <- ifelse(is.na(expected_value), NaN, expected_value)
+          
             expect_equivalent(
-                object = reporter$pkg_graph$graph_measures(graphMeas)
-                , expected = expectedGraphMeasuresDT[measure == graphMeas, value]
+                object = reporter$pkg_graph$graph_measures(graphMeas)[[graphMeas]]
+                , expected = expected_value
                 , ignore.col.order = TRUE
                 , ignore.row.order = TRUE
                 , info = sprintf("Value testing for %s, %s : %s"
                                  , thisTest[['pkg']]
                                  , thisTest[['reporter']]
-                                 , nodeMeas)
+                                 , graphMeas)
             )
         } # /for graphMeas
         }) # /test_that
@@ -200,8 +201,3 @@ test_that('DirectedGraph constructor errors on bad inputs', {
         , fixed = TRUE
     )
 })
-
-##### TEST TEAR DOWN #####
-
-rm(list = ls())
-closeAllConnections()
