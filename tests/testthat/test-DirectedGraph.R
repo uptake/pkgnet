@@ -110,10 +110,13 @@ for (thisTest in testList) {
                 , expected = expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
                 , ignore.col.order = TRUE
                 , ignore.row.order = TRUE
-                , info = sprintf("Value testing for %s, %s : %s"
+                , info = sprintf("Value testing for %s, %s : %s /n obj: %s /n exp %s"
                                  , thisTest[['pkg']]
                                  , thisTest[['reporter']]
-                                 , nodeMeas)
+                                 , nodeMeas
+                                 , reporter$pkg_graph$node_measures(nodeMeas)
+                                 , expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
+                                 )
             )
         } # /for nodeMeas
     }) # /test_that
