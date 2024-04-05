@@ -39,3 +39,4 @@ License: BSD_3_clause + file LICENSE
 URL: https://github.com/uptake/pkgnet, https://uptake.github.io/pkgnet/
 BugReports: https://github.com/uptake/pkgnet/issues
 RoxygenNote: 7.1.0
+Roxygen: list(r6 = FALSE)
