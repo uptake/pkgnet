@@ -77,7 +77,8 @@ slugging_avg <- function(outcomes){
                       4 * sum(outcomes == 'hr')
                      }
     
-    return(bases_on_hits / at_bats(outcomes))
+    denom <- do.call("at_bats", outcomes)
+    return(bases_on_hits / denom)
 }
 
 
