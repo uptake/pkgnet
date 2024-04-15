@@ -35,32 +35,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-<!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
-
-```{=html}
-<style>
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-.column-left{
-  float: left;
-  width: 48%;
-  text-align: justify;
-  text-justify: inter-word;
-  margin-right: 4%;
-}
-.column-right{
-  float: right;
-  width: 48%;
-  text-align: justify;
-  text-justify: inter-word;
-}
-</style>
-```
-<!--  CODE BELOW HERE WILL RENDER  -->
-
 `pkgnet` is an R package designed for the analysis of R packages! The goal of the package is to build graph representations of a package's various types of dependencies. This can inform a variety of activities, including:
 
 -   prioritizing functions to unit test based on their centrality or influence
@@ -69,7 +43,7 @@ knitr::opts_chunk$set(
 
 Below is a brief tour of `pkgnet` and its features.
 
-------------------------------------------------------------------------
+***
 
 # Packages as a Graph
 
@@ -129,7 +103,7 @@ In the example dependency graph above:
 
 Following the direction of the edges allows you to figure out the **dependencies** of a node---the other nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **reverse dependencies** (i.e., dependents) of a node---the other nodes that depend on it.
 
-------------------------------------------------------------------------
+***
 
 # Running pkgnet
 
@@ -154,7 +128,7 @@ report2 <- CreatePackageReport(
 )
 ```
 
-------------------------------------------------------------------------
+***
 
 # The HTML Report & Returned Object
 
@@ -188,11 +162,11 @@ Here's how the **Function Network Visualization** looks for `baseballstats`.  No
 
 <!--  SIDE BY SIDE START  -->
 
-::: row
-<!--  Div to Wrap columns -->
+:::: {style="content: ''; display: table; clear: both;"}
 
-::: column-left
-#### Default
+::: {style="float:left;width: 48%;text-align: justify;text-justify: inter-word;margin-right: 4%;"}
+
+**Default**
 
 ```{r demoVis1, fig.height=3, message=FALSE, warning=FALSE, echo=FALSE}
 pkgnet:::silence_logger()
@@ -215,12 +189,12 @@ g
 All functions and their dependencies are visible. For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.
 
 We also see that nothing depends on the `on_base_pct` function. This might be valuable information to an R package developer.
+
 :::
 
-<!--  End column-left -->
+::: {style="float: right; width: 48%; text-align: justify; text-justify: inter-word;"}
 
-::: column-right
-#### With Coverage Information
+**With Coverage Information**
 
 ```{r demoVis2, fig.height=3, message=FALSE, warning=FALSE, echo=FALSE}
 pkgnet:::silence_logger()
@@ -249,10 +223,8 @@ Same as the default visualization except we can see coverage information as well
 It appears the function with the most dependencies, `at_bats`, is well covered. However, no other functions are covered by unit tests.
 :::
 
-<!--  End column-right  -->
-:::
-
-<!--  End Div to Wrap columns --> <!--  SIDE BY SIDE END -->
+::::
+<!--  SIDE BY SIDE END -->
 
 ### Node Measures
 
@@ -263,14 +235,9 @@ Metrics for the nodes (either packages, functions, or classes depending on the r
 report2 <- list(FunctionReporter = funcReporter2)
 ```
 
-```{r nodes, eval=FALSE}
+```{r nodes}
 colSubset <- c('node','type','betweenness','outDegree','inDegree','numRecursiveDeps')
 report2$FunctionReporter$nodes[,..colSubset]
-```
-
-```{r nodesFormatted, message=FALSE, warning=FALSE, echo=FALSE}
-colSubset <- c('node','type','betweenness','outDegree','inDegree','numRecursiveDeps')
-knitr::kable(report2$FunctionReporter$nodes[,..colSubset])
 ```
 
 Note, a few of these metrics provided by default are from the field of [Network Theory](https://en.wikipedia.org/wiki/Network_theory). You can leverage the _Network Graph Model Object_ described below to derive many more.
@@ -295,7 +262,7 @@ report2$FunctionReporter$pkg_graph$node_measures(c('hubScore', 'authorityScore')
 report2$FunctionReporter$pkg_graph$igraph
 ```
 
-------------------------------------------------------------------------
+***
 
 # A Deeper Look
 
@@ -431,7 +398,7 @@ utils::remove.packages(
 unlink(testLibPath)
 ```
 
-------------------------------------------------------------------------
+***
 
 # More Information
 
