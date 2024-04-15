@@ -3,6 +3,7 @@
 * `do.call` with the function argument as string will now properly appear on the function reporter.  Previously, this would show as a `do.call` node with a circular reference. (#302)
 
 ## CHANGES
+* Updated `pkgnet-intro` vignette to include information on the Class Inheritance Reporter and other minor edits. 
 
 ## BUGFIXES
 

@@ -10,7 +10,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-
 ```{r setupVignette, include = FALSE}
 
 ## NOTE:    Vignettes are built within their own environment. 
@@ -37,6 +36,8 @@ knitr::opts_chunk$set(
 ```
 
 <!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
+
+```{=html}
 <style>
 .row:after {
     content: "";
@@ -57,20 +58,21 @@ knitr::opts_chunk$set(
   text-justify: inter-word;
 }
 </style>
-
-
+```
 <!--  CODE BELOW HERE WILL RENDER  -->
 
 `pkgnet` is an R package designed for the analysis of R packages! The goal of the package is to build graph representations of a package's various types of dependencies. This can inform a variety of activities, including:
 
-- prioritizing functions to unit test based on their centrality or influence
-- examining the recursive dependencies you are taking on by using a given package
-- exploring the structure of a new package provided by a coworker or downloaded from the internet
+-   prioritizing functions to unit test based on their centrality or influence
+-   examining the recursive dependencies you are taking on by using a given package
+-   exploring the structure of a new package provided by a coworker or downloaded from the internet
 
-Below is a brief tour of `pkgnet` and its features. 
+Below is a brief tour of `pkgnet` and its features.
 
-***
+------------------------------------------------------------------------
+
 # Packages as a Graph
+
 `pkgnet` represents aspects of R packages as graphs. The two default reporters, which we will discuss in this vignette, model their respective aspects as directed graphs: a package's dependencies on other packages, and the interdependencies of functions within a package. Before we look at the output of `pkgnet`, here are few core concepts to keep in mind.
 
 ```{r whatIsDepGraph, echo=FALSE, message=FALSE, fig.height=3, results='markup', fig.cap = "Example Dependency Graph"}
@@ -114,33 +116,35 @@ g
 
 ## Dependency
 
-Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point in the direction of dependency---the tail node depends on the head node.^[Edge direction was previously Independent -> Dependent. It was changed to Dependent -> Independent in version v0.3.0. The new convention follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_\(UML\)) framework, a widely used standard for software system modeling.] 
+Units of the analysis are represented as **nodes**, and their dependency relationships are represented as **edges** (a.k.a. arcs or arrows). In `pkgnet`, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point in the direction of dependency---the tail node depends on the head node.[^1]
+
+[^1]: This follows the [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Dependency_(UML)) framework, a widely used standard for software system modeling.
 
 In the example dependency graph above:
 
-* **C** depends on both **A** and **B**.
-* **D** depends both **C** and **B**.
-* **D** indirectly depends upon **A** through **C** via the transitive property.
-* **B** does not depend on **A** as there is no path from **A** to **B** by following the edges.
+-   **C** depends on both **A** and **B**.
+-   **D** depends both **C** and **B**.
+-   **D** indirectly depends upon **A** through **C** via the transitive property.
+-   **B** does not depend on **A** as there is no path from **A** to **B** by following the edges.
 
 Following the direction of the edges allows you to figure out the **dependencies** of a node---the other nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the **reverse dependencies** (i.e., dependents) of a node---the other nodes that depend on it.
 
-***
+------------------------------------------------------------------------
+
 # Running pkgnet
 
-`pkgnet` can analyze any R package locally installed.  (Run `installed.packages()` to see the full list of packages installed on your system.)  For this example, let's say we are analyzing a custom built package, `baseballstats`.
+`pkgnet` can analyze any R package locally installed. (Run `installed.packages()` to see the full list of packages installed on your system.) For this example, let's say we are analyzing a custom built package, `baseballstats`.
 
-To analyze `baseballstats`, run the following two lines of code: 
+To analyze `baseballstats`, run the following two lines of code:
 
 ```{r pkgnetRunFirst, eval=FALSE}
 library(pkgnet)
 report1 <- CreatePackageReport(pkg_name = "baseballstats")
 ```
 
-That's it! You have generated a lot of valuable information with that one call for an installed package.  
+*THAT'S IT!* You have generated a lot of valuable information with that one call for an installed package.
 
-However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from [covr](https://CRAN.R-project.org/package=covr).  To do so, specify the path to the repository in `CreatePackageReport`.  
-
+However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from [covr](https://CRAN.R-project.org/package=covr). To do so, specify the path to the repository in `CreatePackageReport`.
 
 ```{r pkgnetRunFAKE, eval=FALSE}
 library(pkgnet)
@@ -150,29 +154,44 @@ report2 <- CreatePackageReport(
 )
 ```
 
-***
-# Examining the Results
+------------------------------------------------------------------------
 
-`CreatePackageReport` has written an HTML report with the pertinent information, and it also returned a list object with the same information and more.  
+# The HTML Report & Returned Object
 
-## The Report
+`CreatePackageReport()` creates an HTML report with the pertinent information, and it also returns an object with the report information _and more_. The location of the HTML report is specified in the messages in the terminal, but it should render automatically in your browser.
 
-The location of the HTML report is specified in the messages in the terminal. 
+## Report Sections
 
-This report has three sections: 
+These will display in the HTML report, and their content will also be attached as public bindings in the `PackageReport` object returned from `CreatePackageReport()`.
 
-1. **Package Summary** -- general information about the package and package level statistics
-2. **Dependency Network** -- information regarding the packages upon which the current package under analysis depends upon
-3. **Function Network** -- information regarding the functions within the current package under analysis and their interdependencies
+### Package Summary
 
-Each section has helpful tables and visuals. 
+`SummaryReporter`: This section displays general information about the package. The returned object contains basic information like the package name and path.
 
-As a sample, here's how the **Function Network Visualization** looks for `baseballstats`: 
+### Dependency Network
+
+`DependencyReporter`: This section displays information regarding the packages upon which the current package under analysis depends. This includes both base and third-party R packages. The returned object contains graph visualizations, graph measures and data tables among other methods.
+
+### Function Network
+
+`FunctionReporter`: This section displays information regarding the functions within the current package under analysis and their interdependence network. The returned object contains graph visualizations, graph measures and data tables among other methods.
+
+### Class Inheritance Network (*Optional*)
+
+`InheritanceReporter`: While not generated by default (as not all packages are object oriented), this reporter is very useful when investigating the parent-child structure of [R6](https://r6.r-lib.org/), [S4](http://adv-r.had.co.nz/S4.html) or [Reference Class (a.k.a. "R5")](http://adv-r.had.co.nz/R5.html) objects. The inheritance graph is displayed in the report along with other information. The returned object contains graph visualizations, graph measures and data tables among other methods.  
+
+## Network Based Section Detail
+Aside from the Package Summary section and its returned object, each reporter is based around a graph structure.  Let's look at the `FunctionReporter` from `baseballstats` in more detail. 
+
+### Visualizations 
+Here's how the **Function Network Visualization** looks for `baseballstats`.  Note, its appearance differs based on if `pkg_path` is specified in `CreatePackageReport()`:
 
 <!--  SIDE BY SIDE START  -->
-<div class="row"> <!--  Div to Wrap columns -->
 
-<div class="column-left">
+::: row
+<!--  Div to Wrap columns -->
+
+::: column-left
 #### Default
 
 ```{r demoVis1, fig.height=3, message=FALSE, warning=FALSE, echo=FALSE}
@@ -192,13 +211,17 @@ g <- visNetwork::visInteraction(graph = g
                                 , zoomView = FALSE)
 g
 ```
-All functions and their dependencies are visible.  For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.  
 
-We also see that nothing depends on the `on_base_pct` function.  This might be valuable information to an R package developer. 
-</div> <!--  End column-left -->
+All functions and their dependencies are visible. For example, we can see that both `batting_avg` and `slugging_avg` functions depend upon the `at_bats` function.
 
-<div class="column-right">
-#### With Coverage Information 
+We also see that nothing depends on the `on_base_pct` function. This might be valuable information to an R package developer.
+:::
+
+<!--  End column-left -->
+
+::: column-right
+#### With Coverage Information
+
 ```{r demoVis2, fig.height=3, message=FALSE, warning=FALSE, echo=FALSE}
 pkgnet:::silence_logger()
 funcReporter2 <- pkgnet::FunctionReporter$new()
@@ -220,51 +243,49 @@ g <- visNetwork::visInteraction(graph = g
                                 , zoomView = FALSE)
 g
 ```
-Same as the default visualization except we can see coverage information as well (Pink = 0%, Green = 100%). 
 
-It appears the function with the most dependencies, `at_bats`, is well covered.  However, no other functions are covered by unit tests.
-</div> <!--  End column-right  -->
+Same as the default visualization except we can see coverage information as well (Pink = 0%, Green = 100%).
 
-</div> <!--  End Div to Wrap columns -->
-<!--  SIDE BY SIDE END -->
+It appears the function with the most dependencies, `at_bats`, is well covered. However, no other functions are covered by unit tests.
+:::
 
-**Check out the full HTML report for more results**  
+<!--  End column-right  -->
+:::
 
-## The List Object
+<!--  End Div to Wrap columns --> <!--  SIDE BY SIDE END -->
 
-The `CreatePackageReport()` function returns a list with three items: 
+### Node Measures
 
-1. SummaryReporter  
-2. DependencyReporter  
-3. FunctionReporter  
+Metrics for the nodes (either packages, functions, or classes depending on the reporter) are contained in a table:
 
-Each items contains information visible in the report *and more*.  We can use this information for a more detailed analysis of the results and/or more easily incorporate `pkgnet` results into other R processes.
-
-Here are a few notable items available within the list object:
-
-### Node Information
-Both the `DependencyReporter` and the `FunctionReporter` contain metrics about their package dependencies or functions (a.k.a network nodes) in a `nodes` table.  
 ```{r mockPackageReport, message=FALSE, warning=FALSE, results='hide', echo=FALSE}
 # We initialized just the reporters because we didn't want to actually generate the full html report. So we'll put funcReporter2 into a list to mock the interface for the example
 report2 <- list(FunctionReporter = funcReporter2)
 ```
 
-```{r nodes}
-dim(report2$FunctionReporter$nodes)
-names(report2$FunctionReporter$nodes)
+```{r nodes, eval=FALSE}
+colSubset <- c('node','type','betweenness','outDegree','inDegree','numRecursiveDeps')
+report2$FunctionReporter$nodes[,..colSubset]
 ```
 
-Note, a few of these metrics provided by default are from the field of [Network Theory](https://en.wikipedia.org/wiki/Network_theory).  You can leverage the **Network Object** described below to derive many more.     
+```{r nodesFormatted, message=FALSE, warning=FALSE, echo=FALSE}
+colSubset <- c('node','type','betweenness','outDegree','inDegree','numRecursiveDeps')
+knitr::kable(report2$FunctionReporter$nodes[,..colSubset])
+```
 
-### Network Measures 
-Both the `DependencyReporter` and the `FunctionReporter` contain graph-level measures based on their network structure in a `network_measures` list. 
+Note, a few of these metrics provided by default are from the field of [Network Theory](https://en.wikipedia.org/wiki/Network_theory). You can leverage the _Network Graph Model Object_ described below to derive many more.
+
+### Network Measures
+
+Network-level measures are contained in a `network_measures` list.
 
 ```{r networkMeasures}
 report2$FunctionReporter$network_measures
 ```
 
 ### Network Graph Model Object
-Both the `DependencyReporter` and the `FunctionReporter` have an object called `pkg_graph` that contains the graph model of their respective networks. This object has methods to calculate additional node-level and graph-level measures. It is powered by [igraph](http://igraph.org/r/), and the igraph object itself is directly accessible with `pkg_graph$igraph`. 
+
+The network model object itself is contained in the `pkg_graph` attribute. The [igraph](http://igraph.org/r/) formatted object itself is directly accessible via `pkg_graph$igraph`.
 
 ```{r networkObjAddtlMeasures}
 report2$FunctionReporter$pkg_graph$node_measures(c('hubScore', 'authorityScore'))
@@ -274,14 +295,17 @@ report2$FunctionReporter$pkg_graph$node_measures(c('hubScore', 'authorityScore')
 report2$FunctionReporter$pkg_graph$igraph
 ```
 
-***
+------------------------------------------------------------------------
+
 # A Deeper Look
 
-With the reports and objects produced by `pkgnet` by default, there is plenty to inform us on the inner workings of an R package.  However, we may want to know MORE! Since the [igraph](http://igraph.org/r/) objects are available, we can leverage those graphs for further analysis.  
-     
+With the reports and objects produced by `pkgnet` by default, there is plenty to inform us on the inner workings of an R package. However, we may want to know MORE! Since the [igraph](http://igraph.org/r/) objects are available, we can leverage those graphs for further analysis.
+
 In this section, let's examine a larger R package, such as [lubridate](http://lubridate.tidyverse.org/).
-       
-If you would like to follow along with the examples in this section, run these commands in your terminal to download and install `lubridate`^[Examples from version 1.7.3 of Lubridate].
+
+If you would like to follow along with the examples in this section, run these commands in your terminal to download and install `lubridate`[^2].
+
+[^2]: Examples from version 1.7.3 of Lubridate
 
 ```{r bashText, engine='bash', eval=FALSE}
 # Create a temporary workspace
@@ -299,9 +323,11 @@ R CMD install .
 ```
 
 ## Coverage of Most Depended-on Functions
-Let's examine `lubridate`'s functions through the lens of each function's total number of dependents (i.e., the other functions that depend on it) and its code's unit test coverage. In our graph model for the `FunctionReporter`, the subgraph of paths leading into a given node is the set of functions that directly or indirectly depend on the function that node represents.  
+
+Let's examine `lubridate`'s functions through the lens of each function's total number of dependents (i.e., the other functions that depend on it) and its code's unit test coverage. In our graph model for the `FunctionReporter`, the subgraph of paths leading into a given node is the set of functions that directly or indirectly depend on the function that node represents.
 
 <!--  Faked Since lubridate not guaranteed to be installed at time of report creation -->
+
 ```{r fakeDetail1, eval=FALSE}
 # Run pkgnet
 library(pkgnet)
@@ -333,12 +359,13 @@ mostRef <- funcNodes[order(numRecursiveRevDeps, decreasing = TRUE),
 #> 10:      as_date                  52             1          1
 ```
 
-Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.  
+Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.
 
-In this case, `check_duration`, one of the most depended-on functions (either directly or indirectly), is not covered by unit tests.  However, it appears to be a simple one line function that may not be necessary to cover in unit testing.  `check_interval`, on the other hand, might benefit from some unit test coverage as it is a larger, uncovered function with a similar number of dependencies.
+In this case, `check_duration`, one of the most depended-on functions (either directly or indirectly), is not covered by unit tests. However, it appears to be a simple one line function that may not be necessary to cover in unit testing. `check_interval`, on the other hand, might benefit from some unit test coverage as it is a larger, uncovered function with a similar number of dependencies.
 
 ## Discovering Similar Functions
-Looking at that same large package, let's say we want to explore options for consolidating functions.  One approach might be to explore consolidating functions that share the same dependencies.  In that case, we could use the `igraph` object to highlight functions with the same out-neighborhood via [Jaccard similarity](https://en.wikipedia.org/wiki/Jaccard_index). 
+
+Looking at that same large package, let's say we want to explore options for consolidating functions. One approach might be to explore consolidating functions that share the same dependencies. In that case, we could use the `igraph` object to highlight functions with the same out-neighborhood via [Jaccard similarity](https://en.wikipedia.org/wiki/Jaccard_index).
 
 ```{r fakeDetail2, eval=FALSE}
 # Get igraph object
@@ -366,7 +393,7 @@ for (i in seq_along(sameDeps)) {
     cat("\n")
 }
 ```
-  
+
 ```{r resultFromFake, echo=FALSE, results='markup'}
 cat("Group 1: divisible_period, make_date
 Group 2: parse_date_time2, fast_strptime
@@ -391,7 +418,7 @@ Group 20: dmy_h, ydm_hms, ymd_hms, dmy_hm, ymd_h, ydm_hm, ydm_h, dmy_hms, ymd_hm
 )
 ```
 
-Now, we have identified twenty different groups of functions within [lubridate](http://lubridate.tidyverse.org/) that share the _exact same_ dependencies.  We could explore each group of functions for potential consolidation. 
+Now, we have identified twenty different groups of functions within [lubridate](http://lubridate.tidyverse.org/) that share the *exact same* dependencies. We could explore each group of functions for potential consolidation.
 
 ```{r removeDemoPackage, include=FALSE}
 utils::remove.packages(
@@ -403,4 +430,25 @@ utils::remove.packages(
 .libPaths(new = c(origLibPaths))
 unlink(testLibPath)
 ```
+
+------------------------------------------------------------------------
+
+# More Information
+
+**_Want to know even more about the `pkgnet` package?!_**
+
+Run `pkgnet` on itself!
+
+```{r dogfoodin, eval=FALSE}
+install.packages("pkgnet")
+pkgnetObj <- CreatePackageReport("pkgnet", c(DefaultReporters(), InheritanceReporter$new()))
+```
+
+**_Want to see `pkgnet` reports for other packages?_**
+
+Check out the [pkgnet Gallery](https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html).
+
+**_Want to ship a `pkgnet` report with your R package?_**
+
+Include it a `vignette()` in your package. See [Publishing Your pkgnet Package Report](https://uptake.github.io/pkgnet/articles/publishing-reports.html).
 
