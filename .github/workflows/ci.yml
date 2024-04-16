@@ -23,7 +23,7 @@ jobs:
             r-version: 'release'
     steps:
       - name: checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
       - name: Install Tidy Ubuntu
@@ -35,14 +35,15 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - uses: r-lib/actions/setup-pandoc@v2
       - uses: r-lib/actions/setup-tinytex@v2
-      - name: set up dependencies
-        shell: bash
-        env:
-          OS_NAME: ${{ matrix.os }}
-        run: $GITHUB_WORKSPACE/.github/setup.sh
-      - name: run tests
-        shell: bash
-        run: $GITHUB_WORKSPACE/test.sh
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--as-cran")'
+          error-on: '"warning"'
+          check-dir: '"check"'
       - name: upload coverage
         if: ${{ matrix.os == 'macos-latest' && matrix.r-version == 'release' }}
         shell: Rscript {0}
