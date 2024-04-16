@@ -1,0 +1,60 @@
+name: Release Testing on Devel
+
+on:
+  push:
+    branches:
+        - 'release/**'
+  workflow_dispatch:
+
+jobs:
+  version_check:
+    name: Confirm Whole Version Number
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: grep -E "Version:\s\d+\.\d+\.\d+$" DESCRIPTION
+  devel_test:
+    name: ${{ matrix.os }} (R ${{ matrix.r-version }})
+    needs: [version_check]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            r-version: 'devel'
+          - os: macos-latest
+            r-version: 'devel'
+          - os: windows-latest
+            r-version: 'devel'   
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Install Tidy Ubuntu
+        if: matrix.os == 'ubuntu-devel'
+        run: sudo apt install -y tidy
+      - name: set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r-version }}
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-tinytex@v2
+      - name: set up dependencies
+        shell: bash
+        env:
+          OS_NAME: ${{ matrix.os }}
+        run: $GITHUB_WORKSPACE/.github/setup.sh
+      - name: run R CMD CHECK tests
+        shell: bash
+        run: $GITHUB_WORKSPACE/test.sh
+  all-successful:
+    runs-on: ubuntu-latest
+    needs: [devel_test]
+    steps:
+      - name: Note that all tests succeeded
+        run: echo "🎉"
+
+  
