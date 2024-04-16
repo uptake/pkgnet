@@ -1,0 +1,48 @@
+name: update website docs
+
+# only build on new tagged versions (OR manually specified)
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  version_check:
+    name: Confirm Whole Version Number
+    runs-on: macos-latest
+    steps:
+      - name: Grep Version in DESCRIPTION
+        shell: bash
+        run: grep -E "Version:\s\d+\.\d+\.\d+$" DESCRIPTION
+  build-website:
+    name: build website PR
+    needs: [version_check]
+    runs-on: macos-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+      - uses: r-lib/actions/setup-pandoc@v2
+      - uses: r-lib/actions/setup-tinytex@v2
+      - name: set up dependencies
+        shell: bash
+        env:
+          OS_NAME: 'macos-latest'
+        run: $GITHUB_WORKSPACE/.github/setup.sh
+      - name: Build Site
+        run: pkgdown::build_site()
+        shell: Rscript {0}
+      - name: Commit and push changes for review
+        run: |
+            git config --local user.name "$GITHUB_ACTOR"
+            git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+            git add man/\* NAMESPACE DESCRIPTION
+            git commit -m "Update documentation" || echo "No changes to commit"
+            git pull --ff-only
+            git push origin
