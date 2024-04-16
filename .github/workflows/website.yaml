@@ -12,12 +12,14 @@ jobs:
     name: Confirm Whole Version Number
     runs-on: macos-latest
     steps:
+      - name: checkout repository
+        uses: actions/checkout@v4
       - name: Grep Version in DESCRIPTION
         shell: bash
-        run: grep -E "Version:\s\d+\.\d+\.\d+$" DESCRIPTION
+        run: grep -E "Version:\s\d+\.\d+\.\d+$"  $GITHUB_WORKSPACE/DESCRIPTION
   build-website:
     name: build website PR
-    needs: [version_check]
+    #needs: [version_check]
     runs-on: macos-latest
     steps:
       - name: checkout repository
@@ -30,11 +32,10 @@ jobs:
           r-version: 'release'
       - uses: r-lib/actions/setup-pandoc@v2
       - uses: r-lib/actions/setup-tinytex@v2
-      - name: set up dependencies
-        shell: bash
-        env:
-          OS_NAME: 'macos-latest'
-        run: $GITHUB_WORKSPACE/.github/setup.sh
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
       - name: Build Site
         run: pkgdown::build_site()
         shell: Rscript {0}
