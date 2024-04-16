@@ -34,16 +34,15 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck
-          needs: check
+          packages: pkgdown
       - name: Build Site
         run: pkgdown::build_site()
         shell: Rscript {0}
-      - name: Commit and push changes for review
+      - name: Commit website doc changes
         run: |
             git config --local user.name "$GITHUB_ACTOR"
             git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            git add man/\* NAMESPACE DESCRIPTION
-            git commit -m "Update documentation" || echo "No changes to commit"
+            git add docs/\*
+            git commit -m "Update website documentation" || echo "No changes to commit"
             git pull --ff-only
             git push origin
