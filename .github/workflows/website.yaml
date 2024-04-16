@@ -19,7 +19,7 @@ jobs:
         run: grep -E "Version:\s\d+\.\d+\.\d+$"  $GITHUB_WORKSPACE/DESCRIPTION
   build-website:
     name: build website PR
-    #needs: [version_check]
+    needs: [version_check]
     runs-on: macos-latest
     steps:
       - name: checkout repository
