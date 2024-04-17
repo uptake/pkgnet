@@ -14,22 +14,89 @@ jobs:
   test:
     name: smoke-tests
     runs-on: ubuntu-latest
+    env:
+      PKGNET_SUPPRESS_BROWSER: 0
+    strategy:
+      fail-fast: false
+      matrix: 
+        test_pkg: 
+          - askpass
+          - assertthat
+          - base64enc
+          - bslib
+          - cachem
+          - cli
+          - covr
+          - cpp11
+          - crayon
+          - crosstalk
+          - curl
+          - data.table
+          - digest
+          - DT
+          - evaluate
+          - fastmap
+          - fontawesome
+          - formatR
+          - fs
+          - futile.logger
+          - futile.options
+          - glue
+          - highr
+          - htmltools
+          - htmlwidgets
+          - httpuv
+          - httr
+          - igraph
+          - jquerylib
+          - jsonlite
+          - knitr
+          - lambda.r
+          - later
+          - lazyeval
+          - lifecycle
+          - magrittr
+          - memoise
+          - mime
+          - openssl
+          - pkgconfig
+          - promises
+          - R6
+          - rappdirs
+          - Rcpp
+          - rex
+          - rlang
+          - rmarkdown
+          - sass
+          - sys
+          - tinytex
+          - vctrs
+          - visNetwork
+          - withr
+          - xfun
+          - yaml
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
       - name: Install Tidy
         run: sudo apt install -y tidy 
-      - name: set up R
-        shell: bash
-        run: |
-          export GITHUB_ACTIONS="true"
-          ${GITHUB_WORKSPACE}/smoke_tests/setup.sh
-      - name: run smoke tests
-        shell: bash
-        run: |
-          R CMD INSTALL .
-          TEST_DATA_DIR=$(pwd)/smoke_tests/test_data
-          NUM_PARALLEL=4
-          ${GITHUB_WORKSPACE}/smoke_tests/test.sh ${TEST_DATA_DIR} ${NUM_PARALLEL}
+      - name: Install Deps For Pkgnet & ${{ matrix.test_pkg }}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: ${{ matrix.test_pkg }}, local::.
+      - name: run smoke test
+        shell: Rscript {0}
+        run: "pkgnet::CreatePackageReport(pkg_name='${{ matrix.test_pkg }}', report_path='${{ github.workspace }}/${{ matrix.test_pkg }}_report.html')"
+  # https://github.community/t/is-it-possible-to-require-all-github-actions-tasks-to-pass-without-enumerating-them/117957/4?u=graingert
+  all-successful:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+    - name: Note that all smoke tests succeeded
+      run: echo "🚫🔥==🐻👍🏼👍🏼"
