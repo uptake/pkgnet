@@ -19,7 +19,62 @@ jobs:
     strategy:
       fail-fast: false
       matrix: 
-        test_pkg: [rcmdcheck, covr, assertthat, data.table, DT, futile.logger,glue, igraph, knitr, magrittr, R6, rlang, rmarkdown, visNetwork]
+        test_pkg: 
+          - askpass
+          - assertthat
+          - base64enc
+          - bslib
+          - cachem
+          - cli
+          - covr
+          - cpp11
+          - crayon
+          - crosstalk
+          - curl
+          - data.table
+          - digest
+          - DT
+          - evaluate
+          - fastmap
+          - fontawesome
+          - formatR
+          - fs
+          - futile.logger
+          - futile.options
+          - glue
+          - highr
+          - htmltools
+          - htmlwidgets
+          - httpuv
+          - httr
+          - igraph
+          - jquerylib
+          - jsonlite
+          - knitr
+          - lambda.r
+          - later
+          - lazyeval
+          - lifecycle
+          - magrittr
+          - memoise
+          - mime
+          - openssl
+          - pkgconfig
+          - promises
+          - R6
+          - rappdirs
+          - Rcpp
+          - rex
+          - rlang
+          - rmarkdown
+          - sass
+          - sys
+          - tinytex
+          - vctrs
+          - visNetwork
+          - withr
+          - xfun
+          - yaml
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
