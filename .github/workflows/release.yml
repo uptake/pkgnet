@@ -16,7 +16,11 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
-      - shell: bash
+      - name: Show Version Found
+        shell: bash
+        run: grep -E "Version:"  $GITHUB_WORKSPACE/DESCRIPTION
+      - name: Test if it is a production pattern (#.#.#)
+        shell: bash
         run: grep -E "Version:\s\d+\.\d+\.\d+$"  $GITHUB_WORKSPACE/DESCRIPTION
   devel_test:
     name: ${{ matrix.os }} (R ${{ matrix.r-version }})
@@ -59,13 +63,13 @@ jobs:
           upload-snapshots: '"true"'
   all-successful:
     runs-on: ubuntu-latest
-    #needs: [version_check, devel_test]
+    needs: [version_check, devel_test]
     steps:
       - name: Note that all tests succeeded
         run: echo "🎉"
   build-tarball:
     runs-on: ubuntu-latest
-    #needs: [all-successful]
+    needs: [version_check]
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
