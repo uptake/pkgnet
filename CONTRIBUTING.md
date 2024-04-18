@@ -312,6 +312,7 @@ Github Actions workflows will now:
 - test your PR against latest `ubuntu` and `macos` R versions (like all PRs)
 - check that your version numbering is correct (and you didn't leave the trailing `.9999`) 
 - test your PR against R development version ("devel") on the previous OS's as well as Microsoft (mirroring CRAN checks for package updates)
+- save a copy of the tarball (i.e. `.tar.gz.` package file) as a workflow artifact. 
 
 If some checks fail, correct and push again to the release branch.  
 
@@ -319,7 +320,7 @@ Once checks all pass, _Don't merge the PR quite yet!_  Follow the steps below to
 
 ### Submit to CRAN
 
-1. Build the tarball locally on the current release branch: `R CMD Build .`
+1. Download the tarball file created during the Github Action workflow. 
 2. Go to https://cran.r-project.org/submit.html, take the  and submit it! 
 ![](https://cdn.dribbble.com/users/30794/screenshots/4088042/e__push-button.gif)
 
