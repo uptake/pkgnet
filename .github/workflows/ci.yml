@@ -44,6 +44,8 @@ jobs:
           args: 'c("--as-cran")'
           error-on: '"warning"'
           check-dir: '"check"'
+          upload-results: '"true"'
+          upload-snapshots: '"true"'
       - name: upload coverage
         if: ${{ matrix.os == 'macos-latest' && matrix.r-version == 'release' }}
         shell: Rscript {0}
