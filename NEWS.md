@@ -1,7 +1,7 @@
 # pkgnet (dev)
 ## NEW FEATURES
 * `do.call` with the function argument as string will now properly appear on the function reporter.  Previously, this would show as a `do.call` node with a circular reference. (#302)
-* `LinkingTo:` package dependencies are now included in the `DependencyReporter` and subsequent HTML report and objects. (#303) 
+* `LinkingTo:` package dependencies are now included in the `DependencyReporter` and subsequent HTML report and objects. (#319 Thanks @petergodbert !) 
 
 ## CHANGES
 * Updated `pkgnet-intro` vignette to include information on the Class Inheritance Reporter and other minor edits. 
