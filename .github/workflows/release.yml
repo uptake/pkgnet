@@ -82,7 +82,7 @@ jobs:
         if: ${ (env.ACT || false)}
         run: sudo apt update
       - name: Install Tidy Ubuntu
-        run: sudo apt install -y tidy
+        run: apt update && sudo apt install -y tidy
       - name: build tarball for submission to CRAN
         run: R CMD build $GITHUB_WORKSPACE
       - name: Grab tarball path

@@ -88,7 +88,7 @@ jobs:
         if: ${{ (env.ACT || false) }}
         run: sudo apt update
       - name: Install Tidy
-        run: sudo apt install -y tidy 
+        run: apt update && sudo apt install -y tidy 
       - name: Install Deps For Pkgnet & ${{ matrix.test_pkg }}
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
