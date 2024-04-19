@@ -40,7 +40,7 @@ DependencyReporter <- R6::R6Class(
 
     public = list(
 
-        initialize = function(dep_types = c("Imports", "Depends"), installed = TRUE){
+        initialize = function(dep_types = c("Imports", "Depends", "LinkingTo"), installed = TRUE){
 
             # Check inputs
             assertthat::assert_that(
