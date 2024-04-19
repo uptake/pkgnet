@@ -1,4 +1,4 @@
-name: Release Testing on Devel
+name: Release Testing (Devel)
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
-      - name: Show Version Found
+      - name: Display Version Found
         shell: bash
         run: grep -E "Version:"  $GITHUB_WORKSPACE/DESCRIPTION
       - name: Test if it is a production pattern (#.#.#)
@@ -41,6 +41,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: If local, apt update
+        if: ${{ (env.ACT || false) && (matrix.os == 'ubuntu-latest')}}
+        run: sudo apt update
       - name: Install Tidy Ubuntu
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y tidy
@@ -75,6 +78,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: If local, apt update
+        if: ${ (env.ACT || false)}
+        run: sudo apt update
       - name: Install Tidy Ubuntu
         run: sudo apt install -y tidy
       - name: build tarball for submission to CRAN

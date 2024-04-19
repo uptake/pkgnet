@@ -1,4 +1,4 @@
-name: Tests
+name: CI Tests
 
 on:
   push:
@@ -26,6 +26,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: If local, apt update
+        if: ${{ (env.ACT || false) && (matrix.os == 'ubuntu-latest')}}
+        run: sudo apt update
       - name: Install Tidy Ubuntu
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y tidy
