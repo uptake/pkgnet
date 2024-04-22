@@ -1,22 +1,36 @@
 # R6 Class Definitions for testing
 
-#' @title Age One
-#' @name One
-#' @family TheEnd
-#' @description Age One
+#' R6 Class Age One
+#' 
+#' @description 
+#' Age One
+#' 
+#' @details 
+#' Age One
+#' 
 #' @importFrom R6 R6Class
 #' @export
 One <- R6::R6Class(
     classname = "One",
     public = list(
+
+        #' @description
+        #' Create a New Age One Object
+        #' @return An Age One Object
         initialize = function() {
             cat("The End, by A. A. Milne \n")
         },
+
+        #' @description 
+        #' Print poem
         print_poem = function() {
             cat("When I was One, \n",
                 "I had just begun. \n"
                 )
         },
+
+        #' @description 
+        #' Get Age
         how_old_am_i = function() {private$get_age()}
     ),
     private = list(
@@ -24,16 +38,22 @@ One <- R6::R6Class(
     )
 )
 
-#' @title Age Two
-#' @name Two
-#' @family TheEnd
-#' @description Age Two
+#' R6 Class Age Two
+#' 
+#' @description 
+#' Age Two
+#' 
+#' @details 
+#' Age Two
+#' 
 #' @importFrom R6 R6Class
 #' @export
 Two <- R6::R6Class(
     classname = "Two",
     inherit = One,
     public = list(
+        #' @description 
+        #' Print poem two
         print_poem = function() {
             super$print_poem()
             cat("When I was Two, \n",
@@ -43,10 +63,14 @@ Two <- R6::R6Class(
     )
 )
 
-#' @title Age Three
-#' @name Three
-#' @family TheEnd
-#' @description Age Three
+#' R6 Class Age Three
+#' 
+#' @description 
+#' Age Three
+#' 
+#' @details 
+#' Age Three
+#' 
 #' @importFrom R6 R6Class
 #' @export
 Three <- R6::R6Class(
@@ -54,6 +78,8 @@ Three <- R6::R6Class(
     classname = "HardlyThree",
     inherit = Two,
     public = list(
+        #' @description 
+        #' Print poem thrice
         print_poem = function() {
             super$print_poem()
             cat("When I was Three, \n",
@@ -63,10 +89,14 @@ Three <- R6::R6Class(
     )
 )
 
-#' @title Age Four
-#' @name Four
-#' @family TheEnd
-#' @description Age Four
+#' R6 Class Age Four
+#' 
+#' @description 
+#' Age Four
+#' 
+#' @details 
+#' Age Four
+#' 
 #' @importFrom R6 R6Class
 #' @export
 Four <- R6::R6Class(
@@ -74,6 +104,8 @@ Four <- R6::R6Class(
     classname = NULL,
     inherit = Three,
     public = list(
+        #' @description 
+        #' Print poem four
         print_poem = function() {
             super$print_poem()
             cat("When I was Four, \n",
@@ -83,16 +115,24 @@ Four <- R6::R6Class(
     )
 )
 
-#' @title Age Five
-#' @name Five
-#' @family TheEnd
-#' @description Age Five
+#' R6 Class Age Five
+#' 
+#' @description 
+#' Age Five
+#' 
+#' @details 
+#' Age Five
+#' 
 #' @importFrom R6 R6Class
 #' @export
 Five <- R6::R6Class(
     classname = "Five",
     inherit = Four,
     public = list(
+        #' @description 
+        #' Print poem five times
+        #' @details
+        #' Did your hand hit on the river?
         print_poem = function() {
             super$print_poem()
             cat("When I was Five, \n",
@@ -104,16 +144,24 @@ Five <- R6::R6Class(
     )
 )
 
-#' @title Age Six
-#' @name Six
-#' @family TheEnd
-#' @description Age Six
+#' R6 Class Age Six
+#' 
+#' @description 
+#' Age Six
+#' 
+#' @details 
+#' Age Six
+#' 
 #' @importFrom R6 R6Class
 #' @export
 Six <- R6::R6Class(
     classname = "Six",
     inherit = Five,
     public = list(
+        #' @description 
+        #' Print poem six times
+        #' @details
+        #' I should have looked ahead
         print_poem = function() {
             super$print_poem()
             cat("But now I am Six,",
@@ -123,6 +171,7 @@ Six <- R6::R6Class(
         }
     ),
     private = list(
+        # I don't think private classes and methods are supported by Roxygen2
         print_ending = function() {
             cat("So I think I'll be six now",
                 "for ever and ever."
