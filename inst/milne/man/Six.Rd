@@ -10,7 +10,7 @@ Age Six
 Age Six
 }
 \section{Super classes}{
-\code{\link[milne:One]{milne::One}} -> \code{\link[milne:Two]{milne::Two}} -> \code{milne::HardlyThree} -> \code{milne::NA} -> \code{\link[milne:Five]{milne::Five}} -> \code{Six}
+\code{milne::One} -> \code{milne::Two} -> \code{milne::HardlyThree} -> \code{milne::NA} -> \code{milne::Five} -> \code{Six}
 }
 \section{Methods}{
 \subsection{Public methods}{

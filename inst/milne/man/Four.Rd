@@ -10,7 +10,7 @@ Age Four
 Age Four
 }
 \section{Super classes}{
-\code{\link[milne:One]{milne::One}} -> \code{\link[milne:Two]{milne::Two}} -> \code{milne::HardlyThree}
+\code{milne::One} -> \code{milne::Two} -> \code{milne::HardlyThree}
 }
 \section{Methods}{
 \subsection{Public methods}{

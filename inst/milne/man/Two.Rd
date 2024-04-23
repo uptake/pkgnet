@@ -10,7 +10,7 @@ Age Two
 Age Two
 }
 \section{Super class}{
-\code{\link[milne:One]{milne::One}} -> \code{Two}
+\code{milne::One} -> \code{Two}
 }
 \section{Methods}{
 \subsection{Public methods}{
