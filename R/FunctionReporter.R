@@ -160,6 +160,8 @@ FunctionReporter <- R6::R6Class(
                 path = private$pkg_path
                 , type = "tests"
                 , combine_types = FALSE
+                , quiet = FALSE
+                , clean = FALSE
             ))
 
             # workaround for covr conflict with loaded packages on windows
