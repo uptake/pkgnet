@@ -79,7 +79,7 @@ jobs:
         with:
           fetch-depth: 1
       - name: If local, apt update
-        if: ${ (env.ACT || false)}
+        if: ${{ (env.ACT || false)}}
         run: sudo apt update
       - name: Install Tidy Ubuntu
         run: sudo apt install -y tidy
