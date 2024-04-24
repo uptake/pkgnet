@@ -5,8 +5,11 @@
 
 ## CHANGES
 * Updated `pkgnet-intro` vignette to include information on the Class Inheritance Reporter and other minor edits. 
+* Recursive function network creation made tolerant to empty lists. (#322)
+* Excessive warnings removed for custom `vignette_path` param in `CreatePackageVignette()` (#322)
 
 ## BUGFIXES
+* `CreatePackageReporter()` failing on Windows to build package coverage when `report_path` specified. (#322) 
 
 # pkgnet 0.4.2
 ## NEW FEATURES
