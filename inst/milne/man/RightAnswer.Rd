@@ -9,6 +9,7 @@ Correct Answer to a Question
 }
 
 \seealso{
-Other TheFriend: \code{\link{PoohAnswer}}
+Other TheFriend: 
+\code{\link{PoohAnswer}}
 }
 \concept{TheFriend}

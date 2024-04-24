@@ -1,18 +1,9 @@
-#' @title Package Summary Reporter
-#' @name SummaryReporter
+#' Package Summary Reporter
+#' 
+#' @description 
+#' This reporter provides a high-level overview of a package via its package DESCRIPTION file.
 #' @family Package Reporters
 #' @concept Reporters
-#' @description This reporter provides a high-level overview of a package via
-#'    its package DESCRIPTION file.
-#' @section Class Constructor:
-#' \preformatted{SummaryReporter$new()}
-#' @inheritSection PackageReporters Class Constructor
-#' @inheritSection PackageReporters Public Methods
-#' @inheritSection PackageReporters Public Fields
-#' @inheritSection PackageReporters Special Methods
-NULL
-
-
 #' @importFrom R6 R6Class
 #' @importFrom utils packageDescription
 #' @importFrom data.table data.table
@@ -22,6 +13,9 @@ SummaryReporter <- R6::R6Class(
     classname = "SummaryReporter",
     inherit = AbstractPackageReporter,
     public = list(
+        #' @description Returns an htmlwidget object that summarizes the analysis of the reporter. 
+        #' Used when creating a \link[=CreatePackageReport]{package report}.
+        #' @return Self, invisibly.
         get_summary_view = function(){
 
             # Read DESCRIPTION file into a table
@@ -46,6 +40,7 @@ SummaryReporter <- R6::R6Class(
     ),
 
     active = list(
+        #' @field report_markdown_path (character string) path to R Markdown template for this reporter. Read-only.
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_summary_reporter.Rmd"), package = "pkgnet")
         }

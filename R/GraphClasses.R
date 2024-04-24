@@ -1,126 +1,17 @@
-#' @title Graph Classes for Network Modeling
-#' @name GraphClasses
+#' Base class for Graphs
+#' @keywords internal
+#' 
+#' @description 
+#' pkgnet uses R6 classes to define and encapsulate the graph
+#' models for representing package networks. These classes implement
+#' different types of graphs and functionality to calculate their respective
+#' graph theory measures. The base class \code{AbstractGraph} defines the
+#' standard interfaces and functionality.
+#'
+#' Currently the only implemented type of graph is \link{DirectedGraph}.
+#' 
 #' @concept Graph Classes
 #' @keywords internal
-#' @description pkgnet uses R6 classes to define and encapsulate the graph
-#'     models for representing package networks. These classes implement
-#'     different types of graphs and functionality to calculate their respective
-#'     graph theory measures. The base class \code{AbstractGraph} defines the
-#'     standard interfaces and functionality.
-#'
-#'     Currently the only implemented type of graph is \link{DirectedGraph}.
-#'
-#' @section Class Constructor:
-#' \describe{
-#'     \item{\code{new(nodes, edges)}}{
-#'         \itemize{
-#'             \item{Instantiate new object of the class.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                     \item{\bold{\code{nodes}}: a data.table containing nodes}
-#'                     \item{\bold{\code{edges}}: a data.table containing edges}
-#'                 }
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Object of the class}
-#'                 }
-#'             }
-#'         }
-#'     }
-#' }
-#'
-#' @section Public Methods:
-#' \describe{
-#'     \item{\code{node_measures(measures = NULL)}}{
-#'         \itemize{
-#'             \item{Return specified node-level measures, calculating if necessary.
-#'             See Node Measures section below for details about each measure.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                     \item{\bold{\code{measures}}: character vector of measure
-#'                     names. Default NULL will return those that are already
-#'                     calculated.}
-#'                 }
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{data.table with specified node meaures as columns}
-#'                 }
-#'             }
-#'         }
-#'     }
-#'     \item{\code{graph_measures(measures = NULL)}}{
-#'         \itemize{
-#'             \item{Return specified graph-level measures, calculating if necessary.
-#'             See Graph Measures section below for details about each measure.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                     \item{\bold{\code{measures}}: character vector of measure
-#'                     names. Default NULL will return those that are already
-#'                     calculated.}
-#'                 }
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{list with specified graph measures}
-#'                 }
-#'             }
-#'         }
-#'     }
-#' }
-#'
-#' @section Public Fields:
-#' \describe{
-#'     \item{\bold{\code{nodes}}}{node data.table, read-only}
-#'     \item{\bold{\code{edges}}}{edge data.table, read-only}
-#'     \item{\bold{\code{igraph}}}{igraph object, read-only}
-#'     \item{\bold{\code{available_node_measures}}}{character vector of all
-#'     supported node measures. See Node Measures section below for detailed
-#'     descriptions. Read-only.}
-#'     \item{\bold{\code{available_graph_measures}}}{character vector of all
-#'     supported graph measures. See Graph Measures section below for detailed
-#'     descriptions. Read-only.}
-#'     \item{\bold{\code{default_node_measures}}}{character vector of default
-#'     node measures. See Node Measures section below for detailed descriptions.
-#'     Read-only.}
-#'     \item{\bold{\code{default_graph_measures}}}{character vector of default
-#'     graph measures. See Graph Measures section below for detailed descriptions.
-#'     Read-only.}
-#' }
-#'
-#'
-#' @section Special Methods:
-#' \describe{
-#'     \item{\code{clone(deep = FALSE)}}{
-#'         \itemize{
-#'             \item{Method for copying an object. See \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}} for the intricacies of R6 reference semantics.}
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                     \item{\bold{\code{deep}}: logical. Whether to recursively clone nested R6 objects.}
-#'                 }
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Cloned object of this class.}
-#'                 }
-#'             }
-#'         }
-#'     }
-#'     \item{\code{print()}}{
-#'         \itemize{
-#'             \item{Print igraph object.}
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Self}
-#'                 }
-#'             }
-#'         }
-#'     }
-#' }
-NULL
-
-## Base class for Graphs
 #' @importFrom R6 R6Class
 #' @importFrom igraph graph.edgelist make_empty_graph vertex
 #' @importFrom data.table data.table
@@ -128,6 +19,11 @@ NULL
 AbstractGraph <- R6::R6Class(
     classname = "AbstractGraph"
     , public = list(
+
+        #' @description Instantiate new object of the class.
+        #' @param nodes a data.table containing nodes
+        #' @param edges a data.table containing edges
+        #' @return Self, invisibly.
         initialize = function(nodes, edges) {
 
             # Input validation
@@ -144,7 +40,12 @@ AbstractGraph <- R6::R6Class(
 
             return(invisible(self))
         }
-
+        #' @description 
+        #' Return specified node-level measures, calculating if necessary.
+        #' See \emph{Node Measures} section in \link{DirectedGraphMeasures} for details about each measure.
+        #' @param measures character vector of measure names. 
+        #' Default NULL will return those that are already calculated.
+        #' @return a data.table with specified node meaures as columns
         , node_measures = function(measures = NULL){
 
             # If not specifying, return node table
@@ -177,6 +78,11 @@ AbstractGraph <- R6::R6Class(
             return(self$nodes[, .SD, .SDcols = c('node', measures)])
         }
 
+        #' @description Return specified graph-level measures, calculating if necessary. 
+        #' See \emph{Graph Measures} section in \link{DirectedGraphMeasures} for details about each measure.
+        #' @param measures character vector of measure names. 
+        #' Default NULL will return those that are already calculated.
+        #' @return list with specified graph measures.
         , graph_measures = function(measures = NULL){
 
             # If not specifying, return full list
@@ -202,7 +108,8 @@ AbstractGraph <- R6::R6Class(
             }
             return(private$protected$graph_measures[measures])
         }
-
+        #' @description print igraph object
+        #' @return Self, invisibly.
         , print = function(){
             print(self$igraph)
             invisible(self)
@@ -211,11 +118,13 @@ AbstractGraph <- R6::R6Class(
     ) # /public
 
     , active = list(
-        # Read-only access to node and edge data.tables
+        #' @field nodes node data.table, read-only.
         nodes = function(){return(private$protected$nodes)}
+
+        #' @field edges edge data.table, read-only.
         , edges = function(){return(private$protected$edges)}
 
-        # Read-only access to igraph objects
+        #' @field igraph igraph object, read-only.
         , igraph = function(){
             if (is.null(private$protected$igraph)) {
                 private$initialize_igraph()
@@ -223,18 +132,26 @@ AbstractGraph <- R6::R6Class(
             return(private$protected$igraph)
         }
 
+        #' @field available_node_measures character vector of all supported node measures. 
+        #' See \emph{Node Measures} section in \link{DirectedGraphMeasures} for details about each measure.
         , available_node_measures = function(){
             return(names(private$node_measure_functions))
         }
 
+        #' @field available_graph_measures character vector of all supported graph measures. 
+        #' See \emph{Graph Measures} section in \link{DirectedGraphMeasures} for details about each measure. Read-only.
         , available_graph_measures = function(){
             return(names(private$graph_measure_functions))
         }
 
+        #' @field default_node_measures character vector of default node measures. 
+        #' See \emph{Node Measures} section in \link{DirectedGraphMeasures} for details about each measure.
         , default_node_measures = function(){
             log_fatal('Default node measures not implemented.')
         }
 
+        #' @field default_graph_measures character vector of default graph measures. 
+        #' See \emph{Graph Measures} section in \link{DirectedGraphMeasures} for details about each measure. Read-only.
         , default_graph_measures = function(){
             log_fatal('Default graph measures not implemented.')
         }
@@ -292,39 +209,37 @@ AbstractGraph <- R6::R6Class(
     )  # /private
 )
 
-#' @title Directed Graph Network Model
-#' @name DirectedGraph
+#' Directed Graph Network Model
+#' @description 
+#' R6 class defining a directed graph model for representing a
+#' network, including methods to calculate various measures from graph
+#' theory. The \link[igraph:igraph-package]{igraph} package is used as a
+#' backend for calculations.
+#'
+#' This class isn't intended to be initialized directly; instead,
+#' \link[=AbstractGraphReporter]{network reporter objects} will initialize it as
+#' its \code{pkg_graph} field. If you have a network reporter named
+#' \code{reporter}, then you access this object's public
+#' interface through \code{pkg_graph}---for example,
+#'
+#' \preformatted{reporter$pkg_graph$node_measures('hubScore')}
+#'
 #' @concept Graph Classes
-#' @description R6 class defining a directed graph model for representing a
-#'    network, including methods to calculate various measures from graph
-#'    theory. The \link[igraph:igraph-package]{igraph} package is used as a
-#'    backend for calculations.
-#'
-#'    This class isn't intended to be initialized directly; instead,
-#'    \link[=NetworkReporters]{network reporter objects} will initialize it as
-#'    its \code{pkg_graph} field. If you have a network reporter named
-#'    \code{reporter}, then you access this object's public
-#'    interface through \code{pkg_graph}---for example,
-#'
-#'    \preformatted{    reporter$pkg_graph$node_measures('hubScore')}
-#'
-#' @inheritSection GraphClasses Public Methods
-#' @inheritSection GraphClasses Public Fields
-#' @inheritSection DirectedGraphMeasures Node Measures
-#' @inheritSection DirectedGraphMeasures Graph Measures
-NULL
-
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree closeness betweenness
 #' @importFrom igraph page_rank hub_score authority_score
 #' @importFrom igraph neighborhood.size vcount V
 #' @importFrom igraph centralize centr_degree_tmax
 #' @importFrom igraph centr_clo_tmax centr_betw_tmax
+#' @seealso DirectedGraphMeasures
 DirectedGraph <- R6::R6Class(
     classname = "DirectedGraph"
     , inherit = AbstractGraph
     , public = list()
     , active = list(
+
+        #' @field default_node_measures character vector of default node measures. 
+        #' See \emph{Node Measures} section in \link{DirectedGraphMeasures} for details about each measure. Read-only.
         default_node_measures = function() {
             return(c(
                 "outDegree"
@@ -335,7 +250,9 @@ DirectedGraph <- R6::R6Class(
                 , "pageRank"
             ))
         }
-
+        
+        #' @field default_graph_measures character vector of default graph measures. 
+        #' See \emph{Graph Measures} section in \link{DirectedGraphMeasures} for details about each measure. Read-only.
         , default_graph_measures = function() {
             return(c(
                 "graphOutDegree"

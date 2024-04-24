@@ -1,62 +1,15 @@
-#' @title Network Reporters for Packages
-#' @name NetworkReporters
+#' Abstract Network Reporter Class
+#'
+#' @description
+#' \pkg{pkgnet} defines several package reporter R6 classes that model
+#' a particular network aspect of a package as a graph. These network
+#' reporter classes are extended from \code{AbstractGraphReporter}, which
+#' itself extends the \code{\link[=AbstractPackageReporter]{AbstractPackageReporter}}
+#' with graph-modeling-related functionality. 
+#'
+#' This article describes the additional fields added by the \code{AbstractGraphReporter} class definition.
 #' @keywords internal
 #' @concept Reporters
-#' @description \pkg{pkgnet} defines several package reporter R6 classes that model
-#'     a particular network aspect of a package as a graph. These network
-#'     reporter classes are extended from \code{AbstractGraphReporter}, which
-#'     itself extends the \code{\link[=PackageReporters]{AbstractPackageReporter}}
-#'     with graph-modeling-related functionality.
-#'
-#'     This article describes the additional fields added by the
-#'     \code{AbstractGraphReporter} class definition.
-#'
-#' @section Public Methods:
-#' \describe{
-#'     \item{\code{calculate_default_measures()}}{
-#'         \itemize{
-#'             \item{Calculates the default node and network measures for this
-#'                reporter.
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Self, invisibly.}
-#'                 }
-#'             }
-#'         }
-#'     }
-#' }
-#' @section Public Fields:
-#' \describe{
-#'     \item{\bold{\code{nodes}}}{a data.table, containing information about
-#'        the nodes of the network the reporter is analyzing. The \code{node}
-#'        column acts the identifier. Read-only.
-#'     }
-#'     \item{\bold{\code{edges}}}{a data.table, containing information about
-#'        the edge connections of the network the reporter is analyzing. Each
-#'        row is one edge, and the columns \code{SOURCE} and \code{TARGET}
-#'        specify the node identifiers. Read-only.
-#'     }
-#'     \item{\bold{\code{network_measures}}}{a list, containing any measures
-#'        of the network calculated by the reporter. Read-only.
-#'     }
-#'     \item{\bold{\code{pkg_graph}}}{a graph model object. See \link{DirectedGraph}
-#'        for additional documentation. Read-only.
-#'     }
-#'     \item{\bold{\code{graph_viz}}}{a graph visualization object. A
-#'        \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
-#'        Read-only.
-#'     }
-#'     \item{\bold{\code{layout_type}}}{a character string, the current layout
-#'        type for the graph visualization. Can be assigned a new valid layout
-#'        type value. Use use
-#'        \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)}
-#'        to see valid options.
-#'     }
-#' }
-NULL
-
-
 #' @importFrom R6 R6Class
 #' @importFrom DT datatable formatRound
 #' @importFrom data.table data.table copy setkeyv
@@ -64,12 +17,15 @@ NULL
 #' @importFrom grDevices colorRamp colorRampPalette rgb
 #' @importFrom magrittr %>%
 #' @importFrom visNetwork visNetwork visIgraphLayout visEdges visOptions
-#' visGroups visLegend
+# visGroups visLegend
 AbstractGraphReporter <- R6::R6Class(
     "AbstractGraphReporter"
     , inherit = AbstractPackageReporter
 
     , public = list(
+        #' @description
+        #' Calculates the default node and network measures for this reporter.
+        #' @return Self, invisibly.
         calculate_default_measures = function() {
             self$pkg_graph$node_measures(
                 measures = self$pkg_graph$default_node_measures
@@ -80,6 +36,9 @@ AbstractGraphReporter <- R6::R6Class(
             return(invisible(self))
         }
 
+        #' @description 
+        #' Creates a summary table formatted for display.
+        #' @return A \code{DT} object
         , get_summary_view = function(){
 
             # Create DT for display of the nodes data.table
@@ -108,7 +67,9 @@ AbstractGraphReporter <- R6::R6Class(
     ) # /public
 
     , active = list(
-
+        #' @field nodes A data.table, containing information about
+        #' the nodes of the network the reporter is analyzing. The \code{node} 
+        #' column acts the identifier. Read-only.
         nodes = function(){
             if (is.null(private$cache$nodes)){
                 private$extract_nodes()
@@ -116,6 +77,10 @@ AbstractGraphReporter <- R6::R6Class(
             return(private$cache$nodes)
         },
 
+        #' @field edges A data.table, containing information about
+        #' the edge connections of the network the reporter is analyzing. Each
+        #' row is one edge, and the columns \code{SOURCE} and \code{TARGET}
+        #' specify the node identifiers. Read-only.
         edges = function(){
             if (is.null(private$cache$edges)) {
                 private$extract_edges()
@@ -123,11 +88,15 @@ AbstractGraphReporter <- R6::R6Class(
             return(private$cache$edges)
         },
 
+        #' @field network_measures A list, containing any measures 
+        #' of the network calculated by the reporter. Read-only.
         network_measures = function() {
             return(c(private$cache$network_measures
                      , private$cache$pkg_graph$graph_measures()))
         },
 
+        #' @field pkg_graph a graph model object. See \link{DirectedGraph}
+        #' for additional documentation. Read-only.
         pkg_graph = function(){
             if (is.null(private$cache$pkg_graph)){
                 if (is.null(private$graph_class)) {
@@ -150,6 +119,9 @@ AbstractGraphReporter <- R6::R6Class(
             return(private$cache$pkg_graph)
         },
 
+        #' @field graph_viz a graph visualization object. A 
+        #' \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
+        #' Read-only.
         graph_viz = function(){
             if (is.null(private$cache$graph_viz)) {
                 private$cache$graph_viz <- private$plot_network()
@@ -157,6 +129,8 @@ AbstractGraphReporter <- R6::R6Class(
             return(private$cache$graph_viz)
         },
 
+        #' @field layout_type a character string, the current layout type for the graph visualization. 
+        #' Can be assigned a new valid layout type value. Use use \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)} to see valid options.
         layout_type = function(layout) {
             # If user using <- assignment, set layout and reset viz
             if (!missing(layout)) {

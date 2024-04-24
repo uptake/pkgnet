@@ -1,26 +1,18 @@
-#' @title Class Inheritance Reporter
-#' @name InheritanceReporter
-#' @family Network Reporters
-#' @family Package Reporters
-#' @concept Reporters
-#' @description This reporter takes a package and traces the class inheritance
-#'   structure. Currently the following object-oriented systems are supported:
-#'   \itemize{
-#'       \item{S4 Classes}
-#'       \item{Reference Classes (sometimes informally called "R5")}
-#'       \item{R6 Classes}
-#'   }
-#'   S3 classes are not supported, as their inheritance is defined on an ad hoc
-#'   basis per object and not formally by class definitions.
-#' @section Class Constructor:
-#' \preformatted{InheritanceReporter$new()}
-#' @inheritSection PackageReporters Class Constructor
-#' @inheritSection PackageReporters Public Methods
-#' @inheritSection NetworkReporters Public Methods
-#' @inheritSection PackageReporters Public Fields
-#' @inheritSection NetworkReporters Public Fields
-#' @inheritSection PackageReporters Special Methods
-#' @details Note the following details about class naming:
+#' Class Inheritance Reporter
+#' 
+#' @description
+#' This reporter takes a package and traces the class inheritance
+#' structure. Currently the following object-oriented systems are supported:
+#' \itemize{
+#'     \item{S4 Classes}
+#'     \item{Reference Classes (sometimes informally called "R5")}
+#'     \item{R6 Classes}
+#' }
+#' S3 classes are not supported, as their inheritance is defined on an ad hoc
+#' basis per object and not formally by class definitions.
+#'
+#' @details
+#' Note the following details about class naming:
 #'   \itemize{
 #'       \item{Reference Classes : The name passed as \code{Class} in
 #'       \code{\link[methods:ReferenceClasses]{setRefClass}} is used as the node
@@ -41,8 +33,10 @@
 #'   Wickham's \emph{Advanced R}}. For more info about R6, check out their
 #'   \href{https://r6.r-lib.org/index.html}{docs website} or the chapter in
 #'   \href{https://adv-r.hadley.nz/r6.html}{\emph{Advanced R}'s second edition}.
-NULL
-
+#' 
+#' @family Network Reporters
+#' @family Package Reporters
+#' @concept Reporters
 #' @importFrom R6 R6Class is.R6Class
 #' @importFrom data.table data.table rbindlist setkeyv
 #' @importFrom methods is
@@ -53,6 +47,8 @@ InheritanceReporter <- R6::R6Class(
     , inherit = AbstractGraphReporter
 
     , active = list(
+        
+        #' @field report_markdown_path (character string) path to R Markdown template for this reporter. Read-only.
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_inheritance_reporter.Rmd"), package = "pkgnet")
         }

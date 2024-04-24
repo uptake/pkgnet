@@ -1,21 +1,12 @@
-#' @title Function Interdependency Reporter
-#' @name FunctionReporter
-#' @family Network Reporters
-#' @family Package Reporters
-#' @concept Reporters
-#' @description This reporter looks at the network of interdependencies of its
-#'    defined functions. Measures of centrality from graph theory can indicate
-#'    which function is most important to a package. Combined with unit test
-#'    coverage information---also provided by this reporter--- it can be used
-#'    as a powerful tool to prioritize test writing.
-#' @section Class Constructor:
-#' \preformatted{FunctionReporter$new()}
-#' @inheritSection PackageReporters Class Constructor
-#' @inheritSection PackageReporters Public Methods
-#' @inheritSection NetworkReporters Public Methods
-#' @inheritSection PackageReporters Public Fields
-#' @inheritSection NetworkReporters Public Fields
-#' @inheritSection PackageReporters Special Methods
+#' Function Interdependency Reporter
+#' 
+#' @description
+#' This reporter looks at the network of interdependencies of its
+#' defined functions. Measures of centrality from graph theory can indicate
+#' which function is most important to a package. Combined with unit test
+#' coverage information---also provided by this reporter--- it can be used
+#' as a powerful tool to prioritize test writing.
+#' 
 #' @details
 #' \subsection{R6 Method Support:}{
 #'     R6 classes are supported, with their methods treated as functions by the
@@ -56,9 +47,9 @@
 #'        }
 #'    }
 #' }
-NULL
-
-
+#' @family Network Reporters
+#' @family Package Reporters
+#' @concept Reporters
 #' @importFrom R6 R6Class is.R6Class
 #' @importFrom assertthat assert_that is.string
 #' @importFrom covr package_coverage
@@ -72,6 +63,9 @@ FunctionReporter <- R6::R6Class(
 
     public = list(
 
+        #' @description
+        #' Calculates the default node and network measures for this reporter.
+        #' @return Self, invisibly.
         calculate_default_measures = function() {
             # Calculate test coverage if pkg_path is set and source code available
             if (!is.null(private$pkg_path)){
@@ -87,6 +81,7 @@ FunctionReporter <- R6::R6Class(
 
     , active = list(
 
+        #' @field report_markdown_path (character string) path to R Markdown template for this reporter. Read-only.
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_function_reporter.Rmd"), package = "pkgnet")
         }
