@@ -151,11 +151,21 @@ FunctionReporter <- R6::R6Class(
 
             log_info(sprintf("Calculating test coverage for %s...", self$pkg_name))
 
+            # workaround for covr conflict with loaded packages on windows
+            if(.Platform$OS.type == "windows") {
+                detach(paste0('package:',self$pkg_name), unload = TRUE, character.only = TRUE)
+            }
+
             pkgCovDT <- data.table::as.data.table(covr::package_coverage(
                 path = private$pkg_path
                 , type = "tests"
                 , combine_types = FALSE
             ))
+
+            # workaround for covr conflict with loaded packages on windows
+            if(.Platform$OS.type == "windows") {
+                attachNamespace(self$pkg_name)
+            }
 
             pkgCovDT <- pkgCovDT[, .(coveredLines = sum(value > 0)
                                     , totalLines = .N
