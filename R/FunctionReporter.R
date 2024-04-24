@@ -405,12 +405,17 @@ FunctionReporter <- R6::R6Class(
     if (!is.list(x) && listable) {
         x <- as.list(x)
 
-        # Check for expression of the form foo$bar
-        # We still want to split it up because foo might be a function
-        # but we want to get rid of bar, because it's a symbol in foo's namespace
-        # and not a symbol that could be reliably matched to the package namespace
-        if (identical(x[[1]], quote(`$`))) {
-            x <- x[1:2]
+        if (length(x) > 0){
+            # Check for expression of the form foo$bar
+            # We still want to split it up because foo might be a function
+            # but we want to get rid of bar, because it's a symbol in foo's namespace
+            # and not a symbol that could be reliably matched to the package namespace
+            if (identical(x[[1]], quote(`$`))) {
+                x <- x[1:2]
+            }
+        } else {
+            # make empty lists "not listable" so recursion stops
+            listable <- FALSE 
         }
     }
 
@@ -653,9 +658,10 @@ FunctionReporter <- R6::R6Class(
     if (!is.list(x) && listable) {
         xList <- as.list(x)
 
+        if (length(xList) > 0){
+
         # Check if expression x is from _$_
         if (identical(xList[[1]], quote(`$`))) {
-
             # Check if expression x is of form self$foo, private$foo, or super$foo
             # We want to keep those together because they could refer to the class'
             # methods. So expression is not listable
@@ -663,6 +669,7 @@ FunctionReporter <- R6::R6Class(
                 || identical(xList[[2]], quote(private))
                 || identical(xList[[2]], quote(super))) {
                 listable <- FALSE
+
 
             # If expression lefthand side is not keyword, we still want to split
             # it up because left might be a function
@@ -677,7 +684,14 @@ FunctionReporter <- R6::R6Class(
         } else {
             x <- xList
         }
+        } else {
+            # make empty list "non-listable" so recursion stops
+            listable <- FALSE
+        }   
+
     }
+
+        
 
     if (listable){
         # Filter out atomic values because we don't care about them
