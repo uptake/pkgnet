@@ -85,42 +85,6 @@ CreatePackageVignette <- function(pkg = "."
                           , dirname(vignette_path)))
     }
 
-    # Check if vignette_path matches the right package
-    # if the path is to a file in a directory named vignettes
-    vignetteDirAbsPath <- normalizePath(dirname(vignette_path))
-    # If path is a vignettes directory
-    if (grepl('/vignettes$', vignetteDirAbsPath)) {
-        # Get path for expected DESCRIPTION file for package
-        expectedDescriptionPath <- gsub(
-            pattern = "vignettes$"
-            , replacement = "DESCRIPTION"
-            , x = vignetteDirAbsPath
-            )
-
-        # If DESCRIPTION file exists check the name
-        if (file.exists(expectedDescriptionPath)) {
-            foundPkgName <- read.dcf(expectedDescriptionPath)[1,][["Package"]]
-
-            # If it doesn't match pkg_name, give warning
-            if (!identical(foundPkgName, pkg_name)) {
-                log_warn(glue::glue(
-                    "You are writing a report for {pkg_name} to the vignettes "
-                    , "directory for {foundPkgName}"
-                    , pkg_name = pkg_name
-                    , foundPkgName = foundPkgName))
-            }
-
-        # Otherwise, warn that we're writing to a vignettes folder inside
-        # a directory that is not a package root
-        } else {
-            log_warn(paste(
-                "You specified a path to a vignettes directory"
-                , vignetteDirAbsPath
-                , "that is not inside a package root directory."
-            ))
-        }
-    }
-
     log_info(sprintf(
         "Creating pkgnet package report as vignette for %s..."
         , pkg_name
