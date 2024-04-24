@@ -1,4 +1,4 @@
-name: update website docs
+name: Website Docs Update
 
 # only build on new tagged versions (OR manually specified)
 on:
