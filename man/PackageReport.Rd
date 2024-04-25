@@ -2,123 +2,125 @@
 % Please edit documentation in R/CreatePackageReport.R
 \name{PackageReport}
 \alias{PackageReport}
-\title{Package Report}
+\title{R6 Class Representing an R Package Report}
+\value{
+Self, invisibly.
+}
 \description{
 pkgnet compiles one or more package reporters into a package
-    report for a specified package. \code{PackageReport} is an R6 class that
-    holds all of those reporters and has a method \code{render_report()}
-    to generate an HTML report file. You can access each individual reporter
-    and modify it using its methods if you wish.
+report for a specified package. \code{PackageReport} is an R6 class that
+holds all of those reporters and has a method \code{render_report()}
+to generate an HTML report file. You can access each individual reporter
+and modify it using its methods if you wish.
 
-    The function \code{\link{CreatePackageReport}()} is a shortcut for both
-    generating a \code{PackageReport} object with instantiated reporters
-    and creating the HTML report in one call.
+The function \code{\link{CreatePackageReport}()} is a shortcut for both
+generating a \code{PackageReport} object with instantiated reporters
+and creating the HTML report in one call.
 }
-\section{Class Constructor}{
-
-\preformatted{DependencyReporter$new(pkg_name, pkg_path = NULL, report_path =
-   tempfile(pattern = pkg_name, fileext = ".html"))}
-\itemize{
-   \item{Initialize an instance of a package report object.}
-       \item{\bold{Args:}}{\itemize{
-           \item{\bold{\code{pkg_name}} (character string) name of
-               package
-           }
-           \item{\bold{\code{pkg_path}}: (character string) optional
-               directory path to source code of the package. It is used
-               for calculating test coverage. It can be an absolute or
-               relative path.
-           }
-           \item{\bold{\code{report_path}}: (character string) The
-               path and filename of the output report.  Default
-               report will be produced in the temporary directory.
-           }
-       }}
-       \item{\bold{Returns:}}{\itemize{
-           \item{Instantiated package report object.}
-       }}
-}
-}
-
-\section{Public Methods}{
-
-\describe{
-    \item{\code{add_reporter(reporter)}}{
-        \itemize{
-            \item{Add a reporter to the package report.}
-            \item{\bold{Args:}}{
-                \item{\bold{\code{reporter}}: Instantiated package reporter
-                object
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-    \item{\code{render_report()}}{
-        \itemize{
-            \item{Render html pkgnet package report.
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Fields}{
-
-\describe{
-    \item{\bold{\code{pkg_name}}}{(character string) name of package.
-        Read-only.
-    }
-    \item{\bold{\code{pkg_path}}}{(character string) path to source code of
-        the package. Read-only.
-    }
-    \item{\bold{\code{report_path}}}{(character string) path and filename
-        of output report.
-    }
-    \item{\bold{\code{SummaryReporter}}}{instantiated pkgnet
-        \code{\link{SummaryReporter}} object}
-    \item{\bold{\code{DependencyReporter}}}{instantiated pkgnet
-        \code{\link{DependencyReporter}} object}
-    \item{\bold{\code{FunctionReporter}}}{instantiated pkgnet
-        \code{\link{FunctionReporter}} object}
-    \item{\bold{\code{InheritanceReporter}}}{instantiated pkgnet
-        \code{\link{InheritanceReporter}} object}
-}
-}
-
-\section{Special Methods}{
-
-\describe{
-    \item{\code{clone(deep = FALSE)}}{
-        \itemize{
-            \item{Method for copying an object. See
-                \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}}
-                for the intricacies of R6 reference semantics.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{deep}}(logical) Whether to recursively
-                    clone nested R6 objects.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Cloned object of this class.}
-                }
-            }
-        }
-    }
-}
-}
-
 \concept{Reporters}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{pkg_name}}{(character string) name of package. Read-only.}
+
+\item{\code{pkg_path}}{(character string) path to source code of the package. Read-only.}
+
+\item{\code{report_path}}{(character string) path and filename of output report.}
+
+\item{\code{SummaryReporter}}{Instantiated pkgnet \code{\link{SummaryReporter}} object}
+
+\item{\code{DependencyReporter}}{Instantiated pkgnet \code{\link{DependencyReporter}} object}
+
+\item{\code{FunctionReporter}}{Instantiated pkgnet \code{\link{FunctionReporter}} object}
+
+\item{\code{InheritanceReporter}}{Instantiated pkgnet \code{\link{InheritanceReporter}} object}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-PackageReport-new}{\code{PackageReport$new()}}
+\item \href{#method-PackageReport-add_reporter}{\code{PackageReport$add_reporter()}}
+\item \href{#method-PackageReport-render_report}{\code{PackageReport$render_report()}}
+\item \href{#method-PackageReport-clone}{\code{PackageReport$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PackageReport-new"></a>}}
+\if{latex}{\out{\hypertarget{method-PackageReport-new}{}}}
+\subsection{Method \code{new()}}{
+Initialize an instance of a package report object.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PackageReport$new(
+  pkg_name,
+  pkg_path = NULL,
+  report_path = tempfile(pattern = pkg_name, fileext = ".html")
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{pkg_name}}{(character string) name of package}
+
+\item{\code{pkg_path}}{(character string) optional directory path to source code of the package. 
+It is used for calculating test coverage. It can be an absolute or relative path.}
+
+\item{\code{report_path}}{(character string) The path and filename of the output report. 
+Default report will be produced in the temporary directory.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Instantiated package report object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PackageReport-add_reporter"></a>}}
+\if{latex}{\out{\hypertarget{method-PackageReport-add_reporter}{}}}
+\subsection{Method \code{add_reporter()}}{
+Add a reporter to the package report.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PackageReport$add_reporter(reporter)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{reporter}}{Instantiated package reporter object}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Self, invisibly
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PackageReport-render_report"></a>}}
+\if{latex}{\out{\hypertarget{method-PackageReport-render_report}{}}}
+\subsection{Method \code{render_report()}}{
+Render html pkgnet package report.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PackageReport$render_report()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-PackageReport-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-PackageReport-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{PackageReport$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

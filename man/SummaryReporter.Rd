@@ -4,116 +4,8 @@
 \alias{SummaryReporter}
 \title{Package Summary Reporter}
 \description{
-This reporter provides a high-level overview of a package via
-   its package DESCRIPTION file.
+This reporter provides a high-level overview of a package via its package DESCRIPTION file.
 }
-\section{Class Constructor}{
-
-\preformatted{SummaryReporter$new()}
-
-
-\describe{
-    \item{\code{}}{
-        \itemize{
-            \item{Initialize an instance of the reporter.}
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Instantiated reporter object. Note that this
-                       reporter object isn't useful yet until you use the
-                       \code{set_package} method to set a package.
-                    }
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Methods}{
-
-\describe{
-    \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
-        \itemize{
-            \item{Set the package that the reporter will analyze. This can
-                only be done once for a given instance of a reporter.
-                Instantiate a new copy of the reporter if you need to analyze
-                a different package.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{pkg_name}}: character string, name of
-                     package
-                 }
-                    \item{\bold{\code{pkg_path}}: character string, optional
-                    directory path to source code of the package. It is used
-                    for calculating test coverage. It can be an absolute or
-                    relative path.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-    \item{\code{get_summary_view()}}{
-        \itemize{
-            \item{Returns an htmlwidget object that summarizes the analysis
-                of the reporter. Used when creating a
-                \link[=CreatePackageReport]{package report}.
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{\link[htmlwidgets:htmlwidgets-package]{htmlwidget}
-                        object
-                    }
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Fields}{
-
-\describe{
-    \item{\bold{\code{pkg_name}}}{character string, name of set package.
-        Read-only.
-    }
-    \item{\bold{\code{report_markdown_path}}}{character string, path to
-        R Markdown template for this reporter. Read-only.
-    }
-}
-}
-
-\section{Special Methods}{
-
-\describe{
-    \item{\code{clone(deep = FALSE)}}{
-        \itemize{
-            \item{Method for copying an object. See
-                \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}}
-                for the intricacies of R6 reference semantics.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{deep}}: logical. Whether to recursively
-                    clone nested R6 objects.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Cloned object of this class.}
-                }
-            }
-        }
-    }
-}
-}
-
 \seealso{
 Other Package Reporters: 
 \code{\link{DependencyReporter}},
@@ -122,3 +14,59 @@ Other Package Reporters:
 }
 \concept{Package Reporters}
 \concept{Reporters}
+\section{Super class}{
+\code{\link[pkgnet:AbstractPackageReporter]{pkgnet::AbstractPackageReporter}} -> \code{SummaryReporter}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{report_markdown_path}}{(character string) path to R Markdown template for this reporter. Read-only.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-SummaryReporter-get_summary_view}{\code{SummaryReporter$get_summary_view()}}
+\item \href{#method-SummaryReporter-clone}{\code{SummaryReporter$clone()}}
+}
+}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractPackageReporter" data-id="set_package"><a href='../../pkgnet/html/AbstractPackageReporter.html#method-AbstractPackageReporter-set_package'><code>pkgnet::AbstractPackageReporter$set_package()</code></a></span></li>
+</ul>
+</details>
+}}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SummaryReporter-get_summary_view"></a>}}
+\if{latex}{\out{\hypertarget{method-SummaryReporter-get_summary_view}{}}}
+\subsection{Method \code{get_summary_view()}}{
+Returns an htmlwidget object that summarizes the analysis of the reporter. 
+Used when creating a \link[=CreatePackageReport]{package report}.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SummaryReporter$get_summary_view()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+Self, invisibly.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-SummaryReporter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-SummaryReporter-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{SummaryReporter$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -5,14 +5,14 @@
 \title{Class Inheritance Reporter}
 \description{
 This reporter takes a package and traces the class inheritance
-  structure. Currently the following object-oriented systems are supported:
-  \itemize{
-      \item{S4 Classes}
-      \item{Reference Classes (sometimes informally called "R5")}
-      \item{R6 Classes}
-  }
-  S3 classes are not supported, as their inheritance is defined on an ad hoc
-  basis per object and not formally by class definitions.
+structure. Currently the following object-oriented systems are supported:
+\itemize{
+    \item{S4 Classes}
+    \item{Reference Classes (sometimes informally called "R5")}
+    \item{R6 Classes}
+}
+S3 classes are not supported, as their inheritance is defined on an ad hoc
+basis per object and not formally by class definitions.
 }
 \details{
 Note the following details about class naming:
@@ -37,158 +37,6 @@ Note the following details about class naming:
   \href{https://r6.r-lib.org/index.html}{docs website} or the chapter in
   \href{https://adv-r.hadley.nz/r6.html}{\emph{Advanced R}'s second edition}.
 }
-\section{Class Constructor}{
-
-\preformatted{InheritanceReporter$new()}
-
-
-\describe{
-    \item{\code{}}{
-        \itemize{
-            \item{Initialize an instance of the reporter.}
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Instantiated reporter object. Note that this
-                       reporter object isn't useful yet until you use the
-                       \code{set_package} method to set a package.
-                    }
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Methods}{
-
-\describe{
-    \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
-        \itemize{
-            \item{Set the package that the reporter will analyze. This can
-                only be done once for a given instance of a reporter.
-                Instantiate a new copy of the reporter if you need to analyze
-                a different package.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{pkg_name}}: character string, name of
-                     package
-                 }
-                    \item{\bold{\code{pkg_path}}: character string, optional
-                    directory path to source code of the package. It is used
-                    for calculating test coverage. It can be an absolute or
-                    relative path.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-    \item{\code{get_summary_view()}}{
-        \itemize{
-            \item{Returns an htmlwidget object that summarizes the analysis
-                of the reporter. Used when creating a
-                \link[=CreatePackageReport]{package report}.
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{\link[htmlwidgets:htmlwidgets-package]{htmlwidget}
-                        object
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-\describe{
-    \item{\code{calculate_default_measures()}}{
-        \itemize{
-            \item{Calculates the default node and network measures for this
-               reporter.
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Fields}{
-
-\describe{
-    \item{\bold{\code{pkg_name}}}{character string, name of set package.
-        Read-only.
-    }
-    \item{\bold{\code{report_markdown_path}}}{character string, path to
-        R Markdown template for this reporter. Read-only.
-    }
-}
-
-
-\describe{
-    \item{\bold{\code{nodes}}}{a data.table, containing information about
-       the nodes of the network the reporter is analyzing. The \code{node}
-       column acts the identifier. Read-only.
-    }
-    \item{\bold{\code{edges}}}{a data.table, containing information about
-       the edge connections of the network the reporter is analyzing. Each
-       row is one edge, and the columns \code{SOURCE} and \code{TARGET}
-       specify the node identifiers. Read-only.
-    }
-    \item{\bold{\code{network_measures}}}{a list, containing any measures
-       of the network calculated by the reporter. Read-only.
-    }
-    \item{\bold{\code{pkg_graph}}}{a graph model object. See \link{DirectedGraph}
-       for additional documentation. Read-only.
-    }
-    \item{\bold{\code{graph_viz}}}{a graph visualization object. A
-       \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
-       Read-only.
-    }
-    \item{\bold{\code{layout_type}}}{a character string, the current layout
-       type for the graph visualization. Can be assigned a new valid layout
-       type value. Use use
-       \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)}
-       to see valid options.
-    }
-}
-}
-
-\section{Special Methods}{
-
-\describe{
-    \item{\code{clone(deep = FALSE)}}{
-        \itemize{
-            \item{Method for copying an object. See
-                \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}}
-                for the intricacies of R6 reference semantics.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{deep}}: logical. Whether to recursively
-                    clone nested R6 objects.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Cloned object of this class.}
-                }
-            }
-        }
-    }
-}
-}
-
 \seealso{
 Other Network Reporters: 
 \code{\link{DependencyReporter}},
@@ -202,3 +50,46 @@ Other Package Reporters:
 \concept{Network Reporters}
 \concept{Package Reporters}
 \concept{Reporters}
+\section{Super classes}{
+\code{\link[pkgnet:AbstractPackageReporter]{pkgnet::AbstractPackageReporter}} -> \code{\link[pkgnet:AbstractGraphReporter]{pkgnet::AbstractGraphReporter}} -> \code{InheritanceReporter}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{report_markdown_path}}{(character string) path to R Markdown template for this reporter. Read-only.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-InheritanceReporter-clone}{\code{InheritanceReporter$clone()}}
+}
+}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractPackageReporter" data-id="set_package"><a href='../../pkgnet/html/AbstractPackageReporter.html#method-AbstractPackageReporter-set_package'><code>pkgnet::AbstractPackageReporter$set_package()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraphReporter" data-id="calculate_default_measures"><a href='../../pkgnet/html/AbstractGraphReporter.html#method-AbstractGraphReporter-calculate_default_measures'><code>pkgnet::AbstractGraphReporter$calculate_default_measures()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraphReporter" data-id="get_summary_view"><a href='../../pkgnet/html/AbstractGraphReporter.html#method-AbstractGraphReporter-get_summary_view'><code>pkgnet::AbstractGraphReporter$get_summary_view()</code></a></span></li>
+</ul>
+</details>
+}}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-InheritanceReporter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-InheritanceReporter-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{InheritanceReporter$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
