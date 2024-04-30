@@ -655,40 +655,34 @@ FunctionReporter <- R6::R6Class(
     # an environment pointer then we can break x up into list of components
     listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
 
+    # If it is not a list but listable...
     if (!is.list(x) && listable) {
+        # Convert to list
         xList <- as.list(x)
-
         if (length(xList) > 0){
-
-        # Check if expression x is from _$_
-        if (identical(xList[[1]], quote(`$`))) {
-            # Check if expression x is of form self$foo, private$foo, or super$foo
-            # We want to keep those together because they could refer to the class'
-            # methods. So expression is not listable
-            if (identical(xList[[2]], quote(self))
-                || identical(xList[[2]], quote(private))
-                || identical(xList[[2]], quote(super))) {
-                listable <- FALSE
-
-
-            # If expression lefthand side is not keyword, we still want to split
-            # it up because left might be a function
-            # but we want to get rid of right, because it's a symbol in left's namespace
-            # and not a symbol that could be reliably matched to the package namespace
+            # Check if expression x is from _$_
+            if (identical(xList[[1]], quote(`$`))) {
+                # Check if expression x is of form self$foo, private$foo, or super$foo
+                if (xList[[2]] %in% c(quote(self), quote(private), quote(super))) {
+                    # We want to keep those together because they could refer to the class'
+                    # methods. So expression is not listable
+                    listable <- FALSE
+                } else {
+                    # If expression lefthand side is not keyword, we still want to split
+                    # it up because left might be a function
+                    # but we want to get rid of right, because it's a symbol in left's namespace
+                    # and not a symbol that could be reliably matched to the package namespace
+                    x <- xList[1:2]
+                }
             } else {
+                # Left Hand is not a _$_.  Proceed as normal list.
                 x <- xList
-                x <- x[1:2]
             }
-
-        # Otherwise list as usual
         } else {
-            x <- xList
-        }
-        } else {
-            # make empty list "non-listable" so recursion stops
+            # List is zero length.  This might occur when encountering a "break" command.
+            # Make empty list "non-listable" so recursion stops in following step.
             listable <- FALSE
         }   
-
     }
 
         
