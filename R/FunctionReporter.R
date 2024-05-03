@@ -663,7 +663,7 @@ FunctionReporter <- R6::R6Class(
             # Check if expression x is from _$_
             if (identical(xList[[1]], quote(`$`))) {
                 # Check if expression x is of form self$foo, private$foo, or super$foo
-                if (xList[[2]] %in% c(quote(self), quote(private), quote(super))) {
+                if (identical(xList[[2]], quote(self)) || identical(xList[[2]], quote(private)) || identical(xList[[2]], quote(super))) {
                     # We want to keep those together because they could refer to the class'
                     # methods. So expression is not listable
                     listable <- FALSE
