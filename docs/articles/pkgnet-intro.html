@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -93,11 +93,13 @@
 
       
 
-      </header><script src="pkgnet-intro_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><link href="pkgnet-intro_files/vis-9.1.0/vis-network.min.css" rel="stylesheet">
-<script src="pkgnet-intro_files/vis-9.1.0/vis-network.min.js"></script><script src="pkgnet-intro_files/visNetwork-binding-2.1.0/visNetwork.js"></script><div class="row">
+      </header><script src="pkgnet-intro_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="pkgnet-intro_files/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="pkgnet-intro_files/vis-9.1.0/vis-network.min.js"></script><script src="pkgnet-intro_files/visNetwork-binding-2.1.2/visNetwork.js"></script><link href="pkgnet-intro_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Exploring the Structure and Dependencies of an R Package</h1>
+      <h1 data-toc-skip>Exploring the Structure and Dependencies of an R
+Package</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/uptake/pkgnet/blob/HEAD/vignettes/pkgnet-intro.Rmd" class="external-link"><code>vignettes/pkgnet-intro.Rmd</code></a></small>
@@ -107,305 +109,406 @@
 
     
     
-<!--  STYLE SET UP FOR TWO COLUMN SECTIONS  -->
-<style>
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-.column-left{
-  float: left;
-  width: 48%;
-  text-align: justify;
-  text-justify: inter-word;
-  margin-right: 4%;
-}
-.column-right{
-  float: right;
-  width: 48%;
-  text-align: justify;
-  text-justify: inter-word;
-}
-</style>
-<!--  CODE BELOW HERE WILL RENDER  --><p><code>pkgnet</code> is an R package designed for the analysis of R packages! The goal of the package is to build graph representations of a package’s various types of dependencies. This can inform a variety of activities, including:</p>
+<p><code>pkgnet</code> is an R package designed for the analysis of R
+packages! The goal of the package is to build graph representations of a
+package’s various types of dependencies. This can inform a variety of
+activities, including:</p>
 <ul>
-<li>prioritizing functions to unit test based on their centrality or influence</li>
-<li>examining the recursive dependencies you are taking on by using a given package</li>
-<li>exploring the structure of a new package provided by a coworker or downloaded from the internet</li>
+<li>prioritizing functions to unit test based on their centrality or
+influence</li>
+<li>examining the recursive dependencies you are taking on by using a
+given package</li>
+<li>exploring the structure of a new package provided by a coworker or
+downloaded from the internet</li>
 </ul>
 <p>Below is a brief tour of <code>pkgnet</code> and its features.</p>
 <hr>
-<div class="section level1">
-<h1 id="packages-as-a-graph">Packages as a Graph<a class="anchor" aria-label="anchor" href="#packages-as-a-graph"></a>
-</h1>
-<p><code>pkgnet</code> represents aspects of R packages as graphs. The two default reporters, which we will discuss in this vignette, model their respective aspects as directed graphs: a package’s dependencies on other packages, and the interdependencies of functions within a package. Before we look at the output of <code>pkgnet</code>, here are few core concepts to keep in mind.</p>
+<div class="section level2">
+<h2 id="packages-as-a-graph">Packages as a Graph<a class="anchor" aria-label="anchor" href="#packages-as-a-graph"></a>
+</h2>
+<p><code>pkgnet</code> represents aspects of R packages as graphs. The
+two default reporters, which we will discuss in this vignette, model
+their respective aspects as directed graphs: a package’s dependencies on
+other packages, and the interdependencies of functions within a package.
+Before we look at the output of <code>pkgnet</code>, here are few core
+concepts to keep in mind.</p>
 <div class="figure" style="text-align: center">
-<div id="htmlwidget-59217b0434e29cf6ddf1" style="width:100%;height:288px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-59217b0434e29cf6ddf1">{"x":{"nodes":{"id":[1,2,3,4],"label":["A","B","C","D"],"x":[1,3,2,4],"y":[1,1,2,3],"level":[1,1,2,3]},"edges":{"from":[3,3,4,4],"to":[1,2,3,2]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"circle","font":{"size":25,"bold":true,"align":"center"}},"manipulation":{"enabled":false},"edges":{"arrows":"to"},"layout":{"hierarchical":{"enabled":true,"direction":"DU","sortMethod":"directed"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false,"zoomSpeed":1}},"groups":null,"width":"100%","height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p class="caption">
+<div id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:288px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"nodes":{"id":[1,2,3,4],"label":["A","B","C","D"],"x":[1,3,2,4],"y":[1,1,2,3],"level":[1,1,2,3]},"edges":{"from":[3,3,4,4],"to":[1,2,3,2]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"circle","font":{"size":25,"bold":true,"align":"center"}},"manipulation":{"enabled":false},"edges":{"arrows":"to"},"layout":{"hierarchical":{"enabled":true,"direction":"DU","sortMethod":"directed"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false,"zoomSpeed":1}},"groups":null,"width":"100%","height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p class="caption">
 Example Dependency Graph
 </p>
 </div>
-<div class="section level2">
-<h2 id="dependency">Dependency<a class="anchor" aria-label="anchor" href="#dependency"></a>
-</h2>
-<p>Units of the analysis are represented as <strong>nodes</strong>, and their dependency relationships are represented as <strong>edges</strong> (a.k.a. arcs or arrows). In <code>pkgnet</code>, the nodes could be functions in the package you are examining, or other packages that the package depends on. The direction of edges point in the direction of dependency—the tail node depends on the head node.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<div class="section level3">
+<h3 id="dependency">Dependency<a class="anchor" aria-label="anchor" href="#dependency"></a>
+</h3>
+<p>Units of the analysis are represented as <strong>nodes</strong>, and
+their dependency relationships are represented as <strong>edges</strong>
+(a.k.a. arcs or arrows). In <code>pkgnet</code>, the nodes could be
+functions in the package you are examining, or other packages that the
+package depends on. The direction of edges point in the direction of
+dependency—the tail node depends on the head node.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>In the example dependency graph above:</p>
 <ul>
 <li>
-<strong>C</strong> depends on both <strong>A</strong> and <strong>B</strong>.</li>
+<strong>C</strong> depends on both <strong>A</strong> and
+<strong>B</strong>.</li>
 <li>
-<strong>D</strong> depends both <strong>C</strong> and <strong>B</strong>.</li>
+<strong>D</strong> depends both <strong>C</strong> and
+<strong>B</strong>.</li>
 <li>
-<strong>D</strong> indirectly depends upon <strong>A</strong> through <strong>C</strong> via the transitive property.</li>
+<strong>D</strong> indirectly depends upon <strong>A</strong>
+through <strong>C</strong> via the transitive property.</li>
 <li>
-<strong>B</strong> does not depend on <strong>A</strong> as there is no path from <strong>A</strong> to <strong>B</strong> by following the edges.</li>
+<strong>B</strong> does not depend on <strong>A</strong> as there is
+no path from <strong>A</strong> to <strong>B</strong> by following the
+edges.</li>
 </ul>
-<p>Following the direction of the edges allows you to figure out the <strong>dependencies</strong> of a node—the other nodes that it depends on. On the flip side, tracing the edges backwards allows you to figure out the <strong>reverse dependencies</strong> (i.e., dependents) of a node—the other nodes that depend on it.</p>
+<p>Following the direction of the edges allows you to figure out the
+<strong>dependencies</strong> of a node—the other nodes that it depends
+on. On the flip side, tracing the edges backwards allows you to figure
+out the <strong>reverse dependencies</strong> (i.e., dependents) of a
+node—the other nodes that depend on it.</p>
 <hr>
 </div>
 </div>
-<div class="section level1">
-<h1 id="running-pkgnet">Running pkgnet<a class="anchor" aria-label="anchor" href="#running-pkgnet"></a>
-</h1>
-<p><code>pkgnet</code> can analyze any R package locally installed. (Run <code><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages()</a></code> to see the full list of packages installed on your system.) For this example, let’s say we are analyzing a custom built package, <code>baseballstats</code>.</p>
-<p>To analyze <code>baseballstats</code>, run the following two lines of code:</p>
+<div class="section level2">
+<h2 id="running-pkgnet">Running pkgnet<a class="anchor" aria-label="anchor" href="#running-pkgnet"></a>
+</h2>
+<p><code>pkgnet</code> can analyze any R package locally installed. (Run
+<code><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages()</a></code> to see the full list of packages
+installed on your system.) For this example, let’s say we are analyzing
+a custom built package, <code>baseballstats</code>.</p>
+<p>To analyze <code>baseballstats</code>, run the following two lines of
+code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span>
-<span class="va">report1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span><span class="op">(</span>pkg_name <span class="op">=</span> <span class="st">"baseballstats"</span><span class="op">)</span></code></pre></div>
-<p>That’s it! You have generated a lot of valuable information with that one call for an installed package.</p>
-<p>However, if the full source repository for the package is available on your system, you can supplement this report with other information such as code coverage from <a href="https://CRAN.R-project.org/package=covr" class="external-link">covr</a>. To do so, specify the path to the repository in <code>CreatePackageReport</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">library</span>(pkgnet)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>report2 &lt;-<span class="st"> </span><span class="kw">CreatePackageReport</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>  <span class="dt">pkg_name =</span> <span class="st">"baseballstats"</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  , <span class="dt">pkg_path =</span> <span class="op">&lt;</span>path to the repo<span class="op">&gt;</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span></span>
+<span><span class="va">report1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span><span class="op">(</span>pkg_name <span class="op">=</span> <span class="st">"baseballstats"</span><span class="op">)</span></span></code></pre></div>
+<p><em>THAT’S IT!</em> You have generated a lot of valuable information
+with that one call for an installed package.</p>
+<p>However, if the full source repository for the package is available
+on your system, you can supplement this report with other information
+such as code coverage from <a href="https://CRAN.R-project.org/package=covr" class="external-link">covr</a>. To do so,
+specify the path to the repository in
+<code>CreatePackageReport</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(pkgnet)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>report2 <span class="ot">&lt;-</span> <span class="fu">CreatePackageReport</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">pkg_name =</span> <span class="st">"baseballstats"</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  , <span class="at">pkg_path =</span> <span class="sc">&lt;</span>path to the repo<span class="sc">&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span></code></pre></div>
 <hr>
 </div>
-<div class="section level1">
-<h1 id="examining-the-results">Examining the Results<a class="anchor" aria-label="anchor" href="#examining-the-results"></a>
-</h1>
-<p><code>CreatePackageReport</code> has written an HTML report with the pertinent information, and it also returned a list object with the same information and more.</p>
 <div class="section level2">
-<h2 id="the-report">The Report<a class="anchor" aria-label="anchor" href="#the-report"></a>
+<h2 id="the-html-report-returned-object">The HTML Report &amp; Returned Object<a class="anchor" aria-label="anchor" href="#the-html-report-returned-object"></a>
 </h2>
-<p>The location of the HTML report is specified in the messages in the terminal.</p>
-<p>This report has three sections:</p>
-<ol style="list-style-type: decimal">
-<li>
-<strong>Package Summary</strong> – general information about the package and package level statistics</li>
-<li>
-<strong>Dependency Network</strong> – information regarding the packages upon which the current package under analysis depends upon</li>
-<li>
-<strong>Function Network</strong> – information regarding the functions within the current package under analysis and their interdependencies</li>
-</ol>
-<p>Each section has helpful tables and visuals.</p>
-<p>As a sample, here’s how the <strong>Function Network Visualization</strong> looks for <code>baseballstats</code>:</p>
+<p><code><a href="../reference/CreatePackageReport.html">CreatePackageReport()</a></code> creates an HTML report with the
+pertinent information, and it also returns an object with the report
+information <em>and more</em>. The location of the HTML report is
+specified in the messages in the terminal, but it should render
+automatically in your browser.</p>
+<div class="section level3">
+<h3 id="report-sections">Report Sections<a class="anchor" aria-label="anchor" href="#report-sections"></a>
+</h3>
+<p>These will display in the HTML report, and their content will also be
+attached as public bindings in the <code>PackageReport</code> object
+returned from <code><a href="../reference/CreatePackageReport.html">CreatePackageReport()</a></code>.</p>
+<div class="section level4">
+<h4 id="package-summary">Package Summary<a class="anchor" aria-label="anchor" href="#package-summary"></a>
+</h4>
+<p><code>SummaryReporter</code>: This section displays general
+information about the package. The returned object contains basic
+information like the package name and path.</p>
+</div>
+<div class="section level4">
+<h4 id="dependency-network">Dependency Network<a class="anchor" aria-label="anchor" href="#dependency-network"></a>
+</h4>
+<p><code>DependencyReporter</code>: This section displays information
+regarding the packages upon which the current package under analysis
+depends. This includes both base and third-party R packages. The
+returned object contains graph visualizations, graph measures and data
+tables among other methods.</p>
+</div>
+<div class="section level4">
+<h4 id="function-network">Function Network<a class="anchor" aria-label="anchor" href="#function-network"></a>
+</h4>
+<p><code>FunctionReporter</code>: This section displays information
+regarding the functions within the current package under analysis and
+their interdependence network. The returned object contains graph
+visualizations, graph measures and data tables among other methods.</p>
+</div>
+<div class="section level4">
+<h4 id="class-inheritance-network-optional">Class Inheritance Network (<em>Optional</em>)<a class="anchor" aria-label="anchor" href="#class-inheritance-network-optional"></a>
+</h4>
+<p><code>InheritanceReporter</code>: While not generated by default (as
+not all packages are object oriented), this reporter is very useful when
+investigating the parent-child structure of <a href="https://r6.r-lib.org/" class="external-link">R6</a>, <a href="http://adv-r.had.co.nz/S4.html" class="external-link">S4</a> or <a href="http://adv-r.had.co.nz/R5.html" class="external-link">Reference Class (a.k.a. “R5”)</a>
+objects. The inheritance graph is displayed in the report along with
+other information. The returned object contains graph visualizations,
+graph measures and data tables among other methods.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="network-based-section-detail">Network Based Section Detail<a class="anchor" aria-label="anchor" href="#network-based-section-detail"></a>
+</h3>
+<p>Aside from the Package Summary section and its returned object, each
+reporter is based around a graph structure. Let’s look at the
+<code>FunctionReporter</code> from <code>baseballstats</code> in more
+detail.</p>
+<div class="section level4">
+<h4 id="visualizations">Visualizations<a class="anchor" aria-label="anchor" href="#visualizations"></a>
+</h4>
+<p>Here’s how the <strong>Function Network Visualization</strong> looks
+for <code>baseballstats</code>. Note, its appearance differs based on if
+<code>pkg_path</code> is specified in
+<code><a href="../reference/CreatePackageReport.html">CreatePackageReport()</a></code>:</p>
 <!--  SIDE BY SIDE START  -->
-<div class="row">
-<p><!--  Div to Wrap columns --></p>
-<div class="section level4 column-left">
-<h4 id="default">Default<a class="anchor" aria-label="anchor" href="#default"></a>
+<div style="content: ''; display: table; clear: both;">
+<div style="float:left;width: 48%;text-align: justify;text-justify: inter-word;margin-right: 4%;">
+<p><strong>Default</strong></p>
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:288px;"></div>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"type":["function","function","function","function","function"],"isExported":[true,true,true,true,true],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"color":["#97C2FC","#97C2FC","#97C2FC","#97C2FC","#97C2FC"],"x":[-0.3333333333333334,-1,-1,1,0.3333333333333333],"y":[1,-1,0,1,0]},"edges":{"SOURCE":["OPS","OPS","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","at_bats","at_bats"],"from":["OPS","OPS","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","at_bats","at_bats"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false,"arrows":"to"},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"edgeMinimization":false,"direction":"UD","sortMethod":"directed"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false,"zoomSpeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p>All functions and their dependencies are visible. For example, we can
+see that both <code>batting_avg</code> and <code>slugging_avg</code>
+functions depend upon the <code>at_bats</code> function.</p>
+<p>We also see that nothing depends on the <code>on_base_pct</code>
+function. This might be valuable information to an R package
+developer.</p>
+</div>
+<div style="float: right; width: 48%; text-align: justify; text-justify: inter-word;">
+<p><strong>With Coverage Information</strong></p>
+<div class="visNetwork html-widget html-fill-item" id="htmlwidget-36aa3d2a04d42bbc2145" style="width:100%;height:288px;"></div>
+<script type="application/json" data-for="htmlwidget-36aa3d2a04d42bbc2145">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"type":["function","function","function","function","function"],"isExported":[true,true,true,true,true],"coveredLines":[0,2,0,0,0],"totalLines":[3,2,4,6,6],"coverageRatio":[0,1,0,0,0],"meanCoveragePerLine":[0,1,0,0,0],"filename":["R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R"],"betweenness":[0,0,0.5,0,0.5],"outDegree":[2,0,1,0,1],"inDegree":[0,2,1,0,1],"numRecursiveDeps":[3,0,1,0,1],"numRecursiveRevDeps":[0,3,1,0,1],"pageRank":[0.1208824418253249,0.4137201571471744,0.1722574796010879,0.1208824418253249,0.1722574796010879],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"scaledColorValues":[0,1,0,0,0],"color":["#E9A3C9","#A1D76A","#E9A3C9","#E9A3C9","#E9A3C9"],"x":[-0.3333333333333334,-1,-1,1,0.3333333333333333],"y":[1,-1,0,1,0]},"edges":{"SOURCE":["OPS","OPS","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","at_bats","at_bats"],"from":["OPS","OPS","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","at_bats","at_bats"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false,"arrows":"to"},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"edgeMinimization":false,"direction":"UD","sortMethod":"directed"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false,"zoomSpeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p>Same as the default visualization except we can see coverage
+information as well (Pink = 0%, Green = 100%).</p>
+<p>It appears the function with the most dependencies,
+<code>at_bats</code>, is well covered. However, no other functions are
+covered by unit tests.</p>
+</div>
+</div>
+<!--  SIDE BY SIDE END -->
+</div>
+<div class="section level4">
+<h4 id="node-measures">Node Measures<a class="anchor" aria-label="anchor" href="#node-measures"></a>
 </h4>
-<div id="htmlwidget-6e107258ab101dad1c9f" style="width:100%;height:288px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6e107258ab101dad1c9f">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"type":["function","function","function","function","function"],"isExported":[true,true,true,true,true],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"color":["#97C2FC","#97C2FC","#97C2FC","#97C2FC","#97C2FC"],"x":[-0.333333333333333,-1,-1,1,0.333333333333333],"y":[1,-1,0,1,0]},"edges":{"SOURCE":["OPS","OPS","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","at_bats","at_bats"],"from":["OPS","OPS","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","at_bats","at_bats"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false,"arrows":"to"},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"edgeMinimization":false,"direction":"UD","sortMethod":"directed"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false,"zoomSpeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p>All functions and their dependencies are visible. For example, we can see that both <code>batting_avg</code> and <code>slugging_avg</code> functions depend upon the <code>at_bats</code> function.</p>
-<p>We also see that nothing depends on the <code>on_base_pct</code> function. This might be valuable information to an R package developer.</p>
-</div>
-<p><!--  End column-left --></p>
-<div class="section level4 column-right">
-<h4 id="with-coverage-information">With Coverage Information<a class="anchor" aria-label="anchor" href="#with-coverage-information"></a>
-</h4>
-<div id="htmlwidget-255ca60f381639c3496b" style="width:100%;height:288px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-255ca60f381639c3496b">{"x":{"nodes":{"node":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"type":["function","function","function","function","function"],"isExported":[true,true,true,true,true],"coveredLines":[0,2,0,0,0],"totalLines":[3,2,4,6,5],"coverageRatio":[0,1,0,0,0],"meanCoveragePerLine":[0,1,0,0,0],"filename":["R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R","R/batting_statistics.R"],"betweenness":[0,0,0.5,0,0.5],"outDegree":[2,0,1,0,1],"inDegree":[0,2,1,0,1],"numRecursiveDeps":[3,0,1,0,1],"numRecursiveRevDeps":[0,3,1,0,1],"pageRank":[0.120882441825325,0.413720157147174,0.172257479601088,0.120882441825325,0.172257479601088],"id":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"label":["OPS","at_bats","batting_avg","on_base_pct","slugging_avg"],"scaledColorValues":[0,1,0,0,0],"color":["#E9A3C9","#A1D76A","#E9A3C9","#E9A3C9","#E9A3C9"],"x":[-0.333333333333333,-1,-1,1,0.333333333333333],"y":[1,-1,0,1,0]},"edges":{"SOURCE":["OPS","OPS","batting_avg","slugging_avg"],"TARGET":["batting_avg","slugging_avg","at_bats","at_bats"],"from":["OPS","OPS","batting_avg","slugging_avg"],"to":["batting_avg","slugging_avg","at_bats","at_bats"],"color":["#848484","#848484","#848484","#848484"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false,"arrows":"to"},"physics":{"stabilization":false},"layout":{"hierarchical":{"enabled":true,"edgeMinimization":false,"direction":"UD","sortMethod":"directed"}},"interaction":{"dragNodes":true,"dragView":true,"zoomView":false,"zoomSpeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":true,"style":"width: 150px; height: 26px","useLabels":true,"main":"Select by id"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"},"highlight":{"enabled":true,"hoverNearest":false,"degree":{"from":5,"to":5},"algorithm":"hierarchical","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"},"tooltipStay":300,"tooltipStyle":"position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;font-family: verdana;font-size:14px;font-color:#000000;background-color: #f5f4ed;-moz-border-radius: 3px;-webkit-border-radius: 3px;border-radius: 3px;border: 1px solid #808074;box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);"},"evals":[],"jsHooks":[]}</script><p>Same as the default visualization except we can see coverage information as well (Pink = 0%, Green = 100%).</p>
-<p>It appears the function with the most dependencies, <code>at_bats</code>, is well covered. However, no other functions are covered by unit tests.</p>
-</div>
-<p><!--  End column-right  --></p>
-</div>
-<p><!--  End Div to Wrap columns --> <!--  SIDE BY SIDE END --></p>
-<p><strong>Check out the full HTML report for more results</strong></p>
-</div>
-<div class="section level2">
-<h2 id="the-list-object">The List Object<a class="anchor" aria-label="anchor" href="#the-list-object"></a>
-</h2>
-<p>The <code><a href="../reference/CreatePackageReport.html">CreatePackageReport()</a></code> function returns a list with three items:</p>
-<ol style="list-style-type: decimal">
-<li>SummaryReporter<br>
-</li>
-<li>DependencyReporter<br>
-</li>
-<li>FunctionReporter</li>
-</ol>
-<p>Each items contains information visible in the report <em>and more</em>. We can use this information for a more detailed analysis of the results and/or more easily incorporate <code>pkgnet</code> results into other R processes.</p>
-<p>Here are a few notable items available within the list object:</p>
-<div class="section level3">
-<h3 id="node-information">Node Information<a class="anchor" aria-label="anchor" href="#node-information"></a>
-</h3>
-<p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> contain metrics about their package dependencies or functions (a.k.a network nodes) in a <code>nodes</code> table.</p>
+<p>Metrics for the nodes (either packages, functions, or classes
+depending on the reporter) are contained in a table:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">nodes</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt; [1]  5 14</span></code></pre>
+<code class="sourceCode R"><span><span class="va">colSubset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'node'</span>,<span class="st">'type'</span>,<span class="st">'betweenness'</span>,<span class="st">'outDegree'</span>,<span class="st">'inDegree'</span>,<span class="st">'numRecursiveDeps'</span><span class="op">)</span></span>
+<span><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">nodes</span><span class="op">[</span>,<span class="va">..colSubset</span><span class="op">]</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Key: &lt;node&gt;</span></span>
+<span><span class="co">#&gt;            node     type betweenness outDegree inDegree numRecursiveDeps</span></span>
+<span><span class="co">#&gt;          &lt;char&gt;   &lt;char&gt;       &lt;num&gt;     &lt;int&gt;    &lt;int&gt;            &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:          OPS function         0.0         2        0                3</span></span>
+<span><span class="co">#&gt; 2:      at_bats function         0.0         0        2                0</span></span>
+<span><span class="co">#&gt; 3:  batting_avg function         0.5         1        1                1</span></span>
+<span><span class="co">#&gt; 4:  on_base_pct function         0.0         0        0                0</span></span>
+<span><span class="co">#&gt; 5: slugging_avg function         0.5         1        1                1</span></span></code></pre>
+<p>Note, a few of these metrics provided by default are from the field
+of <a href="https://en.wikipedia.org/wiki/Network_theory" class="external-link">Network
+Theory</a>. You can leverage the <em>Network Graph Model Object</em>
+described below to derive many more.</p>
+</div>
+<div class="section level4">
+<h4 id="network-measures">Network Measures<a class="anchor" aria-label="anchor" href="#network-measures"></a>
+</h4>
+<p>Network-level measures are contained in a
+<code>network_measures</code> list.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">nodes</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt;  [1] "node"                "type"                "isExported"         </span>
-<span class="co">#&gt;  [4] "coveredLines"        "totalLines"          "coverageRatio"      </span>
-<span class="co">#&gt;  [7] "meanCoveragePerLine" "filename"            "betweenness"        </span>
-<span class="co">#&gt; [10] "outDegree"           "inDegree"            "numRecursiveDeps"   </span>
-<span class="co">#&gt; [13] "numRecursiveRevDeps" "pageRank"</span></code></pre>
-<p>Note, a few of these metrics provided by default are from the field of <a href="https://en.wikipedia.org/wiki/Network_theory" class="external-link">Network Theory</a>. You can leverage the <strong>Network Object</strong> described below to derive many more.</p>
+<code class="sourceCode R"><span><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">network_measures</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; $packageTestCoverage.mean</span></span>
+<span><span class="co">#&gt; [1] 0.0952381</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $packageTestCoverage.betweenessWeightedMean</span></span>
+<span><span class="co">#&gt; [1] 0</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $graphOutDegree</span></span>
+<span><span class="co">#&gt; [1] 0.3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $graphInDegree</span></span>
+<span><span class="co">#&gt; [1] 0.3</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $graphBetweenness</span></span>
+<span><span class="co">#&gt; [1] 0.03125</span></span></code></pre>
 </div>
-<div class="section level3">
-<h3 id="network-measures">Network Measures<a class="anchor" aria-label="anchor" href="#network-measures"></a>
-</h3>
-<p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> contain graph-level measures based on their network structure in a <code>network_measures</code> list.</p>
+<div class="section level4">
+<h4 id="network-graph-model-object">Network Graph Model Object<a class="anchor" aria-label="anchor" href="#network-graph-model-object"></a>
+</h4>
+<p>The network model object itself is contained in the
+<code>pkg_graph</code> attribute. The <a href="http://igraph.org/r/" class="external-link">igraph</a> formatted object itself is
+directly accessible via <code>pkg_graph$igraph</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">network_measures</span></code></pre></div>
-<pre><code><span class="co">#&gt; $packageTestCoverage.mean</span>
-<span class="co">#&gt; [1] 0.1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $packageTestCoverage.betweenessWeightedMean</span>
-<span class="co">#&gt; [1] 0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $graphOutDegree</span>
-<span class="co">#&gt; [1] 0.3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $graphInDegree</span>
-<span class="co">#&gt; [1] 0.3</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $graphBetweenness</span>
-<span class="co">#&gt; [1] 0.03125</span></code></pre>
-</div>
-<div class="section level3">
-<h3 id="network-graph-model-object">Network Graph Model Object<a class="anchor" aria-label="anchor" href="#network-graph-model-object"></a>
-</h3>
-<p>Both the <code>DependencyReporter</code> and the <code>FunctionReporter</code> have an object called <code>pkg_graph</code> that contains the graph model of their respective networks. This object has methods to calculate additional node-level and graph-level measures. It is powered by <a href="http://igraph.org/r/" class="external-link">igraph</a>, and the igraph object itself is directly accessible with <code>pkg_graph$igraph</code>.</p>
+<code class="sourceCode R"><span><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">pkg_graph</span><span class="op">$</span><span class="fu">node_measures</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'hubScore'</span>, <span class="st">'authorityScore'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Key: &lt;node&gt;</span></span>
+<span><span class="co">#&gt;            node hubScore authorityScore</span></span>
+<span><span class="co">#&gt;          &lt;char&gt;    &lt;num&gt;          &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:          OPS        1            0.0</span></span>
+<span><span class="co">#&gt; 2:      at_bats        0            1.0</span></span>
+<span><span class="co">#&gt; 3:  batting_avg        1            0.5</span></span>
+<span><span class="co">#&gt; 4:  on_base_pct        0            0.0</span></span>
+<span><span class="co">#&gt; 5: slugging_avg        1            0.5</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">pkg_graph</span><span class="op">$</span><span class="fu">node_measures</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'hubScore'</span>, <span class="st">'authorityScore'</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">#&gt;            node hubScore authorityScore</span>
-<span class="co">#&gt; 1:          OPS        1              0</span>
-<span class="co">#&gt; 2:      at_bats        0              1</span>
-<span class="co">#&gt; 3:  batting_avg        1              1</span>
-<span class="co">#&gt; 4:  on_base_pct        0              0</span>
-<span class="co">#&gt; 5: slugging_avg        1              1</span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">pkg_graph</span><span class="op">$</span><span class="va">igraph</span></code></pre></div>
-<pre><code><span class="co">#&gt; IGRAPH f3f0cd3 DN-- 5 4 -- </span>
-<span class="co">#&gt; + attr: name (v/c)</span>
-<span class="co">#&gt; + edges from f3f0cd3 (vertex names):</span>
-<span class="co">#&gt; [1] slugging_avg-&gt;at_bats      batting_avg -&gt;at_bats     </span>
-<span class="co">#&gt; [3] OPS         -&gt;slugging_avg OPS         -&gt;batting_avg</span></code></pre>
+<code class="sourceCode R"><span><span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">pkg_graph</span><span class="op">$</span><span class="va">igraph</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; IGRAPH b97bc79 DN-- 5 4 -- </span></span>
+<span><span class="co">#&gt; + attr: name (v/c)</span></span>
+<span><span class="co">#&gt; + edges from b97bc79 (vertex names):</span></span>
+<span><span class="co">#&gt; [1] slugging_avg-&gt;at_bats      batting_avg -&gt;at_bats     </span></span>
+<span><span class="co">#&gt; [3] OPS         -&gt;slugging_avg OPS         -&gt;batting_avg</span></span></code></pre>
 <hr>
 </div>
 </div>
 </div>
-<div class="section level1">
-<h1 id="a-deeper-look">A Deeper Look<a class="anchor" aria-label="anchor" href="#a-deeper-look"></a>
-</h1>
-<p>With the reports and objects produced by <code>pkgnet</code> by default, there is plenty to inform us on the inner workings of an R package. However, we may want to know MORE! Since the <a href="http://igraph.org/r/" class="external-link">igraph</a> objects are available, we can leverage those graphs for further analysis.</p>
+<div class="section level2">
+<h2 id="a-deeper-look">A Deeper Look<a class="anchor" aria-label="anchor" href="#a-deeper-look"></a>
+</h2>
+<p>With the reports and objects produced by <code>pkgnet</code> by
+default, there is plenty to inform us on the inner workings of an R
+package. However, we may want to know MORE! Since the <a href="http://igraph.org/r/" class="external-link">igraph</a> objects are available, we can
+leverage those graphs for further analysis.</p>
 <p>In this section, let’s examine a larger R package, such as <a href="http://lubridate.tidyverse.org/" class="external-link">lubridate</a>.</p>
-<p>If you would like to follow along with the examples in this section, run these commands in your terminal to download and install <code>lubridate</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co"># Create a temporary workspace</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="fu">mkdir</span> -p ~/pkgnet_example <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/pkgnet_example</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="co"># Grab the lubridate source code</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="fu">git</span> clone https://github.com/tidyverse/lubridate</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a><span class="bu">cd</span> lubridate</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a><span class="co"># If you want the examples to match exactly</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a><span class="fu">git</span> reset --hard 9797d69abe1574dd89310c834e52d358137669b8</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a><span class="co"># Install it</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a><span class="ex">R</span> CMD install .</span></code></pre></div>
-<div class="section level2">
-<h2 id="coverage-of-most-depended-on-functions">Coverage of Most Depended-on Functions<a class="anchor" aria-label="anchor" href="#coverage-of-most-depended-on-functions"></a>
-</h2>
-<p>Let’s examine <code>lubridate</code>’s functions through the lens of each function’s total number of dependents (i.e., the other functions that depend on it) and its code’s unit test coverage. In our graph model for the <code>FunctionReporter</code>, the subgraph of paths leading into a given node is the set of functions that directly or indirectly depend on the function that node represents.</p>
+<p>If you would like to follow along with the examples in this section,
+run these commands in your terminal to download and install
+<code>lubridate</code><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Create a temporary workspace</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/pkgnet_example <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ~/pkgnet_example</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co"># Grab the lubridate source code</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/tidyverse/lubridate</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="bu">cd</span> lubridate</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co"># If you want the examples to match exactly</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="fu">git</span> reset <span class="at">--hard</span> 9797d69abe1574dd89310c834e52d358137669b8</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co"># Install it</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="ex">R</span> CMD install .</span></code></pre></div>
+<div class="section level3">
+<h3 id="coverage-of-most-depended-on-functions">Coverage of Most Depended-on Functions<a class="anchor" aria-label="anchor" href="#coverage-of-most-depended-on-functions"></a>
+</h3>
+<p>Let’s examine <code>lubridate</code>’s functions through the lens of
+each function’s total number of dependents (i.e., the other functions
+that depend on it) and its code’s unit test coverage. In our graph model
+for the <code>FunctionReporter</code>, the subgraph of paths leading
+into a given node is the set of functions that directly or indirectly
+depend on the function that node represents.</p>
 <!--  Faked Since lubridate not guaranteed to be installed at time of report creation -->
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run pkgnet</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span></span>
+<span><span class="va">report2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span><span class="op">(</span></span>
+<span>    pkg_name <span class="op">=</span> <span class="st">"lubridate"</span></span>
+<span>    , pkg_path <span class="op">=</span> <span class="st">"~/pkgnet_example/lubridate"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Extract Nodes Table</span></span>
+<span><span class="va">funcNodes</span> <span class="op">&lt;-</span> <span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">nodes</span></span>
+<span></span>
+<span><span class="co"># List Coverage For Most Depended-on Functions</span></span>
+<span><span class="va">mostRef</span> <span class="op">&lt;-</span> <span class="va">funcNodes</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">numRecursiveRevDeps</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                     <span class="fu">.</span><span class="op">(</span><span class="va">node</span>, <span class="va">numRecursiveRevDeps</span>, <span class="va">coverageRatio</span>, <span class="va">totalLines</span><span class="op">)</span></span>
+<span>                     <span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#&gt;             node numRecursiveRevDeps coverageRatio totalLines</span></span>
+<span><span class="co">#&gt;  1:        month                  81             1          1</span></span>
+<span><span class="co">#&gt;  2:           tz                  79             1          1</span></span>
+<span><span class="co">#&gt;  3: reclass_date                  68             1          1</span></span>
+<span><span class="co">#&gt;  4:         date                  67             1          1</span></span>
+<span><span class="co">#&gt;  5:      is.Date                  60             1          1</span></span>
+<span><span class="co">#&gt;  6:    is.POSIXt                  57             1          1</span></span>
+<span><span class="co">#&gt;  7:         wday                  56             1          1</span></span>
+<span><span class="co">#&gt;  8:   is.POSIXct                  55             1          1</span></span>
+<span><span class="co">#&gt;  9:  .deprecated                  55             0         10</span></span>
+<span><span class="co">#&gt; 10:      as_date                  52             1          1</span></span></code></pre></div>
+<p>Inspecting results such as these can help an R package developer
+decide which function to cover with unit tests next.</p>
+<p>In this case, <code>check_duration</code>, one of the most
+depended-on functions (either directly or indirectly), is not covered by
+unit tests. However, it appears to be a simple one line function that
+may not be necessary to cover in unit testing.
+<code>check_interval</code>, on the other hand, might benefit from some
+unit test coverage as it is a larger, uncovered function with a similar
+number of dependencies.</p>
+</div>
+<div class="section level3">
+<h3 id="discovering-similar-functions">Discovering Similar Functions<a class="anchor" aria-label="anchor" href="#discovering-similar-functions"></a>
+</h3>
+<p>Looking at that same large package, let’s say we want to explore
+options for consolidating functions. One approach might be to explore
+consolidating functions that share the same dependencies. In that case,
+we could use the <code>igraph</code> object to highlight functions with
+the same out-neighborhood via <a href="https://en.wikipedia.org/wiki/Jaccard_index" class="external-link">Jaccard
+similarity</a>.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Run pkgnet</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span>
-<span class="va">report2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span><span class="op">(</span>
-    pkg_name <span class="op">=</span> <span class="st">"lubridate"</span>
-    , pkg_path <span class="op">=</span> <span class="st">"~/pkgnet_example/lubridate"</span>
-<span class="op">)</span>
-
-<span class="co"># Extract Nodes Table</span>
-<span class="va">funcNodes</span> <span class="op">&lt;-</span> <span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">nodes</span>
-
-<span class="co"># List Coverage For Most Depended-on Functions</span>
-<span class="va">mostRef</span> <span class="op">&lt;-</span> <span class="va">funcNodes</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">numRecursiveRevDeps</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                     <span class="fu">.</span><span class="op">(</span><span class="va">node</span>, <span class="va">numRecursiveRevDeps</span>, <span class="va">coverageRatio</span>, <span class="va">totalLines</span><span class="op">)</span>
-                     <span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#&gt;             node numRecursiveRevDeps coverageRatio totalLines</span>
-<span class="co">#&gt;  1:        month                  81             1          1</span>
-<span class="co">#&gt;  2:           tz                  79             1          1</span>
-<span class="co">#&gt;  3: reclass_date                  68             1          1</span>
-<span class="co">#&gt;  4:         date                  67             1          1</span>
-<span class="co">#&gt;  5:      is.Date                  60             1          1</span>
-<span class="co">#&gt;  6:    is.POSIXt                  57             1          1</span>
-<span class="co">#&gt;  7:         wday                  56             1          1</span>
-<span class="co">#&gt;  8:   is.POSIXct                  55             1          1</span>
-<span class="co">#&gt;  9:  .deprecated                  55             0         10</span>
-<span class="co">#&gt; 10:      as_date                  52             1          1</span></code></pre></div>
-<p>Inspecting results such as these can help an R package developer decide which function to cover with unit tests next.</p>
-<p>In this case, <code>check_duration</code>, one of the most depended-on functions (either directly or indirectly), is not covered by unit tests. However, it appears to be a simple one line function that may not be necessary to cover in unit testing. <code>check_interval</code>, on the other hand, might benefit from some unit test coverage as it is a larger, uncovered function with a similar number of dependencies.</p>
+<code class="sourceCode R"><span><span class="co"># Get igraph object</span></span>
+<span><span class="va">funcGraph</span> <span class="op">&lt;-</span> <span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">pkg_graph</span><span class="op">$</span><span class="va">igraph</span></span>
+<span><span class="va">funcNames</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/vertex_attr.html" class="external-link">vertex_attr</a></span><span class="op">(</span><span class="va">funcGraph</span>, name <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Jaccard Similarity</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/similarity.html" class="external-link">similarity</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">funcGraph</span></span>
+<span>                          , mode <span class="op">=</span> <span class="st">"out"</span></span>
+<span>                          , method <span class="op">=</span> <span class="st">"jaccard"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="va">sim</span><span class="op">[</span><span class="va">sim</span> <span class="op">&lt;</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span></span>
+<span><span class="va">simGraph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span>adjmatrix <span class="op">=</span> <span class="va">sim</span>, mode <span class="op">=</span> <span class="st">"undirected"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Find groups with same out-neighbors (similarity == 1)</span></span>
+<span><span class="va">sameDeps</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://r.igraph.org/reference/cliques.html" class="external-link">max_cliques</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">simGraph</span></span>
+<span>                                , min <span class="op">=</span> <span class="fl">2</span></span>
+<span>                                <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Write results</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">sameDeps</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group "</span>, <span class="va">i</span>, <span class="st">": "</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">funcNames</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">sameDeps</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Group 1: divisible_period, make_date</span></span>
+<span><span class="co">#&gt; Group 2: parse_date_time2, fast_strptime</span></span>
+<span><span class="co">#&gt; Group 3: .deprecated_fun, .deprecated_arg</span></span>
+<span><span class="co">#&gt; Group 4: stamp_date, stamp_time</span></span>
+<span><span class="co">#&gt; Group 5: epiweek, isoweek</span></span>
+<span><span class="co">#&gt; Group 6: ms, hm</span></span>
+<span><span class="co">#&gt; Group 7: quarter, semester</span></span>
+<span><span class="co">#&gt; Group 8: am, .roll_hms</span></span>
+<span><span class="co">#&gt; Group 9: modulo_interval_by_duration, modulo_interval_by_period</span></span>
+<span><span class="co">#&gt; Group 10: .difftime_from_pieces, .duration_from_units</span></span>
+<span><span class="co">#&gt; Group 11: divide_period_by_period, xtfrm.Period</span></span>
+<span><span class="co">#&gt; Group 12: int_diff, %--%</span></span>
+<span><span class="co">#&gt; Group 13: isoyear, epiyear</span></span>
+<span><span class="co">#&gt; Group 14: nanoseconds, microseconds, picoseconds, milliseconds</span></span>
+<span><span class="co">#&gt; Group 15: period_to_seconds, check_period, multiply_period_by_number, format.Period, divide_period_by_number, add_period_to_period</span></span>
+<span><span class="co">#&gt; Group 16: myd, dmy, yq, ymd, dym, mdy, ydm</span></span>
+<span><span class="co">#&gt; Group 17: hours, weeks, minutes, years, days, months.numeric, seconds, seconds_to_period</span></span>
+<span><span class="co">#&gt; Group 18: C_force_tz, hour.default, mday.default, c.POSIXct, .mklt, yday.default, year.default, minute.default, second.default</span></span>
+<span><span class="co">#&gt; Group 19: ehours, emilliseconds, eyears, eseconds, epicoseconds, enanoseconds, eminutes, olson_time_zones, edays, emicroseconds, eweeks</span></span>
+<span><span class="co">#&gt; Group 20: dmy_h, ydm_hms, ymd_hms, dmy_hm, ymd_h, ydm_hm, ydm_h, dmy_hms, ymd_hm, mdy_hms, mdy_hm, mdy_h</span></span></code></pre>
+<p>Now, we have identified twenty different groups of functions within
+<a href="http://lubridate.tidyverse.org/" class="external-link">lubridate</a> that share the
+<em>exact same</em> dependencies. We could explore each group of
+functions for potential consolidation.</p>
+<hr>
+</div>
 </div>
 <div class="section level2">
-<h2 id="discovering-similar-functions">Discovering Similar Functions<a class="anchor" aria-label="anchor" href="#discovering-similar-functions"></a>
+<h2 id="more-information">More Information<a class="anchor" aria-label="anchor" href="#more-information"></a>
 </h2>
-<p>Looking at that same large package, let’s say we want to explore options for consolidating functions. One approach might be to explore consolidating functions that share the same dependencies. In that case, we could use the <code>igraph</code> object to highlight functions with the same out-neighborhood via <a href="https://en.wikipedia.org/wiki/Jaccard_index" class="external-link">Jaccard similarity</a>.</p>
+<p><strong><em>Want to know even more about the <code>pkgnet</code>
+package?!</em></strong></p>
+<p>Run <code>pkgnet</code> on itself!</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Get igraph object</span>
-<span class="va">funcGraph</span> <span class="op">&lt;-</span> <span class="va">report2</span><span class="op">$</span><span class="va">FunctionReporter</span><span class="op">$</span><span class="va">pkg_graph</span><span class="op">$</span><span class="va">igraph</span>
-<span class="va">funcNames</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/vertex_attr.html" class="external-link">vertex_attr</a></span><span class="op">(</span><span class="va">funcGraph</span>, name <span class="op">=</span> <span class="st">"name"</span><span class="op">)</span>
-
-<span class="co"># Jaccard Similarity</span>
-<span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/similarity.html" class="external-link">similarity</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">funcGraph</span>
-                          , mode <span class="op">=</span> <span class="st">"out"</span>
-                          , method <span class="op">=</span> <span class="st">"jaccard"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-<span class="va">sim</span><span class="op">[</span><span class="va">sim</span> <span class="op">&lt;</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span>
-
-<span class="va">simGraph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html" class="external-link">graph_from_adjacency_matrix</a></span><span class="op">(</span>adjmatrix <span class="op">=</span> <span class="va">sim</span>, mode <span class="op">=</span> <span class="st">"undirected"</span><span class="op">)</span>
-
-<span class="co"># Find groups with same out-neighbors (similarity == 1)</span>
-<span class="va">sameDeps</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html" class="external-link">max_cliques</a></span><span class="op">(</span>graph <span class="op">=</span> <span class="va">simGraph</span>
-                                , min <span class="op">=</span> <span class="fl">2</span>
-                                <span class="op">)</span>
-
-<span class="co"># Write results</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">sameDeps</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Group "</span>, <span class="va">i</span>, <span class="st">": "</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">funcNames</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">sameDeps</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">]</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n"</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
-<pre><code><span class="co">#&gt; Group 1: divisible_period, make_date</span>
-<span class="co">#&gt; Group 2: parse_date_time2, fast_strptime</span>
-<span class="co">#&gt; Group 3: .deprecated_fun, .deprecated_arg</span>
-<span class="co">#&gt; Group 4: stamp_date, stamp_time</span>
-<span class="co">#&gt; Group 5: epiweek, isoweek</span>
-<span class="co">#&gt; Group 6: ms, hm</span>
-<span class="co">#&gt; Group 7: quarter, semester</span>
-<span class="co">#&gt; Group 8: am, .roll_hms</span>
-<span class="co">#&gt; Group 9: modulo_interval_by_duration, modulo_interval_by_period</span>
-<span class="co">#&gt; Group 10: .difftime_from_pieces, .duration_from_units</span>
-<span class="co">#&gt; Group 11: divide_period_by_period, xtfrm.Period</span>
-<span class="co">#&gt; Group 12: int_diff, %--%</span>
-<span class="co">#&gt; Group 13: isoyear, epiyear</span>
-<span class="co">#&gt; Group 14: nanoseconds, microseconds, picoseconds, milliseconds</span>
-<span class="co">#&gt; Group 15: period_to_seconds, check_period, multiply_period_by_number, format.Period, divide_period_by_number, add_period_to_period</span>
-<span class="co">#&gt; Group 16: myd, dmy, yq, ymd, dym, mdy, ydm</span>
-<span class="co">#&gt; Group 17: hours, weeks, minutes, years, days, months.numeric, seconds, seconds_to_period</span>
-<span class="co">#&gt; Group 18: C_force_tz, hour.default, mday.default, c.POSIXct, .mklt, yday.default, year.default, minute.default, second.default</span>
-<span class="co">#&gt; Group 19: ehours, emilliseconds, eyears, eseconds, epicoseconds, enanoseconds, eminutes, olson_time_zones, edays, emicroseconds, eweeks</span>
-<span class="co">#&gt; Group 20: dmy_h, ydm_hms, ymd_hms, dmy_hm, ymd_h, ydm_hm, ydm_h, dmy_hms, ymd_hm, mdy_hms, mdy_hm, mdy_h</span></code></pre>
-<p>Now, we have identified twenty different groups of functions within <a href="http://lubridate.tidyverse.org/" class="external-link">lubridate</a> that share the <em>exact same</em> dependencies. We could explore each group of functions for potential consolidation.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pkgnet"</span><span class="op">)</span></span>
+<span><span class="va">pkgnetObj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/CreatePackageReport.html">CreatePackageReport</a></span><span class="op">(</span><span class="st">"pkgnet"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="../reference/DefaultReporters.html">DefaultReporters</a></span><span class="op">(</span><span class="op">)</span>, <span class="va"><a href="../reference/InheritanceReporter.html">InheritanceReporter</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><strong><em>Want to see <code>pkgnet</code> reports for other
+packages?</em></strong></p>
+<p>Check out the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">pkgnet
+Gallery</a>.</p>
+<p><strong><em>Want to ship a <code>pkgnet</code> report with your R
+package?</em></strong></p>
+<p>Include it a <code><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette()</a></code> in your package. See <a href="https://uptake.github.io/pkgnet/articles/publishing-reports.html">Publishing
+Your pkgnet Package Report</a>.</p>
 </div>
-</div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p>Edge direction was previously Independent -&gt; Dependent. It was changed to Dependent -&gt; Independent in version v0.3.0. The new convention follows the <a href="https://en.wikipedia.org/wiki/Dependency_(UML)" class="external-link">Unified Modeling Language (UML)</a> framework, a widely used standard for software system modeling.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>This follows the <a href="https://en.wikipedia.org/wiki/Dependency_(UML)" class="external-link">Unified Modeling
+Language (UML)</a> framework, a widely used standard for software system
+modeling.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>Examples from version 1.7.3 of Lubridate<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
@@ -428,7 +531,7 @@ Example Dependency Graph
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>

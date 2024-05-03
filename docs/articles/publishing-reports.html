@@ -12,7 +12,7 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.5.0</span>
       </span>
     </div>
 
@@ -106,28 +106,66 @@
 
     
     
-<p>You’ve generated a <strong>pkgnet Package Report</strong> and used it to get a better understanding of your package. Now what? How about sharing the knowledge!</p>
-<p>Why share a pkgnet report? Developers who want to contribute to your package can use it to deep dive into your package’s dependencies, function control flow, or class inheritance architecture, as discussed in our other vignettes. Or perhaps someone is looking to report a bug, and they could benefit from a little help navigating the structure of your package. Or maybe even a user of your package just wants a better appreciation of how your package ticks. There are many ways that other people benefit from having a pkgnet report available for your package.</p>
-<p>This vignette will discuss two ways you can easily publish your pkgnet report: as a vignette in your package; or adding it to the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html"><strong>pkgnet Gallery</strong> website</a>. These aren’t mutally exclusive—feel free to do both!</p>
+<p>You’ve generated a <strong>pkgnet Package Report</strong> and used it
+to get a better understanding of your package. Now what? How about
+sharing the knowledge!</p>
+<p>Why share a pkgnet report? Developers who want to contribute to your
+package can use it to deep dive into your package’s dependencies,
+function control flow, or class inheritance architecture, as discussed
+in our other vignettes. Or perhaps someone is looking to report a bug,
+and they could benefit from a little help navigating the structure of
+your package. Or maybe even a user of your package just wants a better
+appreciation of how your package ticks. There are many ways that other
+people benefit from having a pkgnet report available for your
+package.</p>
+<p>This vignette will discuss two ways you can easily publish your
+pkgnet report: as a vignette in your package; or adding it to the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html"><strong>pkgnet
+Gallery</strong> website</a>. These aren’t mutally exclusive—feel free
+to do both!</p>
 <div class="section level2">
 <h2 id="publish-as-a-vignette-in-your-package">Publish as a vignette in your package<a class="anchor" aria-label="anchor" href="#publish-as-a-vignette-in-your-package"></a>
 </h2>
-<p>Vignettes are guides included with R packages—you are reading one right now! If you’re not familiar with vignettes, you can learn more from the <a href="https://r-pkgs.org/vignettes.html" class="external-link">chapter about them</a> in Hadley Wickham’s book <em>R Packages</em>.</p>
-<p>pkgnet provides an easy-to-use function <code>CreatePackageVignette</code> to create an R Markdown file that can be rendered as a standard HTML vignette using knitr.</p>
-<p>To get started, set set your working directory to your package root and create a <code>vignettes</code> directory if you don’t already have one. Then simply run <code><a href="../reference/CreatePackageVignette.html">CreatePackageVignette()</a></code>! For example, here is us creating a vignette for pkgnet itself:</p>
+<p>Vignettes are guides included with R packages—you are reading one
+right now! If you’re not familiar with vignettes, you can learn more
+from the <a href="https://r-pkgs.org/vignettes.html" class="external-link">chapter about
+them</a> in Hadley Wickham’s book <em>R Packages</em>.</p>
+<p>pkgnet provides an easy-to-use function
+<code>CreatePackageVignette</code> to create an R Markdown file that can
+be rendered as a standard HTML vignette using knitr.</p>
+<p>To get started, set set your working directory to your package root
+and create a <code>vignettes</code> directory if you don’t already have
+one. Then simply run <code><a href="../reference/CreatePackageVignette.html">CreatePackageVignette()</a></code>! For example,
+here is us creating a vignette for pkgnet itself:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span>
-<span class="fu"><a href="../reference/CreatePackageVignette.html">CreatePackageVignette</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; INFO [2019-03-27 21:00:50] Creating pkgnet package report as vignette for pkgnet...</span>
-<span class="co">#&gt; INFO [2019-03-27 21:00:50] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd</span></code></pre></div>
-<p>If this is your first R Markdown vignette for your package, you’ll want to add <code>VignetteBuilder: knitr</code> to your DESCRIPTION file and both <code>knitr</code> and <code>rmarkdown</code> as <code>Suggests</code> dependencies. You’ll also need to install the knitr and rmarkdown packages if you haven’t already.</p>
-<p>The R Markdown file generated in this way will be built when you use <code>R CMD build</code> to create your package tarball. That means anyone installing your package will have it available, and it will also be available through CRAN if you choose to publish your package. You can preview what it will look like with <code><a href="https://devtools.r-lib.org/reference/build_vignettes.html" class="external-link">devtools::build_vignettes()</a></code>. If you use pkgdown, it will also be built into an article when you use <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>.</p>
-<p>You can check out our <a href="https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">example for pkgnet</a> to see what one looks like (it’s actually slightly customized—we used the <code>pkg_reporters</code> parameter).</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/uptake/pkgnet" class="external-link">pkgnet</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/CreatePackageVignette.html">CreatePackageVignette</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; INFO [2019-03-27 21:00:50] Creating pkgnet package report as vignette for pkgnet...</span></span>
+<span><span class="co">#&gt; INFO [2019-03-27 21:00:50] ...successfully wrote vignette R Markdown file to /Users/jqi/repos/pkgnet/vignettes/pkgnet-report.Rmd</span></span></code></pre></div>
+<p>If this is your first R Markdown vignette for your package, you’ll
+want to add <code>VignetteBuilder: knitr</code> to your DESCRIPTION file
+and both <code>knitr</code> and <code>rmarkdown</code> as
+<code>Suggests</code> dependencies. You’ll also need to install the
+knitr and rmarkdown packages if you haven’t already.</p>
+<p>The R Markdown file generated in this way will be built when you use
+<code>R CMD build</code> to create your package tarball. That means
+anyone installing your package will have it available, and it will also
+be available through CRAN if you choose to publish your package. You can
+preview what it will look like with
+<code><a href="https://devtools.r-lib.org/reference/build_vignettes.html" class="external-link">devtools::build_vignettes()</a></code>. If you use pkgdown, it will
+also be built into an article when you use
+<code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>.</p>
+<p>You can check out our <a href="https://uptake.github.io/pkgnet-gallery/exhibits/pkgnet-vignette/pkgnet-vignette.html">example
+for pkgnet</a> to see what one looks like (it’s actually slightly
+customized—we used the <code>pkg_reporters</code> parameter).</p>
 </div>
 <div class="section level2">
 <h2 id="add-your-package-to-the-pkgnet-gallery">Add your package to the pkgnet Gallery<a class="anchor" aria-label="anchor" href="#add-your-package-to-the-pkgnet-gallery"></a>
 </h2>
-<p>We also welcome contributions to the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">pkgnet Gallery</a>! This is a webpage on our site that showcases pkgnet reports for different packages. See the <a href="https://github.com/uptake/pkgnet-gallery" class="external-link">GitHub README</a> for the pkgnet Gallery for instructions on how to contribute your package’s report.</p>
+<p>We also welcome contributions to the <a href="https://uptake.github.io/pkgnet-gallery/docs/articles/pkgnet-gallery.html">pkgnet
+Gallery</a>! This is a webpage on our site that showcases pkgnet reports
+for different packages. See the <a href="https://github.com/uptake/pkgnet-gallery" class="external-link">GitHub README</a> for
+the pkgnet Gallery for instructions on how to contribute your package’s
+report.</p>
 </div>
   </div>
 
@@ -148,7 +186,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
       </footer>
