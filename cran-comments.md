@@ -6,7 +6,7 @@
 This is a minor release that includes a number of new features, bug fixes and minor backwards compatible changes. Please see `NEWS.md` for details.
 
 ### CRAN Response 
-
+None.  Passed tests and merged without comment. 
 
 ## v 0.4.2
 
