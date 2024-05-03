@@ -1,16 +1,13 @@
-# pkgnet (dev)
+# pkgnet 0.5.0
 ## NEW FEATURES
 * `do.call` with the function argument as string will now properly appear on the function reporter.  Previously, this would show as a `do.call` node with a circular reference. (#302)
 * `LinkingTo:` package dependencies are now included in the `DependencyReporter` and subsequent HTML report and objects. (#319 Thanks @petergodbert !) 
 
 ## CHANGES
-* Updated `pkgnet-intro` vignette to include information on the Class Inheritance Reporter and other minor edits. 
-<<<<<<< HEAD
-* Recursive functions `.parse_function` and `.parse_R6_expression` made tolerant to control statemets like `break` or `next` that would break the recursion. (#322)
-* Excessive warnings removed for custom `vignette_path` param in `CreatePackageVignette()` (#322)
-=======
-* Updated R6 class documentation to be in line with current `roxygen2` standards. 
->>>>>>> df2fdd4 (latest R6 doc standards for roxygen and pkgdown)
+* Updated `pkgnet-intro` vignette to include information on the Class Inheritance Reporter and other minor edits.    
+* Recursive functions `.parse_function` and `.parse_R6_expression` made tolerant to control statemets like `break` or `next` that would break the recursion. (#322)   
+* Excessive warnings removed for custom `vignette_path` param in `CreatePackageVignette()` (#322)    
+* Updated R6 class documentation to be in line with current `roxygen2` standards.    
 
 ## BUGFIXES
 * `CreatePackageReporter()` failing on Windows to build package coverage when `report_path` specified. (#322) 
