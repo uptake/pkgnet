@@ -25,8 +25,7 @@ Note, \code{\link{InheritanceReporter}} is not included in the default list.
 
 If desired, append a new instance of \code{\link{InheritanceReporter}} to the \code{DefaultReporters} list.
 
-ex. 
-
-\code{c(DefaultReporters(), InheritanceReporter$new())})
+ex: 
+\code{c(DefaultReporters(), InheritanceReporter$new())}
 }
 \concept{Reporters}
