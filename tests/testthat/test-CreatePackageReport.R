@@ -132,6 +132,40 @@ test_that("CreatePackageReport respects report_path when explicitly given", {
     expect_true(any(grepl("Dependency Network", readLines(testing_file))))
 })
 
+test_that("Test that CreatePackageReport runs with control statements", {
+
+    testReportPath <- tempfile(
+        pattern = "control"
+        , fileext = ".html"
+    )
+
+    createdReport <- CreatePackageReport(
+        pkg_name = "control"
+        , report_path = testReportPath
+    )
+
+    testthat::expect_true({
+        reporters <- grep("Reporter$", names(createdReport), value = TRUE)
+        all(vapply(
+            X = reporters
+            , FUN = function(x) {
+                is.null(createdReport[[x]]) | inherits(createdReport[[x]], "AbstractPackageReporter")
+            }
+            , FUN.VALUE = logical(1)
+        ))
+    })
+    testthat::expect_true(file.exists(testReportPath) && file.size(testReportPath) > 0)
+    testthat::expect_true(inherits(createdReport, "PackageReport"))
+    testthat::expect_true(
+        all(
+            vapply(DefaultReporters(), function(x){class(x)[1]}, FUN.VALUE = character(1))
+                %in% names(createdReport)
+        )
+        , info = "Returned report object doesn't have reporters accessible")
+    file.remove(testReportPath)
+})
+
+
 ##### TEST TEAR DOWN #####
 
 Sys.unsetenv("PKGNET_SUPPRESS_BROWSER")

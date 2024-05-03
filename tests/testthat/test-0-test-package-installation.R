@@ -3,7 +3,7 @@
 # correctly and being available.
 
 test_that('Test packages installed correctly',{
-    testPkgNames <- c("baseballstats", "sartre", "milne", "silverstein")
+    testPkgNames <- c("baseballstats", "sartre", "milne", "silverstein","control")
     for (thisTestPkg in testPkgNames) {
         expect_true(
             object = require(thisTestPkg
