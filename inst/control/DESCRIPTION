@@ -1,0 +1,12 @@
+Package: control
+Type: Package
+Title: Have self control, don't break!
+Version: 0.1
+Author: Brian Burns
+Maintainer: Brian Burns <brian.burns.opensource@gmail.com>
+Description: This package is used to test that functions in pkgnet don't break on control statements.
+Imports:
+    R6
+License: file LICENSE
+LazyData: TRUE
+RoxygenNote: 7.3.1

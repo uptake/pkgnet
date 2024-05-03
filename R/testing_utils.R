@@ -65,6 +65,7 @@
         , sartre = file.path(pkgnetSourcePath, testPkgSourceDir, "sartre")
         , milne = file.path(pkgnetSourcePath, testPkgSourceDir, "milne")
         , silverstein = file.path(pkgnetSourcePath, testPkgSourceDir, "silverstein")
+        , control = file.path(pkgnetSourcePath, testPkgSourceDir, "control")
         , pkgnet = pkgnetSourcePath
     )
 

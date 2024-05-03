@@ -5,8 +5,11 @@
 
 ## CHANGES
 * Updated `pkgnet-intro` vignette to include information on the Class Inheritance Reporter and other minor edits. 
+* Recursive functions `.parse_function` and `.parse_R6_expression` made tolerant to control statemets like `break` or `next` that would break the recursion. (#322)
+* Excessive warnings removed for custom `vignette_path` param in `CreatePackageVignette()` (#322)
 
 ## BUGFIXES
+* `CreatePackageReporter()` failing on Windows to build package coverage when `report_path` specified. (#322) 
 
 # pkgnet 0.4.2
 ## NEW FEATURES
