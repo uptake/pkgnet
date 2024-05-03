@@ -242,6 +242,42 @@ test_that(".parse_function correctly ignores right side of list extraction", {
     })
 })
 
+test_that(".parse_function correctly handles break control statement", {
+    # Correctly parses body of function and finds all function symbols
+    expect_true({
+        myfunc <- function() {
+            x <- innerfunc1()
+            y <- innerfunc2()
+            z <- innerfunc3(innerfunc4())
+            for (i in 1:10){
+                if(i==5){
+                    break
+                }
+            }
+        }
+        result <- pkgnet:::.parse_function(body(myfunc))
+        all(c("innerfunc1", "innerfunc2", "innerfunc3", "innerfunc4") %in% result)
+    })
+})
+
+test_that(".parse_function correctly handles next control statement", {
+    # Correctly parses body of function and finds all function symbols
+    expect_true({
+        myfunc <- function() {
+            x <- innerfunc1()
+            y <- innerfunc2()
+            z <- innerfunc3(innerfunc4())
+            for (i in 1:10){
+                if(i==5){
+                    next
+                }
+            }
+        }
+        result <- pkgnet:::.parse_function(body(myfunc))
+        all(c("innerfunc1", "innerfunc2", "innerfunc3", "innerfunc4") %in% result)
+    })
+})
+
 test_that(".parse_R6_expression correctly parses expressions for symbols", {
     # Correctly parses body of function and finds all function symbols
     expect_true({
@@ -268,6 +304,51 @@ test_that(".parse_R6_expression correctly ignores right side of list extraction"
     })
 })
 
+test_that(".parse_R6_expression correctly parses expressions containing a break statement", {
+    # Correctly parses body of function and finds all function symbols
+    expect_true({
+        myr6method <- function() {
+            x <- regularfunc1()
+            z <- regularfunc2(regularfunc3())
+            self$public_method()
+            self$active_binding <- "new_value"
+            private$private_method
+            for (i in 1:10){
+                if(i==5){
+                    break
+                }
+            }
+            2+2
+        }
+        result <- pkgnet:::.parse_R6_expression(body(myr6method))
+        all(c("regularfunc1", "regularfunc2", "regularfunc3", "self$public_method"
+              , "self$active_binding", "private$private_method"
+        ) %in% result)
+    })
+})
+
+test_that(".parse_R6_expression correctly parses expressions containing a next statements", {
+    # Correctly parses body of function and finds all function symbols
+    expect_true({
+        myr6method <- function() {
+            x <- regularfunc1()
+            z <- regularfunc2(regularfunc3())
+            self$public_method()
+            self$active_binding <- "new_value"
+            private$private_method
+            for (i in 1:10){
+                if(i==5){
+                    next
+                }
+            }
+            2+2
+        }
+        result <- pkgnet:::.parse_R6_expression(body(myr6method))
+        all(c("regularfunc1", "regularfunc2", "regularfunc3", "self$public_method"
+              , "self$active_binding", "private$private_method"
+        ) %in% result)
+    })
+})
 
 
 test_that("FunctionReporter R6 edge extraction handles case where all methods have the same number of dependencies", {
