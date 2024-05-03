@@ -31,6 +31,15 @@
     <loc>https://uptake.github.io/pkgnet/news/index.html</loc>
   </url>
   <url>
+    <loc>https://uptake.github.io/pkgnet/reference/AbstractGraph.html</loc>
+  </url>
+  <url>
+    <loc>https://uptake.github.io/pkgnet/reference/AbstractGraphReporter.html</loc>
+  </url>
+  <url>
+    <loc>https://uptake.github.io/pkgnet/reference/AbstractPackageReporter.html</loc>
+  </url>
+  <url>
     <loc>https://uptake.github.io/pkgnet/reference/CreatePackageReport.html</loc>
   </url>
   <url>

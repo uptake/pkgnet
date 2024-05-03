@@ -1,10 +1,10 @@
-pandoc: 2.10.1
-pkgdown: 2.0.1
+pandoc: 3.1.12.3
+pkgdown: 2.0.8
 pkgdown_sha: ~
 articles:
   pkgnet-intro: pkgnet-intro.html
   publishing-reports: publishing-reports.html
-last_built: 2021-12-23T18:50Z
+last_built: 2024-05-03T22:05Z
 urls:
   reference: https://uptake.github.io/pkgnet/reference
   article: https://uptake.github.io/pkgnet/articles
