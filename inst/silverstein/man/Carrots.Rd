@@ -2,40 +2,28 @@
 % Please edit documentation in R/Carrots.R
 \name{Carrots}
 \alias{Carrots}
-\title{Carrots}
+\title{Carrots R6 Class Definitions for testing}
 \description{
-Carrots
+Class in which every method has an equal number of package function references
 }
 \concept{Carrots}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{Carrots$new()}}
-\item \href{#method-clone}{\code{Carrots$clone()}}
+\item \href{#method-Carrots-new}{\code{Carrots$new()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
+\if{html}{\out{<a id="method-Carrots-new"></a>}}
+\if{latex}{\out{\hypertarget{method-Carrots-new}{}}}
 \subsection{Method \code{new()}}{
+Initialize Carrots.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Carrots$new()}\if{html}{\out{</div>}}
 }
 
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{Carrots$clone(deep = FALSE)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
+\subsection{Returns}{
+nothing
 }
 }
 }

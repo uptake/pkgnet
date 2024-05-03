@@ -1,32 +1,14 @@
-#' @title Recursive Package Dependency Reporter
-#' @name DependencyReporter
+#' Recursive Package Dependency Reporter
+#' 
+#' @description
+#' This reporter looks at the recursive network of its dependencies
+#' on other packages. This allows a developer to understand how individual
+#' dependencies might lead to a much larger set of dependencies, potentially
+#' informing decisions on including or removing them.
+#' 
 #' @family Network Reporters
 #' @family Package Reporters
 #' @concept Reporters
-#' @description This reporter looks at the recursive network of its dependencies
-#'    on other packages. This allows a developer to understand how individual
-#'    dependencies might lead to a much larger set of dependencies, potentially
-#'    informing decisions on including or removing them.
-#' @section Class Constructor:
-#' \preformatted{DependencyReporter$new()}
-#' @inheritSection PackageReporters Class Constructor
-#' @inheritSection PackageReporters Public Methods
-#' @inheritSection NetworkReporters Public Methods
-#' @inheritSection PackageReporters Public Fields
-#' @inheritSection NetworkReporters Public Fields
-#' @inheritSection PackageReporters Special Methods
-#' @examples
-#' \donttest{
-#'
-#' # Instantiate an object
-#' reporter <- DependencyReporter$new()
-#'
-#' # Seed it with a package
-#' reporter$set_package("ggplot2")
-#'
-#' }
-NULL
-
 #' @importFrom R6 R6Class
 #' @importFrom assertthat assert_that is.flag
 #' @importFrom utils installed.packages
@@ -40,6 +22,22 @@ DependencyReporter <- R6::R6Class(
 
     public = list(
 
+        #' @description
+        #' Initialize an instance of the reporter.
+        #' @param dep_types (character vector) The sections within the \code{DESCRIPTION} file to be counted as dependencies. 
+        #' By default, c("Imports", "Depends", "LinkingTo") is chosen. 
+        #' @param installed (logical) If \code{TRUE}, consider only installed packages when building dependency network.
+        #' @return Self, invisibly.
+        #' @examples
+        #' \donttest{
+        #'
+        #' # Instantiate an object
+        #' reporter <- DependencyReporter$new()
+        #'
+        #' # Seed it with a package
+        #' reporter$set_package("ggplot2")
+        #'
+        #' }
         initialize = function(dep_types = c("Imports", "Depends", "LinkingTo"), installed = TRUE){
 
             # Check inputs
@@ -55,6 +53,7 @@ DependencyReporter <- R6::R6Class(
     ),
 
     active = list(
+        #' @field report_markdown_path (character string) path to R Markdown template for this reporter. Read-only.
         report_markdown_path = function(){
             system.file(file.path("package_report", "package_dependency_reporter.Rmd"), package = "pkgnet")
         }

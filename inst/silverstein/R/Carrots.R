@@ -1,7 +1,4 @@
-# R6 Class Definitions for testing
-
-#' @title Carrots
-#' @name Carrots
+#' Carrots R6 Class Definitions for testing
 #' @family Carrots
 #' @description Class in which every method has an equal number of package function references
 #' @importFrom R6 R6Class
@@ -13,6 +10,8 @@ Carrots  <- R6Class(
   cloneable = FALSE,
 
   public = list(
+    #' @description Initialize Carrots. 
+    #' @return nothing
     initialize = function() {
       couplet_1()
     }

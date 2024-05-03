@@ -5,153 +5,67 @@
 \title{Directed Graph Network Model}
 \description{
 R6 class defining a directed graph model for representing a
-   network, including methods to calculate various measures from graph
-   theory. The \link[igraph:igraph-package]{igraph} package is used as a
-   backend for calculations.
+network, including methods to calculate various measures from graph
+theory. The \link[igraph:igraph-package]{igraph} package is used as a
+backend for calculations.
 
-   This class isn't intended to be initialized directly; instead,
-   \link[=NetworkReporters]{network reporter objects} will initialize it as
-   its \code{pkg_graph} field. If you have a network reporter named
-   \code{reporter}, then you access this object's public
-   interface through \code{pkg_graph}---for example,
+This class isn't intended to be initialized directly; instead,
+\link[=AbstractGraphReporter]{network reporter objects} will initialize it as
+its \code{pkg_graph} field. If you have a network reporter named
+\code{reporter}, then you access this object's public
+interface through \code{pkg_graph}---for example,
 
-   \preformatted{    reporter$pkg_graph$node_measures('hubScore')}
+\preformatted{reporter$pkg_graph$node_measures('hubScore')}
 }
-\section{Public Methods}{
-
-\describe{
-    \item{\code{node_measures(measures = NULL)}}{
-        \itemize{
-            \item{Return specified node-level measures, calculating if necessary.
-            See Node Measures section below for details about each measure.}
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{measures}}: character vector of measure
-                    names. Default NULL will return those that are already
-                    calculated.}
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{data.table with specified node meaures as columns}
-                }
-            }
-        }
-    }
-    \item{\code{graph_measures(measures = NULL)}}{
-        \itemize{
-            \item{Return specified graph-level measures, calculating if necessary.
-            See Graph Measures section below for details about each measure.}
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{measures}}: character vector of measure
-                    names. Default NULL will return those that are already
-                    calculated.}
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{list with specified graph measures}
-                }
-            }
-        }
-    }
+\seealso{
+DirectedGraphMeasures
 }
-}
-
-\section{Public Fields}{
-
-\describe{
-    \item{\bold{\code{nodes}}}{node data.table, read-only}
-    \item{\bold{\code{edges}}}{edge data.table, read-only}
-    \item{\bold{\code{igraph}}}{igraph object, read-only}
-    \item{\bold{\code{available_node_measures}}}{character vector of all
-    supported node measures. See Node Measures section below for detailed
-    descriptions. Read-only.}
-    \item{\bold{\code{available_graph_measures}}}{character vector of all
-    supported graph measures. See Graph Measures section below for detailed
-    descriptions. Read-only.}
-    \item{\bold{\code{default_node_measures}}}{character vector of default
-    node measures. See Node Measures section below for detailed descriptions.
-    Read-only.}
-    \item{\bold{\code{default_graph_measures}}}{character vector of default
-    graph measures. See Graph Measures section below for detailed descriptions.
-    Read-only.}
-}
-}
-
-\section{Node Measures}{
-
-\describe{
-    \item{\bold{\code{outDegree}}}{outdegree, the number of outward edges (tail ends).
-    Calculated by \code{\link[igraph:degree]{igraph::degree}}.
-    [\href{https://en.wikipedia.org/wiki/Directed_graph#Indegree_and_outdegree}{Wikipedia}]}
-    \item{\bold{\code{inDegree}}}{indegree, number of inward edges (head ends).
-    Calculated by \code{\link[igraph:degree]{igraph::degree}}.
-    [\href{https://en.wikipedia.org/wiki/Directed_graph#Indegree_and_outdegree}{Wikipedia}]}
-    \item{\bold{\code{outCloseness}}}{closeness centrality (out), a measure of
-    path lengths to other nodes along edge directions.
-    Calculated by \code{\link[igraph:closeness]{igraph::closeness}}.
-    [\href{https://en.wikipedia.org/wiki/Closeness_centrality}{Wikipedia}]}
-    \item{\bold{\code{inCloseness}}}{closeness centrality (in), a measure of
-    path lengths to other nodes in reverse of edge directions.
-    Calculated by \code{\link[igraph:closeness]{igraph::closeness}}.
-    [\href{https://en.wikipedia.org/wiki/Closeness_centrality}{Wikipedia}]}
-    \item{\bold{\code{numRecursiveDeps}}}{number recursive dependencies, i.e., count of all nodes reachable by following edges
-    out from this node.
-    Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
-    [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
-    \item{\bold{\code{numRecursiveRevDeps}}}{number of recursive reverse dependencies (dependents), i.e., count all nodes reachable by following edges
-    into this node in reverse direction.
-    Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
-    [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
-    \item{\bold{\code{betweenness}}}{betweenness centrality, a measure of
-    the number of shortest paths in graph passing through this node
-    Calculated by \code{\link[igraph:betweenness]{igraph::betweenness}}.
-    [\href{https://en.wikipedia.org/wiki/Betweenness_centrality}{Wikipedia}]}
-    \item{\bold{\code{pageRank}}}{Google PageRank.
-    Calculated by \code{\link[igraph:page_rank]{igraph::page_rank}}.
-    [\href{https://en.wikipedia.org/wiki/PageRank}{Wikipedia}]}
-    \item{\bold{\code{hubScore}}}{hub score from Hyperlink-Induced Topic
-    Search (HITS) algorithm.
-    Calculated by \code{\link[igraph:hub_score]{igraph::hub_score}}.
-    [\href{https://en.wikipedia.org/wiki/HITS_algorithm}{Wikipedia}]}
-    \item{\bold{\code{authorityScore}}}{authority score from
-    Hyperlink-Induced Topic Search (HITS) algorithm.
-    Calculated by \code{\link[igraph:authority_score]{igraph::authority_score}}.
-    [\href{https://en.wikipedia.org/wiki/HITS_algorithm}{Wikipedia}]}
-}
-}
-
-\section{Graph Measures}{
-
-\describe{
-    \item{\bold{\code{graphOutDegree}}}{graph freeman centralization for
-    outdegree. A measure of the most central node by outdegree in relation to
-    all other nodes.
-    Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
-    [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
-    \item{\bold{\code{graphInDegree}}}{graph Freeman centralization for
-    indegree. A measure of the most central node by indegree in relation to
-    all other nodes.
-    Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
-    [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
-    \item{\bold{\code{graphOutClosness}}}{graph Freeman centralization for
-    out-closeness. A measure of the most central node by out-closeness in relation to
-    all other nodes.
-    Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
-    [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
-    \item{\bold{\code{graphInCloseness}}}{graph Freeman centralization for
-    outdegree. A measure of the most central node by outdegree in relation to
-    all other nodes.
-    Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
-    [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
-    \item{\bold{\code{graphBetweennness}}}{graph Freeman centralization for
-    betweenness A measure of the most central node by betweenness in relation to
-    all other nodes.
-    Calculated by \code{\link[igraph:centralize]{igraph::centralize}}.
-    [\href{https://en.wikipedia.org/wiki/Centrality#Freeman_centralization}{Wikipedia}]}
-}
-}
-
 \concept{Graph Classes}
+\section{Super class}{
+\code{\link[pkgnet:AbstractGraph]{pkgnet::AbstractGraph}} -> \code{DirectedGraph}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{default_node_measures}}{character vector of default node measures. 
+See \emph{Node Measures} section in \link{DirectedGraphMeasures} for details about each measure. Read-only.}
+
+\item{\code{default_graph_measures}}{character vector of default graph measures. 
+See \emph{Graph Measures} section in \link{DirectedGraphMeasures} for details about each measure. Read-only.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-DirectedGraph-clone}{\code{DirectedGraph$clone()}}
+}
+}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraph" data-id="graph_measures"><a href='../../pkgnet/html/AbstractGraph.html#method-AbstractGraph-graph_measures'><code>pkgnet::AbstractGraph$graph_measures()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraph" data-id="initialize"><a href='../../pkgnet/html/AbstractGraph.html#method-AbstractGraph-initialize'><code>pkgnet::AbstractGraph$initialize()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraph" data-id="node_measures"><a href='../../pkgnet/html/AbstractGraph.html#method-AbstractGraph-node_measures'><code>pkgnet::AbstractGraph$node_measures()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraph" data-id="print"><a href='../../pkgnet/html/AbstractGraph.html#method-AbstractGraph-print'><code>pkgnet::AbstractGraph$print()</code></a></span></li>
+</ul>
+</details>
+}}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DirectedGraph-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DirectedGraph-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DirectedGraph$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

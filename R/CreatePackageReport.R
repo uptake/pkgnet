@@ -1,115 +1,17 @@
-#' @title Package Report
-#' @name PackageReport
+#' R6 Class Representing an R Package Report
+#'
+#' @description
+#' pkgnet compiles one or more package reporters into a package
+#' report for a specified package. \code{PackageReport} is an R6 class that
+#' holds all of those reporters and has a method \code{render_report()}
+#' to generate an HTML report file. You can access each individual reporter
+#' and modify it using its methods if you wish.
+#'
+#' The function \code{\link{CreatePackageReport}()} is a shortcut for both
+#' generating a \code{PackageReport} object with instantiated reporters
+#' and creating the HTML report in one call.
+#' 
 #' @concept Reporters
-#' @description pkgnet compiles one or more package reporters into a package
-#'     report for a specified package. \code{PackageReport} is an R6 class that
-#'     holds all of those reporters and has a method \code{render_report()}
-#'     to generate an HTML report file. You can access each individual reporter
-#'     and modify it using its methods if you wish.
-#'
-#'     The function \code{\link{CreatePackageReport}()} is a shortcut for both
-#'     generating a \code{PackageReport} object with instantiated reporters
-#'     and creating the HTML report in one call.
-#' @section Class Constructor:
-#' \preformatted{DependencyReporter$new(pkg_name, pkg_path = NULL, report_path =
-#'    tempfile(pattern = pkg_name, fileext = ".html"))}
-#' \itemize{
-#'    \item{Initialize an instance of a package report object.}
-#'        \item{\bold{Args:}}{\itemize{
-#'            \item{\bold{\code{pkg_name}} (character string) name of
-#'                package
-#'            }
-#'            \item{\bold{\code{pkg_path}}: (character string) optional
-#'                directory path to source code of the package. It is used
-#'                for calculating test coverage. It can be an absolute or
-#'                relative path.
-#'            }
-#'            \item{\bold{\code{report_path}}: (character string) The
-#'                path and filename of the output report.  Default
-#'                report will be produced in the temporary directory.
-#'            }
-#'        }}
-#'        \item{\bold{Returns:}}{\itemize{
-#'            \item{Instantiated package report object.}
-#'        }}
-#' }
-#'
-#' @section Public Methods:
-#' \describe{
-#'     \item{\code{add_reporter(reporter)}}{
-#'         \itemize{
-#'             \item{Add a reporter to the package report.}
-#'             \item{\bold{Args:}}{
-#'                 \item{\bold{\code{reporter}}: Instantiated package reporter
-#'                 object
-#'                 }
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Self, invisibly.}
-#'                 }
-#'             }
-#'         }
-#'     }
-#'     \item{\code{render_report()}}{
-#'         \itemize{
-#'             \item{Render html pkgnet package report.
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Self, invisibly.}
-#'                 }
-#'             }
-#'         }
-#'     }
-#' }
-#'
-#' @section Public Fields:
-#' \describe{
-#'     \item{\bold{\code{pkg_name}}}{(character string) name of package.
-#'         Read-only.
-#'     }
-#'     \item{\bold{\code{pkg_path}}}{(character string) path to source code of
-#'         the package. Read-only.
-#'     }
-#'     \item{\bold{\code{report_path}}}{(character string) path and filename
-#'         of output report.
-#'     }
-#'     \item{\bold{\code{SummaryReporter}}}{instantiated pkgnet
-#'         \code{\link{SummaryReporter}} object}
-#'     \item{\bold{\code{DependencyReporter}}}{instantiated pkgnet
-#'         \code{\link{DependencyReporter}} object}
-#'     \item{\bold{\code{FunctionReporter}}}{instantiated pkgnet
-#'         \code{\link{FunctionReporter}} object}
-#'     \item{\bold{\code{InheritanceReporter}}}{instantiated pkgnet
-#'         \code{\link{InheritanceReporter}} object}
-#' }
-#'
-#' @section Special Methods:
-#' \describe{
-#'     \item{\code{clone(deep = FALSE)}}{
-#'         \itemize{
-#'             \item{Method for copying an object. See
-#'                 \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}}
-#'                 for the intricacies of R6 reference semantics.
-#'             }
-#'             \item{\bold{Args:}}{
-#'                 \itemize{
-#'                     \item{\bold{\code{deep}}(logical) Whether to recursively
-#'                     clone nested R6 objects.
-#'                  }
-#'                 }
-#'             }
-#'             \item{\bold{Returns:}}{
-#'                 \itemize{
-#'                     \item{Cloned object of this class.}
-#'                 }
-#'             }
-#'         }
-#'     }
-#' }
-NULL
-
 #' @importFrom assertthat assert_that is.readable is.string is.writeable
 #' @importFrom tools file_ext
 #' @importFrom utils browseURL
@@ -118,6 +20,15 @@ NULL
 PackageReport <- R6::R6Class(
     classname = "PackageReport"
     , public = list(
+
+        #' @description 
+        #' Initialize an instance of a package report object.
+        #' @param pkg_name (character string) name of package
+        #' @param pkg_path (character string) optional directory path to source code of the package. 
+        #' It is used for calculating test coverage. It can be an absolute or relative path.
+        #' @param report_path (character string) The path and filename of the output report. 
+        #' Default report will be produced in the temporary directory.
+        #' @return Instantiated package report object.
         initialize = function(pkg_name
                               , pkg_path = NULL
                               , report_path = tempfile(
@@ -141,11 +52,18 @@ PackageReport <- R6::R6Class(
             return(invisible(self))
         }
 
+        #' @description
+        #' Add a reporter to the package report.
+        #' @param reporter Instantiated package reporter object
+        #' @return Self, invisibly
         , add_reporter = function(reporter) {
             private$set_reporter(reporter, class = class(reporter)[1])
             return(invisible(self))
         }
 
+        #' @description
+        #' Render html pkgnet package report.
+        #' @returns Self, invisibly. 
         , render_report = function() {
             log_info("Rendering package report...")
 
@@ -179,12 +97,15 @@ PackageReport <- R6::R6Class(
     ) # / public
 
     , active = list(
+        #' @field pkg_name (character string) name of package. Read-only.
         pkg_name = function() {
             return(private$protected$pkg_name)
         }
+        #' @field pkg_path (character string) path to source code of the package. Read-only.
         , pkg_path = function() {
             return(private$protected$pkg_path)
         }
+        #' @field report_path (character string) path and filename of output report.
         , report_path = function(report_path) {
             if (!missing(report_path)) {
                 assertthat::assert_that(
@@ -205,24 +126,28 @@ PackageReport <- R6::R6Class(
             }
             return(private$protected$report_path)
         }
+        #' @field SummaryReporter Instantiated pkgnet \code{\link{SummaryReporter}} object
         , SummaryReporter = function(reporter) {
             if (!missing(reporter)) {
                 private$set_reporter(reporter, class = "SummaryReporter")
             }
             return(private$reporters$SummaryReporter)
         }
+        #' @field DependencyReporter Instantiated pkgnet \code{\link{DependencyReporter}} object
         , DependencyReporter = function(reporter) {
             if (!missing(reporter)) {
                 private$set_reporter(reporter, class = "DependencyReporter")
             }
             return(private$reporters$DependencyReporter)
         }
+        #' @field FunctionReporter Instantiated pkgnet \code{\link{FunctionReporter}} object
         , FunctionReporter = function(reporter) {
             if (!missing(reporter)) {
                 private$set_reporter(reporter, class = "FunctionReporter")
             }
             return(private$reporters$FunctionReporter)
         }
+        #' @field InheritanceReporter Instantiated pkgnet \code{\link{InheritanceReporter}} object
         , InheritanceReporter = function(reporter) {
             if (!missing(reporter)) {
                 private$set_reporter(reporter, class = "InheritanceReporter")

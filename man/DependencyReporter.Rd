@@ -5,163 +5,16 @@
 \title{Recursive Package Dependency Reporter}
 \description{
 This reporter looks at the recursive network of its dependencies
-   on other packages. This allows a developer to understand how individual
-   dependencies might lead to a much larger set of dependencies, potentially
-   informing decisions on including or removing them.
+on other packages. This allows a developer to understand how individual
+dependencies might lead to a much larger set of dependencies, potentially
+informing decisions on including or removing them.
 }
-\section{Class Constructor}{
-
-\preformatted{DependencyReporter$new()}
-
-
-\describe{
-    \item{\code{}}{
-        \itemize{
-            \item{Initialize an instance of the reporter.}
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Instantiated reporter object. Note that this
-                       reporter object isn't useful yet until you use the
-                       \code{set_package} method to set a package.
-                    }
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Methods}{
-
-\describe{
-    \item{\code{set_package(pkg_name, pkg_path = NULL)}}{
-        \itemize{
-            \item{Set the package that the reporter will analyze. This can
-                only be done once for a given instance of a reporter.
-                Instantiate a new copy of the reporter if you need to analyze
-                a different package.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{pkg_name}}: character string, name of
-                     package
-                 }
-                    \item{\bold{\code{pkg_path}}: character string, optional
-                    directory path to source code of the package. It is used
-                    for calculating test coverage. It can be an absolute or
-                    relative path.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-    \item{\code{get_summary_view()}}{
-        \itemize{
-            \item{Returns an htmlwidget object that summarizes the analysis
-                of the reporter. Used when creating a
-                \link[=CreatePackageReport]{package report}.
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{\link[htmlwidgets:htmlwidgets-package]{htmlwidget}
-                        object
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-\describe{
-    \item{\code{calculate_default_measures()}}{
-        \itemize{
-            \item{Calculates the default node and network measures for this
-               reporter.
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Self, invisibly.}
-                }
-            }
-        }
-    }
-}
-}
-
-\section{Public Fields}{
-
-\describe{
-    \item{\bold{\code{pkg_name}}}{character string, name of set package.
-        Read-only.
-    }
-    \item{\bold{\code{report_markdown_path}}}{character string, path to
-        R Markdown template for this reporter. Read-only.
-    }
-}
-
-
-\describe{
-    \item{\bold{\code{nodes}}}{a data.table, containing information about
-       the nodes of the network the reporter is analyzing. The \code{node}
-       column acts the identifier. Read-only.
-    }
-    \item{\bold{\code{edges}}}{a data.table, containing information about
-       the edge connections of the network the reporter is analyzing. Each
-       row is one edge, and the columns \code{SOURCE} and \code{TARGET}
-       specify the node identifiers. Read-only.
-    }
-    \item{\bold{\code{network_measures}}}{a list, containing any measures
-       of the network calculated by the reporter. Read-only.
-    }
-    \item{\bold{\code{pkg_graph}}}{a graph model object. See \link{DirectedGraph}
-       for additional documentation. Read-only.
-    }
-    \item{\bold{\code{graph_viz}}}{a graph visualization object. A
-       \code{\link[visNetwork:visNetwork]{visNetwork::visNetwork}} object.
-       Read-only.
-    }
-    \item{\bold{\code{layout_type}}}{a character string, the current layout
-       type for the graph visualization. Can be assigned a new valid layout
-       type value. Use use
-       \code{grep("^layout_\\\\S", getNamespaceExports("igraph"), value = TRUE)}
-       to see valid options.
-    }
-}
-}
-
-\section{Special Methods}{
-
-\describe{
-    \item{\code{clone(deep = FALSE)}}{
-        \itemize{
-            \item{Method for copying an object. See
-                \href{https://adv-r.hadley.nz/r6.html#r6-semantics}{\emph{Advanced R}}
-                for the intricacies of R6 reference semantics.
-            }
-            \item{\bold{Args:}}{
-                \itemize{
-                    \item{\bold{\code{deep}}: logical. Whether to recursively
-                    clone nested R6 objects.
-                 }
-                }
-            }
-            \item{\bold{Returns:}}{
-                \itemize{
-                    \item{Cloned object of this class.}
-                }
-            }
-        }
-    }
-}
-}
-
 \examples{
+
+## ------------------------------------------------
+## Method `DependencyReporter$new`
+## ------------------------------------------------
+
 \donttest{
 
 # Instantiate an object
@@ -185,3 +38,89 @@ Other Package Reporters:
 \concept{Network Reporters}
 \concept{Package Reporters}
 \concept{Reporters}
+\section{Super classes}{
+\code{\link[pkgnet:AbstractPackageReporter]{pkgnet::AbstractPackageReporter}} -> \code{\link[pkgnet:AbstractGraphReporter]{pkgnet::AbstractGraphReporter}} -> \code{DependencyReporter}
+}
+\section{Active bindings}{
+\if{html}{\out{<div class="r6-active-bindings">}}
+\describe{
+\item{\code{report_markdown_path}}{(character string) path to R Markdown template for this reporter. Read-only.}
+}
+\if{html}{\out{</div>}}
+}
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-DependencyReporter-new}{\code{DependencyReporter$new()}}
+\item \href{#method-DependencyReporter-clone}{\code{DependencyReporter$clone()}}
+}
+}
+\if{html}{\out{
+<details open><summary>Inherited methods</summary>
+<ul>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractPackageReporter" data-id="set_package"><a href='../../pkgnet/html/AbstractPackageReporter.html#method-AbstractPackageReporter-set_package'><code>pkgnet::AbstractPackageReporter$set_package()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraphReporter" data-id="calculate_default_measures"><a href='../../pkgnet/html/AbstractGraphReporter.html#method-AbstractGraphReporter-calculate_default_measures'><code>pkgnet::AbstractGraphReporter$calculate_default_measures()</code></a></span></li>
+<li><span class="pkg-link" data-pkg="pkgnet" data-topic="AbstractGraphReporter" data-id="get_summary_view"><a href='../../pkgnet/html/AbstractGraphReporter.html#method-AbstractGraphReporter-get_summary_view'><code>pkgnet::AbstractGraphReporter$get_summary_view()</code></a></span></li>
+</ul>
+</details>
+}}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DependencyReporter-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DependencyReporter-new}{}}}
+\subsection{Method \code{new()}}{
+Initialize an instance of the reporter.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DependencyReporter$new(
+  dep_types = c("Imports", "Depends", "LinkingTo"),
+  installed = TRUE
+)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{dep_types}}{(character vector) The sections within the \code{DESCRIPTION} file to be counted as dependencies. 
+By default, c("Imports", "Depends", "LinkingTo") is chosen.}
+
+\item{\code{installed}}{(logical) If \code{TRUE}, consider only installed packages when building dependency network.}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+Self, invisibly.
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{\donttest{
+
+# Instantiate an object
+reporter <- DependencyReporter$new()
+
+# Seed it with a package
+reporter$set_package("ggplot2")
+
+}
+}
+\if{html}{\out{</div>}}
+
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-DependencyReporter-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DependencyReporter-clone}{}}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DependencyReporter$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}
