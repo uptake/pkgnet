@@ -21,7 +21,11 @@ jobs:
         run: grep -E "Version:"  $GITHUB_WORKSPACE/DESCRIPTION
       - name: Test if it is a production pattern (#.#.#)
         shell: bash
-        run: grep -E "Version:\s\d+\.\d+\.\d+$"  $GITHUB_WORKSPACE/DESCRIPTION
+        run: |
+          verLine=$(grep -E "Version:"  $GITHUB_WORKSPACE/DESCRIPTION)
+          dots="${verLine//[^.]}"
+          cnt=${#dots}
+          echo $((2-$cnt)) 
   devel_test:
     name: ${{ matrix.os }} (R ${{ matrix.r-version }})
     runs-on: ${{ matrix.os }}
@@ -53,6 +57,13 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - uses: r-lib/actions/setup-pandoc@v2
       - uses: r-lib/actions/setup-tinytex@v2
+      - run: tlmgr --version
+      - name: Install additional LaTeX Packages
+        run: |
+          tlmgr update --self
+          tlmgr update --all
+          tlmgr install titling framed inconsolata
+          tlmgr install collection-fontsrecommended
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
