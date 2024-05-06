@@ -17,6 +17,7 @@ jobs:
         with:
           fetch-depth: 0 # pull all tags and other history
       - name: Get Latest Version Tag
+        id: previoustag
         uses: WyriHaximus/github-action-get-previous-tag@v1.4.0
         with: 
           prefix: 'v'
