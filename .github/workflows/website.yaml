@@ -9,17 +9,22 @@ on:
 
 jobs:
   build-website:
-    name: build website PR
+    name: build website docs on website_docs_update branch
     runs-on: macos-latest
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # checking out latest tag in next step
+          fetch-depth: 0 # pull all tags and other history
       - name: Get Latest Version Tag
         uses: WyriHaximus/github-action-get-previous-tag@v1.4.0
         with: 
-          prefix: 'v'  
+          prefix: 'v'
+      - name: Git Checkout Branch From Latest Version Tag
+        run: |
+          git config --local user.name "$GITHUB_ACTOR"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git checkout -b website_docs_update ${{steps.previoustag.outputs.tag}}
       - name: set up R
         uses: r-lib/actions/setup-r@v2
         with:
@@ -32,11 +37,13 @@ jobs:
       - name: Build Site
         run: pkgdown::build_site()
         shell: Rscript {0}
-      - name: Commit website doc changes
+      - name: Save Site Docs Articfact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "built_website_docs_${{steps.previoustag.outputs.tag}}"
+          path: ${{github.workspace}}/docs/
+      - name: Commit website doc changes (overwrite if existing)
         run: |
-            git config --local user.name "$GITHUB_ACTOR"
-            git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-            git checkout -b website_update_${{steps.previoustag.outputs.tag}}
             git add docs/\*
             git commit -m "Update website documentation to ${{steps.previoustag.outputs.tag}}" || echo "No changes to commit"
-            git push origin website_update_${{steps.previoustag.outputs.tag}}
+            git push -f origin website_docs_update
