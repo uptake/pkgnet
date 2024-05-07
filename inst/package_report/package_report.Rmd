@@ -4,7 +4,7 @@ output:
   html_document:
     self_contained: TRUE
     theme: flatly
-    include:
+    includes:
       in_header: header.html
       after_body: footer.html
 params:
