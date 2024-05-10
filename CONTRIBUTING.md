@@ -346,7 +346,7 @@ Add some notes explaining what has changed since the previous release (usually a
 
 ### Update the Website
 
-Adding the new version tag in the previous step should have triggered a Github Action to build the website docs and create a PR.  If not, manually trigger the workflow and create a PR to update the docs.  Merge that in!
+Adding the new version tag in the previous step should have triggered a Github Action to build the website docs and create a branch named `website_docs_update`. Review and merge.
 
 ### Open a new PR to begin development on the next version
 
