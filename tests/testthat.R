@@ -57,6 +57,11 @@ if(identical(Sys.getenv("NOT_CRAN"), "true")){
 
     }
 
+    # Record modifaction time of package directory to be checked at end of testing 
+    # in test-Z-test-no-source-modifcations.R
+    tmp_pkgnet_path <- file.path(Sys.getenv('PKGNET_TEST_LIB'), 'pkgnet')
+    Sys.setenv(PKGNET_LATEST_MOD = as.character(file.info(tmp_pkgnet_path)$mtime))
+
     # This withr statement should be redundant.
     # This is within a test environment in which .libpaths() has been altered to include PKGNET_TEST_LIB.
     # Yet, it appears to be necessary.
