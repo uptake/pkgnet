@@ -67,13 +67,28 @@ PackageReport <- R6::R6Class(
         , render_report = function() {
             log_info("Rendering package report...")
 
+            # copy Rmd files to temp directory to avoid writing interim files to package repo
+            tmp_dir <- tempfile("package_report") # subdir within temp directory
+            tmp_package_report_rmd <- file.path(tmp_dir, "package_report.Rmd")
+
+            orig_package_report_rmd <- system.file(file.path("package_report", "package_report.Rmd"), package = "pkgnet")
+            orig_files <- list.files(dirname(orig_package_report_rmd), full.names = TRUE)
+
+            dir.create(tmp_dir)
+            file.copy(
+                from = orig_files,
+                to = tmp_dir,
+                recursive = TRUE,
+                overwrite = TRUE
+            )
+
+            # render report
             rmarkdown::render(
-                input = system.file(
-                    file.path("package_report", "package_report.Rmd")
-                    , package = "pkgnet"
-                )
+                input = tmp_package_report_rmd
                 , output_dir = dirname(self$report_path)
                 , output_file = basename(self$report_path)
+                , intermediates_dir = tmp_dir
+                , knit_root_dir = tmp_dir
                 , quiet = TRUE
                 , params = list(
                     reporters = private$reporters
@@ -85,6 +100,9 @@ PackageReport <- R6::R6Class(
                 "Done creating package report!"
                 , sprintf("It is available at %s", self$report_path)
             ))
+
+            # Clean up tmp
+            unlink(tmp_dir, recursive = TRUE)
 
             # If suppress flag is unset, then env variable will be emptry string ""
             if (identical(Sys.getenv("PKGNET_SUPPRESS_BROWSER"), "")) {

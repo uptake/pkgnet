@@ -4,6 +4,7 @@
 ## CHANGES  
 
 ## BUGFIXES
+* Moved `rmarkdown::render` interium files to occur within a temp directory, not the installed package directory (#329 Thanks @jcarbaut!) 
 
 # pkgnet 0.5.0
 ## NEW FEATURES

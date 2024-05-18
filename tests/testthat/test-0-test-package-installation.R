@@ -13,3 +13,8 @@ test_that('Test packages installed correctly',{
         )
     }
 })
+
+# Record modifaction time of package directory to be checked at end of testing 
+# in test-Z-test-no-source-modifcations.R
+tmp_pkgnet_path <- file.path(Sys.getenv('PKGNET_TEST_LIB'), 'pkgnet')
+Sys.setenv(PKGNET_LATEST_MOD = as.character(file.info(tmp_pkgnet_path)$mtime))

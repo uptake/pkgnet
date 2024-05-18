@@ -104,3 +104,29 @@
 
     return(invisible(TRUE))
 }
+
+
+# Get Files with Modification Date after a specific date
+# Used to provide more verbose logging in the event package directory is modified.
+# Will not list files created and deleted in the interium but it helps.
+.printModifiedFiles <- function(dir_path, after_posixct){
+    file_list <- list.files(
+        path = dir_path,
+        full.names = TRUE
+    )
+
+    print(sprintf("FILE INFO FOR UPDATES AFTER %s", as.character(after_posixct)))
+    for (file in file_list){
+        info <- as.list(file.info(file))
+        if (info['mtime'] > after_posixct){
+            msg <- sprintf(
+                "%s %s %s %s",
+                file,
+                info['mtime'],
+                info['mode'],
+                info['isdir']
+            )
+            print(msg)
+        }
+    }
+}
