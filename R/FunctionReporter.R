@@ -420,7 +420,7 @@ FunctionReporter <- R6::R6Class(
         
         # If do.call and first argument is string (atomic), covert to call
         if (length(x) >= 2){
-            if (deparse(x[[1]]) == "do.call" & is.character(x[[2]])){
+            if (deparse(x[[1]])[1] == "do.call" & is.character(x[[2]])){
                 x[[2]] <- parse(text=x[[2]])
             }
         }
