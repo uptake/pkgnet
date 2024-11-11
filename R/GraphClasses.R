@@ -368,9 +368,17 @@ DirectedGraph <- R6::R6Class(
                 )$vector
             }
 
-            # HITS Score
+            # Hub Score
             , hubScore = function(self){
-                igraph::hits_score(
+                igraph::hub_score(
+                    graph = self$igraph
+                    , scale = TRUE
+                )$vector
+            }
+
+            # Authority Score
+            , authorityScore = function(self){
+                igraph::authority_score(
                     graph = self$igraph
                     , scale = TRUE
                 )$vector
@@ -484,7 +492,11 @@ DirectedGraph <- R6::R6Class(
 #'     [\href{https://en.wikipedia.org/wiki/PageRank}{Wikipedia}]}
 #'     \item{\bold{\code{hubScore}}}{hub score from Hyperlink-Induced Topic
 #'     Search (HITS) algorithm.
-#'     Calculated by \code{\link[igraph:hits_score]{igraph::hits_score}}.
+#'     Calculated by \code{\link[igraph:hub_score]{igraph::hub_score}}.
+#'     [\href{https://en.wikipedia.org/wiki/HITS_algorithm}{Wikipedia}]}
+#'     \item{\bold{\code{authorityScore}}}{authority score from
+#'     Hyperlink-Induced Topic Search (HITS) algorithm.
+#'     Calculated by \code{\link[igraph:authority_score]{igraph::authority_score}}.
 #'     [\href{https://en.wikipedia.org/wiki/HITS_algorithm}{Wikipedia}]}
 #' }
 #' @section Graph Measures:
