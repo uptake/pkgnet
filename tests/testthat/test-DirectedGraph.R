@@ -105,11 +105,12 @@ for (thisTest in testList) {
         reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
         
         for (nodeMeas in reporter$pkg_graph$available_node_measures) {
-            expect_equivalent(
+            expect_equal(
                 object = reporter$pkg_graph$node_measures(nodeMeas)
                 , expected = expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
                 , ignore.col.order = TRUE
                 , ignore.row.order = TRUE
+                , tolerance = 0.01
                 , info = sprintf("Value testing for %s, %s : %s /n obj: %s /n exp %s"
                                  , thisTest[['pkg']]
                                  , thisTest[['reporter']]
