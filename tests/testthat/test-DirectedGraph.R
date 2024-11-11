@@ -108,9 +108,7 @@ for (thisTest in testList) {
             expect_equal(
                 object = reporter$pkg_graph$node_measures(nodeMeas)
                 , expected = expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
-                , ignore.col.order = TRUE
-                , ignore.row.order = TRUE
-                , tolerance = 0.01
+                , ignore_attr = TRUE
                 , info = sprintf("Value testing for %s, %s : %s /n obj: %s /n exp %s"
                                  , thisTest[['pkg']]
                                  , thisTest[['reporter']]
