@@ -370,18 +370,18 @@ DirectedGraph <- R6::R6Class(
 
             # Hub Score
             , hubScore = function(self){
-                igraph::hits_scores$hub(
+                igraph::hits_scores(
                     graph = self$igraph
                     , scale = TRUE
-                )$vector
+                )$hub
             }
 
             # Authority Score
             , authorityScore = function(self){
-                igraph::hits_score$authority(
+                igraph::hits_scores(
                     graph = self$igraph
                     , scale = TRUE
-                )$vector
+                )$authority
             }
 
         ) #/node_measure_functions
