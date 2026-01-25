@@ -5,6 +5,7 @@
 
 ## BUGFIXES
 * Moved `rmarkdown::render` interium files to occur within a temp directory, not the installed package directory (#329 Thanks @jcarbaut!) 
+* Removed `futile.logger` dependency (#338)
 
 # pkgnet 0.5.0
 ## NEW FEATURES
