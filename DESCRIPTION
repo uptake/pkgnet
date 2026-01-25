@@ -19,7 +19,7 @@ Imports:
     data.table,
     DT,
     glue,
-    igraph(>= 1.3),
+    igraph,
     knitr,
     magrittr,
     methods,
