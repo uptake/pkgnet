@@ -10,9 +10,9 @@ SimpleLogger <- R6::R6Class(
     , public = list(
 
         #' @description Initialize a new SimpleLogger
-        #' @param threshold Initial threshold level (default: 4 for INFO)
+        #' @param threshold Initial threshold level (default: 0 for silent)
         #' @return A new SimpleLogger instance
-        initialize = function(threshold = 4) {
+        initialize = function(threshold = 0) {
             private$threshold <- threshold
         }
 
@@ -65,7 +65,7 @@ SimpleLogger <- R6::R6Class(
     )
 
     , private = list(
-        threshold = 4
+        threshold = 0
     )
 )
 

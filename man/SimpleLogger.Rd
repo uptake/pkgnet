@@ -26,13 +26,13 @@ Provides threshold-based logging with INFO, WARN, and FATAL levels.
 \subsection{Method \code{new()}}{
 Initialize a new SimpleLogger
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{SimpleLogger$new(threshold = 4)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{SimpleLogger$new(threshold = 0)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{threshold}}{Initial threshold level (default: 4 for INFO)}
+\item{\code{threshold}}{Initial threshold level (default: 0 for silent)}
 }
 \if{html}{\out{</div>}}
 }

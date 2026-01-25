@@ -5,8 +5,8 @@ test_that("SimpleLogger class works", {
     # Create a new logger instance
     logger <- SimpleLogger$new()
 
-    # Test default threshold is INFO (4)
-    expect_equal(logger$get_threshold(), 4)
+    # Test default threshold is silent (0)
+    expect_equal(logger$get_threshold(), 0)
 
     # Test setting threshold to WARN (5) - should log INFO and WARN but not FATAL
     logger$set_threshold(5)
