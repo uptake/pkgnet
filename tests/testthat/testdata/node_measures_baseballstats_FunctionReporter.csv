@@ -1,6 +1,0 @@
-node,type,isExported,outDegree,inDegree,outCloseness,inCloseness,numRecursiveDeps,numRecursiveRevDeps,betweenness,pageRank,hubScore,authorityScore
-on_base_pct,function,TRUE,0,0,,,0,0,0,0.1208824418,0,0
-OPS,function,TRUE,2,0,0.75,0.75,3,0,0,0.1208824418,0,1
-slugging_avg,function,TRUE,1,1,1,1,1,1,0.5,0.1722574796,0.5,1
-at_bats,function,TRUE,0,2,,,0,3,0,0.4137201571,1,0
-batting_avg,function,TRUE,1,1,1,1,1,1,0.5,0.1722574796,0.5,1

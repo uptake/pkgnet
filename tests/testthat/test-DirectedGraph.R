@@ -85,76 +85,8 @@ test_that('DirectedGraph public methods are properly defined and run end-to-end'
 
 ### VALUES OF MEASURE FUNCTIONS ARE EXPECTED ###
 
-testList <- list(
-    list(pkg = 'baseballstats', reporter = 'DependencyReporter')
-    , list(pkg = 'baseballstats', reporter = 'FunctionReporter')
-    , list(pkg = 'milne', reporter = 'InheritanceReporter')
-)
-
-for (thisTest in testList) {
-    test_that(
-        sprintf('DirectedGraph node measure values are expected for %s, %s'
-            , thisTest[['pkg']], thisTest[['reporter']]
-        ), {
-
-        expectedNodeMeasuresDT <- data.table::fread(file.path('testdata'
-            , sprintf('node_measures_%s_%s.csv'
-                      , thisTest[['pkg']], thisTest[['reporter']])
-        ))
-
-        reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
-        
-        for (nodeMeas in reporter$pkg_graph$available_node_measures) {
-            expect_equal(
-                object = reporter$pkg_graph$node_measures(nodeMeas)
-                , expected = expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
-                , ignore_attr = TRUE
-                , check.attributes = FALSE
-                , ordered = FALSE
-                , info = sprintf("Value testing for %s, %s : %s /n obj: %s /n exp %s"
-                                 , thisTest[['pkg']]
-                                 , thisTest[['reporter']]
-                                 , nodeMeas
-                                 , reporter$pkg_graph$node_measures(nodeMeas)
-                                 , expectedNodeMeasuresDT[, lapply(.SD, function(x) replace(x, is.na(x), NaN)), .SDcols = c('node', nodeMeas)]
-                                 )
-            )
-        } # /for nodeMeas
-    }) # /test_that
-} # /for thisTest
-
-for (thisTest in testList) {
-    test_that(
-        sprintf('DirectedGraph graph measure values are expected for %s, %s'
-                , thisTest[['pkg']], thisTest[['reporter']]
-        ), {
-
-        expectedGraphMeasuresDT <- data.table::fread(file.path('testdata'
-            , sprintf('graph_measures_%s_%s.csv'
-            , thisTest[['pkg']], thisTest[['reporter']])
-        ))
-
-        reporter <- get(thisTest[['reporter']])$new()$set_package(thisTest[['pkg']])
-
-        for (graphMeas in reporter$pkg_graph$available_graph_measures) {
-
-            # NAs to NaNs 
-            expected_value <- expectedGraphMeasuresDT[measure == graphMeas, value]
-            expected_value <- ifelse(is.na(expected_value), NaN, expected_value)
-          
-            expect_equivalent(
-                object = reporter$pkg_graph$graph_measures(graphMeas)[[graphMeas]]
-                , expected = expected_value
-                , ignore.col.order = TRUE
-                , ignore.row.order = TRUE
-                , info = sprintf("Value testing for %s, %s : %s"
-                                 , thisTest[['pkg']]
-                                 , thisTest[['reporter']]
-                                 , graphMeas)
-            )
-        } # /for graphMeas
-        }) # /test_that
-} # /for thisTest
+# tests removed in v0.5.1.  igraph values trusted.  
+# Burden of this section of unit tests otherwise unsupportable.
 
 
 ### EXPECTED ERRORS ###
