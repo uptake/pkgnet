@@ -370,7 +370,7 @@ DirectedGraph <- R6::R6Class(
 
             # Hub Score
             , hubScore = function(self){
-                igraph::hub_score(
+                igraph::hits_scores(
                     graph = self$igraph
                     , scale = TRUE
                 )$vector
