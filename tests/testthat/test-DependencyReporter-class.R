@@ -51,10 +51,8 @@ test_that('DependencyReporter works end-to-end for typical use', {
     })
 
     ## Node and Edge extraction work ##
-    expect_silent({
-        testObj$nodes
-        testObj$edges
-    })
+    expect_silent({testObj$nodes})
+    expect_silent({testObj$edges})
 
     expect_true(data.table::is.data.table(testObj$nodes))
     expect_true(object = is.element("node", names(testObj$nodes))

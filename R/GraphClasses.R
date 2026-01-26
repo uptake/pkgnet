@@ -13,7 +13,7 @@
 #' @concept Graph Classes
 #' @keywords internal
 #' @importFrom R6 R6Class
-#' @importFrom igraph graph.edgelist make_empty_graph vertex
+#' @importFrom igraph graph_from_edgelist make_empty_graph vertex
 #' @importFrom data.table data.table
 #' @importFrom assertthat assert_that
 AbstractGraph <- R6::R6Class(
@@ -172,7 +172,7 @@ AbstractGraph <- R6::R6Class(
             # Connected graph
             if (nrow(self$edges) > 0) {
                 # A graph with edges
-                connectedGraph <- igraph::graph.edgelist(
+                connectedGraph <- igraph::graph_from_edgelist(
                     as.matrix(self$edges[,list(SOURCE,TARGET)])
                     , directed = directed
                 )
@@ -227,8 +227,8 @@ AbstractGraph <- R6::R6Class(
 #' @concept Graph Classes
 #' @importFrom R6 R6Class
 #' @importFrom igraph degree closeness betweenness
-#' @importFrom igraph page_rank hub_score authority_score
-#' @importFrom igraph neighborhood.size vcount V
+#' @importFrom igraph page_rank hits_scores
+#' @importFrom igraph ego_size vcount V
 #' @importFrom igraph centralize centr_degree_tmax
 #' @importFrom igraph centr_clo_tmax centr_betw_tmax
 #' @seealso DirectedGraphMeasures
@@ -324,7 +324,7 @@ DirectedGraph <- R6::R6Class(
             , numRecursiveDeps = function(self){
                 # Calculate using out-neighborhood size with order of longest
                 # possible path
-                result <- igraph::neighborhood.size(
+                result <- igraph::ego_size(
                     graph = self$igraph
                     , order = igraph::vcount(self$igraph)
                     , mode = "out"
@@ -340,7 +340,7 @@ DirectedGraph <- R6::R6Class(
             , numRecursiveRevDeps = function(self){
                 # Calculate using in-neighborhood size with order of longest
                 # possible path
-                result <- igraph::neighborhood.size(
+                result <- igraph::ego_size(
                     graph = self$igraph
                     , order = igraph::vcount(self$igraph)
                     , mode = "in"
@@ -477,11 +477,11 @@ DirectedGraph <- R6::R6Class(
 #'     [\href{https://en.wikipedia.org/wiki/Closeness_centrality}{Wikipedia}]}
 #'     \item{\bold{\code{numRecursiveDeps}}}{number recursive dependencies, i.e., count of all nodes reachable by following edges
 #'     out from this node.
-#'     Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
+#'     Calculated by \code{\link[igraph:ego_size]{igraph::ego_size}}.
 #'     [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
 #'     \item{\bold{\code{numRecursiveRevDeps}}}{number of recursive reverse dependencies (dependents), i.e., count all nodes reachable by following edges
 #'     into this node in reverse direction.
-#'     Calculated by \code{\link[igraph:neighborhood.size]{igraph::neighborhood.size}}.
+#'     Calculated by \code{\link[igraph:ego_size]{igraph::ego_size}}.
 #'     [\href{https://en.wikipedia.org/wiki/Rooted_graph}{Wikipedia}]}
 #'     \item{\bold{\code{betweenness}}}{betweenness centrality, a measure of
 #'     the number of shortest paths in graph passing through this node
