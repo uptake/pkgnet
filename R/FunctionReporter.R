@@ -260,7 +260,7 @@ FunctionReporter <- R6::R6Class(
 
             private$cache$nodes <- nodes
 
-            log_info(sprintf('... done extracting functions as nodes.'
+            log_info(sprintf('%s ... done extracting functions as nodes.'
                              , self$pkg_name))
 
             return(invisible(nodes))

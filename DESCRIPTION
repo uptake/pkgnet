@@ -19,7 +19,7 @@ Imports:
     data.table,
     DT,
     glue,
-    igraph(>= 1.3),
+    igraph(>= 2.2),
     knitr,
     magrittr,
     methods,
@@ -37,4 +37,4 @@ Suggests:
 License: BSD_3_clause + file LICENSE
 URL: https://github.com/uptake/pkgnet, https://uptake.github.io/pkgnet/
 BugReports: https://github.com/uptake/pkgnet/issues
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
