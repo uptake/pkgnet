@@ -18,7 +18,6 @@ Imports:
     covr,
     data.table,
     DT,
-    futile.logger,
     glue,
     igraph(>= 1.3),
     knitr,
