@@ -72,9 +72,9 @@ AbstractGraphReporter <- R6::R6Class(
         #' column acts the identifier. Read-only.
         nodes = function(){
             if (is.null(private$cache$nodes)){
-                private$extract_nodes()
+                invisible(private$extract_nodes())
             }
-            return(private$cache$nodes)
+            invisible(private$cache$nodes)
         },
 
         #' @field edges A data.table, containing information about
@@ -83,9 +83,9 @@ AbstractGraphReporter <- R6::R6Class(
         #' specify the node identifiers. Read-only.
         edges = function(){
             if (is.null(private$cache$edges)) {
-                private$extract_edges()
+                invisible(private$extract_edges())
             }
-            return(private$cache$edges)
+            invisible(private$cache$edges)
         },
 
         #' @field network_measures A list, containing any measures 
