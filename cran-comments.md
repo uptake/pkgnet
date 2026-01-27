@@ -1,6 +1,6 @@
 # CRAN Submission History
 
-## v 0.5.0
+## v 0.5.0 
 
 ### Submission on May 3rd, 2024
 This is a minor release that includes a number of new features, bug fixes and minor backwards compatible changes. Please see `NEWS.md` for details.

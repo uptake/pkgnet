@@ -39,7 +39,6 @@ jobs:
           - fontawesome
           - formatR
           - fs
-          - futile.logger
           - futile.options
           - glue
           - highr

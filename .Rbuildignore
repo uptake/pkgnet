@@ -16,6 +16,7 @@
 ^CODEOWNERS
 ^vignettes.*
 ^release_testing*
+^CLAUDE.md$
 
 # History files
 ^\.Rhistory*

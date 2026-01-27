@@ -1,10 +1,19 @@
 # development
 ## NEW FEATURES
 
-## CHANGES  
+## CHANGES
+* Replaced `futile.logger` with custom `SimpleLogger` R6 class implementation using only base R. This reduces external dependencies and improves maintainability. (#338)
+* Updated minimum `igraph` version requirement from `>= 1.3` to `>= 2.1` to align with modern igraph APIs. (#338)
+* Updated deprecated igraph function calls to current API: (#338)
+    * `graph.edgelist()` → `graph_from_edgelist()`
+    * `neighborhood.size()` → `ego_size()`
+    * `hub_score()` / `authority_score()` → `hits_scores()` (unified API)
+* Test suite improvements: removed static CSV fixtures for graph measures in favor of structure/behavior validation. Tests are now more maintainable across igraph versions. (#338)
+* Added `CLAUDE.md` project documentation file for AI-assisted development tools.
 
 ## BUGFIXES
-* Moved `rmarkdown::render` interium files to occur within a temp directory, not the installed package directory (#329 Thanks @jcarbaut!) 
+* Moved `rmarkdown::render` interium files to occur within a temp directory, not the installed package directory (#329 Thanks @jcarbaut!)
+* Removed `futile.logger` dependency to eliminate potential compatibility issues and reduce maintenance burden. (#338)
 
 # pkgnet 0.5.0
 ## NEW FEATURES
