@@ -1,5 +1,10 @@
 # CRAN Submission History
 
+## v 0.6.0 
+
+### Submission on January 26th, 2026
+This is a minor release that includes a number of new features, bug fixes and minor backwards compatible changes. Of particular note, it removes `futile.logger` as a dependency.  Please see `NEWS.md` for details.
+
 ## v 0.5.0 
 
 ### Submission on May 3rd, 2024
