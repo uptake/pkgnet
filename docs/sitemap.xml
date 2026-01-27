@@ -1,87 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://uptake.github.io/pkgnet/404.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/articles/pkgnet-intro.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/articles/publishing-reports.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/AbstractGraph.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/AbstractGraphReporter.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/AbstractPackageReporter.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/CreatePackageReport.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/CreatePackageVignette.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/DefaultReporters.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/DependencyReporter.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/DirectedGraph.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/DirectedGraphMeasures.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/FunctionReporter.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/GraphClasses.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/InheritanceReporter.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/NetworkReporters.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/PackageReport.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/PackageReporters.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/SummaryReporter.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://uptake.github.io/pkgnet/reference/pkgnet-package.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://uptake.github.io/pkgnet/404.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/CLAUDE.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/CONTRIBUTING.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/LICENSE-text.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/articles/index.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/articles/pkgnet-intro.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/articles/publishing-reports.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/authors.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/index.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/news/index.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/AbstractGraph.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/AbstractGraphReporter.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/AbstractPackageReporter.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/CreatePackageReport.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/CreatePackageVignette.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/DefaultReporters.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/DependencyReporter.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/DirectedGraph.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/DirectedGraphMeasures.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/FunctionReporter.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/GraphClasses.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/InheritanceReporter.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/NetworkReporters.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/PackageReport.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/PackageReporters.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/SimpleLogger.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/SummaryReporter.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/index.html</loc></url>
+<url><loc>https://uptake.github.io/pkgnet/reference/pkgnet-package.html</loc></url>
 </urlset>
+
