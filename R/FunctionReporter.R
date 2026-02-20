@@ -446,7 +446,7 @@ FunctionReporter <- R6::R6Class(
     # Symbol (i.e., name of object)
     if (is.symbol(x)){return(FALSE)}
     # Environment
-    if (!is.environment(x)){return(FALSE)}
+    if (is.environment(x)){return(FALSE)}
     # Raw external pointer to non-R memory/state (e.g., for C/C++ code)
     if (typeof(x) == "externalptr"){return(FALSE)}
 
