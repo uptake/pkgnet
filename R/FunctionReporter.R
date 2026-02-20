@@ -398,7 +398,7 @@ FunctionReporter <- R6::R6Class(
     # an environment pointer then we can break x up into list of components
     listable <- .is_listable_expr(x)
     if (!is.list(x) && listable) {
-        x <- .try_list(x)
+        x <- .try_as_list(x)
 
         if (length(x) > 0){
             # Check for expression of the form foo$bar
@@ -454,14 +454,16 @@ FunctionReporter <- R6::R6Class(
 }
 
 # [description]
-.try_list <- function(x) {
+.try_as_list <- function(x) {
     tryCatch(
         as.list(x),
         error = function(e) {
             log_warn(sprintf(
                 paste0(
                     ".parse_function: as.list() failed for ",
-                    "typeof=%s class=%s; treating as unlistable. Error: %s",
+                    "typeof=%s class=%s; treating as unlistable. ",
+                    "Please report to pkgnet maintainers in an issue. ",
+                    "Error: %s",
                 ),
                 typeof(x),
                 paste(class(x), collapse = ","),
@@ -687,7 +689,7 @@ FunctionReporter <- R6::R6Class(
     # If it is not a list but listable...
     if (!is.list(x) && listable) {
         # Convert to list
-        xList <- .try_list(x)
+        xList <- .try_as_list(x)
         if (length(xList) > 0){
             # Check if expression x is from _$_
             if (identical(xList[[1]], quote(`$`))) {
