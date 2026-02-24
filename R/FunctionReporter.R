@@ -455,7 +455,10 @@ FunctionReporter <- R6::R6Class(
     return(TRUE)
 }
 
-# [description]
+# [description] attempt to coerce an expression to a list, returning a list
+#               containing the result as `value` and a `listable` flag; on
+#               error, log a warning and return the original object as
+#               unlistable.
 .try_as_list <- function(x) {
     tryCatch(
         list(
