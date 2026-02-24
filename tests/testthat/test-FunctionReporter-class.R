@@ -340,6 +340,39 @@ test_that(".parse_R6_expression correctly parses expressions containing a next s
     })
 })
 
+test_that(".is_listable_expr treats external pointers as unlistable", {
+    ptr <- new("externalptr")
+    expect_false(pkgnet:::.is_listable_expr(ptr))
+})
+
+test_that(".parse_function falls back when as.list fails on listable objects", {
+    if (!methods::isClass("PkgnetNoListable")) {
+        methods::setClass("PkgnetNoListable", slots = c(x = "numeric"))
+    }
+    obj <- methods::new("PkgnetNoListable", x = 1)
+
+    expect_true(pkgnet:::.is_listable_expr(obj))
+    expect_error(as.list(obj))
+
+    result <- expect_no_error(pkgnet:::.parse_function(obj))
+    expect_true(is.character(result))
+    expect_length(result, 1)
+})
+
+test_that(".parse_R6_expression falls back when as.list fails on listable objects", {
+    if (!methods::isClass("PkgnetNoListable")) {
+        methods::setClass("PkgnetNoListable", slots = c(x = "numeric"))
+    }
+    obj <- methods::new("PkgnetNoListable", x = 1)
+
+    expect_true(pkgnet:::.is_listable_expr(obj))
+    expect_error(as.list(obj))
+
+    result <- expect_no_error(pkgnet:::.parse_R6_expression(obj))
+    expect_true(is.character(result))
+    expect_length(result, 1)
+})
+
 
 test_that("FunctionReporter R6 edge extraction handles case where all methods have the same number of dependencies", {
 

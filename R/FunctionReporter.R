@@ -398,9 +398,11 @@ FunctionReporter <- R6::R6Class(
     # an environment pointer then we can break x up into list of components
     listable <- .is_listable_expr(x)
     if (!is.list(x) && listable) {
-        x <- .try_as_list(x)
+        result <- .try_as_list(x)
+        x <- result$value
+        listable <- result$listable
 
-        if (length(x) > 0){
+        if (listable && length(x) > 0){
             # Check for expression of the form foo$bar
             # We still want to split it up because foo might be a function
             # but we want to get rid of bar, because it's a symbol in foo's namespace
@@ -408,7 +410,7 @@ FunctionReporter <- R6::R6Class(
             if (identical(x[[1]], quote(`$`))) {
                 x <- x[1:2]
             }
-        } else {
+        } else if (listable) {
             # make empty lists "not listable" so recursion stops
             listable <- FALSE
         }
@@ -456,21 +458,26 @@ FunctionReporter <- R6::R6Class(
 # [description]
 .try_as_list <- function(x) {
     tryCatch(
-        as.list(x),
+        list(
+            value = as.list(x),
+            listable = TRUE
+        ),
         error = function(e) {
             log_warn(sprintf(
                 paste0(
-                    ".parse_function: as.list() failed for ",
+                    "Expression parsing: as.list() failed for ",
                     "typeof=%s class=%s; treating as unlistable. ",
                     "Please report to pkgnet maintainers in an issue. ",
-                    "Error: %s",
+                    "Error: %s"
                 ),
                 typeof(x),
                 paste(class(x), collapse = ","),
                 conditionMessage(e)
             ))
-            listable <<- FALSE
-            return(x)
+            list(
+                value = x,
+                listable = FALSE
+            )
         }
     )
 }
@@ -689,8 +696,10 @@ FunctionReporter <- R6::R6Class(
     # If it is not a list but listable...
     if (!is.list(x) && listable) {
         # Convert to list
-        xList <- .try_as_list(x)
-        if (length(xList) > 0){
+        result <- .try_as_list(x)
+        xList <- result$value
+        listable <- result$listable
+        if (listable && length(xList) > 0){
             # Check if expression x is from _$_
             if (identical(xList[[1]], quote(`$`))) {
                 # Check if expression x is of form self$foo, private$foo, or super$foo
@@ -709,7 +718,7 @@ FunctionReporter <- R6::R6Class(
                 # Left Hand is not a _$_.  Proceed as normal list.
                 x <- xList
             }
-        } else {
+        } else if (listable) {
             # List is zero length.  This might occur when encountering a "break" command.
             # Make empty list "non-listable" so recursion stops in following step.
             listable <- FALSE
@@ -731,4 +740,3 @@ FunctionReporter <- R6::R6Class(
     }
     return(out)
 }
-
