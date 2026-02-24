@@ -4,6 +4,7 @@
 ## CHANGES
 
 ## BUGFIXES
+* Fixed runtime error when `FunctionReporter` extract edges from a function containing expressions of `externalptr` type. `FunctionReporter` will generally now ignore unknown expression types and instead log an error. (#344) 
 
 # pkgnet 0.6.0
 ## NEW FEATURES
