@@ -354,7 +354,10 @@ test_that(".parse_function falls back when as.list fails on listable objects", {
     expect_true(pkgnet:::.is_listable_expr(obj))
     expect_error(as.list(obj))
 
-    result <- expect_no_error(pkgnet:::.parse_function(obj))
+    result <- expect_warning(
+        pkgnet:::.parse_function(obj),
+        regexp = "Expression parsing: as\\.list\\(\\) failed"
+    )
     expect_true(is.character(result))
     expect_length(result, 1)
 })
@@ -368,7 +371,10 @@ test_that(".parse_R6_expression falls back when as.list fails on listable object
     expect_true(pkgnet:::.is_listable_expr(obj))
     expect_error(as.list(obj))
 
-    result <- expect_no_error(pkgnet:::.parse_R6_expression(obj))
+    result <- expect_warning(
+        pkgnet:::.parse_R6_expression(obj),
+        regexp = "Expression parsing: as\\.list\\(\\) failed"
+    )
     expect_true(is.character(result))
     expect_length(result, 1)
 })
