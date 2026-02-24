@@ -1,12 +1,12 @@
 #' Function Interdependency Reporter
-#' 
+#'
 #' @description
 #' This reporter looks at the network of interdependencies of its
 #' defined functions. Measures of centrality from graph theory can indicate
 #' which function is most important to a package. Combined with unit test
 #' coverage information---also provided by this reporter--- it can be used
 #' as a powerful tool to prioritize test writing.
-#' 
+#'
 #' @details
 #' \subsection{R6 Method Support:}{
 #'     R6 classes are supported, with their methods treated as functions by the
@@ -396,11 +396,13 @@ FunctionReporter <- R6::R6Class(
 .parse_function <- function (x) {
     # If expression x is not an atomic value or symbol (i.e., name of object) or
     # an environment pointer then we can break x up into list of components
-    listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
+    listable <- .is_listable_expr(x)
     if (!is.list(x) && listable) {
-        x <- as.list(x)
+        result <- .try_as_list(x)
+        x <- result$value
+        listable <- result$listable
 
-        if (length(x) > 0){
+        if (listable && length(x) > 0){
             # Check for expression of the form foo$bar
             # We still want to split it up because foo might be a function
             # but we want to get rid of bar, because it's a symbol in foo's namespace
@@ -408,23 +410,23 @@ FunctionReporter <- R6::R6Class(
             if (identical(x[[1]], quote(`$`))) {
                 x <- x[1:2]
             }
-        } else {
+        } else if (listable) {
             # make empty lists "not listable" so recursion stops
-            listable <- FALSE 
+            listable <- FALSE
         }
     }
 
 
 
     if (listable){
-        
+
         # If do.call and first argument is string (atomic), covert to call
         if (length(x) >= 2){
             if (deparse(x[[1]])[1] == "do.call" & is.character(x[[2]])){
                 x[[2]] <- parse(text=x[[2]])
             }
         }
-        
+
         # Filter out atomic values because we don't care about them
         x <- Filter(f = Negate(is.atomic), x = x)
 
@@ -437,6 +439,50 @@ FunctionReporter <- R6::R6Class(
         out <- paste(deparse(x), collapse = "\n")
     }
     return(out)
+}
+
+# [description] check if expression can be expanded into a list of components
+.is_listable_expr <- function(x) {
+    # Atomic value
+    if (is.atomic(x)){return(FALSE)}
+    # Symbol (i.e., name of object)
+    if (is.symbol(x)){return(FALSE)}
+    # Environment
+    if (is.environment(x)){return(FALSE)}
+    # Raw external pointer to non-R memory/state (e.g., for C/C++ code)
+    if (typeof(x) == "externalptr"){return(FALSE)}
+
+    return(TRUE)
+}
+
+# [description] attempt to coerce an expression to a list, returning a list
+#               containing the result as `value` and a `listable` flag; on
+#               error, log a warning and return the original object as
+#               unlistable.
+.try_as_list <- function(x) {
+    tryCatch(
+        list(
+            value = as.list(x),
+            listable = TRUE
+        ),
+        error = function(e) {
+            log_warn(sprintf(
+                paste0(
+                    "Expression parsing: as.list() failed for ",
+                    "typeof=%s class=%s; treating as unlistable. ",
+                    "Please report to pkgnet maintainers in an issue. ",
+                    "Error: %s"
+                ),
+                typeof(x),
+                paste(class(x), collapse = ","),
+                conditionMessage(e)
+            ))
+            list(
+                value = x,
+                listable = FALSE
+            )
+        }
+    )
 }
 
 # [description] given an R6 class, returns a data.table
@@ -648,13 +694,15 @@ FunctionReporter <- R6::R6Class(
 
     # If expression x is not an atomic value or symbol (i.e., name of object) or
     # an environment pointer then we can break x up into list of components
-    listable <- (!is.atomic(x) && !is.symbol(x) && !is.environment(x))
+    listable <- .is_listable_expr(x)
 
     # If it is not a list but listable...
     if (!is.list(x) && listable) {
         # Convert to list
-        xList <- as.list(x)
-        if (length(xList) > 0){
+        result <- .try_as_list(x)
+        xList <- result$value
+        listable <- result$listable
+        if (listable && length(xList) > 0){
             # Check if expression x is from _$_
             if (identical(xList[[1]], quote(`$`))) {
                 # Check if expression x is of form self$foo, private$foo, or super$foo
@@ -673,14 +721,14 @@ FunctionReporter <- R6::R6Class(
                 # Left Hand is not a _$_.  Proceed as normal list.
                 x <- xList
             }
-        } else {
+        } else if (listable) {
             # List is zero length.  This might occur when encountering a "break" command.
             # Make empty list "non-listable" so recursion stops in following step.
             listable <- FALSE
-        }   
+        }
     }
 
-        
+
 
     if (listable){
         # Filter out atomic values because we don't care about them
@@ -695,4 +743,3 @@ FunctionReporter <- R6::R6Class(
     }
     return(out)
 }
-
