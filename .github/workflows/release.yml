@@ -9,13 +9,28 @@ on:
         - 'release/**'
   workflow_dispatch:
 
+# automatically cancel in-progress builds if another commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# default to 0 permissions
+# (job-level overrides add the minimal permissions needed)
+permissions:
+  contents: none
+
 jobs:
   version_check:
     name: Confirm Whole Version Number
     runs-on: ubuntu-latest
+    permission:
+      contents: read
     steps:
       - name: checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 1
+          persist-credentials: false
       - name: Display Version Found
         shell: bash
         run: grep -E "Version:"  $GITHUB_WORKSPACE/DESCRIPTION
@@ -39,12 +54,15 @@ jobs:
           - os: macos-latest
             r-version: 'devel'
           - os: windows-latest
-            r-version: 'devel'   
+            r-version: 'devel'
+    permissions:
+      contents: read
     steps:
       - name: checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 1
+          persist-credentials: false
       - name: If local, apt update
         if: ${{ (env.ACT || false) && (matrix.os == 'ubuntu-latest')}}
         run: sudo apt update
@@ -52,11 +70,11 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt install -y tidy
       - name: set up R
-        uses: r-lib/actions/setup-r@v2
+        uses: r-lib/actions/setup-r@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
         with:
           r-version: ${{ matrix.r-version }}
-      - uses: r-lib/actions/setup-pandoc@v2
-      - uses: r-lib/actions/setup-tinytex@v2
+      - uses: r-lib/actions/setup-pandoc@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
+      - uses: r-lib/actions/setup-tinytex@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
       - run: tlmgr --version
       - name: Install additional LaTeX Packages
         run: |
@@ -64,11 +82,11 @@ jobs:
           tlmgr update --all
           tlmgr install titling framed inconsolata
           tlmgr install collection-fontsrecommended
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
         with:
           extra-packages: any::rcmdcheck
           needs: check
-      - uses: r-lib/actions/check-r-package@v2
+      - uses: r-lib/actions/check-r-package@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
         with:
           args: 'c("--as-cran")'
           error-on: '"warning"'
@@ -76,19 +94,29 @@ jobs:
           upload-results: '"true"'
           upload-snapshots: '"true"'
   all-successful:
+    if: always()
     runs-on: ubuntu-latest
-    needs: [version_check, devel_test]
+    needs:
+      - devel_test
+      - version_check
+    permissions:
+      statuses: read
     steps:
       - name: Note that all tests succeeded
-        run: echo "🎉"
+        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe  # v1.2.2
+        with:
+          jobs: ${{ toJSON(needs) }}
   build-tarball:
     runs-on: ubuntu-latest
     needs: [version_check]
+    permissions:
+      contents: read
     steps:
       - name: checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 1
+          persist-credentials: false
       - name: If local, apt update
         if: ${{ (env.ACT || false)}}
         run: sudo apt update
@@ -104,12 +132,9 @@ jobs:
           TAR_NAME+=".tar.gz"
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       - name: Upload tarball to run
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ${{env.TAR_NAME}}
           path: ${{github.workspace}}/${{env.TAR_NAME}}
           if-no-files-found: error
           compression-level: 0 # already compressed
-
-
-  

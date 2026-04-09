@@ -4,7 +4,6 @@
 [![CRAN\_Download\_Badge](https://cranlogs.r-pkg.org/badges/grand-total/pkgnet)](https://cran.r-project.org/package=pkgnet) 
 [![GitHub Actions Build Status](https://github.com/uptake/pkgnet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/uptake/pkgnet/actions/workflows/ci.yml?query=branch%3Amain)
 [![Appveyor Build status](https://ci.appveyor.com/api/projects/status/github/uptake/pkgnet?branch=main&svg=true)](https://ci.appveyor.com/project/jameslamb/pkgnet)
-[![codecov](https://codecov.io/gh/uptake/pkgnet/branch/main/graph/badge.svg)](https://app.codecov.io/gh/uptake/pkgnet) 
 [![Lifecycle badge](https://lifecycle.r-lib.org/articles/figures/lifecycle-stable.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 
 ## Introduction
