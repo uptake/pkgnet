@@ -71,7 +71,9 @@ The code in this project should follow a standard set of conventions for style i
 
 Additional checks on code characteristics that can caught with static analysis are enforced with `pre-commit` hooks.
 
-To run those hooks locally, do the following from the root of the repo.
+Additional checks on code characteristics that can caught with static analysis are enforced with `pre-commit` hooks. We use the [pre-commit](https://pre-commit.com/) manager for installing and running those checks. You can find instructions for installing pre-commit [here](https://pre-commit.com/#install).
+
+To run the hooks locally, do the following from the root of the repo.
 
 ```shell
 pre-commit run --all-files
