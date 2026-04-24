@@ -13,10 +13,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# default to 0 permissions
+# default to read-only permissions
 # (job-level overrides add the minimal permissions needed)
 permissions:
-  contents: none
+  contents: read
 
 jobs:
   lint:
@@ -41,8 +41,6 @@ jobs:
             r-version: 'release'
           - os: macos-latest
             r-version: 'release'
-    permissions:
-      contents: read
     steps:
       - name: checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
