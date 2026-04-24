@@ -69,6 +69,14 @@ We will try to review PRs promptly and get back to you within a few days.
 
 The code in this project should follow a standard set of conventions for style in R code.
 
+Additional checks on code characteristics that can caught with static analysis are enforced with `pre-commit` hooks.
+
+To run those hooks locally, do the following from the root of the repo.
+
+```shell
+pre-commit run --all-files
+```
+
 ### Declaring Dependencies
 
 We use [roxygen2](https://github.com/klutometis/roxygen) to auto-generate our dependency lists in the package's `NAMESPACE` file. If you use a function from any package other than this package and `base`, you need to add `#' @importFrom package_name function_name` in the roxygen documentation of the function you are adding this call to.
