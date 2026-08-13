@@ -120,6 +120,10 @@ jobs:
         run: sudo apt update
       - name: Install Tidy Ubuntu
         run: sudo apt install -y tidy
+      - name: set up R
+        uses: r-lib/actions/setup-r@6f6e5bc62fba3a704f74e7ad7ef7676c5c6a2590 # v2.11.4
+        with:
+          r-version: 'release'
       - name: build tarball for submission to CRAN
         run: R CMD build $GITHUB_WORKSPACE
       - name: Grab tarball path
