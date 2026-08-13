@@ -1,5 +1,10 @@
 # CRAN Submission History
 
+## v 0.6.1
+
+### Submission on August 12th, 2026
+This is a patch release that fixes a runtime error in `FunctionReporter` when parsing functions containing `externalptr` expressions, along with minor test suite and CI maintenance. Please see `NEWS.md` for details.
+
 ## v 0.6.0 
 
 ### Submission on January 26th, 2026
