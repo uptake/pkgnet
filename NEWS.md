@@ -1,7 +1,10 @@
-# development
+# pkgnet 0.6.1
 ## NEW FEATURES
 
 ## CHANGES
+* Removed commented-out `expect_silent` tests from the test suite. (#342)
+* CI now enforces `zizmor` checks on Github Actions workflows, and `codecov` reporting has been dropped. (#346)
+* Added `.pre-commit-config.yaml` to `.Rbuildignore` so it is excluded from the built tarball.
 
 ## BUGFIXES
 * Fixed runtime error when `FunctionReporter` extract edges from a function containing expressions of `externalptr` type. `FunctionReporter` will generally now ignore unknown expression types and instead log a warning. (#344) 
