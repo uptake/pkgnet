@@ -14,6 +14,7 @@
 ^CONTRIBUTING\.md$
 ^test\.sh$
 ^CODEOWNERS
+^\.pre-commit-config\.yaml$
 ^vignettes.*
 ^release_testing*
 ^CLAUDE.md$

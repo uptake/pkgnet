@@ -80,6 +80,18 @@ jobs:
           tlmgr update --all
           tlmgr install titling framed inconsolata
           tlmgr install collection-fontsrecommended
+      # macOS runners have no binaries for R devel, so dependencies are built
+      # from source. data.table needs gettext's libintl.h, which is absent from
+      # the CRAN toolchain prefix the compiler searches.
+      - name: Install gettext for source builds (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install gettext
+          mkdir -p ~/.R
+          {
+            echo "CPPFLAGS += -I$(brew --prefix gettext)/include"
+            echo "LDFLAGS += -L$(brew --prefix gettext)/lib -lintl"
+          } >> ~/.R/Makevars
       - uses: r-lib/actions/setup-r-dependencies@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
         with:
           extra-packages: any::rcmdcheck
@@ -120,6 +132,10 @@ jobs:
         run: sudo apt update
       - name: Install Tidy Ubuntu
         run: sudo apt install -y tidy
+      - name: set up R
+        uses: r-lib/actions/setup-r@d3c5be51b12e724e68f33216ca3c148b66d5f0b6 # v2.12.1
+        with:
+          r-version: 'release'
       - name: build tarball for submission to CRAN
         run: R CMD build $GITHUB_WORKSPACE
       - name: Grab tarball path
