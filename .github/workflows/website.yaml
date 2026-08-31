@@ -21,11 +21,15 @@ jobs:
   build-website:
     name: build website docs on website_docs_update branch
     runs-on: macos-latest
+    # needed to push the website_docs_update branch
+    permissions:
+      contents: write
     steps:
       - name: checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          fetch-depth: 1
+          # pull all tags and other history, so the latest version tag can be found
+          fetch-depth: 0
           persist-credentials: false
       - name: Get Latest Version Tag
         id: previoustag
@@ -59,7 +63,12 @@ jobs:
       - name: Commit website doc changes (overwrite if existing)
         env:
           PREVIOUS_TAG: ${{ steps.previoustag.outputs.tag }}
+          # checkout is run with persist-credentials: false, so credentials for the
+          # push have to be provided explicitly here
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
             git add docs/\*
             git commit -m "Update website documentation to ${PREVIOUS_TAG}" || echo "No changes to commit"
-            git push -f origin website_docs_update
+            git push -f \
+              "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+              website_docs_update
