@@ -406,3 +406,32 @@ test_that("FunctionReporter R6 edge extraction handles case where all methods ha
                                         TARGET = c("couplet_2",
                                                    "couplet_1"),key = c("SOURCE","TARGET")))
 })
+
+
+test_that("FunctionReporter determines exports from the namespace, not the attached environment", {
+
+    testthat::skip_if_not_installed("pkgload")
+
+    # Start from a clean slate so load_all() does not have to patch an
+    # already-loaded namespace
+    if (isNamespaceLoaded("silverstein")) {
+        unloadNamespace("silverstein")
+    }
+
+    # devtools::load_all() copies the whole namespace into package:<pkg>, so
+    # listing that environment makes every function look exported (#347)
+    pkgload::load_all(
+        path = system.file("silverstein", package = "pkgnet")
+        , quiet = TRUE
+    )
+    on.exit(pkgload::unload("silverstein"), add = TRUE)
+
+    # couplet_1 is not in silverstein's NAMESPACE, but load_all() attaches it
+    expect_true("couplet_1" %in% ls("package:silverstein"))
+
+    testObj <- FunctionReporter$new()$set_package('silverstein')
+
+    expect_false(testObj$nodes[node == "couplet_1", isExported])
+    expect_false(testObj$nodes[node == "couplet_2", isExported])
+    expect_true(testObj$nodes[node == "Carrots$public_methods$initialize", isExported])
+})

@@ -147,8 +147,10 @@ FunctionReporter <- R6::R6Class(
             log_info(sprintf("Calculating test coverage for %s...", self$pkg_name))
 
             # workaround for covr conflict with loaded packages on windows
-            if(.Platform$OS.type == "windows") {
-                detach(paste0('package:',self$pkg_name), unload = TRUE, character.only = TRUE)
+            pkg_search_name <- paste0('package:', self$pkg_name)
+            reattach_pkg <- .Platform$OS.type == "windows" && pkg_search_name %in% search()
+            if (reattach_pkg) {
+                detach(pkg_search_name, unload = TRUE, character.only = TRUE)
             }
 
             pkgCovDT <- data.table::as.data.table(covr::package_coverage(
@@ -158,7 +160,7 @@ FunctionReporter <- R6::R6Class(
             ))
 
             # workaround for covr conflict with loaded packages on windows
-            if(.Platform$OS.type == "windows") {
+            if (reattach_pkg) {
                 attachNamespace(self$pkg_name)
             }
 
@@ -236,13 +238,10 @@ FunctionReporter <- R6::R6Class(
             )
 
             # Figure out which functions are exported
-            # We need the package to be loaded first
-            suppressPackageStartupMessages({
-                require(self$pkg_name
-                        , lib.loc = .libPaths()[1]
-                        , character.only = TRUE)
-            })
-            exported_obj_names <- ls(sprintf("package:%s", self$pkg_name))
+            # Use the namespace's export metadata rather than the contents of the
+            # attached package environment. devtools::load_all() can attach
+            # unexported objects, which would otherwise look exported.
+            exported_obj_names <- getNamespaceExports(pkg_env)
             nodes[, isExported := node %in% exported_obj_names]
 
             # Check if we have R6 functions
