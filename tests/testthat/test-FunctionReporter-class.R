@@ -268,6 +268,22 @@ test_that(".parse_function correctly handles next control statement", {
     })
 })
 
+test_that(".parse_function resolves do.call function names given as strings", {
+    myfunc <- function() {
+        do.call("innerfunc1", list(innerfunc2()))
+    }
+    result <- pkgnet:::.parse_function(body(myfunc))
+    expect_true(all(c("innerfunc1", "innerfunc2") %in% result))
+})
+
+test_that(".parse_function handles do.call with a non-syntactic function name", {
+    myfunc <- function() {
+        do.call("[<-", list(x, 1, value = innerfunc1()))
+    }
+    result <- pkgnet:::.parse_function(body(myfunc))
+    expect_true("innerfunc1" %in% result)
+})
+
 test_that(".parse_R6_expression correctly parses expressions for symbols", {
     # Correctly parses body of function and finds all function symbols
     expect_true({
