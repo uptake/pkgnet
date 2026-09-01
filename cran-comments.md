@@ -2,8 +2,15 @@
 
 ## v 0.6.1
 
-### Submission on August 12th, 2026
+### Submission on August 30th, 2026
 This is a patch release that fixes a runtime error in `FunctionReporter` when parsing functions containing `externalptr` expressions, along with minor test suite and CI maintenance. Please see `NEWS.md` for details.
+
+### Follow up on August 31st, 2026
+Good Afternoon, 
+
+It has been 15 hours since this submission, and I just want to confirm that it was submitted without issue.  I understand there was a recent system overhaul. 
+
+If everything is fine, when I might expect this submission to work itself through the process?
 
 ## v 0.6.0 
 
