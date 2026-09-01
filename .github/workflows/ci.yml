@@ -41,6 +41,8 @@ jobs:
             r-version: 'release'
           - os: macos-latest
             r-version: 'release'
+          - os: windows-latest
+            r-version: 'release'
     steps:
       - name: checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

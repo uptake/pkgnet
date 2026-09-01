@@ -9,7 +9,6 @@
 ^CODE_OF_CONDUCT\.md$
 ^LICENSE\.MD$
 ^.travis\.yml$
-^appveyor\.yml$
 ^coverage.sh$
 ^CONTRIBUTING\.md$
 ^test\.sh$
