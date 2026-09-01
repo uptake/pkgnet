@@ -420,10 +420,12 @@ FunctionReporter <- R6::R6Class(
 
     if (listable){
 
-        # If do.call and first argument is string (atomic), covert to call
+        # If do.call and first argument is string (atomic), convert to symbol.
+        # as.name() is used rather than parse() because the string can name a
+        # non-syntactic function such as "[<-", which is not parseable as text.
         if (length(x) >= 2){
             if (deparse(x[[1]])[1] == "do.call" & is.character(x[[2]])){
-                x[[2]] <- parse(text=x[[2]])
+                x[[2]] <- as.name(x[[2]])
             }
         }
 

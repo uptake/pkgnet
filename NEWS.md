@@ -4,6 +4,7 @@
 ## CHANGES
 
 ## BUGFIXES
+* Fixed runtime error when `FunctionReporter` parses a `do.call()` whose function argument is a string naming a non-syntactic function, such as `do.call("[<-", ...)`. (#335)
 
 # pkgnet 0.6.1
 ## NEW FEATURES
