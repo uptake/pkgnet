@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.1</span>
       </span>
     </div>
 
@@ -64,9 +64,25 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/uptake/pkgnet/blob/v0.6.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/uptake/pkgnet/blob/ci/fix-website-docs-push/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.6.1" id="pkgnet-061">pkgnet 0.6.1<a class="anchor" aria-label="anchor" href="#pkgnet-061"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-6-1">NEW FEATURES<a class="anchor" aria-label="anchor" href="#new-features-0-6-1"></a></h3>
+</div>
+<div class="section level3">
+<h3 id="changes-0-6-1">CHANGES<a class="anchor" aria-label="anchor" href="#changes-0-6-1"></a></h3>
+<ul><li>Removed commented-out <code>expect_silent</code> tests from the test suite. (<a href="https://github.com/uptake/pkgnet/issues/342" class="external-link">#342</a>)</li>
+<li>CI now enforces <code>zizmor</code> checks on Github Actions workflows, and <code>codecov</code> reporting has been dropped. (<a href="https://github.com/uptake/pkgnet/issues/346" class="external-link">#346</a>)</li>
+<li>Added <code>.pre-commit-config.yaml</code> to <code>.Rbuildignore</code> so it is excluded from the built tarball.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bugfixes-0-6-1">BUGFIXES<a class="anchor" aria-label="anchor" href="#bugfixes-0-6-1"></a></h3>
+<ul><li>Fixed runtime error when <code>FunctionReporter</code> extract edges from a function containing expressions of <code>externalptr</code> type. <code>FunctionReporter</code> will generally now ignore unknown expression types and instead log a warning. (<a href="https://github.com/uptake/pkgnet/issues/344" class="external-link">#344</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.0" id="pkgnet-060">pkgnet 0.6.0<small>2026-01-27</small><a class="anchor" aria-label="anchor" href="#pkgnet-060"></a></h2>
 <div class="section level3">
@@ -266,7 +282,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>
