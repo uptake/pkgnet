@@ -4,6 +4,7 @@
 ## CHANGES
 
 ## BUGFIXES
+* `FunctionReporter` now determines exported functions from the package namespace's export metadata via `getNamespaceExports()` instead of listing the attached `package:<pkg>` environment. Previously, running pkgnet after `devtools::load_all()` marked every function as exported. (#347 Thanks @hughjonesd!)
 
 # pkgnet 0.6.1
 ## NEW FEATURES
