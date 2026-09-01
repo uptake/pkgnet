@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">pkgnet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.1</span>
       </span>
     </div>
 
@@ -128,6 +128,9 @@
 <h2 id="code-style-">Code Style <a name="style"></a>
 <a class="anchor" aria-label="anchor" href="#code-style-"></a></h2>
 <p>The code in this project should follow a standard set of conventions for style in R code.</p>
+<p>Additional checks on code characteristics that can be caught with static analysis are enforced with <code>pre-commit</code> hooks. We use the <a href="https://pre-commit.com/" class="external-link">pre-commit</a> manager for installing and running those checks. You can find instructions for installing pre-commit <a href="https://pre-commit.com/#install" class="external-link">here</a>.</p>
+<p>To run the hooks locally, do the following from the root of the repo.</p>
+<pre class="shell"><code>pre-commit run --all-files</code></pre>
 <div class="section level3">
 <h3 id="declaring-dependencies">Declaring Dependencies<a class="anchor" aria-label="anchor" href="#declaring-dependencies"></a></h3>
 <p>We use <a href="https://github.com/klutometis/roxygen" class="external-link">roxygen2</a> to auto-generate our dependency lists in the package’s <code>NAMESPACE</code> file. If you use a function from any package other than this package and <code>base</code>, you need to add <code>#' @importFrom package_name function_name</code> in the roxygen documentation of the function you are adding this call to.</p>
@@ -310,7 +313,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer></div>
