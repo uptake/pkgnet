@@ -1,5 +1,6 @@
 # development
 ## NEW FEATURES
+* Network visualizations now include a "Size by" dropdown that resizes nodes by any numeric metric in the nodes table, with node area proportional to the value. The default, "none", keeps the uniform node size. RIP Ed. (#169)
 
 ## CHANGES
 
