@@ -2,6 +2,7 @@
 ## NEW FEATURES
 
 ## CHANGES
+* `FunctionReporter` now detects function calls made in default argument values (e.g. `function(x, y = helper(x))`), for both regular functions and R6 methods. Previously only the function body was parsed, so these dependencies were missing from the network. (#304)
 
 ## BUGFIXES
 * Fixed runtime error when `FunctionReporter` parses a `do.call()` whose function argument is a string naming a non-syntactic function, such as `do.call("[<-", ...)`. (#335)

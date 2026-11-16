@@ -284,6 +284,38 @@ test_that(".parse_function handles do.call with a non-syntactic function name", 
     expect_true("innerfunc1" %in% result)
 })
 
+test_that(".parse_closure finds calls made in default argument values", {
+    myfunc <- function(a, b = 1, c = defaultfunc(a), d = NULL) {
+        bodyfunc()
+    }
+    result <- pkgnet:::.parse_closure(myfunc)
+    expect_true(all(c("defaultfunc", "bodyfunc") %in% result))
+})
+
+test_that(".called_by creates edges for calls made in default argument values", {
+    pkg_env <- new.env()
+    pkg_env$helper <- function(x) x
+    pkg_env$other <- function() NULL
+    pkg_env$caller <- function(obj, res = helper(obj)) {
+        other()
+    }
+    edgeDT <- pkgnet:::.called_by(
+        fname = "caller"
+        , all_functions = c("helper", "other", "caller")
+        , pkg_env = pkg_env
+    )
+    expect_setequal(edgeDT[["TARGET"]], c("helper", "other"))
+    expect_true(all(edgeDT[["SOURCE"]] == "caller"))
+})
+
+test_that(".parse_R6_expression finds calls made in default argument values", {
+    myr6method <- function(x = regularfunc1(), y = self$public_method()) {
+        NULL
+    }
+    result <- pkgnet:::.parse_R6_expression(formals(myr6method))
+    expect_true(all(c("regularfunc1", "self$public_method") %in% result))
+})
+
 test_that(".parse_R6_expression correctly parses expressions for symbols", {
     # Correctly parses body of function and finds all function symbols
     expect_true({
