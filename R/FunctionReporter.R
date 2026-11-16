@@ -357,13 +357,10 @@ FunctionReporter <- R6::R6Class(
         , assertthat::is.string(fname)
     )
 
-    # Get only the body of the function
+    # Parse the body and the default argument values of the function.
     # We will potentially miss calls if they are in attributes of the closure,
     # e.g., the way the decorators package implements decorators
-    f <- body(get(fname, envir = pkg_env))
-
-    # get the literal code of the function
-    f_vec <- .parse_function(f)
+    f_vec <- .parse_closure(get(fname, envir = pkg_env))
 
     # Figure out which ones mix
     matches <- match(
@@ -388,6 +385,16 @@ FunctionReporter <- R6::R6Class(
     )
 
     return(edgeDT)
+}
+
+# [description] parse a closure's body and default argument values into a
+#               character vector of symbols, so that calls made in default
+#               arguments (e.g. function(x = helper())) are also detected
+.parse_closure <- function(fn) {
+    return(c(
+        .parse_function(body(fn))
+        , .parse_function(formals(fn))
+    ))
 }
 
 # [description] parse out a function's body into a character
@@ -544,12 +551,14 @@ FunctionReporter <- R6::R6Class(
                                        , pkg_env
                                        , pkg_functions
 ) {
-    # Get body of method
-    mbody <- body(get(class_name, envir = pkg_env)[[method_type]][[method_name]])
+    method <- get(class_name, envir = pkg_env)[[method_type]][[method_name]]
 
-    # Parse into symbols
+    # Parse the body and the default argument values of the method into symbols
     mbodyDT <- data.table::data.table(
-        SYMBOL = unique(.parse_R6_expression(mbody))
+        SYMBOL = unique(c(
+            .parse_R6_expression(body(method))
+            , .parse_R6_expression(formals(method))
+        ))
     )
 
     # Match to R6 methods

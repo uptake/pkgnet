@@ -3,6 +3,7 @@
 * Network visualizations now include a "Size by" dropdown that resizes nodes by any numeric metric in the nodes table, with node area proportional to the value. The default, "none", keeps the uniform node size. RIP Ed. (#169)
 
 ## CHANGES
+* `FunctionReporter` now detects function calls made in default argument values (e.g. `function(x, y = helper(x))`), for both regular functions and R6 methods. Previously only the function body was parsed, so these dependencies were missing from the network. (#304)
 
 ## BUGFIXES
 * Fixed runtime error when `FunctionReporter` parses a `do.call()` whose function argument is a string naming a non-syntactic function, such as `do.call("[<-", ...)`. (#335)
