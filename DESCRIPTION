@@ -19,6 +19,7 @@ Imports:
     data.table,
     DT,
     glue,
+    htmlwidgets,
     igraph(>= 2.1),
     knitr,
     magrittr,

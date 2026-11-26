@@ -15,6 +15,7 @@
 #' @importFrom data.table data.table copy setkeyv
 #' @importFrom assertthat assert_that
 #' @importFrom grDevices colorRamp colorRampPalette rgb
+#' @importFrom htmlwidgets onRender
 #' @importFrom magrittr %>%
 #' @importFrom visNetwork visNetwork visIgraphLayout visEdges visOptions
 # visGroups visLegend
@@ -376,6 +377,11 @@ AbstractGraphReporter <- R6::R6Class(
                 )
             )
 
+            g <- private$add_node_size_selector(
+                g = g
+                , plotDTnodes = plotDTnodes
+            )
+
 
             if (colorByGroup) {
                 # Add group definitions
@@ -412,6 +418,37 @@ AbstractGraphReporter <- R6::R6Class(
             return(g)
         },
 
+        # Adds a dropdown to the graph viz that resizes nodes by a numeric
+        # column of the nodes table. Defaults to uniform node size.
+        add_node_size_selector = function(g, plotDTnodes) {
+
+            sizeFields <- Filter(
+                f = function(colName) {is.numeric(self$nodes[[colName]])}
+                , x = names(self$nodes)
+            )
+
+            if (length(sizeFields) == 0) {
+                return(g)
+            }
+
+            nodeSizes <- lapply(
+                X = sizeFields
+                , FUN = function(colName) {.scaleNodeSizes(plotDTnodes[[colName]])}
+            )
+            names(nodeSizes) <- sizeFields
+
+            g <- htmlwidgets::onRender(
+                x = g
+                , jsCode = .nodeSizeSelectorJS
+                , data = list(
+                    ids = plotDTnodes[['id']]
+                    , sizes = nodeSizes
+                )
+            )
+
+            return(g)
+        },
+
         # Function to reset cached graph_viz
         reset_graph_viz = function() {
             log_info('Resetting cached graph_viz...')
@@ -433,3 +470,90 @@ AbstractGraphReporter <- R6::R6Class(
 .igraphAvailableLayouts <- function() {
     return(grep("^layout_\\S", getNamespaceExports("igraph"), value = TRUE))
 }
+
+# [title] Scale Values to Node Sizes
+# [name] .scaleNodeSizes
+# [description] Maps numeric values onto node radii so that node area is
+# proportional to the value's position within the observed range. Missing
+# and non-finite values, or a column with no spread, return NA, which
+# leaves those nodes at the default size.
+# [param] values a numeric vector
+# [param] minSize radius for the smallest value
+# [param] maxSize radius for the largest value
+# [return] a numeric vector of node sizes, the same length as values
+.scaleNodeSizes <- function(values, minSize = 10, maxSize = 50) {
+    values <- as.numeric(values)
+    sizes <- rep(NA_real_, length(values))
+    isFinite <- is.finite(values)
+
+    if (!any(isFinite)) {
+        return(sizes)
+    }
+
+    valRange <- range(values[isFinite])
+    if (valRange[1] == valRange[2]) {
+        return(sizes)
+    }
+
+    scaled <- (values[isFinite] - valRange[1]) / (valRange[2] - valRange[1])
+    sizes[isFinite] <- sqrt(minSize^2 + scaled * (maxSize^2 - minSize^2))
+    return(sizes)
+}
+
+# JavaScript passed to htmlwidgets::onRender() for the node size dropdown.
+# "this" is the visNetwork widget instance, and data holds node ids plus
+# one array of precomputed sizes per metric. Null sizes fall back to the
+# size each node had when the graph was first drawn.
+.nodeSizeSelectorJS <- "
+function(el, x, data) {
+    var network = this.network;
+    if (!network || !data || !data.sizes) {
+        return;
+    }
+
+    var nodesDS = network.body.data.nodes;
+    var ids = [].concat(data.ids);
+    var defaultSizes = {};
+    ids.forEach(function(id) {
+        var node = network.body.nodes[id];
+        defaultSizes[id] = node ? node.options.size : undefined;
+    });
+
+    var select = document.createElement('select');
+    select.className = 'dropdown';
+    select.id = 'nodeSizeSelect' + el.id;
+    select.title = 'Size nodes by a metric from the table';
+    select.setAttribute('style', 'width: 200px; height: 26px; margin-left: 5px;');
+
+    var noneOption = document.createElement('option');
+    noneOption.value = '';
+    noneOption.text = 'Size by: none';
+    select.appendChild(noneOption);
+
+    Object.keys(data.sizes).forEach(function(metric) {
+        var option = document.createElement('option');
+        option.value = metric;
+        option.text = 'Size by: ' + metric;
+        select.appendChild(option);
+    });
+
+    select.onchange = function() {
+        var metric = select.value;
+        var metricSizes = metric === '' ? null : [].concat(data.sizes[metric]);
+        nodesDS.update(ids.map(function(id, i) {
+            var size = metricSizes ? metricSizes[i] : null;
+            return {
+                id: id
+                , size: (size === null || size === undefined) ? defaultSizes[id] : size
+            };
+        }));
+    };
+
+    var idList = document.getElementById('nodeSelect' + el.id);
+    if (idList && idList.parentNode) {
+        idList.parentNode.insertBefore(select, idList.nextSibling);
+    } else {
+        el.insertBefore(select, el.firstChild);
+    }
+}
+"
