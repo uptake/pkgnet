@@ -65,7 +65,12 @@ jobs:
       # manual, so pull in the extra LaTeX packages Rd2pdf needs. Without
       # collection-fontsrecommended, the retry that R CMD check makes with
       # R_RD4PDF=times cannot find the Courier metrics (pcrr8t.tfm).
+      # TEXLIVE_PREFETCH=0 disables tlmgr's aria2c prefetch path, which has
+      # been hanging indefinitely on Windows runners while unpacking 'titling'.
       - name: Install additional LaTeX Packages
+        timeout-minutes: 10
+        env:
+          TEXLIVE_PREFETCH: "0"
         run: |
           tlmgr update --self
           tlmgr update --all
