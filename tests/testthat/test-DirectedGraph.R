@@ -88,6 +88,53 @@ test_that('DirectedGraph public methods are properly defined and run end-to-end'
 # tests removed in v0.5.1.  igraph values trusted.  
 # Burden of this section of unit tests otherwise unsupportable.
 
+test_that('DirectedGraph inCloseness uses mode = "in"', {
+
+    nodes <- data.table::data.table(node = c("a", "b", "c"))
+    edges <- data.table::data.table(
+        SOURCE = c("a", "b")
+        , TARGET = c("b", "c")
+    )
+    graphObj <- pkgnet:::DirectedGraph$new(
+        nodes = nodes
+        , edges = edges
+    )
+
+    measuresDT <- graphObj$node_measures(c("outCloseness", "inCloseness"))
+    expectedOut <- suppressWarnings(igraph::closeness(
+        graph = graphObj$igraph
+        , mode = "out"
+        , normalized = TRUE
+    ))
+    expectedIn <- suppressWarnings(igraph::closeness(
+        graph = graphObj$igraph
+        , mode = "in"
+        , normalized = TRUE
+    ))
+
+    expect_equal(
+        object = measuresDT[, outCloseness]
+        , expected = unname(expectedOut[measuresDT[, node]])
+    )
+    expect_equal(
+        object = measuresDT[, inCloseness]
+        , expected = unname(expectedIn[measuresDT[, node]])
+    )
+
+    expectedGraphIn <- igraph::centralize(
+        scores = unname(expectedIn[measuresDT[, node]])
+        , theoretical.max = igraph::centr_clo_tmax(
+            graph = graphObj$igraph
+            , mode = "in"
+        )
+        , normalized = TRUE
+    )
+    expect_equal(
+        object = graphObj$graph_measures("graphInCloseness")$graphInCloseness
+        , expected = expectedGraphIn
+    )
+})
+
 
 ### EXPECTED ERRORS ###
 
