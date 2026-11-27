@@ -315,7 +315,7 @@ DirectedGraph <- R6::R6Class(
             , inCloseness = function(self){
                 suppressWarnings(igraph::closeness(
                     graph = self$igraph
-                    , mode = "out"
+                    , mode = "in"
                     , normalized = TRUE
                 ))
             }
